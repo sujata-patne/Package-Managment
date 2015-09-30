@@ -19,10 +19,15 @@ exports.getContentTypes = function (req, res, next) {
                             mainSiteManager.getContentTypeData( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypeData){
                                 callback(err, ContentTypeData)
                             });
+                        },
+                        OfferData: function (callback) {
+                            mainSiteManager.getOfferData( connection_ikon_cms, req.session.package_StoreId, function(err,OfferData){
+                                callback(err, OfferData)
+                            });
                         }
                     },
                     function (err, results) {
-                        //console.log(results.AlacartaData)
+                        console.log(results.OfferData)
                         if (err) {
                             connection_ikon_cms.release();
                             res.status(500).json(err.message);

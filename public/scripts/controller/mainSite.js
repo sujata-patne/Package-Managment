@@ -4,7 +4,7 @@
 myApp.controller('mainSiteCtrl', function ($scope, $http, ngProgress, $stateParams, MainSite) {
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
-
+    $scope.alacartPlanIds = {};
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"main-site.alacart", content:" content 1", active: true },
         { title:"Value Pack Plans",  state:"main-site.valuepack",content:" content 2" },
@@ -35,13 +35,17 @@ myApp.controller('mainSiteCtrl', function ($scope, $http, ngProgress, $statePara
 
     }
     $scope.showDeliveryTypes = function(contents){
-        return contents.delivery_type_name === 'Streaming' ||
-            contents.parent_name === 'Video'
+        return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
     MainSite.getContentTypes(function (MainSiteData) {
        // $scope.ContentTypes = ContentTypeData.ContentTypes;
-        //$scope.ContentTypeAlacart = angular.copy(SubscriptionData.AlacartaData);
+        $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.alacartData = angular.copy(MainSiteData.ContentTypeData);
     });
+    $scope.submitForm = function (isValid) {
+        console.log($scope.alacartPlanIds)
+        console.log('test' + $scope.alacartPlanIds)
+    }
+
 });

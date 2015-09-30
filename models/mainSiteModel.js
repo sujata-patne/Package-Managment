@@ -20,6 +20,13 @@ exports.getContentTypeData = function(dbConnection, storeId, callback) {
         callback(err, ContentTypes)
     });
 }
+exports.getOfferData = function(dbConnection, storeId, callback) {
+    var query = dbConnection.query(' SELECT plan.*' +
+        'FROM icn_offer_plan AS plan ' +
+        'WHERE plan.op_st_id = ? ', [storeId], function (err, ContentTypes) {
+        callback(err, ContentTypes)
+    });
+}
 exports.getContentTypes123 = function(dbConnection, storeId, callback) {
     //var query = dbConnection.query('SELECT cd.*, ct.mct_parent_cnt_type_id, cd3.cd_name AS parent_name, cd2.cd_name AS delivery_type_name ' +
     //'from icn_store As st ' +
