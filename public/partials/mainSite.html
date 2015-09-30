@@ -1,0 +1,8 @@
+<tabset>
+    <tab ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled" select="setIndex($index)">
+        <tab-heading>
+            <a ui-sref="{{tab.state}}" ui-sref-active="{{tab.active}}">{{tab.title}}</a>
+        </tab-heading>
+        <div data-ui-view></div>
+    </tab>
+</tabset>

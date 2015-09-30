@@ -40,20 +40,17 @@ exports.pages = function (req, res, next) {
     var role;
 
     var pagesjson = [
-        { 'pagename': 'Add Pack', 'href': 'add-pack', 'id': 'add-pack', 'class': 'fa fa-briefcase', 'submenuflag': '0', 'sub': [] },
-        //{ 'pagename': 'Add Search Content', 'href': 'add-search-content', 'id': 'add-search-content', 'class': 'fa fa-briefcase', 'submenuflag': '0', 'sub': [] },
-        { 'pagename': 'Add/Update Content List', 'href': 'add-content-list', 'id': 'add-content-list', 'class': 'fa fa-briefcase', 'submenuflag': '0', 'sub': [] },
-        { 'pagename': 'Pack List', 'href': 'show-packs-list', 'id': 'show-packs-list', 'class': 'fa fa-briefcase', 'submenuflag': '0', 'sub': [] },
+        { 'pagename': 'Main Site', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
         { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
     ];
 
     if (req.session) {
-        if (req.session.pack_UserName) {
-            if (req.session.pack_StoreId) {
-                role = req.session.pack_UserRole;
+        if (req.session.package_UserName) {
+            if (req.session.package_StoreId) {
+                role = req.session.package_UserRole;
                 var pageData = getPages(role);
-                //res.render('index', { title: 'Express', username: req.session.pack_UserName, Pages: pageData, userrole: req.session.pack_UserRole });
-                res.render('index', { title: 'Express', username: req.session.pack_FullName, Pages: pageData, userrole: req.session.pack_UserType, lastlogin: " " + getDate(req.session.pack_lastlogin) + " " + getTime(req.session.pack_lastlogin) });
+                //res.render('index', { title: 'Express', username: req.session.package_UserName, Pages: pageData, userrole: req.session.package_UserRole });
+                res.render('index', { title: 'Express', username: req.session.package_FullName, Pages: pageData, userrole: req.session.package_UserType, lastlogin: " " + getDate(req.session.package_lastlogin) + " " + getTime(req.session.package_lastlogin) });
             }
             else {
                 res.redirect('/accountlogin');
@@ -77,12 +74,12 @@ exports.pages = function (req, res, next) {
  */
 exports.login = function (req, res, next) {
     if (req.session) {
-        if (req.session.pack_UserName) {
-            if (req.session.pack_StoreId) {
-                res.redirect("/add-pack");
+        if (req.session.package_UserName) {
+            if (req.session.package_StoreId) {
+                res.redirect("/main-site");
             }
             else {
-                res.redirect("/add-pack");
+                res.redirect("/accountlogin");
             }
         }
         else {
@@ -103,8 +100,8 @@ exports.login = function (req, res, next) {
 exports.logout = function (req, res, next) {
     try {
         if (req.session) {
-            if (req.session.pack_UserName) {
-                if (req.session.pack_StoreId) {
+            if (req.session.package_UserName) {
+                if (req.session.package_StoreId) {
                     req.session = null;
                     res.redirect('/accountlogin');
                 }
@@ -143,15 +140,15 @@ exports.authenticate = function (req, res, next) {
                             if(userDetails[0].ld_role == 'Store Manager') {
 
                                 var session = req.session;
-                                session.pack_UserId = userDetails[0].ld_id;
-                                session.pack_UserRole = userDetails[0].ld_role;
-                                session.pack_UserName = req.body.username;
-                                session.pack_Password = req.body.password;
-                                session.pack_Email = userDetails[0].ld_email_id;
-                                session.pack_FullName = userDetails[0].ld_display_name;
-                                session.pack_lastlogin = userDetails[0].ld_last_login;
-                                session.pack_UserType = userDetails[0].ld_user_type;
-                                session.pack_StoreId = userDetails[0].su_st_id;//coming from new store's user table.
+                                session.package_UserId = userDetails[0].ld_id;
+                                session.package_UserRole = userDetails[0].ld_role;
+                                session.package_UserName = req.body.username;
+                                session.package_Password = req.body.password;
+                                session.package_Email = userDetails[0].ld_email_id;
+                                session.package_FullName = userDetails[0].ld_display_name;
+                                session.package_lastlogin = userDetails[0].ld_last_login;
+                                session.package_UserType = userDetails[0].ld_user_type;
+                                session.package_StoreId = userDetails[0].su_st_id;//coming from new store's user table.
                                 connection_ikon_cms.release();
                                 res.redirect('/');
                             } else {
@@ -185,9 +182,7 @@ function getPages(role) {
     if (role == "Super Admin" || role == "Store Manager") {
 
         var pagesjson = [
-            { 'pagename': 'Add Pack', 'href': 'add-pack', 'id': 'add-pack', 'class': 'fa fa-briefcase', 'submenuflag': '0', 'sub': [] },
-            { 'pagename': 'Add/Update Content List', 'href': 'add-content-list', 'id': 'add-content-list', 'class': 'fa fa-briefcase', 'submenuflag': '0', 'sub': [] },
-            { 'pagename': 'Pack List', 'href': 'show-packs-list', 'id': 'show-packs-list', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
+            { 'pagename': 'Main Site', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
         ];
         return pagesjson;
@@ -278,17 +273,17 @@ exports.viewChangePassword = function (req, res, next) {
 exports.changePassword = function (req, res) {
     try {
         if (req.session) {
-            if (req.session.pack_UserName) {
+            if (req.session.package_UserName) {
                 var session = req.session;
-                //console.log( req.session.pack_Email );
+                //console.log( req.session.package_Email );
                 mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                    if(req.body.oldpassword == session.pack_Password) {
-                        userManager.updateUser( connection_ikon_cms, req.body.newpassword, new Date(), session.pack_UserId, function( err, response ) {
+                    if(req.body.oldpassword == session.package_Password) {
+                        userManager.updateUser( connection_ikon_cms, req.body.newpassword, new Date(), session.package_UserId, function( err, response ) {
                             if (err) {
                                 connection_ikon_cms.release();
                                 res.status(500).json(err.message);
                             }else {
-                                session.pack_Password = req.body.newpassword;
+                                session.package_Password = req.body.newpassword;
                                 var smtpTransport = nodemailer.createTransport({
                                     service: "Gmail",
                                     auth: {
@@ -297,9 +292,9 @@ exports.changePassword = function (req, res) {
                                     }
                                 });
                                 var mailOptions = {
-                                    to: session.pack_Email,
+                                    to: session.package_Email,
                                     subject: 'Change Password',
-                                    html: "<p>Hi, " + session.pack_UserName + " <br />This is your password: " + req.body.newpassword + "</p>"
+                                    html: "<p>Hi, " + session.package_UserName + " <br />This is your password: " + req.body.newpassword + "</p>"
                                 }
                                 smtpTransport.sendMail(mailOptions, function (error, response) {
                                     if (error) {

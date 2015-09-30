@@ -1,171 +1,5 @@
-var myApp = angular.module('myApp', ['ui.bootstrap', 'ui.router', 'ngProgress','angularUtils.directives.dirPagination','ngFileUpload','validation', 'validation.rule','ngMessages']); 
-var ContentTypeDetails ={
-    "Manual":{
-        "Wallpaper": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Vendor": "Vendor"},
-            {"Photographer": "Photographer"},
-            {"Adult": "Adult"}
-        ],
-        "Animation": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Vendor": "Vendor"},
-            {"Photographer": "Photographer"},
-            {"Adult": "Adult"}
-        ],
-        "Full Track": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ],
-        "Movies": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ],
-        "Video Clip": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ]
-    },
-    "Auto": {
-        "Wallpaper": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Vendor": "Vendor"},
-            {"Photographer": "Photographer"},
-            {"Adult": "Adult"}
-        ],
-        "Animation": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Vendor": "Vendor"},
-            {"Photographer": "Photographer"},
-            {"Adult": "Adult"}
-        ],
-        "Full Track": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ],
-        "Movies": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ],
-        "Video Clip": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ]
-    },
-    "Rule Based": {
-        "Wallpaper": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Vendor": "Vendor"},
-            {"Photographer": "Photographer"},
-            {"Adult": "Adult"}
-        ],
-        "Animation": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Vendor": "Vendor"},
-            {"Photographer": "Photographer"},
-            {"Adult": "Adult"}
-        ],
-        "Full Track": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ],
-        "Movies": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ],
-        "Video Clip": [
-            {"Language": "Language"},
-            {"Actor/Actress": "Actor_Actress"},
-            {"Singer":"Singer"},
-            {"Music Director":"Music_Director"},
-            {"Vendor": "Vendor"},
-            {"Genres": "Genres"},
-            {"Sub Genres": "Sub_Genres"},
-            {"Mood": "Mood"},
-            {"Adult": "Adult"}
-        ]
-    }
-};
+var myApp = angular.module('myApp', ['ui.bootstrap', 'ui.router', 'ngProgress','ngFileUpload']);
+
 toastr.options = {
     "closeButton": false,
     "debug": false,
@@ -185,56 +19,46 @@ toastr.options = {
 }
 myApp.config(function ($stateProvider) {
     $stateProvider
-        .state("add-pack", {
-            templateUrl: "partials/add-pack.html",
-            controller: "addPackCtrl",
-            url: "/add-pack"
+
+        .state("main-site", {
+            templateUrl: 'partials/mainSite.html',
+            controller: 'mainSiteCtrl',
+            url: '/main-site'
         })
-        .state("edit-pack", {
-            templateUrl: "partials/add-pack.html",
-            controller: "addPackCtrl",
-            url: "/edit-pack/:id"
+        //
+        //.state('users', {
+        //    templateUrl: 'partials/add-edit-users.html',
+        //    controller: 'usersCtrl',
+        //    url: '/users'
+        //})
+        //
+        .state('main-site.alacart', {
+            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            controller: 'mainSiteCtrl',
+            url: '/alacart'
         })
-        .state("search-content-manual", {
-            templateUrl: "partials/add-search-content.html",
-            controller: "searchContentCtrl",
-            url: "/search-content-manual/:pctId"
+        .state('main-site.valuepack', {
+            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            controller: 'mainSiteCtrl',
+            url: '/valuepack'
         })
-        .state("search-content-auto", {
-            templateUrl: "partials/add-search-content-auto.html",
-            controller: "searchContentAutoCtrl",
-            url: "/search-content-auto/:pctId"
+        .state('main-site.subscription', {
+            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            controller: 'mainSiteCtrl',
+            url: '/subscription'
         })
-        .state("search-content-rule", {
-            templateUrl: "partials/add-search-content-rule.html",
-            controller: "searchContentRuleCtrl",
-            url: "/search-content-rule/:pctId"
+        .state('main-site.advancesetting', {
+            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            controller: 'mainSiteCtrl',
+            url: '/advancesetting'
         })
-        .state("add-content-list", {
-            templateUrl: "partials/add-content-list.html",
-            controller: "contentListCtrl",
-            url: "/add-content-list"
+        .state('main-site.arrangeplan', {
+            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            controller: 'mainSiteCtrl',
+            url: '/arrangeplan'
         })
-        .state("show-content-list", {
-            templateUrl: "partials/show-content-list.html",
-            controller: "showContentListCtrl",
-            url: "/show-content-list/:pctId/:limitCount/:action/:title/:property"
-        })
-        .state("arrange-content-list", {
-            templateUrl: "partials/arrange-content-list.html",
-            controller: "arrangeContentListCtrl",
-            url: "/arrange-content-list/:pctId"
-        })
-        .state("show-packs-list", {
-            templateUrl: "partials/show-packs-list.html",
-            controller: "showPacksListCtrl",
-            url: "/show-packs-list"
-        })
-        .state('users', {
-            templateUrl: 'partials/add-edit-users.html',
-            controller: 'usersCtrl',
-            url: '/users'
-        })
+
+
         .state('accountforgot', {
             templateUrl: 'partials/account-changepassword.html',
             controller: '',
@@ -246,5 +70,5 @@ myApp.config(function ($stateProvider) {
             url: '/changepassword'
         })
 }).run(function ($state) {
-    $state.go("add-pack");
+    $state.go("main-site");
 })
