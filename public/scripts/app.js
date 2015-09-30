@@ -22,7 +22,8 @@ myApp.config(function ($stateProvider) {
 
         .state("main-site", {
             templateUrl: 'partials/mainSite.html',
-            controller: 'mainSiteCtrl'
+            controller: 'mainSiteCtrl',
+            url: '/main-site'
         })
         //
         //.state('users', {
