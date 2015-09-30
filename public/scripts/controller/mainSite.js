@@ -34,8 +34,14 @@ myApp.controller('mainSiteCtrl', function ($scope, $http, ngProgress, $statePara
         $scope.tabIndex = $index;
 
     }
-
-    MainSite.getContentTypes(function (ContentTypeData) {
-        $scope.ContentTypes = ContentTypeData.ContentTypes;
+    $scope.showDeliveryTypes = function(contents){
+        return contents.delivery_type_name === 'Streaming' ||
+            contents.parent_name === 'Video'
+    };
+    MainSite.getContentTypes(function (MainSiteData) {
+       // $scope.ContentTypes = ContentTypeData.ContentTypes;
+        //$scope.ContentTypeAlacart = angular.copy(SubscriptionData.AlacartaData);
+        $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
+        $scope.alacartData = angular.copy(MainSiteData.ContentTypeData);
     });
 });
