@@ -2,11 +2,18 @@
     <div class="content">
         <div class="content-container">
             <div class="content-header">
-                <h2 class="content-header-title">A-la-cart & Offer Plans</h2>
+                <h2 class="content-header-title">Main Site Plans and Offers</h2>
             </div>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}}</span>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}}</span>
-
+            <span class="col-sm-offset-3 col-sm-9" > <strong>Select plans with Domain</strong></span>
+            <div class="col-sm-offset-3 col-sm-9">
+                <label for="repeatSelect"> Select Store: </label>
+                <select name="domain" id="domain" ng-model="selectedDomain">
+                    <option value=""> --Select Store-- </option>
+                    <option ng-repeat="option in distributionChannels" value="{{option.cd_id}}">{{option.cd_name}}</option>
+                </select>
+            </div>
             <tabset>
                 <tab ng-repeat="tab in tabs" ui-sref="{{tab.state}}" ui-sref-active="{{tab.active}}" disable="tab.disabled" select="setIndex($index)">
                     <tab-heading> {{tab.title}} </tab-heading>

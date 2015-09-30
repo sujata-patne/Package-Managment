@@ -36,11 +36,11 @@ myApp.config(function ($stateProvider) {
             controller: 'mainSiteCtrl'
         })
         .state('main-site.valuepack', {
-            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            templateUrl: 'partials/value-pack-plan.html',
             controller: 'mainSiteCtrl'
         })
         .state('main-site.subscription', {
-            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            templateUrl: 'partials/subscription-plan.html',
             controller: 'mainSiteCtrl'
         })
         .state('main-site.advancesetting', {
@@ -51,7 +51,6 @@ myApp.config(function ($stateProvider) {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
             controller: 'mainSiteCtrl'
         })
-
 
         .state('accountforgot', {
             templateUrl: 'partials/account-changepassword.html',

@@ -7,4 +7,8 @@ var mainSite = require('../controller/mainSite.controller');
 module.exports = function (app) {
     app.route('/getContentTypes')
         .get(mainSite.getContentTypes);
+    app.route('/getValuePackPlans')
+        .get(mainSite.getValuePackPlans);
+    app.route('/getDistributionChannels')
+        .get(mainSite.getDistributionChannels );
 }
