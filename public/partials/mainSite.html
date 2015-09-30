@@ -1,8 +1,19 @@
-<tabset>
-    <tab ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled" select="setIndex($index)">
-        <tab-heading>
-            <a ui-sref="{{tab.state}}" ui-sref-active="{{tab.active}}">{{tab.title}}</a>
-        </tab-heading>
-        <div data-ui-view></div>
-    </tab>
-</tabset>
+<div class="container">
+    <div class="content">
+        <div class="content-container">
+            <div class="content-header">
+                <h2 class="content-header-title">A-la-cart & Offer Plans</h2>
+            </div>
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}}</span>
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}}</span>
+
+            <tabset>
+                <tab ng-repeat="tab in tabs" ui-sref="{{tab.state}}" ui-sref-active="{{tab.active}}" disable="tab.disabled" select="setIndex($index)">
+                    <tab-heading> {{tab.title}} </tab-heading>
+                </tab>
+            </tabset>
+            <div ui-view></div>
+
+        </div>
+    </div>
+</div>

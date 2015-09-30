@@ -22,8 +22,7 @@ myApp.config(function ($stateProvider) {
 
         .state("main-site", {
             templateUrl: 'partials/mainSite.html',
-            controller: 'mainSiteCtrl',
-            url: '/main-site'
+            controller: 'mainSiteCtrl'
         })
         //
         //.state('users', {
@@ -34,28 +33,23 @@ myApp.config(function ($stateProvider) {
         //
         .state('main-site.alacart', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl',
-            url: '/alacart'
+            controller: 'mainSiteCtrl'
         })
         .state('main-site.valuepack', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl',
-            url: '/valuepack'
+            controller: 'mainSiteCtrl'
         })
         .state('main-site.subscription', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl',
-            url: '/subscription'
+            controller: 'mainSiteCtrl'
         })
         .state('main-site.advancesetting', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl',
-            url: '/advancesetting'
+            controller: 'mainSiteCtrl'
         })
         .state('main-site.arrangeplan', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl',
-            url: '/arrangeplan'
+            controller: 'mainSiteCtrl'
         })
 
 
