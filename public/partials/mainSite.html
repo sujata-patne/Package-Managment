@@ -8,12 +8,11 @@
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}}</span>
 
             <tabset>
-                <tab ng-repeat="tab in tabs" ui-sref="{{tab.state}}" ui-sref-active="{{tab.active}}" disable="tab.disabled" select="setIndex($index)">
-                    <tab-heading> {{tab.title}} </tab-heading>
+                <tab ng-repeat="tab in tabs" ui-sref="{{tab.state}}" active="tab.active"  select="setIndex($index)">
+                    <tab-heading> {{tab.title}}   </tab-heading>    
                 </tab>
             </tabset>
-            <div ui-view></div>
-
+        <div ui-view></div>
         </div>
     </div>
 </div>
