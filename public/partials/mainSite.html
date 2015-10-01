@@ -12,6 +12,25 @@
                     <tab-heading> {{tab.title}}   </tab-heading>    
                 </tab>
             </tabset>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 col-xs-12">
+                    <div class="portlet">
+                        <div class="portlet-content">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="caption" class="col-md-3 control-label">Deliver Channel</label>
+                                    <div class="col-md-9">
+                                        <select data-ng-options="item.cd_id as item.cd_name for item in distributionChannels" class="form-control" data-ng-model="distributionChannelId" ></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
             <div ui-view style="min-height: 350px; border: 0px solid red"></div>
         </div>
     </div>
