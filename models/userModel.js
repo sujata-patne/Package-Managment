@@ -1,5 +1,7 @@
 exports.getUserDetails = function(dbConnection, userName, passWord, callback){
-
+	console.log('SELECT * FROM icn_login_detail AS user '+
+			                        'JOIN icn_store_user AS store_user ON user.ld_id = store_user.su_ld_id '+
+			                        'where BINARY ld_user_id = '+userName+' and BINARY ld_user_pwd = '+passWord);
 	var query = dbConnection.query('SELECT * FROM icn_login_detail AS user '+
 			                        'JOIN icn_store_user AS store_user ON user.ld_id = store_user.su_ld_id '+
 			                        'where BINARY ld_user_id= ? and BINARY ld_user_pwd = ? ', 
