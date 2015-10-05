@@ -38,7 +38,7 @@ myApp.config(function ($stateProvider) {
             controller: 'subscriptionPackCtrl'
         })
         .state('main-site.advancesetting', {
-            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            templateUrl: 'partials/advancesetting.html',
             controller: 'advancesettingCtrl'
         })
         .state('main-site.arrangeplan', {
