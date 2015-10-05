@@ -11,16 +11,19 @@ myApp.service('MainSite', ['$http', function ($http) {
         });
     }
 
-    this.getAlacartNOfferData = function(success){
-        $http.get(this.baseRestUrl + '/getContentTypes').success(function (items) {
+    service.getAlacartNOfferData = function(success){
+        $http.get(service.baseRestUrl + '/getAlacartNOfferData').success(function (items) {
             console.log(items)
             success(items);
         });
     }
-    this.addAlacartNOffer = function(data, success){
-        $http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
+
+    service.addAlacartNOffer = function(data, success){
+        $http.post(service.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
             console.log(items)
             success(items);
         });
     }
+
+    return service;
 }]);

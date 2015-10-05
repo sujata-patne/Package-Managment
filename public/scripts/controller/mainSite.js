@@ -8,7 +8,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     $scope.selectedStore = [];
 
     $scope.alacartPlanIds = {};
-    $scope.selectedDistributionChannel = [];
+    $scope.distributionChannelId = "";
 
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
@@ -62,8 +62,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
         $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
     });
 
-    $scope.submitForm = function (isValid) {
-
     MainSite.getAlacartNOfferData( function (MainSiteData) {
         $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData);
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
@@ -74,12 +72,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
             $scope.distributionChannelId = $scope.mainSitePackageData.sp_dc_id;
             $scope.PackageId = $scope.mainSitePackageData.sp_pkg_id;
         }
-
     });
     $scope.resetForm = function () {
+
     }
 });
 
+myApp.controller('alacartCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite) {
+});
 myApp.controller('advancesettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite) {
 });
 myApp.controller('arrangeplanCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite) {

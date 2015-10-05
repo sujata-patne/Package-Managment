@@ -78,10 +78,12 @@ exports.getAlacartNOfferData = function (req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-
                     mainSitePackageData: function (callback) {
                         mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, function(err,mainSitePackageId){
-                            callback(err, mainSitePackageId[0]);
+                            if( mainSitePackageId != undefined )
+                                callback(err, mainSitePackageId[0]);
+                            else
+                                callback(err, null );
                         })
                     },
                     DistributionChannel: function (callback) {

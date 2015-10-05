@@ -4,7 +4,7 @@ myApp.controller('valuePackCtrl', function ($scope, $state, ngProgress, $statePa
         $scope.errorvisible = false;
         var valuePackData = {
             selectedValuePacks: $scope.selectedValuePacks,
-            selectedDistributionChannel: $scope.selectedDistributionChannel
+            selectedDistributionChannel: $scope.distributionChannelId
         };
         if (isValid) {
             if($stateParams.id){
