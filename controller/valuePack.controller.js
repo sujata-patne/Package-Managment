@@ -33,7 +33,7 @@ exports.addValuePackToMainSite = function(req, res, next) {
                                     sp_modified_by: req.session.package_UserId
 
                                 };
-                                mainSiteManager.addStorePackage(connection_ikon_cms, data, function (err, storePlan) {
+                                mainSiteManager.createMainSiteStorePackagePlan(connection_ikon_cms, data, function (err, storePlan) {
                                     console.log("coming");
                                     console.log(storePlan);
                                     if (err) {
@@ -45,7 +45,6 @@ exports.addValuePackToMainSite = function(req, res, next) {
                             }
                         });
                     } else {
-                        console.log("inside else");
                         addValuePackPlan( req, res, connection_ikon_cms, packageData[0] );
                     }
                 });
