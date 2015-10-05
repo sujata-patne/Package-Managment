@@ -10,14 +10,14 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         $scope.successvisible = false;
         $scope.errorvisible = false;
         var subscriptionPackData = {
-            selectedValuePacks: $scope.selectedValuePacks,
+            selectedSubscriptionPlans: $scope.selectedSubscriptionPlans,
             selectedDistributionChannel: $scope.selectedDistributionChannel
         };
         if (isValid) {
             if($stateParams.id){
                 packData.valuePackId = $stateParams.id;
                 ngProgress.start();
-                subscriptionPack.editValuePackPlan( subscriptionPackData ,function(data){
+                subscriptionPack.editSubscriptionPack( subscriptionPackData ,function(data){
                     $scope.result(data);
 
                 },function(error){
