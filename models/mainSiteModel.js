@@ -58,7 +58,7 @@ exports.getMainSitePackageData = function(dbConnection,storeId, callback){
     });
 }
 exports.getAlacartNOfferDetails = function(dbConnection,pkgId, callback){
-    var query = dbConnection.query("SELECT paos.paos_op_id, paos.paos_sp_pkg_id, pct.* FROM icn_package_alacart_offer_site as paos" +
+    var query = dbConnection.query("SELECT paos.paos_op_id, paos.paos_sp_pkg_id, pct.* FROM icn_package_alacart_offer_site as paos " +
         "JOIN icn_package_content_type AS pct ON pct.pct_paos_id =  paos.paos_id AND pct_is_active = 1 AND ISNULL(pct.pct_crud_isactive) " +
         "WHERE paos_sp_pkg_id = ? AND paos_is_active = 1 AND ISNULL(paos_crud_isactive) ", [pkgId], function (err, response) {
         callback(err,response);

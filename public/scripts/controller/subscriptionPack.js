@@ -2,16 +2,17 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
 
     $scope.selectedSubscriptionPlans = [];
     subscriptionPack.getSubscriptionDetails(function (subscriptionPlanData) {
+        console.log( "subscriptionPackPlans" );
+        console.log( subscriptionPlanData );
         $scope.subscriptionPackPlans = angular.copy( subscriptionPlanData.subscriptionPlans );
     });
 
-    console.log( $scope.subscriptionPackPlans );
-    $scope.submitValuePackForm = function( isValid ) {
+    $scope.submitSubsPackForm = function( isValid ) {
         $scope.successvisible = false;
         $scope.errorvisible = false;
         var subscriptionPackData = {
             selectedSubscriptionPlans: $scope.selectedSubscriptionPlans,
-            selectedDistributionChannel: $scope.selectedDistributionChannel
+            selectedDistributionChannel: $scope.distributionChannelId
         };
         if (isValid) {
             if($stateParams.id){
@@ -26,6 +27,8 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
                 ngProgress.complete();
             }else{
                 ngProgress.start();
+                console.log( "subscriptionPackData" );
+                console.log( subscriptionPackData );
                 subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
                     console.log( data );
                     $scope.result(data);
