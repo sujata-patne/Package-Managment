@@ -10,6 +10,17 @@ myApp.service('MainSite', ['$http', function ($http) {
             success(items);
         });
     }
-    return service;
 
+    this.getAlacartNOfferData = function(success){
+        $http.get(this.baseRestUrl + '/getContentTypes').success(function (items) {
+            console.log(items)
+            success(items);
+        });
+    }
+    this.addAlacartNOffer = function(data, success){
+        $http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
+            console.log(items)
+            success(items);
+        });
+    }
 }]);

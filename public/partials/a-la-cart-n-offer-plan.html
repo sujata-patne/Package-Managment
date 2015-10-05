@@ -3,7 +3,8 @@
         <div class="col-md-2"></div>
         <div class="col-md-8 col-xs-12">
             <div class="form-group">
-                <input type="hidden" name="ld_Id" class="form-control" data-ng-model="PackageId">
+                <input type="hidden" name="pkg_id" class="form-control" data-ng-model="PackageId">
+                <input type="hidden" name="pkg_type" class="form-control" data-ng-model="PackageType">
             </div>
             <div class="portlet">
                 <div class="portlet-content">
@@ -78,7 +79,7 @@
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
-                <button class="btn btn-small" ng-click="proceed()" ng-disabled="dis()">{{buttonLabel}}</button>
+                <button class="btn btn-small" ng-click="proceed()" ng-disabled="dis()">Next</button>
                 <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>

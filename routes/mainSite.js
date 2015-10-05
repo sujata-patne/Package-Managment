@@ -7,4 +7,8 @@ var mainSite = require('../controller/mainSite.controller');
 module.exports = function (app) {
     app.route('/getMainSiteData')
         .get(mainSite.getMainSiteData);
+    app.route('/getContentTypes')
+        .get(mainSite.getAlacartNOfferData);
+    app.route('/addAlacartNOffer')
+        .post(mainSite.addAlacartPlanDetails);
 }
