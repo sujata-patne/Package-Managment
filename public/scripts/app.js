@@ -23,36 +23,28 @@ myApp.config(function ($stateProvider) {
         .state("main-site", {
             templateUrl: 'partials/mainSite.html',
             controller: 'mainSiteCtrl',
-            url: '/main-site'
+            url: 'main-site'
         })
-        //
-        //.state('users', {
-        //    templateUrl: 'partials/add-edit-users.html',
-        //    controller: 'usersCtrl',
-        //    url: '/users'
-        //})
-        //
         .state('main-site.alacart', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
             controller: 'alacartCtrl'
         })
         .state('main-site.valuepack', {
-            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl'
+            templateUrl: 'partials/value-pack-plan.html',
+            controller: 'valuePackCtrl'
         })
         .state('main-site.subscription', {
-            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl'
+            templateUrl: 'partials/subscription-pack-plan.html',
+            controller: 'subscriptionPackCtrl'
         })
         .state('main-site.advancesetting', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl'
+            controller: 'advancesettingCtrl'
         })
         .state('main-site.arrangeplan', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'mainSiteCtrl'
+            controller: 'arrangeplanCtrl'
         })
-
 
         .state('accountforgot', {
             templateUrl: 'partials/account-changepassword.html',

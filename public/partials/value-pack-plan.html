@@ -1,0 +1,39 @@
+<form method="post" class="form-horizontal" role="form" name="valuePackOfferForm" data-ng-submit="submitValuePackForm(valuePackOfferForm.$valid)" novalidate>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="form-group">
+                <input type="hidden" name="ld_Id" class="form-control" data-ng-model="PackageId">
+            </div>
+
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}} </span>
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}} </span>
+            <div class="portlet">
+                <div class="portlet-content">
+                    <div class="col-md-12">
+                        <label for="valuePackPlan" class="col-sm-3 control-label"><span class="asterisk">*</span>Select Value pack</label>
+                        <div class="col-md-5">
+                                <select data-ng-options="item.vp_id as item.vp_plan_name for item in valuePackPlans"
+                                        multiple class="form-control"  name="valuePlan" id="valuePlan" data-ng-model="selectedValuePacks" required >
+                                </select>
+                                <span style="color: red" data-ng-show="valuePackOfferForm.$submitted || valuePackOfferForm.valuePlan.$dirty">
+                                    <span ng-show="valuePackOfferForm.valuePlan.$error.required">Please Select value pack plan name.</span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div> <!-- /.row -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-offset-5 col-md-7" >
+                <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
+                <button class="btn btn-small" ng-click="proceed()" ng-disable="dis()">{{buttonLabel}}</button>
+                <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+            </div>
+        </div>
+    </div>
+</form>
+
