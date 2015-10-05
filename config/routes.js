@@ -4,6 +4,8 @@
 module.exports = function(app){
     require('../routes/index')(app);
     require('../routes/mainSite')(app);
+    require('../routes/valuePack')(app);
+    require('../routes/subscriptionPack')(app);
 
     app.use('/*', function(req,res,next){
         res.status(404).json({"error":"No such service present"});

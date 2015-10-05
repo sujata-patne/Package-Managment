@@ -1,4 +1,4 @@
-<form method="post" class="form-horizontal" role="form" name="valuePackOfferForm" data-ng-submit="submitValuePackForm(valuePackOfferForm.$valid)" novalidate>
+<form method="post" class="form-horizontal" role="form" name="subPackOfferForm" data-ng-submit="submitValuePackForm(subPackOfferForm.$valid)" novalidate>
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="form-group">
@@ -10,13 +10,13 @@
             <div class="portlet">
                 <div class="portlet-content">
                     <div class="col-md-12">
-                        <label for="valuePackPlan" class="col-sm-3 control-label"><span class="asterisk">*</span>Select Value pack</label>
+                        <label for="valuePackPlan" class="col-sm-3 control-label"><span class="asterisk">*</span>Select Subscription  pack</label>
                         <div class="col-md-5">
-                                <select data-ng-options="item.vp_id as item.vp_plan_name for item in valuePackPlans"
-                                        multiple class="form-control"  name="valuePlan" id="valuePlan" data-ng-model="selectedValuePacks" required >
+                                <select data-ng-options="item.sp_id as item.sp_plan_name for item in subscriptionPackPlans"
+                                        multiple class="form-control"  name="subscriptionPackPlan" id="subscriptionPackPlan" data-ng-model="selectedSubscriptionPlans" required >
                                 </select>
-                                <span style="color: red" data-ng-show="valuePackOfferForm.$submitted || valuePackOfferForm.valuePlan.$dirty">
-                                    <span ng-show="valuePackOfferForm.valuePlan.$error.required">Please Select value pack plan name.</span>
+                                <span style="color: red" data-ng-show="subPackOfferForm.$submitted || subPackOfferForm.subscriptionPackPlan.$dirty">
+                                    <span ng-show="subPackOfferForm.subscriptionPackPlan.$error.required">Please Select subscription plan name.</span>
                                 </span>
                             </div>
                         </div>

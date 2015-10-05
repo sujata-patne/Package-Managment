@@ -3,74 +3,52 @@
  */
 var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
+var async = require("async");
 
-exports.getContentTypes = function (req, res, next) {
+exports.getMainSiteData = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                mainSiteManager.getContentTypes( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypes){
+
+                async.parallel({
+                    ContentTypes: function (callback) {
+                        mainSiteManager.getContentTypes( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypeData){
+                            callback(err, ContentTypeData)
+                        })
+                    },
+                    ContentTypeData: function (callback) {
+                        mainSiteManager.getContentTypeData( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypeData){
+                            callback(err, ContentTypeData)
+                        });
+                    },
+                    OfferData: function (callback) {
+                        mainSiteManager.getOfferData( connection_ikon_cms, req.session.package_StoreId, function(err,OfferData){
+                            callback(err, OfferData)
+                        });
+                    },
+                    distributionChannels : function( callback ) {
+                        mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
+                            callback( err, distributionChannels );
+                        });
+                    },
+                    valuePackPlans : function( callback ) {
+                        mainSiteManager.getValuePackPlansByStoreId( connection_ikon_cms, req.session.package_StoreId, function( err,valuePackPlans ){
+                            callback( err, valuePackPlans );
+                        });
+                    }
+                },function (err, results) {
+
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        res.send({'ContentTypes':ContentTypes});
+                        res.send(results);
                     }
                 });
 
-
-            })
-        }else{
-            res.redirect('/accountlogin');
-        }
-    }catch(err){
-        res.status(500).json(err.message);
-    }
-};
-
-exports.getValuePackPlans = function (req, res, next) {
-    try {
-        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
-            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                mainSiteManager.getValuePackPlansByStoreId( connection_ikon_cms, req.session.package_StoreId, function( err,valuePackPlans ){
-                    if (err) {
-                        connection_ikon_cms.release();
-                        res.status(500).json(err.message);
-                        console.log(err.message)
-                    } else {
-                        connection_ikon_cms.release();
-                        //console.log( req.session.package_StoreId );
-                        console.log( valuePackPlans );
-                        res.send({'valuePackPlans':valuePackPlans});
-                    }
-                });
-            })
-        }else{
-            res.redirect('/accountlogin');
-        }
-    }catch(err){
-        res.status(500).json(err.message);
-    }
-};
-
-exports.getDistributionChannels = function(req, res, next) {
-    try {
-        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
-            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                mainSiteManager.getAllDistributionChannelsByStoreId( connection_ikon_cms, req.session.package_StoreId, function( err,distributionChannels ){
-                    if (err) {
-                        connection_ikon_cms.release();
-                        res.status(500).json(err.message);
-                        console.log(err.message)
-                    } else {
-                        connection_ikon_cms.release();
-                        //console.log( req.session.package_StoreId );
-                        console.log( distributionChannels );
-                        res.send({'distributionChannels':distributionChannels});
-                    }
-                });
-            })
+            });
         }else{
             res.redirect('/accountlogin');
         }

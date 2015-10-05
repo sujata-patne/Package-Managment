@@ -9,18 +9,20 @@
             <span class="col-sm-offset-3 col-sm-9" > <strong>Select plans with Domain</strong></span>
             <div class="col-sm-offset-3 col-sm-9">
                 <label for="repeatSelect"> Select Store: </label>
-                <select name="domain" id="domain" ng-model="selectedDomain">
+                {{selectedDistributionChannel}}
+                <select data-ng-options="option.cd_id as option.cd_name for option in distributionChannels"
+                        class="form-control"  name="distributionChannel" id="distributionChannel" data-ng-model="selectedDistributionChannel" required >
                     <option value=""> --Select Store-- </option>
-                    <option ng-repeat="option in distributionChannels" value="{{option.cd_id}}">{{option.cd_name}}</option>
                 </select>
+
             </div>
             <tabset>
-                <tab ng-repeat="tab in tabs" ui-sref="{{tab.state}}" ui-sref-active="{{tab.active}}" disable="tab.disabled" select="setIndex($index)">
-                    <tab-heading> {{tab.title}} </tab-heading>
+                <tab ng-repeat="tab in tabs" ui-sref="{{tab.state}}" active="tab.active"  select="setIndex($index)">
+                    <tab-heading> {{tab.title}}   </tab-heading>
                 </tab>
             </tabset>
-            <div ui-view></div>
-
+            <div ui-view style="min-height: 350px; border: 0px solid red"></div>
         </div>
+
     </div>
 </div>
