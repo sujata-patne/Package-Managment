@@ -18,8 +18,8 @@ myApp.service('MainSite', ['$http', function ($http) {
         });
     }
 
-    this.getAlacartNOfferPackDetails = function(data, success){
-        $http.post(this.baseRestUrl + '/getAlacartNOfferPackDetails', data).success(function (items) {
+    this.getAlacartNOfferPackDetails = function(success){
+        $http.get(this.baseRestUrl + '/getAlacartNOfferPackDetails').success(function (items) {
             console.log(items)
             success(items);
         });
