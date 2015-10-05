@@ -136,9 +136,10 @@ exports.authenticate = function (req, res, next) {
                     res.render('account-login', { error: 'Error in database connection.' });
                 } else {
                     if (userDetails.length > 0) {
+                        console.log('Got user Detail'+userDetails);
                         if (userDetails[0].ld_active == 1) {
                             if(userDetails[0].ld_role == 'Store Manager') {
-
+                                console.log('asdmkalsm');
                                 var session = req.session;
                                 session.package_UserId = userDetails[0].ld_id;
                                 session.package_UserRole = userDetails[0].ld_role;

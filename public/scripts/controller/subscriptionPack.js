@@ -10,14 +10,14 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         $scope.successvisible = false;
         $scope.errorvisible = false;
         var subscriptionPackData = {
-            selectedValuePacks: $scope.selectedValuePacks,
+            selectedSubscriptionPlans: $scope.selectedSubscriptionPlans,
             selectedDistributionChannel: $scope.selectedDistributionChannel
         };
         if (isValid) {
             if($stateParams.id){
                 packData.valuePackId = $stateParams.id;
                 ngProgress.start();
-                subscriptionPack.editValuePackPlan( subscriptionPackData ,function(data){
+                subscriptionPack.editSubscriptionPack( subscriptionPackData ,function(data){
                     $scope.result(data);
 
                 },function(error){
@@ -43,10 +43,12 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         if(data.success){
             //$scope.getResultData(data);
             $scope.success = data.message;
-            $scope.successvisible = true;
+            //$scope.successvisible = true;
+            toastr.success( $scope.success );
         }else{
             $scope.error = data.message;
-            $scope.errorvisible = true;
+            toastr.error( $scope.error );
+            //$scope.errorvisible = true;
         }
     }
 
