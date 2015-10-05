@@ -9,4 +9,7 @@ module.exports = function (app) {
         .get(mainSite.getAlacartNOfferData);
     app.route('/addAlacartNOffer')
         .post(mainSite.addAlacartPlanDetails);
+
+    app.route('/getAlacartNOfferPackDetails')
+        .post(mainSite.getAlacartNOfferPackDetails);
 }

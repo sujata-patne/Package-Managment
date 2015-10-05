@@ -15,4 +15,10 @@ myApp.service('MainSite', ['$http', function ($http) {
             success(items);
         });
     }
+    this.getAlacartNOfferPackDetails = function(data, success){
+        $http.post(this.baseRestUrl + '/getAlacartNOfferPackDetails', data).success(function (items) {
+            console.log(items)
+            success(items);
+        });
+    }
 }]);

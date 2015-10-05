@@ -10,43 +10,43 @@ exports.getAlacartNOfferData = function (req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                        mainSitePackageData: function (callback) {
-                            mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, function(err,mainSitePackageId){
-                                callback(err, mainSitePackageId[0]);
-                            })
-                        },
-                        DistributionChannel: function (callback) {
-                            mainSiteManager.getDistributionChannels( connection_ikon_cms, req.session.package_StoreId,function(err,distributionChannels){
-                                callback(err, distributionChannels);
-                            })
-                        },
-                        ContentTypes: function (callback) {
-                            mainSiteManager.getContentTypes( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypeData){
-                                callback(err, ContentTypeData)
-                            })
-                        },
-                        ContentTypeData: function (callback) {
-                            mainSiteManager.getContentTypeData( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypeData){
-                                callback(err, ContentTypeData)
-                            });
-                        },
-                        OfferData: function (callback) {
-                            mainSiteManager.getOfferData( connection_ikon_cms, req.session.package_StoreId, function(err,OfferData){
-                                callback(err, OfferData)
-                            });
-                        }
+                    mainSitePackageData: function (callback) {
+                        mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId, function (err, mainSitePackageData) {
+                            callback(err, mainSitePackageData[0]);
+                        })
                     },
-                    function (err, results) {
-                        console.log(results.mainSitePackageData)
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
-                        } else {
-                            connection_ikon_cms.release();
-                            res.send(results);
-                        }
-                    });
+                    DistributionChannel: function (callback) {
+                        mainSiteManager.getDistributionChannels( connection_ikon_cms, req.session.package_StoreId,function(err,distributionChannels){
+                            callback(err, distributionChannels);
+                        })
+                    },
+                    ContentTypes: function (callback) {
+                        mainSiteManager.getContentTypes( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypeData){
+                            callback(err, ContentTypeData)
+                        })
+                    },
+                    ContentTypeData: function (callback) {
+                        mainSiteManager.getContentTypeData( connection_ikon_cms, req.session.package_StoreId, function(err,ContentTypeData){
+                            callback(err, ContentTypeData)
+                        });
+                    },
+                    OfferData: function (callback) {
+                        mainSiteManager.getOfferData( connection_ikon_cms, req.session.package_StoreId, function(err,OfferData){
+                            callback(err, OfferData)
+                        });
+                    }
+                },
+                function (err, results) {
+                    console.log(results.mainSitePackageData)
+                    if (err) {
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message)
+                    } else {
+                        connection_ikon_cms.release();
+                        res.send(results);
+                    }
+                });
 
             })
         }else{
@@ -57,13 +57,31 @@ exports.getAlacartNOfferData = function (req, res, next) {
     }
 };
 
-exports.getAlacartNOfferDetails = function (req, res, next) {
+/*A-la-cart-n-offer details for package*/
+exports.getAlacartNOfferPackDetails = function (req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, req.body.pkgId, function (err, mainSitePackageId) {
-                    callback(err, mainSitePackageId[0]);
-                })
+                async.waterfall([
+                    function (callback) {
+                        mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId, function (err, mainSitePackageData) {
+                            callback(err, mainSitePackageData);
+                        })
+                    },
+                    function (mainSitePackageData, callback) {
+                        mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, results) {
+                            callback(err, results);
+                        })
+                    }
+                ],
+                function (err, results) {
+                    if (err) {
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                    } else {
+                        console.log(results)
+                    }
+                });
             })
         }else{
             res.redirect('/accountlogin');
@@ -104,7 +122,6 @@ exports.addAlacartPlanDetails = function (req,res,next){
                             callback({message:'Store Package can not be added.'},pkg_id,paosId);
                         }
                     },
-
                     function (pkgId,paosId,callback){
                         var contentType = 0;
                         var paos_id = paosId[0].paos_id != null ?  parseInt(paosId[0].paos_id + 1) : 1;
