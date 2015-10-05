@@ -5,40 +5,6 @@ var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
 var async = require("async");
 /*A-la-cart-n-offer details for package*/
-exports.getAlacartNOfferPackDetails = function (req, res, next) {
-    try {
-        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
-            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                async.waterfall([
-                        function (callback) {
-                            mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId, function (err, mainSitePackageData) {
-                                callback(err, mainSitePackageData);
-                            })
-                        },
-                        function (mainSitePackageData, callback) {
-                            if( mainSitePackageData.length > 0 ) {
-                                mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, results) {
-                                    callback(err, results);
-                                });
-                            }
-                        }
-                    ],
-                    function (err, results) {
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                        } else {
-                            console.log(results)
-                        }
-                    });
-            })
-        }else{
-            res.redirect('/accountlogin');
-        }
-    }catch(err){
-        res.status(500).json(err.message);
-    }
-};
 
 exports.addAlacartPlanDetails = function (req,res,next){
     try {
