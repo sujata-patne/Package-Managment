@@ -4,6 +4,7 @@
 module.exports = function(app){
     require('../routes/index')(app);
     require('../routes/mainSite')(app);
+    require('../routes/alacartPack')(app);
     require('../routes/valuePack')(app);
     require('../routes/subscriptionPack')(app);
 
