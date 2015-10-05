@@ -16,9 +16,11 @@ exports.getAlacartNOfferPackDetails = function (req, res, next) {
                             })
                         },
                         function (mainSitePackageData, callback) {
-                            mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, results) {
-                                callback(err, results);
-                            })
+                            if( mainSitePackageData.length > 0 ) {
+                                mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, results) {
+                                    callback(err, results);
+                                });
+                            }
                         }
                     ],
                     function (err, results) {
