@@ -695,7 +695,7 @@ CREATE TABLE IF NOT EXISTS  icn_store_package
 	sp_st_id						int(7),				-- fk: store id
 	sp_dc_id                        int(10),            -- distribution channel id e.g. mobile, web etc
 	sp_pkg_id						int(10),			-- unique id for a package
-	sp_pkg_type					int(2),				-- 0:alacarte, 1: value pack plans, 2:subscription plan
+	sp_pkg_type					    int(2),				-- 0:alacarte, 1: value pack plans, 2:subscription plan
 	sp_arrange_seq					int(10),			-- arrage sequence of the package vis-a-vis store
 	sp_package_name					varchar(40),		-- name of the package, default: "Site" : "Site" becomes a reserved word
 	sp_package_desc					varchar(200),		-- description of the package
