@@ -16,14 +16,14 @@ exports.createMainSiteStorePackagePlan = function (dbConnection, data, callback)
     });
 }
 
-exports.createMainSiteValuePackPlan = function (dbConnection, data, callback) {
-    dbConnection.query('INSERT INTO icn_package_value_pack_site SET ?', data, function (err, result) {
+exports.createMainSiteSubscriptionPackPlan = function (dbConnection, data, callback) {
+    dbConnection.query('INSERT INTO icn_package_subscription_site SET ?', data, function (err, result) {
         callback( err, result );
     });
 }
 
 exports.getLastInsertedValuePackId = function( dbConnection, callback ) {
-    var query = dbConnection.query('SELECT MAX( pvs_id ) as value_pack_id FROM icn_package_value_pack_site', function( err, response ) {
-        callback( err, response[0].value_pack_id );
+    var query = dbConnection.query('SELECT MAX( pss_id ) as sub_pack_id FROM icn_package_subscription_site', function( err, response ) {
+        callback( err, response[0].sub_pack_id );
     });
 }

@@ -81,7 +81,7 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
                                                         pvs_crud_isactive: 1
                                                     }
 
-                                                    subscriptionPackManager.createMainSiteValuePackPlan(connection_ikon_cms, valuePackData, function(err,resp){
+                                                    subscriptionPackManager.createMainSiteSubscriptionPackPlan(connection_ikon_cms, valuePackData, function(err,resp){
                                                         if(err){
 
                                                         }else{

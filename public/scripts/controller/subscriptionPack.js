@@ -43,10 +43,12 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         if(data.success){
             //$scope.getResultData(data);
             $scope.success = data.message;
-            $scope.successvisible = true;
+            //$scope.successvisible = true;
+            toastr.success( $scope.success );
         }else{
             $scope.error = data.message;
-            $scope.errorvisible = true;
+            toastr.error( $scope.error );
+            //$scope.errorvisible = true;
         }
     }
 
