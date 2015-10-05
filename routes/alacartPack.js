@@ -3,7 +3,9 @@
  */
 var alacartPack = require('../controller/alacartNoffer.controller');
 
-app.route('/addAlacartNOffer')
-    .post(alacartPack.addAlacartPlanDetails);
-app.route('/getAlacartNOfferPackDetails')
-    .post(alacartPack.getAlacartNOfferPackDetails);
+module.exports = function (app) {
+    app.route('/addAlacartNOffer')
+        .post(alacartPack.addAlacartPlanDetails);
+    app.route('/getAlacartNOfferPackDetails')
+        .post(alacartPack.getAlacartNOfferPackDetails);
+}
