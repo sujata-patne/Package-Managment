@@ -33,7 +33,7 @@ exports.getMaxAlacartOfferId = function(dbConnection, callback) {
     });
 }
 exports.getMaxStorePackageId = function(dbConnection, callback) {
-    var query = dbConnection.query('SELECT MAX(sp_pkg_id) AS pkg_id FROM icn_store_package', function (err, pkgId) {
+    var query = dbConnection.query('SELECT MAX(sp_pkg_id) AS pkg_id FROM icn_store_package WHERE ISNULL(sp_crud_isactive) ', function (err, pkgId) {
         callback(err,pkgId);
     });
 }
@@ -80,8 +80,8 @@ exports.addAlacartPack = function(dbConnection,data,callback){
         callback(err,response);
     });
 }
-exports.getMainSitePackageData = function(dbConnection,storeId, callback){
-    var query = dbConnection.query("SELECT * FROM icn_store_package HAVING MIN(sp_pkg_id) AND sp_st_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_package_name) AND ISNULL(sp_crud_isactive) ", [storeId], function (err, response) {
+exports.getMainSitePackageData = function(dbConnection,storeId, dcId, callback){
+    var query = dbConnection.query("SELECT * FROM icn_store_package HAVING MIN(sp_pkg_id) AND sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_package_name) AND ISNULL(sp_crud_isactive) ", [storeId,dcId], function (err, response) {
         callback(err,response);
     });
 }
@@ -117,5 +117,11 @@ exports.getAllDistributionChannelsByStoreId = function(dbConnection, storeId, ca
 exports.getLastInsertedPackageId = function( dbConnection, callback ) {
     var query = dbConnection.query('SELECT MAX( sp_pkg_id ) as pack_id FROM icn_store_package', function( err, response ) {
         callback( err, response[0].pack_id );
+    });
+}
+
+exports.existStorePackage = function(dbConnection,storeId, dcId, callback) {
+    var query = dbConnection.query('SELECT sp_pkg_id AS pkg_id FROM icn_store_package WHERE ISNULL(sp_crud_isactive) AND sp_is_active = 1 AND sp_st_id = ? AND sp_dc_id = ?', [storeId, dcId], function (err, pkgId) {
+        callback(err,pkgId);
     });
 }

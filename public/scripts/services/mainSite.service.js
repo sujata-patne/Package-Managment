@@ -10,18 +10,22 @@ myApp.service('MainSite', ['$http', function ($http) {
             success(items);
         });
     }
-
+    this.showPackageData = function(data, success){
+        $http.post(this.baseRestUrl + '/showPackageData', data).success(function (items) {
+            success(items);
+        });
+    }
     this.addAlacartNOffer = function(data, success){
         $http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
             console.log(items)
             success(items);
         });
     }
+
     this.editAlacartNOffer = function(data, success){
-        $http.post(this.baseRestUrl + '/editAlacartNOffer', data).success(function (items) {
+        $http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
             console.log(items)
             success(items);
         });
     }
-
 }]);

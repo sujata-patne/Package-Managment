@@ -152,6 +152,7 @@ exports.addAlacartPackDetails = function (req,res,next){
                             sp_pkg_type: req.body.packageType, //site type
                             sp_is_active: 1
                         }
+
                         if(addStorePackage(connection_ikon_cms,storePackage)){
                             callback(null,pkg_id,paosId);
                         }else{

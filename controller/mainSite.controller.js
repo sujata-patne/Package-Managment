@@ -5,6 +5,53 @@ var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
 var async = require("async");
 
+exports.showPackageData = function(req, res, next)  {
+    try {
+        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.waterfall([
+                    function (callback) {
+                        mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, mainSitePackageData) {
+                            callback(err, mainSitePackageData);
+                        })
+                    },
+                    function (mainSitePackageData, callback) {
+                        if (mainSitePackageData != null && mainSitePackageData.length > 0) {
+                            mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, alacartNOfferDetails) {
+                                callback(err, mainSitePackageData, alacartNOfferDetails);
+                            })
+                        } else {
+                            callback(null, null, null);
+                        }
+                    },
+                    function (mainSitePackageData,alacartNOfferDetails,callback) {
+                        if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
+                            mainSiteManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
+                                callback(err, {mainSitePackageData: mainSitePackageData, alacartNOfferDetails: alacartNOfferDetails, contentTypePlanData:contentTypePlanData});
+                            })
+                        } else {
+                            callback(err, {mainSitePackageData: null, alacartNOfferDetails: null, contentTypePlanData:null});
+                        }
+                    }
+                ],
+                function (err, results) {
+                    if (err) {
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                    } else {
+                        connection_ikon_cms.release();
+                        res.send(results);
+                    }
+                })
+            })
+        }else{
+            res.redirect('/accountlogin');
+        }
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+};
+
 exports.getMainSiteData = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
@@ -34,42 +81,6 @@ exports.getMainSiteData = function(req, res, next) {
                         mainSiteManager.getValuePackPlansByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, valuePackPlans) {
                             callback(err, valuePackPlans);
                         });
-                    },
-                    mainSiteData: function (callback) {
-                        async.waterfall([
-                            function (callback) {
-                                mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId, function (err, mainSitePackageData) {
-                                    callback(err, mainSitePackageData);
-                                    console.log(mainSitePackageData)
-                                })
-                            },
-                            function (mainSitePackageData, callback) {
-                                if (mainSitePackageData != null && mainSitePackageData.length > 0) {
-                                    mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, alacartNOfferDetails) {
-                                          callback(err, mainSitePackageData, alacartNOfferDetails);
-                                    })
-                                } else {
-                                    callback(null, null, null);
-                                }
-                            },
-                            function (mainSitePackageData,alacartNOfferDetails,callback) {
-                                if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
-                                    mainSiteManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
-                                        callback(err, {mainSitePackageData: mainSitePackageData, alacartNOfferDetails: alacartNOfferDetails, contentTypePlanData:contentTypePlanData});
-                                    })
-                                } else {
-                                    callback(err, {mainSitePackageData: null, alacartNOfferDetails: null, contentTypePlanData:null});
-                                }
-                            }
-                        ],
-                        function (err, results) {
-                            if (err) {
-                                connection_ikon_cms.release();
-                                res.status(500).json(err.message);
-                            } else {
-                                callback(err, results);
-                            }
-                        })
                     }
                 },
                 function (err, results) {
