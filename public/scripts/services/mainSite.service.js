@@ -17,11 +17,11 @@ myApp.service('MainSite', ['$http', function ($http) {
             success(items);
         });
     }
-
-    this.getAlacartNOfferPackDetails = function(success){
-        $http.get(this.baseRestUrl + '/getAlacartNOfferPackDetails').success(function (items) {
+    this.editAlacartNOffer = function(data, success){
+        $http.post(this.baseRestUrl + '/editAlacartNOffer', data).success(function (items) {
             console.log(items)
             success(items);
         });
     }
+
 }]);

@@ -5,6 +5,7 @@ var alacartPack = require('../controller/alacartNoffer.controller');
 
 module.exports = function (app) {
     app.route('/addAlacartNOffer')
-        .post(alacartPack.addAlacartPlanDetails);
-
+        .post(alacartPack.addAlacartPackDetails);
+    app.route('/editAlacartNOffer')
+        .post(alacartPack.editAlacartPackDetails);
 }
