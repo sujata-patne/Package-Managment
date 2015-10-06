@@ -128,7 +128,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
         //console.log( deleteValuePackIds );
        subscriptionPackManager.getSubscriptionPacksByIds( connection_ikon_cms, deletePackIds, packageData.pss_sp_pkg_id,  function( err, response ) {
 
-            if(response[0].value_pack_ids !== null){
+            if(response[0].sub_pack_ids !== null){
                 deleteSubscriptionPackIds = response[0].sub_pack_ids.split(',')
                     .map(function (element) {
                         return parseInt(element)

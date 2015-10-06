@@ -22,9 +22,11 @@ exports.getLastInsertedValueSubscriptionPlanId = function( dbConnection, callbac
     });
 }
 
-exports.getSelectedSubscriptionPacks = function( dbConnection,storeId, callback ){
+exports.getSelectedSubscriptionPacks = function( dbConnection, packageId , callback ){
+    console.log( "package id ");
+    console.log( packageId );
     var query = dbConnection.query('SELECT pss_sp_id FROM  icn_package_subscription_site, icn_sub_plan '+
-        ' WHERE icn_package_subscription_site.pss_sp_pkg_id = ? AND ISNULL( icn_package_subscription_site.pss_crud_isactive ) AND icn_package_subscription_site.pss_sp_id = icn_sub_plan.sp_id ',[storeId],
+        ' WHERE icn_package_subscription_site.pss_sp_pkg_id = ? AND ISNULL( icn_package_subscription_site.pss_crud_isactive ) AND icn_package_subscription_site.pss_sp_id = icn_sub_plan.sp_id ',[packageId],
         function( err, response ) {
             console.log( response );
             callback( err, response );
@@ -42,7 +44,7 @@ exports.subscriptionPackExists = function( dbConnection, subPackId, sp_pkg_id,  
     });
 }
 
-exports.getSubscriptionPacksByIds = function( dbConnection,subscriptionPackIds, pss_sp_pkg_id,   callback ){
+exports.getSubscriptionPacksByIds = function( dbConnection, subscriptionPackIds, pss_sp_pkg_id,   callback ){
     var query = dbConnection.query("SELECT group_concat( pss_id ) as sub_pack_ids " +
         "FROM  icn_package_subscription_site " +
         "WHERE pss_sp_id IN (" + subscriptionPackIds + ") AND ISNULL( pss_crud_isactive ) AND pss_sp_pkg_id = ? " ,[pss_sp_pkg_id],
@@ -53,6 +55,8 @@ exports.getSubscriptionPacksByIds = function( dbConnection,subscriptionPackIds, 
 }
 
 exports.deleteSubscriptionPack = function (dbConnection, pssId, sp_pkg_id, callback ) {
+    console.log("pssId");
+    console.log(pssId);
     var query = dbConnection.query('UPDATE icn_package_subscription_site SET pss_crud_isactive = ? WHERE pss_id = ? AND pss_sp_pkg_id = ?',
         [ pssId, pssId, sp_pkg_id ],function( err, result ) {
             if( err ){
