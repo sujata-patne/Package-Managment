@@ -36,10 +36,10 @@ myApp.controller('valuePackCtrl', function ($scope, $state, ngProgress, $statePa
         if(data.success){
             //$scope.getResultData(data);
             $scope.success = data.message;
-            $scope.successvisible = true;
+            toastr.success( $scope.success );
         }else{
             $scope.error = data.message;
-            $scope.errorvisible = true;
+            toastr.error( $scope.error );
         }
     }
 

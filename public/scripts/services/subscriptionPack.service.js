@@ -17,7 +17,7 @@ myApp.service('subscriptionPack', ['$http', function ($http) {
         });
     };
 
-    subscriptionPackService.addValuePackToMainSite = function (data, success, error) {
+    subscriptionPackService.addSubscriptionPackToMainSite = function (data, success, error) {
         console.log( subscriptionPackService.baseRestUrl );
         $http.post(subscriptionPackService.baseRestUrl + '/addSubscriptionPackToMainSite',data).success(function (items) {
             success(items);

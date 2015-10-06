@@ -10,12 +10,6 @@ exports.getSubscriptionDetailsByStoreId = function(dbConnection, storeId, callba
     )
 }
 
-exports.createMainSiteStorePackagePlan = function (dbConnection, data, callback) {
-    dbConnection.query('INSERT INTO icn_store_package SET ?', data, function (err, result) {
-        callback( err, result );
-    });
-}
-
 exports.createMainSiteSubscriptionPackPlan = function (dbConnection, data, callback) {
     dbConnection.query('INSERT INTO icn_package_subscription_site SET ?', data, function (err, result) {
         callback( err, result );

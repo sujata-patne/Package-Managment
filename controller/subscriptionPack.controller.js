@@ -35,10 +35,9 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, function( err, packageData ) {
-                    console.log( "===================== " );
-                    console.log( packageData );
+                    console.log( packageData.length );
                     if( packageData.length == 0 ) {
-                        /*mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
+                        mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
                             if (err) {
                                 console.log(err.message);
                                 connection_ikon_cms.release();
@@ -48,27 +47,27 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
                                     sp_pkg_id: ( lastInsertedId != null ? parseInt(lastInsertedId + 1) : 1 ),
                                     sp_st_id: req.session.package_StoreId,
                                     sp_dc_id: req.body.selectedDistributionChannel,
-                                    sp_package_type: 0,
+                                    sp_pkg_type: 0,
                                     sp_is_active: 1,
                                     sp_created_on: new Date(),
                                     sp_created_by: req.session.package_UserId,
                                     sp_modified_on: new Date(),
-                                    sp_modified_by: req.session.package_UserId,
-                                    sp_crud_isactive: 1
+                                    sp_modified_by: req.session.package_UserId
 
                                 };
-
-                                subscriptionPackManager.createMainSiteStorePackagePlan(connection_ikon_cms, data, function (err, storePlan) {
+                                mainSiteManager.addStorePackage(connection_ikon_cms, data, function (err, storePlan) {
+                                    console.log("coming");
+                                    console.log(storePlan);
                                     if (err) {
                                         connection_ikon_cms.release();
                                     } else {
-                                        //addSubscriptionPackagePlan(connection_ikon_cms, data );
+                                        addSubscriptionPackagePlan(req, res, connection_ikon_cms, data );
                                     }
                                 });
                             }
-                        });*/
+                        });
                     } else {
-
+                        addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData[0] );
                     }
                 });
 
@@ -81,7 +80,8 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
     }
 }
 
-function addSubscriptionPackagePlan( connection_ikon_cms, packageData ) {
+function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData ) {
+    console.log( packageData );
     for (var i = 0; i < req.body.selectedSubscriptionPlans.length; i++) {
         (function () {
             var j = i;
@@ -93,14 +93,12 @@ function addSubscriptionPackagePlan( connection_ikon_cms, packageData ) {
                         var subscriptionPackData = {
                             pss_id: lastInsertedId != null ? parseInt(lastInsertedId + 1) : 1,
                             pss_sp_pkg_id: packageData.sp_pkg_id,
-                            pss_pkg_type: packageData.sp_package_type,
                             pss_sp_id: req.body.selectedSubscriptionPlans[j],
                             pss_is_active: 1,
                             pss_created_on: new Date(),
                             pss_created_by: req.session.package_UserId,
                             pss_modified_on: new Date(),
-                            pss_modified_by: req.session.package_UserId,
-                            pss_crud_isactive: 1
+                            pss_modified_by: req.session.package_UserId
                         }
 
                         subscriptionPackManager.createMainSiteSubscriptionPackPlan(connection_ikon_cms, subscriptionPackData, function (err, resp) {
@@ -110,7 +108,7 @@ function addSubscriptionPackagePlan( connection_ikon_cms, packageData ) {
                                 if (j == req.body.selectedSubscriptionPlans.length - 1) {
                                     res.send({
                                         success: true,
-                                        "message": "Value pack plan successfully saved for site",
+                                        "message": "Subscription plan successfully saved for site",
                                         "status": 200
                                     });
                                 }
