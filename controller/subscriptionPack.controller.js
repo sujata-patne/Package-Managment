@@ -30,6 +30,28 @@ exports.getSubscriptionDetails = function(req, res, next) {
     }
 }
 
+exports.getSelectedSubscriptionPacks = function( req, res, next ) {
+    try{
+        if( req.session && req.session.package_UserName && req.session.package_StoreId ) {
+            mysql.getConnection('CMS', function( err, connection_ikon_cms) {
+                console.log( req.body.packageId );
+                subscriptionPackManager.getSelectedSubscriptionPacks( connection_ikon_cms, req.body.packageId, function( err, selectedSubscriptionPlans) {
+                    if (err) {
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message)
+                    } else {
+                        connection_ikon_cms.release();
+                        res.send( { selectedSubscriptionPlans : selectedSubscriptionPlans } );
+                    }
+                });
+            });
+        }
+    } catch( err ) {
+        res.status(500).json(err.message);
+    }
+}
+
 exports.addSubscriptionPackToMainSite = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
@@ -82,41 +104,139 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
 
 function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData ) {
     console.log( packageData );
-    for (var i = 0; i < req.body.selectedSubscriptionPlans.length; i++) {
-        (function () {
-            var j = i;
-            process.nextTick(function () {
-                subscriptionPackManager.getLastInsertedValueSubscriptionPlanId(connection_ikon_cms, function (err, lastInsertedId) {
-                    if (err) {
-                        connection_ikon_cms.release();
-                    } else {
-                        var subscriptionPackData = {
-                            pss_id: lastInsertedId != null ? parseInt(lastInsertedId + 1) : 1,
-                            pss_sp_pkg_id: packageData.sp_pkg_id,
-                            pss_sp_id: req.body.selectedSubscriptionPlans[j],
-                            pss_is_active: 1,
-                            pss_created_on: new Date(),
-                            pss_created_by: req.session.package_UserId,
-                            pss_modified_on: new Date(),
-                            pss_modified_by: req.session.package_UserId
-                        }
 
-                        subscriptionPackManager.createMainSiteSubscriptionPackPlan(connection_ikon_cms, subscriptionPackData, function (err, resp) {
-                            if (err) {
+    var subscriptionPacks = req.body.selectedSubscriptionPlans;
+    var addSubscriptionPackIds = subscriptionPacks.filter( function( el ) {
+        return req.body.existingSubscriptionPackIds.indexOf( el ) < 0;
+    });
 
+    var deletePackIds = req.body.existingSubscriptionPackIds.filter( function( el ) {
+        return subscriptionPacks.indexOf( el ) < 0;
+    });
+
+    var is_deleted = true;
+
+    var deleteSubscriptionPackIds = [];
+
+    console.log( "Add ");
+    console.log( addSubscriptionPackIds );
+
+    console.log( "delete ");
+    console.log( deletePackIds );
+
+    if( deletePackIds.length > 0 ) {
+        //console.log( deleteValuePackIds );
+       subscriptionPackManager.getSubscriptionPacksByIds( connection_ikon_cms, deletePackIds, packageData.pss_sp_pkg_id,  function( err, response ) {
+
+            if(response[0].value_pack_ids !== null){
+                deleteSubscriptionPackIds = response[0].sub_pack_ids.split(',')
+                    .map(function (element) {
+                        return parseInt(element)
+                    });
+
+            }
+            if( deleteSubscriptionPackIds.length > 0 ) {
+                loop(0);
+                var count = deleteSubscriptionPackIds.length;
+                function loop(cnt) {
+                    var i = cnt;
+                    valuePackManager.deleteSubscriptionPack( connection_ikon_cms, deleteSubscriptionPackIds[i],packageData.sp_pkg_id, function (err, deleteStatus) {
+                        if (err) {
+                            connection_ikon_cms.release();
+                            res.status(500).json(err.message);
+                        } else if( deleteStatus != false ){
+                            cnt = cnt + 1;
+                            if(cnt == count) {
+                                is_deleted = true;
                             } else {
-                                if (j == req.body.selectedSubscriptionPlans.length - 1) {
-                                    res.send({
-                                        success: true,
-                                        "message": "Subscription plan successfully saved for site",
-                                        "status": 200
-                                    });
-                                }
+                                loop(cnt);
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
+            }
+        });
+    }
+    console.log( addSubscriptionPackIds.length );
+    console.log( "addSubscriptionPackIds.length" );
+    if( addSubscriptionPackIds.length > 0 ) {
+        var count = addSubscriptionPackIds.length;
+        loop(0);
+        function loop(cnt) {
+            var i = cnt;
+            subscriptionPackManager.subscriptionPackExists( connection_ikon_cms, addSubscriptionPackIds[i], packageData.sp_pkg_id, function (err, response ) {
+                console.log("response");
+                console.log( response );
+                if( response != undefined && response.length > 0   ) {
+                    subscriptionPackManager.updateSubscriptionPack(connection_ikon_cms, response[0].pss_id, packageData.sp_pkg_id, function( err, response ) {
+                        if (err) {
+                            connection_ikon_cms.release();
+                            res.status(500).json(err.message);
+                        } else {
+                            cnt = cnt + 1;
+                            if( cnt == count ) {
+                                connection_ikon_cms.release();
+                                res.send({
+                                    success: true,
+                                    "message": "Value pack plan successfully saved for site",
+                                    "status": 200
+                                });
+                            } else {
+                                loop(cnt);
+                            }
+                        }
+                    });
+                } else {
+                    subscriptionPackManager.getLastInsertedValueSubscriptionPlanId(connection_ikon_cms, function (err, lastInsertedId) {
+                        if (err) {
+                            connection_ikon_cms.release();
+                            res.status(500).json(err.message);
+                        } else {
+                            var subscriptionPackData = {
+                                pss_id: lastInsertedId != null ? parseInt(lastInsertedId + 1) : 1,
+                                pss_sp_pkg_id: packageData.sp_pkg_id,
+                                pss_sp_id: addSubscriptionPackIds[i],
+                                pss_is_active: 1,
+                                pss_created_on: new Date(),
+                                pss_created_by: req.session.package_UserId,
+                                pss_modified_on: new Date(),
+                                pss_modified_by: req.session.package_UserId
+                            }
+
+                            subscriptionPackManager.createMainSiteSubscriptionPackPlan(connection_ikon_cms, subscriptionPackData, function (err, resp) {
+                                if (err) {
+                                    connection_ikon_cms.release();
+                                    res.status(500).json(err.message);
+                                } else {
+                                    cnt = cnt + 1;
+                                    if( cnt == count ) {
+                                        connection_ikon_cms.release();
+                                        res.send({
+                                            success: true,
+                                            "message": "Subscription pack plan successfully saved for site.",
+                                            "status": 200
+                                        });
+                                    } else {
+                                        loop(cnt);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
             });
-        })();
+
+        }
+    } else{
+        subscriptionPackManager.getSelectedSubscriptionPacks( connection_ikon_cms, req.body.packageId, function( err, selectedSubscriptionPlans) {
+            if (err) {
+                connection_ikon_cms.release();
+                res.status(500).json(err.message);
+                console.log(err.message)
+            } else {
+                connection_ikon_cms.release();
+                res.send( { "success" : true,"status":200, "message":"Subscription pack plan successfully saved for site.",selectedSubscriptionPlans : selectedSubscriptionPlans } );
+            }
+        });
     }
 }

@@ -26,6 +26,14 @@ myApp.service('subscriptionPack', ['$http', function ($http) {
         });
     };
 
+    subscriptionPackService.getSelectedSubscriptionPacks = function( data, success, error ) {
+        $http.post(subscriptionPackService.baseRestUrl + '/getSelectedSubscriptionPacks', data ).success(function (items) {
+            success(items);
+        }).error(function (err) {
+            error(err);
+        });
+    }
+
     return subscriptionPackService;
 
 }]);
