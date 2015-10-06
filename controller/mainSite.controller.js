@@ -9,7 +9,6 @@ exports.getMainSiteData = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-
                 async.parallel({
                     ContentTypes: function (callback) {
                         mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
@@ -41,19 +40,25 @@ exports.getMainSiteData = function(req, res, next) {
                             function (callback) {
                                 mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId, function (err, mainSitePackageData) {
                                     callback(err, mainSitePackageData);
+                                    console.log(mainSitePackageData)
                                 })
                             },
                             function (mainSitePackageData, callback) {
-                                if (mainSitePackageData.length > 0) {
-                                    mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, results) {
-                                        // console.log(results)
-                                        callback(err, {
-                                            mainSitePackageData: mainSitePackageData[0],
-                                            alacartNOfferDetails: results
-                                        });
+                                if (mainSitePackageData != null && mainSitePackageData.length > 0) {
+                                    mainSiteManager.getAlacartNOfferDetails(connection_ikon_cms, mainSitePackageData[0].sp_pkg_id, function (err, alacartNOfferDetails) {
+                                          callback(err, mainSitePackageData, alacartNOfferDetails);
                                     })
                                 } else {
-                                    callback(err, {mainSitePackageData: null, alacartNOfferDetails: null});
+                                    callback(null, null, null);
+                                }
+                            },
+                            function (mainSitePackageData,alacartNOfferDetails,callback) {
+                                if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
+                                    mainSiteManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
+                                        callback(err, {mainSitePackageData: mainSitePackageData, alacartNOfferDetails: alacartNOfferDetails, contentTypePlanData:contentTypePlanData});
+                                    })
+                                } else {
+                                    callback(err, {mainSitePackageData: null, alacartNOfferDetails: null, contentTypePlanData:null});
                                 }
                             }
                         ],

@@ -54,7 +54,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     };
 
     MainSite.getMainSiteData(function (MainSiteData) {
-       // $scope.ContentTypes = ContentTypeData.ContentTypes;
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.alacartData = angular.copy(MainSiteData.ContentTypeData);
@@ -62,19 +61,21 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
         $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
 
         $scope.mainSitePackageData = angular.copy(MainSiteData.mainSiteData.mainSitePackageData);
-
-        $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSiteData.alacartNOfferDetails);
-
         if($scope.mainSitePackageData != null){
-            $scope.distributionChannelId = $scope.mainSitePackageData.sp_dc_id;
-            $scope.PackageId = $scope.mainSitePackageData.sp_pkg_id;
+            $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
+            $scope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
         }
-        if( $scope.alacartNofferDetails != undefined && $scope.alacartNofferDetails.length > 0){
-            angular.forEach($scope.alacartNofferDetails, function(data){
+        $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSiteData.alacartNOfferDetails);
+        if($scope.alacartNofferDetails != null) {
+            $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
+            $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
+        }
+        $scope.contentTypePlanData = angular.copy(MainSiteData.mainSiteData.contentTypePlanData);
+        if($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0){
+            angular.forEach($scope.contentTypePlanData, function(data){
                 $scope.alacartPlanIds[data.pct_content_type_id] = {download:data.pct_download_id,streaming:data.pct_stream_id};
             })
         }
-
     });
 
     $scope.resetForm = function () {
