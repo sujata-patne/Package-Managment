@@ -4,10 +4,12 @@
 myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $stateParams, MainSite) {
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
-    $scope.selectedValuePacks = [];
+
     $scope.selectedStore = [];
 
     $scope.alacartPlanIds = {};
+    $scope.selectedValuePacks = [];
+    $scope.selectedSubscriptionPlans = [];
     $scope.distributionChannelId = "";
 
     $('.removeActiveClass').removeClass('active');
@@ -62,11 +64,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     $scope.showPackageData = function(){
         $scope.PackageId = '';
         $scope.PackageType = 0;
-        console.log($scope.distributionChannelId)
+        $scope.alacartPlanIds = {};
+        $scope.contentTypePlanData = {};
+        $scope.selectedValuePacks = [];
+        $scope.selectedSubscriptionPlans = [];
+
         MainSite.showPackageData({distributionChannelId:$scope.distributionChannelId},function (MainSiteData) {
-            console.log(MainSiteData)
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData);
-            if ($scope.mainSitePackageData != null) {
+            if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $scope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
             }else{
@@ -74,29 +79,44 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
                 $scope.PackageId = '';
             }
             $scope.alacartNofferDetails = angular.copy(MainSiteData.alacartNOfferDetails);
-            if ($scope.alacartNofferDetails != null) {
+            if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
                 $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
+
+                $scope.contentTypePlanData = angular.copy($scope.alacartNofferDetails[1].contentTypePlanData);
+                if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
+                    angular.forEach($scope.contentTypePlanData, function (data) {
+                        $scope.alacartPlanIds[data.pct_content_type_id] = {
+                            download: data.pct_download_id,
+                            streaming: data.pct_stream_id
+                        };
+                    })
+                }
             }else{
                 $scope.offerId = '';
                 $scope.paosId = '';
             }
-            $scope.contentTypePlanData = angular.copy(MainSiteData.contentTypePlanData);
-            if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
-                angular.forEach($scope.contentTypePlanData, function (data) {
-                    $scope.alacartPlanIds[data.pct_content_type_id] = {
-                        download: data.pct_download_id,
-                        streaming: data.pct_stream_id
-                    };
-                })
-            }else{
-                $scope.alacartPlanIds = {};
+
+            var valuePackDetails = angular.copy(MainSiteData.valuePackDetails);
+            if( valuePackDetails.length > 0 ) {
+                for( i = 0; i < valuePackDetails.length ; i++ ){
+                    $scope.selectedValuePacks.push(valuePackDetails[i].pvs_vp_id );
+                }
+            }
+
+            var subscriptionDetails = angular.copy(MainSiteData.subscriptionDetails);
+            if( subscriptionDetails.length > 0 ) {
+                for( i = 0; i < subscriptionDetails.length ; i++ ){
+                    $scope.selectedSubscriptionPlans.push(subscriptionDetails[i].pss_sp_id );
+                }
             }
         })
     }
 
     $scope.resetForm = function () {
-
+        $scope.alacartPlanIds = [];
+        $scope.selectedValuePacks = [];
+        $scope.selectedSubscriptionPlans = [];
     }
 });
 

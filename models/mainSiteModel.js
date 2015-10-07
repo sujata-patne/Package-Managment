@@ -58,8 +58,10 @@ exports.editAlacartPack = function(dbConnection,data,callback){
         callback(err,response);
     });
 }
-exports.deleteAlacartPlans = function(dbConnection,data,callback){
-    var query = dbConnection.query("UPDATE `icn_package_content_type` SET pct_crud_isactive = ? WHERE pct_paos_id = ? AND pct_content_type_id = ? ", [data,data.pct_paos_id,data,data.pct_paos_id, data.pct_content_type_id], function (err, response) {
+
+exports.addAlacartPack = function(dbConnection,data,callback){
+    console.log(data)
+    var query = dbConnection.query("INSERT INTO `icn_package_content_type` SET ? ", data, function (err, response) {
         callback(err,response);
     });
 }
@@ -70,13 +72,6 @@ exports.getContentTypeAlacartPlan = function(dbConnection,paosId, callback){
 }
 exports.existingContentTypesInPack = function(dbConnection,paosId, callback){
     var query = dbConnection.query("SELECT group_concat(distinct(pct_content_type_id)) as contentTypes FROM icn_package_content_type WHERE pct_paos_id = ? AND pct_is_active = 1 AND ISNULL(pct_crud_isactive) ", [paosId], function (err, response) {
-        callback(err,response);
-    });
-}
-
-exports.addAlacartPack = function(dbConnection,data,callback){
-    console.log(data)
-    var query = dbConnection.query("INSERT INTO `icn_package_content_type` SET ? ", data, function (err, response) {
         callback(err,response);
     });
 }

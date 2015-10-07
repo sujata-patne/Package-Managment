@@ -10,11 +10,10 @@ exports.getLastInsertedValuePackId = function( dbConnection, callback ) {
     });
 }
 
-exports.getSelectedValuePacks = function( dbConnection,storeId, callback ){
+exports.getSelectedValuePacks = function( dbConnection,packageId, callback ){
     var query = dbConnection.query('SELECT pvs_vp_id FROM  icn_package_value_pack_site , icn_valuepack_plan '+
-                  ' WHERE icn_package_value_pack_site.pvs_sp_pkg_id = ? AND ISNULL( icn_package_value_pack_site.pvs_crud_isactive )  AND icn_package_value_pack_site.pvs_vp_id = icn_valuepack_plan.vp_id ',[storeId],
+                  ' WHERE icn_package_value_pack_site.pvs_sp_pkg_id = ? AND ISNULL( icn_package_value_pack_site.pvs_crud_isactive )  AND icn_package_value_pack_site.pvs_vp_id = icn_valuepack_plan.vp_id ',[packageId],
         function( err, response ) {
-                     console.log( response );
                       callback( err, response );
         });
 }

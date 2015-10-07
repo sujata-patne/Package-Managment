@@ -13,7 +13,6 @@ exports.getSelectedValuePacks = function( req, res, next ) {
     try{
         if( req.session && req.session.package_UserName && req.session.package_StoreId ) {
             mysql.getConnection('CMS', function( err, connection_ikon_cms) {
-                console.log( req.body.packageId );
                 valuePackManager.getSelectedValuePacks( connection_ikon_cms, req.body.packageId, function( err, selectedValuePackPlans) {
                     if (err) {
                         connection_ikon_cms.release();
@@ -35,7 +34,7 @@ exports.addValuePackToMainSite = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, function( err, packageData ) {
+                mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, req.body.selectedDistributionChannel,function( err, packageData ) {
                     console.log( packageData.length );
                     if( packageData.length == 0 ) {
                         mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {

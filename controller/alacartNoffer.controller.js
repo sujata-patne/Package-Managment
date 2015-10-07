@@ -8,7 +8,6 @@ var async = require("async");
 
 exports.editAlacartPackDetails = function (req,res,next){
     console.log('edit')
-
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -137,49 +136,50 @@ exports.addAlacartPackDetails = function (req,res,next){
                 async.waterfall([
                     function(callback){
                         //Get store package
-                        mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
-                            callback(err, MaxPkgId)
-                        });
+                        mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId,function( err, packageData ) {
+                            if(packageData.length > 0){
+                                callback(err, packageData[0].sp_pkg_id);
+                            }else{
+                                mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
+                                    var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
+                                    var storePackage = {
+                                        sp_pkg_id: pkgId,
+                                        sp_st_id: req.session.package_StoreId,
+                                        sp_dc_id: req.body.distributionChannelId,
+                                        sp_pkg_type: req.body.packageType, //site type
+                                        sp_is_active: 1
+                                    };
+                                    if(addStorePackage(connection_ikon_cms,storePackage)){
+                                        callback(null,pkgId);
+                                    }else{
+                                        callback({message:'Store Package can not be added.'},pkgId);
+                                    }
+                                });
+                            }
+                        })
                     },
                     function(pkgId,callback){
                         mainSiteManager.getMaxAlacartOfferId( connection_ikon_cms, function(err,MaxPaosId){
-                            callback(err, pkgId, MaxPaosId)
-                        });
-                    },
-                    function (pkgId,paosId,callback){
-                        var pkg_id = pkgId[0].pkg_id != null ?  parseInt(pkgId[0].pkg_id + 1) : 1;
-                        var storePackage = {
-                            sp_pkg_id: pkg_id,
-                            sp_st_id: req.session.package_StoreId,
-                            sp_dc_id: req.body.distributionChannelId,
-                            sp_pkg_type: req.body.packageType, //site type
-                            sp_is_active: 1
-                        }
+                            console.log(MaxPaosId)
 
-                        if(addStorePackage(connection_ikon_cms,storePackage)){
-                            callback(null,pkg_id,paosId);
-                        }else{
-                            callback({message:'Store Package can not be added.'},pkg_id,paosId);
-                        }
-                    },
-                    function (pkgId,paosId,callback){
-                        var contentType = 0;
-                        var paos_id = paosId[0].paos_id != null ?  parseInt(paosId[0].paos_id + 1) : 1;
-                        var AlacartOfferData = {
-                            paos_id: paos_id,
-                            paos_sp_pkg_id: pkgId,
-                            paos_op_id: req.body.offerId,
-                            paos_is_active: 1,
-                            paos_created_on:  new Date(),
-                            paos_created_by: req.session.package_UserName,
-                            paos_modified_on:  new Date(),
-                            paos_modified_by: req.session.package_UserName
-                        }
-                        if(addAlacartOfferDetails(connection_ikon_cms,AlacartOfferData)){
-                            callback(null,paos_id);
-                        }else{
-                            callback({message:'Alacart & Offer can not be added.'},paos_id);
-                        }
+                            var paosId = MaxPaosId[0].paos_id != null ?  parseInt(MaxPaosId[0].paos_id + 1) : 1;
+                            console.log("paosId : "+paosId)
+                            var AlacartOfferData = {
+                                paos_id: paosId,
+                                paos_sp_pkg_id: pkgId,
+                                paos_op_id: req.body.offerId,
+                                paos_is_active: 1,
+                                paos_created_on:  new Date(),
+                                paos_created_by: req.session.package_UserName,
+                                paos_modified_on:  new Date(),
+                                paos_modified_by: req.session.package_UserName
+                            }
+                            if(addAlacartOfferDetails(connection_ikon_cms,AlacartOfferData)){
+                                callback(null,paosId);
+                            }else{
+                                callback({message:'Alacart & Offer can not be added.'},paosId);
+                            }
+                        });
                     },
                     function (paosId, callback) {
                         var ctCount = req.body.ContentTypes.length;
@@ -194,22 +194,23 @@ exports.addAlacartPackDetails = function (req,res,next){
                             addContentTypePlans(connection_ikon_cms, 0, addPlansData);
                         }
                         callback(null,newContentTypes);
+                    }
+                ],
+                function (err, results) {
+                    if (err) {
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message)
+                    } else {
+                        connection_ikon_cms.release();
 
-                    }],
-                    function (err, results) {
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
-                        } else {
-                            //connection_ikon_cms.release();
-                            res.send({
-                                "success": true,
-                                "status": 200,
-                                "message": "A-la-cart & Offer Plans added successfully!."
-                            });
-                        }
-                    });
+                        res.send({
+                            "success": true,
+                            "status": 200,
+                            "message": "A-la-cart & Offer Plans added successfully!."
+                        });
+                    }
+                });
             })
         }else{
             res.redirect('/accountlogin');
@@ -223,7 +224,7 @@ function addStorePackage( connection_ikon_cms, data ){
     mainSiteManager.addStorePackage( connection_ikon_cms, data, function(err,response ){
         if(err){
             connection_ikon_cms.release();
-            res.status(500).json(err.message);
+            console.log(err.message);
             return false;
         }
     });
@@ -234,8 +235,7 @@ function addAlacartOfferDetails( connection_ikon_cms, data ){
     mainSiteManager.addAlacartOfferDetails( connection_ikon_cms, data, function(err,response ){
         if(err){
             connection_ikon_cms.release();
-            console.log(err)
-            res.status(500).json(err.message);
+            console.log(err.message);
             return false;
         }
     });
@@ -245,7 +245,7 @@ function editAlacartOfferDetails( connection_ikon_cms, data ){
     mainSiteManager.editAlacartOfferDetails( connection_ikon_cms, data, function(err,response ){
         if(err){
             connection_ikon_cms.release();
-            res.status(500).json(err.message);
+            console.log(err.message);
             return false;
         }
     });
@@ -255,7 +255,7 @@ function addAlacartPack( connection_ikon_cms, data ){
     mainSiteManager.addAlacartPack( connection_ikon_cms, data, function(err,response ){
         if(err){
             connection_ikon_cms.release();
-            res.status(500).json(err.message);
+            console.log(err.message);
             return false;
         }
     });
@@ -265,7 +265,7 @@ function editAlacartPack( connection_ikon_cms, data ){
     mainSiteManager.editAlacartPack( connection_ikon_cms, data, function(err,response ){
         if(err){
             connection_ikon_cms.release();
-            res.status(500).json(err.message);
+            console.log(err.message);
             return false;
         }
     });
@@ -292,14 +292,11 @@ function addContentTypePlans(connection_ikon_cms,cnt,data) {
         pct_modified_by: data.packageUserName
     }
     mainSiteManager.addAlacartPack( connection_ikon_cms, ContentTypePlanData, function(err,response ){
-
         if(err){
             connection_ikon_cms.release();
-            res.status(500).json(err.message);
-
+            console.log(err.message);
         }else{
             cnt++;
-            console.log(cnt +' : '+ "  added")
             if (cnt < plans) {
                 addContentTypePlans(connection_ikon_cms,cnt,data);
             }
@@ -329,10 +326,9 @@ function editContentTypePlans(connection_ikon_cms,cnt,data) {
 
         if(err){
             connection_ikon_cms.release();
-            res.status(500).json(err.message);
+            console.log(err.message);
         }else{
             cnt++;
-            console.log(cnt +' : '+ " edited")
             if (cnt < plans) {
                 editContentTypePlans(connection_ikon_cms,cnt,data);
             }
@@ -356,11 +352,10 @@ function deleteAlacartPlans(connection_ikon_cms,cnt,data) {
     mainSiteManager.editAlacartPack( connection_ikon_cms, ContentTypePlanData, function(err,response ){
         if(err){
             connection_ikon_cms.release();
-            res.status(500).json(err.message);
+            //res.status(500).json(err.message);
             console.log(err.message)
         }else{
             cnt++;
-            console.log(cnt +' : '+ " edited")
             if (cnt < plans) {
                 deleteAlacartPlans(connection_ikon_cms,cnt,data);
             }

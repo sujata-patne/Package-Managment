@@ -1,6 +1,5 @@
 
 exports.getSubscriptionDetailsByStoreId = function(dbConnection, storeId, callback) {
-
     var query = dbConnection.query('select sp_id, sp_plan_name ' +
         'FROM icn_sub_plan '+
         'WHERE sp_st_id = ? ', [storeId],
@@ -23,12 +22,9 @@ exports.getLastInsertedValueSubscriptionPlanId = function( dbConnection, callbac
 }
 
 exports.getSelectedSubscriptionPacks = function( dbConnection, packageId , callback ){
-    console.log( "package id ");
-    console.log( packageId );
     var query = dbConnection.query('SELECT pss_sp_id FROM  icn_package_subscription_site, icn_sub_plan '+
         ' WHERE icn_package_subscription_site.pss_sp_pkg_id = ? AND ISNULL( icn_package_subscription_site.pss_crud_isactive ) AND icn_package_subscription_site.pss_sp_id = icn_sub_plan.sp_id ',[packageId],
         function( err, response ) {
-            console.log( response );
             callback( err, response );
         });
 }
