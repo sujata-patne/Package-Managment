@@ -62,17 +62,24 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     $scope.showPackageData = function(){
         $scope.PackageId = '';
         $scope.PackageType = 0;
+        console.log($scope.distributionChannelId)
         MainSite.showPackageData({distributionChannelId:$scope.distributionChannelId},function (MainSiteData) {
             console.log(MainSiteData)
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData);
             if ($scope.mainSitePackageData != null) {
                 $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $scope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
+            }else{
+                //$scope.distributionChannelId = '';
+                $scope.PackageId = '';
             }
             $scope.alacartNofferDetails = angular.copy(MainSiteData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
                 $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
+            }else{
+                $scope.offerId = '';
+                $scope.paosId = '';
             }
             $scope.contentTypePlanData = angular.copy(MainSiteData.contentTypePlanData);
             if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
@@ -82,6 +89,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
                         streaming: data.pct_stream_id
                     };
                 })
+            }else{
+                $scope.alacartPlanIds = {};
             }
         })
     }

@@ -81,7 +81,7 @@ exports.addAlacartPack = function(dbConnection,data,callback){
     });
 }
 exports.getMainSitePackageData = function(dbConnection,storeId, dcId, callback){
-    var query = dbConnection.query("SELECT * FROM icn_store_package HAVING MIN(sp_pkg_id) AND sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_package_name) AND ISNULL(sp_crud_isactive) ", [storeId,dcId], function (err, response) {
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_package_name) AND ISNULL(sp_crud_isactive) ", [storeId,dcId], function (err, response) {
         callback(err,response);
     });
 }

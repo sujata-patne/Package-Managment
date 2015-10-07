@@ -7,6 +7,8 @@ var async = require("async");
 /*A-la-cart-n-offer details for package*/
 
 exports.editAlacartPackDetails = function (req,res,next){
+    console.log('edit')
+
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -128,6 +130,7 @@ exports.editAlacartPackDetails = function (req,res,next){
     }
 };
 exports.addAlacartPackDetails = function (req,res,next){
+    console.log('add')
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -180,14 +183,13 @@ exports.addAlacartPackDetails = function (req,res,next){
                     },
                     function (paosId, callback) {
                         var ctCount = req.body.ContentTypes.length;
-                        // console.log(ctCount)
                         var err = null;
                         var alacartPlansList = req.body.alacartPlansList;
                         var newContentTypes  = Object.keys(req.body.alacartPlansList)
                             .map(function (element) {
                                 return parseInt(element)
                             });
-                        var addPlansData = {alacartPlansList:req.body.alacartPlansList, paosId:req.body.paosId,packageUserName:req.session.package_UserName,ContentTypes:newContentTypes}
+                        var addPlansData = {alacartPlansList:req.body.alacartPlansList, paosId:paosId,packageUserName:req.session.package_UserName,ContentTypes:newContentTypes}
                         if(newContentTypes && newContentTypes.length > 0) {
                             addContentTypePlans(connection_ikon_cms, 0, addPlansData);
                         }

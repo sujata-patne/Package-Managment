@@ -18,13 +18,15 @@ myApp.controller('alacartCtrl', function ($scope, $http, ngProgress, $stateParam
                 packageType: $scope.PackageType,
                 distributionChannelId: $scope.distributionChannelId
             }
-            console.log(alacartData)
+            console.log($scope.paosId)
             ngProgress.start();
             if ($scope.paosId != undefined && $scope.paosId != null && $scope.paosId != '') {
                 MainSite.editAlacartNOffer(alacartData, function (data) {
+                    console.log('edit')
                     $scope.showResponse(data);
                 });
             } else {
+                console.log('add')
                 MainSite.addAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
                 });

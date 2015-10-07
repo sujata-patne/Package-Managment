@@ -23,7 +23,7 @@ myApp.service('MainSite', ['$http', function ($http) {
     }
 
     this.editAlacartNOffer = function(data, success){
-        $http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
+        $http.post(this.baseRestUrl + '/editAlacartNOffer', data).success(function (items) {
             console.log(items)
             success(items);
         });
