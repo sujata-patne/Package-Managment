@@ -1,6 +1,7 @@
 myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state, ngProgress, Package) {
     $('.removeActiveClass').removeClass('active');
-    $('#Package Listing').addClass('active');
+    $('.removeSubactiveClass').removeClass('active');
+    $('#packageListing').addClass('active');
 	$scope.PageTitle = $state.current.name == "edit-store" ? "Edit " : "Add ";
 	// $scope.PageTitle = "Add";
 	$scope.success = "";
@@ -48,7 +49,7 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
     });*/
 
     $scope.distributionChannelChange = function(){
-
+        $scope.search_title="";
         var data = {
             title_text : ($scope.alpha)? $scope.alpha:$scope.search_title,
             st_date : $scope.StartDate,
@@ -72,6 +73,7 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
     // }
 
     $scope.searchStartsWith = function(alphabet){
+
             $scope.alpha = alphabet;
             $scope.btn_clicked = false;
             $scope.search_title = "";
@@ -120,8 +122,8 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
 
                      }
                      console.log(criteria);
-                    Package.getPackageByTitle(criteria,function( data ){
-                             $scope.packageList = data.Package;
+                    Package.getPackageDetail(criteria,function( data ){
+                             $scope.packageList = data.packageByName;
                     },function(error){
                             console.log(error);
                     });

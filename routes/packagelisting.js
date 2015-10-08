@@ -7,6 +7,5 @@ module.exports = function (app) {
         .post(packageListing.getPackageDetail);
     app.route('/getPackageStartsWith')
         .post(packageListing.getPackageStartsWith);
-    app.route('/getPackageByTitle')
-        .post(packageListing.getPackageByTitle);
+
 }
