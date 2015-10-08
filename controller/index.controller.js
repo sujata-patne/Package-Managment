@@ -41,6 +41,7 @@ exports.pages = function (req, res, next) {
 
     var pagesjson = [
         { 'pagename': 'Main Site', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
+         { 'pagename': 'Package Listing', 'href': 'packageListing', 'id': 'package-listing', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
         { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
     ];
 
@@ -184,6 +185,7 @@ function getPages(role) {
 
         var pagesjson = [
             { 'pagename': 'Main Site', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
+             { 'pagename': 'Package Listing', 'href': 'packageListing', 'id': 'package-listing', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
         ];
         return pagesjson;

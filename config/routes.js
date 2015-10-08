@@ -7,6 +7,7 @@ module.exports = function(app){
     require('../routes/alacartPack')(app);
     require('../routes/valuePack')(app);
     require('../routes/subscriptionPack')(app);
+     require('../routes/packageListing')(app);
 
     app.use('/*', function(req,res,next){
         res.status(404).json({"error":"No such service present"});

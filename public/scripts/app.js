@@ -56,6 +56,11 @@ myApp.config(function ($stateProvider) {
             controller: 'usersCtrl',
             url: '/changepassword'
         })
+         .state('packageListing', {
+            templateUrl: 'partials/package_list.html',
+            controller: 'PackageListCtrl',
+            url: '/packageListing'
+        })
 }).run(function ($state) {
     $state.go("main-site");
 })
