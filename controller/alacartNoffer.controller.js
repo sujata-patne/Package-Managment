@@ -104,7 +104,7 @@ exports.editAlacartPackDetails = function (req,res,next){
                             });
                             for (var i = 0; i < existingContentTypes.length; i++) {
                                 var ContentTypeId = existingContentTypes[i];
-                                if((req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0) || (req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
+                                if((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0) || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
                                     editContentTypes.push(ContentTypeId);
                                 }else{
                                     deleteContentTypes.push(ContentTypeId);
