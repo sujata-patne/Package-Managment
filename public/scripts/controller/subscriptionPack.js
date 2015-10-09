@@ -3,10 +3,10 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
     $scope.existingSubscriptionPackIds = [];
     $scope.selectedSubscriptionPlans = [];
 
-    subscriptionPack.getSubscriptionDetails(function (subscriptionPlanData) {
-
+   /* subscriptionPack.getSubscriptionDetails({distributionChannelId:$scope.distributionChannelId},function (subscriptionPlanData) {
         $scope.subscriptionPackPlans = angular.copy( subscriptionPlanData.subscriptionPlans );
-    });
+
+    });*/
 
     var data = {
         packageId : $scope.PackageId,

@@ -1,10 +1,9 @@
 myApp.controller('valuePackCtrl', function ($scope, $state, ngProgress, $stateParams, valuePack ) {
 
     var data = {
-       packageId : $scope.PackageId,
-       packageType: $scope.PackageType
+        packageId : $scope.PackageId,
+        packageType: $scope.PackageType
     }
-
 
     $scope.existingValuePackIds = [];
     $scope.selectedValuePacks = [];
@@ -17,9 +16,8 @@ myApp.controller('valuePackCtrl', function ($scope, $state, ngProgress, $statePa
                 $scope.existingValuePackIds.push($scope.selectedValuePackPlans[i].pvs_vp_id );
             }
         }
-        console.log($scope.selectedValuePacks)
-        console.log($scope.existingValuePackIds)
     });
+
 
     $scope.submitValuePackForm = function( isValid ) {
         $scope.successvisible = false;

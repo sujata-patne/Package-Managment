@@ -8,9 +8,9 @@ myApp.service('subscriptionPack', ['$http', function ($http) {
 
     this.baseRestUrl = "";
 
-    this.getSubscriptionDetails = function ( success, error) {
+    this.getSubscriptionDetails = function ( data, success, error) {
 
-        $http.get(this.baseRestUrl + '/getSubscriptionDetails' ).success(function (items) {
+        $http.post(this.baseRestUrl + '/getSubscriptionDetails', data ).success(function (items) {
             success(items);
         }).error(function (err) {
             error(err);

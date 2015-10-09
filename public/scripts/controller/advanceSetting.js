@@ -1,4 +1,4 @@
-myApp.controller('advancesettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite, advanceSetting) {
+myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite, advanceSetting) {
 	ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";

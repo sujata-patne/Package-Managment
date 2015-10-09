@@ -13,10 +13,17 @@ exports.getContentTypes = function(dbConnection, storeId, callback) {
     })
 }
 
-exports.getOfferData = function(dbConnection, storeId, callback) {
+exports.getOfferData = function(dbConnection, storeId,dcId, callback) {
+    if(dcId != '' && dcId != undefined){
+        var str = ' AND cd1.cd_id = '+ dcId;
+    }else{
+        var str = '';
+    }
     var query = dbConnection.query(' SELECT plan.* ' +
         'FROM icn_offer_plan AS plan ' +
-        'WHERE plan.op_st_id = ? ', [storeId], function (err, ContentTypes) {
+        'join multiselect_metadata_detail as mmd ON plan.op_channel_front = mmd.cmd_group_id ' +
+        'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
+        'WHERE plan.op_st_id = ? ' + str, [storeId], function (err, ContentTypes) {
         callback(err, ContentTypes)
     });
 }
