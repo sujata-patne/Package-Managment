@@ -261,7 +261,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        res.send( { "success" : true,"status":200, "message":"Subscription pack plan successfully saved for site.",selectedSubscriptionPackPlans : selectedSubscriptionPlans } );
+                        res.send( { "success" : true,"status":200, "message":"Package Saved Successfully.",selectedSubscriptionPackPlans : selectedSubscriptionPlans } );
                     }
                 });
                 /*res.send({

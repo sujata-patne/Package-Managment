@@ -1,6 +1,6 @@
 <form method="post" class="form-horizontal" role="form" name="alacartnofferForm" data-ng-submit="submitForm(alacartnofferForm.$valid)" novalidate>
     <div class="row">
-        <div class="col-md-2"><input type="text" name="paosId" class="form-control" data-ng-model="paosId"></div>
+        <div class="col-md-2"><input type="text" name="paosId" class="form-control" data-ng-model="$root.paosId"></div>
         <div class="col-md-8 col-xs-12">
             <div class="portlet">
                 <div class="portlet-content">
@@ -76,7 +76,7 @@
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
                 <button class="btn btn-small" ng-click="proceed(); submitForm(alacartnofferForm.$valid);" ng-disabled="dis()">Next</button>
-                <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+                <button type="reset" ng-disabled="alacartPackPlans.length > 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>
     </div>

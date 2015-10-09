@@ -401,7 +401,7 @@ function addValuePackPlan123( req, res, connection_ikon_cms, packageData ) {
                 console.log(err.message)
             } else {
                 connection_ikon_cms.release();
-                res.send( { "success" : true,"status":200, "message":"Value pack plan successfully saved for site.",selectedValuePackPlans : selectedValuePackPlans } );
+                res.send( { "success" : true,"status":200, "message":"Package Saved Successfully..",selectedValuePackPlans : selectedValuePackPlans } );
             }
         });
     }

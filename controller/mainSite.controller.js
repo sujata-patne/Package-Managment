@@ -134,8 +134,7 @@ exports.getMainSiteData = function(req, res, next) {
                         mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
                             callback(err, distributionChannels);
                         });
-                    },
-
+                    }
                 },
                 function (err, results) {
 

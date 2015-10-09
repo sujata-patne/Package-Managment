@@ -1,7 +1,7 @@
-myApp.controller('valuePackCtrl', function ($scope, $state, ngProgress, $stateParams, valuePack ) {
+myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, valuePack ) {
 
     var data = {
-        packageId : $scope.PackageId,
+        packageId : $rootScope.PackageId,
         packageType: $scope.PackageType
     }
 
@@ -25,7 +25,7 @@ myApp.controller('valuePackCtrl', function ($scope, $state, ngProgress, $statePa
         var valuePackData = {
             selectedValuePacks: $scope.selectedValuePacks,
             selectedDistributionChannel: $scope.distributionChannelId,
-            packageId : $scope.PackageId,
+            packageId : $rootScope.PackageId,
             existingValuePackIds: $scope.existingValuePackIds
         };
         if (isValid) {

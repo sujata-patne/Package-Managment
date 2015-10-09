@@ -1,7 +1,7 @@
 /**
  * Created by sujata.patne on 29-09-2015.
  */
-myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $stateParams, MainSite) {
+myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
 
@@ -12,7 +12,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     $scope.selectedSubscriptionPlans = [];
     $scope.distributionChannelId = "";
 
-
+console.log('test')
 
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
@@ -65,7 +65,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
 
     $scope.showPackageData = function(){
         console.log('sdfsd')
-        $scope.PackageId = '';
+        $rootScope.PackageId = '';
         $scope.PackageType = 0;
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
@@ -85,18 +85,18 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
 
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
-                $scope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
+                $rootScope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
             }else{
                 //$scope.distributionChannelId = '';
-                $scope.PackageId = '';
+                $rootScope.PackageId = '';
             }
             $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
-                $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
+                $rootScope.paosId = $scope.alacartNofferDetails[0].paos_id;
             }else{
                 $scope.offerId = '';
-                $scope.paosId = '';
+                $rootScope.paosId = '';
             }
             $scope.contentTypePlanData = angular.copy(MainSiteData.mainSitePackageData.contentTypePlanData);
             if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
@@ -114,7 +114,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
    // $scope.showPackageData();
 
     $scope.resetForm = function () {
-        $scope.alacartPlanIds = [];
         $scope.selectedValuePacks = [];
         $scope.selectedSubscriptionPlans = [];
     }

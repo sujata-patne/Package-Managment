@@ -1,4 +1,4 @@
-myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $stateParams, subscriptionPack ) {
+myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, subscriptionPack ) {
 
     $scope.existingSubscriptionPackIds = [];
     $scope.selectedSubscriptionPlans = [];
@@ -7,9 +7,10 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         $scope.subscriptionPackPlans = angular.copy( subscriptionPlanData.subscriptionPlans );
 
     });*/
+    console.log("##"+$rootScope.PackageId)
 
     var data = {
-        packageId : $scope.PackageId,
+        packageId : $rootScope.PackageId,
         packageType: $scope.PackageType
     }
 
@@ -33,7 +34,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         var subscriptionPackData = {
             selectedSubscriptionPlans: $scope.selectedSubscriptionPlans,
             selectedDistributionChannel: $scope.distributionChannelId,
-            packageId : $scope.PackageId,
+            packageId : $rootScope.PackageId,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
         if (isValid) {
@@ -66,10 +67,6 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
     $scope.result = function( data ){
 
         if(data.success){
-            //$scope.getResultData(data);
-            $scope.success = data.message;
-            //$scope.successvisible = true;
-            toastr.success( $scope.success );
             if( data.selectedSubscriptionPackPlans.length > 0 ) {
                 $scope.existingSubscriptionPackIds = [];
                 $scope.selectedSubscriptionPlans = [];
@@ -79,7 +76,13 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
                     //console.log( $scope.selectedSubscriptionPlans );
                     $scope.existingSubscriptionPackIds.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
                 }
+                $scope.success = data.message;
+
+            }else{
+                $scope.success = 'Package Added successfully';
+
             }
+            toastr.success( $scope.success );
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );
