@@ -16,11 +16,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12">
-<<<<<<< HEAD
-                                    <select data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
-=======
-                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartData | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
->>>>>>> c5b4284782354cbba28dce3211c51afbde6fbe1b
+                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
                                         <option value="">--Select Download Plan for {{ContentType.cd_name}} or it's Free--</option>
                                     </select>
                                 </div></div>
