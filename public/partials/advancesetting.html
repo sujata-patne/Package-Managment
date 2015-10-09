@@ -78,9 +78,11 @@
                             </table>
                         </div>
                         <div ng-show="offerPlan.length == 0 && valuePlans.length == 0">
-                                No plans found for setting.
+                                No plans found for currently selected distibution channel and  package.
+                               <br/>
+                                If no distribution channel selected, please select one.
                         </div>
-                        <div class="row col-md-12">
+                        <div class="row col-md-12" ng-hide="offerPlan.length == 0 && valuePlans.length == 0">
                             Manage CG Images : 
                         </div>
 
