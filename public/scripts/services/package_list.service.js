@@ -27,13 +27,13 @@ myApp.service('Package', ['$http', function ($http) {
         });
     }
 
-    this.getPackageByTitle = function (data,success, error ) {
+   /* this.getPackageDetail = function (data,success, error ) {
         $http.post(this.baseRestUrl + '/getPackageByTitle',data).success(function (items) {
             success(items);
         }).error(function (err) {
             error(err);
         });
-    }
+    }*/
     this.blockUnBlockContentType = function ( data, success, error ) {
         $http.post(this.baseRestUrl + '/blockUnBlockContentType',data).success(function (items) {
             success(items);

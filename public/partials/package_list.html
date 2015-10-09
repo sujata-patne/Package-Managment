@@ -59,11 +59,7 @@
                                            
                                         <td class="col-md-1 col-xs-1 text-center">{{$index+1}}</td>
                                         <td class="col-md-3 col-xs-3">{{i.sp_package_name}}</td>
-                                       <!-- <td class="col-md-2 col-xs-2">
-                                            {{item.types.split(",").sort().reverse().join(",")}}
-                                        </td>  -->
-                    
-                                        <td class="col-md-2 col-xs-2">{{item.pk_modified_on | date:'dd-MMM-yyyy'}}</td>
+                                        <td class="col-md-2 col-xs-2">{{i.valuePackPlanCount + i.subscriptionPlanCount}}</td>
                                         <td class="col-md-3 col-xs-3">
                                                 <a href="#/edit-pack/{{item.pk_id}}">Edit Pack</a>
                                         </td>

@@ -26,15 +26,14 @@ exports.getAllPackageForListStartsWith = function( dbConnection,data, callback )
         whereCond += " AND pk.sp_dc_id = " + data.distributionChannelId;
     }
 
-    var query = dbConnection.query("Select sp_package_name from icn_store_package as pk " +
+    var query = dbConnection.query("Select * from icn_store_package as pk " +
            "WHERE pk.sp_st_id = ? " +whereCond+ "  group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
            callback( err,response );
        });
-       console.log(query);
 }
-exports.getPackageByTitle = function( dbConnection,data, callback ) {
+exports.getAllPackageForList = function( dbConnection,data, callback ) {
     var moment = require("moment");
-        console.log(data)
+      //  console.log(data)
 
     if(data.start_date !== undefined && data.start_date != ""){
         data.start_date = moment(data.start_date);
@@ -59,25 +58,42 @@ exports.getPackageByTitle = function( dbConnection,data, callback ) {
     if(data.distributionChannelId && data.distributionChannelId != undefined){
         whereCond += " AND pk.sp_dc_id = " + data.distributionChannelId; 
     }
-    console.log("whereCond : ");
-        console.log(whereCond)
 
-    // console.log("SELECT pk.*,pct.pct_id, group_concat(if(pct.pct_is_active = 1,cd.cd_name,null)) as status1, "+
-    //  "group_concat(if(pct.pct_is_active = 0, cd.cd_name,null)) as status0 "+
-    //  "FROM icn_packs AS pk JOIN icn_pack_content_type AS pct ON pk.pk_id = pct.pct_pk_id "+
-    //  "inner join catalogue_detail cd on (pct.pct_cnt_type = cd.cd_id) "+
-    //  "WHERE pk.pk_st_id = ? AND  pk.pk_name LIKE '%"+term+"%' AND Date(pk.pk_modified_on) BETWEEN "+
-    //  " '"+start_date+"' AND '"+end_date+"'"+
-    //  " group by pk.pk_id ORDER BY pk.pk_id desc");
-    // console.log("------------------------------")
 
-console.log("SELECT sp_package_name from icn_store_package as pk " +
-        "WHERE pk.sp_st_id = " +data.storeId + whereCond + 
-        " group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc");
 
     var query = dbConnection.query("SELECT * from icn_store_package as pk " +
         "WHERE pk.sp_st_id = ? " + whereCond + 
         " group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
         callback( err,response );
     });
+}
+exports.countValuePackPlans = function( dbConnection,pkgId, callback) {
+    var query = dbConnection.query('select count(pvs_id) as cnt from icn_package_value_pack_site '+
+        ' where pvs_sp_pkg_id = ?  ' , [pkgId],  function (err, count) {
+        callback(err, count[0].cnt);
+    });
+}
+
+exports.existValuePackByPkgId = function( dbConnection,pkgId, callback) {
+    var query = dbConnection.query('select pvs_id FROM icn_package_value_pack_site '+
+        'WHERE pvs_sp_pkg_id = ? ', [pkgId],
+        function ( err, valuePackPlans ) {
+            callback(err, valuePackPlans );
+        }
+    )
+}
+exports.countSubscriptionPlans = function( dbConnection,pkgId, callback) {
+    var query = dbConnection.query('select count(pss_id) as cnt from icn_package_subscription_site '+
+        ' where pss_sp_pkg_id = ?  ' , [pkgId],  function (err, count) {
+        callback(err, count[0].cnt);
+    });
+}
+
+exports.existSubscriptionByPkgId = function( dbConnection,pkgId, callback) {
+    var query = dbConnection.query('select pss_id FROM icn_package_subscription_site '+
+        'WHERE pss_sp_pkg_id = ? ', [pkgId],
+        function ( err, SubscriptionPlans ) {
+            callback(err, SubscriptionPlans );
+        }
+    )
 }

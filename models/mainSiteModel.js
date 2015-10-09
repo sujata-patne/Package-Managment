@@ -98,8 +98,28 @@ exports.getLastInsertedPackageId = function( dbConnection, callback ) {
     });
 }
 
+
 exports.existStorePackage = function(dbConnection,storeId, dcId, callback) {
     var query = dbConnection.query('SELECT sp_pkg_id AS pkg_id FROM icn_store_package WHERE ISNULL(sp_crud_isactive) AND sp_is_active = 1 AND sp_st_id = ? AND sp_dc_id = ?', [storeId, dcId], function (err, pkgId) {
         callback(err,pkgId);
     });
 }
+
+exports.getPackageOfferPlan = function( dbConnection, packageId, callback ) {
+    var query = dbConnection.query('SELECT * FROM `icn_package_alacart_offer_site`,`icn_offer_plan` WHERE '+
+        ' icn_package_alacart_offer_site.paos_sp_pkg_id = ? AND '+
+        ' icn_package_alacart_offer_site.paos_op_id = icn_offer_plan.op_id',packageId, function( err, response ) {
+        callback( err, response );
+    });
+}
+
+exports.getPackageValuePack = function( dbConnection, packageId, callback ) {
+    var query = dbConnection.query('SELECT * FROM `icn_package_value_pack_site`,`icn_valuepack_plan` WHERE '+
+        'icn_package_value_pack_site.pvs_sp_pkg_id = ? AND '+
+        'icn_package_value_pack_site.pvs_vp_id = icn_valuepack_plan.vp_id',packageId, function( err, response ) {
+        callback( err, response );
+    });
+}
+
+
+

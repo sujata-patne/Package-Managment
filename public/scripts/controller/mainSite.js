@@ -28,7 +28,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     //default form display for a-la-cart and offer plan
 
     $scope.proceed = function() {
-
+        
         if($scope.tabIndex !== ( $scope.tabs.length - 1 ) ){
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
@@ -59,8 +59,12 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
         $scope.alacartData = angular.copy(MainSiteData.ContentTypeData);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
+
         $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
     });*/
+
+
+        
 
     $scope.showPackageData = function(){
         $scope.PackageId = '';
@@ -127,6 +131,3 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     }
 });
 
-
-myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite) {
-});
