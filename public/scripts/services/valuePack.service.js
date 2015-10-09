@@ -5,26 +5,21 @@
  * Created by sujata.patne on 29-09-2015.
  */
 myApp.service('valuePack', ['$http', function ($http) {
-    var valuePackService = {};
-    valuePackService.baseRestUrl = "";
+    this.baseRestUrl = "";
 
-    valuePackService.getSelectedValuePacks = function( data, success, error ) {
-        $http.post(valuePackService.baseRestUrl + '/getSelectedValuePacks', data ).success(function (items) {
+    this.getSelectedValuePacks = function( data, success, error ) {
+        $http.post(this.baseRestUrl + '/getSelectedValuePacks', data ).success(function (items) {
             success(items);
         }).error(function (err) {
             error(err);
         });
     }
 
-    valuePackService.addValuePackToMainSite = function (data, success, error) {
-        console.log( valuePackService.baseRestUrl );
-        $http.post(valuePackService.baseRestUrl + '/addValuePackToMainSite',data).success(function (items) {
+    this.addValuePackToMainSite = function (data, success, error) {
+        $http.post(this.baseRestUrl + '/addValuePackToMainSite',data).success(function (items) {
             success(items);
         }).error(function (err) {
             error(err);
         });
     }
-
-    return valuePackService;
-
 }]);

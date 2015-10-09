@@ -16,7 +16,7 @@ exports.getStore = function (req, res, next) {
                     },
                     
                     function (err, results) {
-                        console.log(results.OfferData)
+                        //console.log(results.OfferData)
                         if (err) {
                             connection_ikon_cms.release();
                             res.status(500).json(err.message);
@@ -42,7 +42,7 @@ exports.getPackageDetail  = function (req, res, next) {
                 async.parallel({
                       
                           packageByName: function (callback) {
-                            console.log(req.body);
+                            //console.log(req.body);
                               var data = {
                                   storeId: req.session.package_StoreId,
                                   term:req.body.title_text,
@@ -65,7 +65,7 @@ exports.getPackageDetail  = function (req, res, next) {
                     },
                     
                     function (err, results) {
-                        console.log(results.OfferData)
+                        //console.log(results.OfferData)
                         if (err) {
                             connection_ikon_cms.release();
                             res.status(500).json(err.message);
@@ -88,7 +88,7 @@ exports.getPackageStartsWith = function (req, res, next) {
     try {   
             if (req.session && req.session.package_UserName) {
                 mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                  console.log("in 1");
+                  //console.log("in 1");
                     async.parallel({
                            Package: function (callback) {
                                var data = {
@@ -97,8 +97,8 @@ exports.getPackageStartsWith = function (req, res, next) {
                                    distributionChannelId: req.body.distributionChannelId
                                }
                               PackageManager.getAllPackageForListStartsWith( connection_ikon_cms,data, function(err,Package){
-                                  console.log('in 2');
-                                  console.log(Package);
+                                  //console.log('in 2');
+                                  //console.log(Package);
                                   callback(err, Package);
                               });
                             }

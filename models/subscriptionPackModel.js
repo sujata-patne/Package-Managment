@@ -22,6 +22,7 @@ exports.getLastInsertedValueSubscriptionPlanId = function( dbConnection, callbac
 }
 
 exports.getSelectedSubscriptionPacks = function( dbConnection, packageId , callback ){
+
     var query = dbConnection.query('SELECT pss_sp_id FROM  icn_package_subscription_site, icn_sub_plan '+
         ' WHERE icn_package_subscription_site.pss_sp_pkg_id = ? AND ISNULL( icn_package_subscription_site.pss_crud_isactive ) AND icn_package_subscription_site.pss_sp_id = icn_sub_plan.sp_id ',[packageId],
         function( err, response ) {
@@ -30,17 +31,20 @@ exports.getSelectedSubscriptionPacks = function( dbConnection, packageId , callb
 }
 
 exports.subscriptionPackExists = function( dbConnection, subPackId, sp_pkg_id,  callback ) {
-    var query = dbConnection.query('SELECT  pss_id as sub_pack_id FROM icn_package_subscription_site WHERE pss_sp_id = ? AND pss_sp_pkg_id = ? AND ( pss_crud_isactive ) IS NOT NULL ',
+    var query = dbConnection.query('SELECT  pss_id FROM icn_package_subscription_site WHERE pss_sp_id = ? ' +
+        'AND pss_sp_pkg_id = ? AND ( pss_crud_isactive ) IS NOT NULL ',
             [subPackId, sp_pkg_id ], function( err, response ) {
-            if ( response.length > 0 ){
+            /*if ( response.length > 0 ){
                 callback(err, response[0].sub_pack_id);
             } else {
                 callback(err, response );
-            }
+            }*/
+            callback(err, response)
     });
 }
 
 exports.getSubscriptionPacksByIds = function( dbConnection, subscriptionPackIds, pss_sp_pkg_id,   callback ){
+
     var query = dbConnection.query("SELECT group_concat( pss_id ) as sub_pack_ids " +
         "FROM  icn_package_subscription_site " +
         "WHERE pss_sp_id IN (" + subscriptionPackIds + ") AND ISNULL( pss_crud_isactive ) AND pss_sp_pkg_id = ? " ,[pss_sp_pkg_id],
@@ -64,9 +68,9 @@ exports.deleteSubscriptionPack = function (dbConnection, pssId, sp_pkg_id, callb
     );
 }
 
-exports.updateSubscriptionPack = function( dbConnection, pssId, sp_pkg_id,  callback ) {
-    var query = dbConnection.query('UPDATE icn_package_subscription_site SET pss_crud_isactive = NULL WHERE pss_id = ? AND pss_sp_pkg_id = ?',
-        [pssId, sp_pkg_id], function (err, result) {
+exports.updateSubscriptionPack = function( dbConnection, pssId,  callback ) {
+    var query = dbConnection.query('UPDATE icn_package_subscription_site SET pss_crud_isactive = NULL WHERE pss_id = ? ',
+        [pssId], function (err, result) {
             callback(err, result)
         }
     );

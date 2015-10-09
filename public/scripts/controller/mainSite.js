@@ -53,13 +53,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
     $scope.showDeliveryTypes = function(contents){
         return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
-    MainSite.getMainSiteData(function (MainSiteData) {
+   /* MainSite.getMainSiteData(function (MainSiteData) {
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.alacartData = angular.copy(MainSiteData.ContentTypeData);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
-    });
+        $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
+    });*/
 
     $scope.showPackageData = function(){
         $scope.PackageId = '';
@@ -70,6 +71,13 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
         $scope.selectedSubscriptionPlans = [];
 
         MainSite.showPackageData({distributionChannelId:$scope.distributionChannelId},function (MainSiteData) {
+            $scope.OfferData = angular.copy(MainSiteData.OfferData);
+            $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
+            $scope.alacartData = angular.copy(MainSiteData.ContentTypeData);
+            $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
+            $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
+            $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
+
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData);
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
@@ -82,7 +90,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
                 $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
-
                 $scope.contentTypePlanData = angular.copy($scope.alacartNofferDetails[1].contentTypePlanData);
                 if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
                     angular.forEach($scope.contentTypePlanData, function (data) {
@@ -98,14 +105,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
             }
 
             var valuePackDetails = angular.copy(MainSiteData.valuePackDetails);
-            if( valuePackDetails.length > 0 ) {
+            if( valuePackDetails != null && valuePackDetails.length > 0 ) {
                 for( i = 0; i < valuePackDetails.length ; i++ ){
                     $scope.selectedValuePacks.push(valuePackDetails[i].pvs_vp_id );
                 }
             }
 
             var subscriptionDetails = angular.copy(MainSiteData.subscriptionDetails);
-            if( subscriptionDetails.length > 0 ) {
+            if( subscriptionDetails != null && subscriptionDetails.length > 0 ) {
                 for( i = 0; i < subscriptionDetails.length ; i++ ){
                     $scope.selectedSubscriptionPlans.push(subscriptionDetails[i].pss_sp_id );
                 }
@@ -121,8 +128,5 @@ myApp.controller('mainSiteCtrl', function ( $scope, $state, ngProgress, $statePa
 });
 
 
-myApp.controller('advancesettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite) {
-});
-myApp.controller('arrangeplanCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite) {
-
+myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite) {
 });

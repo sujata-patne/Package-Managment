@@ -12,16 +12,9 @@ exports.getContentTypes = function(dbConnection, storeId, callback) {
         callback(err, ContentTypes);
     })
 }
-exports.getContentTypeData = function(dbConnection, storeId, callback) {
-    var query = dbConnection.query(' SELECT cd.cd_name, plan.*, (SELECT cd_name FROM catalogue_detail WHERE cd_id = plan.ap_delivery_type) AS delivery_type_name ' +
-    'FROM icn_alacart_plan AS plan ' +
-    'join catalogue_detail as cd ON plan.ap_content_type = cd.cd_id ' +
-    'WHERE plan.ap_st_id = ? ', [storeId], function (err, ContentTypes) {
-        callback(err, ContentTypes)
-    });
-}
+
 exports.getOfferData = function(dbConnection, storeId, callback) {
-    var query = dbConnection.query(' SELECT plan.*' +
+    var query = dbConnection.query(' SELECT plan.* ' +
         'FROM icn_offer_plan AS plan ' +
         'WHERE plan.op_st_id = ? ', [storeId], function (err, ContentTypes) {
         callback(err, ContentTypes)
@@ -76,7 +69,7 @@ exports.existingContentTypesInPack = function(dbConnection,paosId, callback){
     });
 }
 exports.getMainSitePackageData = function(dbConnection,storeId, dcId, callback){
-    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_package_name) AND ISNULL(sp_crud_isactive) ", [storeId,dcId], function (err, response) {
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,dcId], function (err, response) {
         callback(err,response);
     });
 }
@@ -88,16 +81,6 @@ exports.getAlacartNOfferDetails = function(dbConnection,pkgId, callback){
     });
 }
 
-exports.getValuePackPlansByStoreId = function(dbConnection, storeId, callback) {
-
-    var query = dbConnection.query('select vp_id, vp_plan_name ' +
-                         'FROM icn_valuepack_plan '+
-                         'WHERE vp_st_id = ? ', [storeId],
-            function ( err, valuePackPlans ) {
-                callback(err, valuePackPlans );
-            }
-    )
-}
 exports.getAllDistributionChannelsByStoreId = function(dbConnection, storeId, callback) {
     var query = dbConnection.query('select cd.cd_id, cd.cd_name FROM catalogue_detail as cd ' +
             'LEFT JOIN catalogue_master as cm ON cm.cm_id = cd.cd_cm_id ' +

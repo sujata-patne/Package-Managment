@@ -1,6 +1,7 @@
 myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $stateParams, subscriptionPack ) {
 
     $scope.existingSubscriptionPackIds = [];
+    $scope.selectedSubscriptionPlans = [];
 
     subscriptionPack.getSubscriptionDetails(function (subscriptionPlanData) {
 
@@ -18,7 +19,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         $scope.selectedSubscriptionPackPlans = selectedSubscriptionPackData.selectedSubscriptionPlans;
         if( $scope.selectedSubscriptionPackPlans.length > 0 ) {
             for( i = 0; i < $scope.selectedSubscriptionPackPlans.length ; i++ ){
-                //$scope.selectedSubscriptionPlans.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
+                $scope.selectedSubscriptionPlans.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
                 //console.log( $scope.selectedSubscriptionPlans );
                 $scope.existingSubscriptionPackIds.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
             }
@@ -36,7 +37,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
         if (isValid) {
-            if($stateParams.id){
+           /* if($stateParams.id){
                 packData.valuePackId = $stateParams.id;
                 ngProgress.start();
                 subscriptionPack.editSubscriptionPack( subscriptionPackData ,function(data){
@@ -49,7 +50,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
             }else{
                 ngProgress.start();
                 console.log( "subscriptionPackData" );
-                console.log( subscriptionPackData );
+                console.log( subscriptionPackData );*/
                 subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
                     console.log( data );
                     $scope.result(data);
@@ -57,7 +58,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
                 },function(error){
                     console.log(error);
                 });
-            }
+            //}
         }
 
     }
@@ -69,6 +70,16 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
             $scope.success = data.message;
             //$scope.successvisible = true;
             toastr.success( $scope.success );
+            if( data.selectedSubscriptionPackPlans.length > 0 ) {
+                $scope.existingSubscriptionPackIds = [];
+                $scope.selectedSubscriptionPlans = [];
+
+                for( i = 0; i < data.selectedSubscriptionPackPlans.length ; i++ ){
+                    $scope.selectedSubscriptionPlans.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
+                    //console.log( $scope.selectedSubscriptionPlans );
+                    $scope.existingSubscriptionPackIds.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
+                }
+            }
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );

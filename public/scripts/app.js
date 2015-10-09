@@ -39,11 +39,11 @@ myApp.config(function ($stateProvider) {
         })
         .state('main-site.advancesetting', {
             templateUrl: 'partials/advancesetting.html',
-            controller: 'advancesettingCtrl'
+            controller: 'advanceSettingCtrl'
         })
         .state('main-site.arrangeplan', {
-            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'arrangeplanCtrl'
+            templateUrl: 'partials/arrange-plans.html',
+            controller: 'arrangePlanCtrl'
         })
 
         .state('accountforgot', {
