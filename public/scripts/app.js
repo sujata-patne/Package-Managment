@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ui.bootstrap', 'ui.router', 'ngProgress','ngFileUpload']);
+var myApp = angular.module('myApp', ['ui.bootstrap','angularUtils.directives.dirPagination', 'ui.router', 'ngProgress','ngFileUpload']);
 
 toastr.options = {
     "closeButton": false,
