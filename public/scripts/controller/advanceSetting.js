@@ -16,6 +16,8 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
     	packageId : $scope.PackageId
     }
 
+
+
     if($scope.PackageId != ""){
        // console.log('PackageId '+$scope.PackageId);
 
@@ -99,92 +101,97 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
 
 
     $scope.submitAdvanceSettingForm = function(isValid){
-      if($scope.offerPlan.length == 0){
-        isValid = true;
-      }
-      if($scope.offerPlan.length > 0){
+      if (!$scope.distributionChannelId) {
+            toastr.error('Distribution Channel is required');
+            $scope.errorvisible = true;
+        }else{
+                  if($scope.offerPlan.length == 0){
+                    isValid = true;
+                  }
+                  if($scope.offerPlan.length > 0){
 
-          if($scope.totalGet > $scope.offerPlan[0].op_free_item){
-              toastr.error(' In offer plan get :  computed sum greater than their total.');
-              isValid = false;
-          }
-          if($scope.totalBuy > $scope.offerPlan[0].op_buy_item){
-              toastr.error('In offer plan buy :  computed sum greater than their total.');
-              isValid = false;
-          }
-      }
-    
+                      if($scope.totalGet > $scope.offerPlan[0].op_free_item){
+                          toastr.error(' In offer plan get :  computed sum greater than their total.');
+                          isValid = false;
+                      }
+                      if($scope.totalBuy > $scope.offerPlan[0].op_buy_item){
+                          toastr.error('In offer plan buy :  computed sum greater than their total.');
+                          isValid = false;
+                      }
+                  }
+                
 
-        angular.forEach($scope.valuePlanSetting,function(value,key){
-            //Key here is the plan id 
-            // console.log('Plan id::'+key);
-            //change to check :: vp_id ==> pvs_id 
-            var result_arr = _.findWhere($scope.valuePlans, {pvs_id: parseInt(key)});
-            var total_download_limit = result_arr.vp_download_limit;
-            var  vp_name = result_arr.vp_plan_name;
-            var computed_sum = 0;
-            angular.forEach(value,function(v,k){
-                computed_sum += parseInt(v);
-            });
+                    angular.forEach($scope.valuePlanSetting,function(value,key){
+                        //Key here is the plan id 
+                        // console.log('Plan id::'+key);
+                        //change to check :: vp_id ==> pvs_id 
+                        var result_arr = _.findWhere($scope.valuePlans, {pvs_id: parseInt(key)});
+                        var total_download_limit = result_arr.vp_download_limit;
+                        var  vp_name = result_arr.vp_plan_name;
+                        var computed_sum = 0;
+                        angular.forEach(value,function(v,k){
+                            computed_sum += parseInt(v);
+                        });
 
-            if(computed_sum > total_download_limit){
-                isValid = false;
-                toastr.error('In Plan '+vp_name+': Computed sum more than the total');
-                return false;
-            }
-        });//forEach
+                        if(computed_sum > total_download_limit){
+                            isValid = false;
+                            toastr.error('In Plan '+vp_name+': Computed sum more than the total');
+                            return false;
+                        }
+                    });//forEach
 
-        if(isValid){
-            var final_offerBuySetting = angular.copy($scope.offerBuySetting);
-            var final_offerGetSetting = angular.copy($scope.offerGetSetting);
-            var final_valuePlanSetting = angular.copy($scope.valuePlanSetting);
+                    if(isValid){
+                        var final_offerBuySetting = angular.copy($scope.offerBuySetting);
+                        var final_offerGetSetting = angular.copy($scope.offerGetSetting);
+                        var final_valuePlanSetting = angular.copy($scope.valuePlanSetting);
 
-            //Changing BAL TO -1 :
-            angular.forEach(final_offerBuySetting,function(value,key){
-                  angular.forEach(value,function(v,k){
-                    if(v == 'BAL'){
-                      value[k] = -1;
+                        //Changing BAL TO -1 :
+                        angular.forEach(final_offerBuySetting,function(value,key){
+                              angular.forEach(value,function(v,k){
+                                if(v == 'BAL'){
+                                  value[k] = -1;
+                                }
+                              });
+                        });
+
+                        angular.forEach(final_offerGetSetting,function(value,key){
+                              angular.forEach(value,function(v,k){
+                                if(v == 'BAL'){
+                                  value[k] = -1;
+                                }
+                              });
+                        });
+
+                        angular.forEach(final_valuePlanSetting,function(value,key){
+                              angular.forEach(value,function(v,k){
+                                if(v == 'BAL'){
+                                  value[k] = -1;
+                                }
+                              });
+                        });
+
+                        var newSetting = {
+                                totalLength : $scope.contentTypes.length,
+                                valueLength : $scope.valuePlans.length,
+                                offerPackageSiteId : $scope.offerPlan.length == 0 ? '' : $scope.offerPlan[0].paos_id,
+                                offerBuySetting : final_offerBuySetting,
+                                offerGetSetting : final_offerGetSetting,
+                                valuePlanSetting : final_valuePlanSetting,
+                                updateFlag : $scope.updateFlag
+                        }
+
+                      if($scope.updateFlag){
+                           advanceSetting.editSetting(newSetting,function(data){
+                                toastr.success('Successfully Updated!');
+                           });
+                      }else{
+                           $scope.updateFlag = true;
+                           advanceSetting.addSetting(newSetting,function(data){
+                                toastr.success('Successfully Added!');
+                           });
+                        
+                      }
                     }
-                  });
-            });
-
-            angular.forEach(final_offerGetSetting,function(value,key){
-                  angular.forEach(value,function(v,k){
-                    if(v == 'BAL'){
-                      value[k] = -1;
-                    }
-                  });
-            });
-
-            angular.forEach(final_valuePlanSetting,function(value,key){
-                  angular.forEach(value,function(v,k){
-                    if(v == 'BAL'){
-                      value[k] = -1;
-                    }
-                  });
-            });
-
-            var newSetting = {
-                    totalLength : $scope.contentTypes.length,
-                    valueLength : $scope.valuePlans.length,
-                    offerPackageSiteId : $scope.offerPlan.length == 0 ? '' : $scope.offerPlan[0].paos_id,
-                    offerBuySetting : final_offerBuySetting,
-                    offerGetSetting : final_offerGetSetting,
-                    valuePlanSetting : final_valuePlanSetting,
-                    updateFlag : $scope.updateFlag
-            }
-
-          if($scope.updateFlag){
-               advanceSetting.editSetting(newSetting,function(data){
-                    toastr.success('Successfully Updated!');
-               });
-          }else{
-               $scope.updateFlag = true;
-               advanceSetting.addSetting(newSetting,function(data){
-                    toastr.success('Successfully Added!');
-               });
-            
-          }
         }
 
     }
