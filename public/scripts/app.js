@@ -20,10 +20,11 @@ toastr.options = {
 myApp.config(function ($stateProvider) {
     $stateProvider
 
+
         .state("main-site", {
             templateUrl: 'partials/mainSite.html',
             controller: 'mainSiteCtrl',
-            url: 'main-site'
+            url: '/main-site/:dcId'
         })
         .state('main-site.alacart', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',

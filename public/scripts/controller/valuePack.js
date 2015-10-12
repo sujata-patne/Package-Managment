@@ -2,7 +2,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
 
     var data = {
         packageId : $rootScope.PackageId,
-        packageType: $scope.PackageType
+        packageType: $rootScope.PackageType
     }
 
     $scope.existingValuePackIds = [];
@@ -29,25 +29,13 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             existingValuePackIds: $scope.existingValuePackIds
         };
         if (isValid) {
-            /*if ($scope.PackageId != undefined && $scope.PackageId != null && $scope.PackageId != '') {
 
-                ngProgress.start();
-                valuePack.editValuePackPlan(valuePackData,function(data){
-                    $scope.result(data);
-
-                },function(error){
-                    console.log(error);
-                });
-                ngProgress.complete();
-            }else{
-                ngProgress.start();*/
                 valuePack.addValuePackToMainSite(valuePackData,function(data){
                     $scope.result(data);
                     ngProgress.complete();
                 },function(error){
                     console.log(error);
                 });
-            //}
         }
 
     }
@@ -55,18 +43,18 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
     $scope.result = function( data ){
 
         if(data.success){
-
-
-            if( data.selectedValuePackPlans.length > 0 ) {
+           /* if( data.selectedValuePackPlans.length > 0 ) {
                 $scope.existingValuePackIds = [];
                 $scope.selectedValuePacks = [];
                 for( i = 0; i < data.selectedValuePackPlans.length ; i++ ){
                     $scope.selectedValuePacks.push(data.selectedValuePackPlans[i].pvs_vp_id );
                     $scope.existingValuePackIds.push(data.selectedValuePackPlans[i].pvs_vp_id );
                 }
-            }
+            }*/
             $scope.success = data.message;
             toastr.success( $scope.success );
+            $rootScope.PackageId = data.pkgId;
+            $state.go($state.current, {}, {reload: $state.current});
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );

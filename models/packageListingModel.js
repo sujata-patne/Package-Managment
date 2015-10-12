@@ -26,7 +26,7 @@ exports.getAllPackageForListStartsWith = function( dbConnection,data, callback )
         whereCond += " AND pk.sp_dc_id = " + data.distributionChannelId;
     }
 
-    var query = dbConnection.query("Select * from icn_store_package as pk " +
+    var query = dbConnection.query("Select pk.*, pack. pk_name from icn_store_package as pk " +
            "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
            callback( err,response );
        });
@@ -68,12 +68,27 @@ exports.getAllPackageForList = function( dbConnection,data, callback ) {
     });
 }
 exports.countValuePackPlans = function( dbConnection,pkgId, callback) {
-    var query = dbConnection.query('select count(pvs_id) as cnt from icn_package_value_pack_site '+
+    var query = dbConnection.query('select COUNT(pvs_id) as cnt from icn_package_value_pack_site '+
         ' where pvs_sp_pkg_id = ?  ' , [pkgId],  function (err, count) {
         callback(err, count[0].cnt);
     });
 }
-
+exports.countAlacartPackPlans = function( dbConnection,pkgId, callback) {
+    var query = dbConnection.query('SELECT COUNT(pct.pct_paos_id) as cnt from icn_package_alacart_offer_site AS alacart '+
+    'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
+    ' WHERE paos_sp_pkg_id = ?  ' , [pkgId],  function (err, count) {
+        callback(err, count[0].cnt);
+    });
+}
+exports.existAlacartPackByPkgId = function(dbConnection, pkgId, callback){
+    var query = dbConnection.query('SELECT pct.pct_paos_id FROM icn_package_alacart_offer_site AS alacart '+
+        'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
+        'WHERE paos_sp_pkg_id = ? ', [pkgId],
+        function ( err, alacrtPackPlans ) {
+            callback(err, alacrtPackPlans );
+        }
+    )
+}
 exports.existValuePackByPkgId = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('select pvs_id FROM icn_package_value_pack_site '+
         'WHERE pvs_sp_pkg_id = ? ', [pkgId],
@@ -98,7 +113,6 @@ exports.existSubscriptionByPkgId = function( dbConnection,pkgId, callback) {
     )
 }
 exports.updateContentTypeStatus = function(dbConnection,active,packageId,callback){
-    console.log('UPDATE  icn_store_package  SET sp_is_active = '+active+' WHERE sp_pkg_id = '+packageId);
     var query = dbConnection.query("UPDATE  icn_store_package  SET sp_is_active = ? WHERE sp_pkg_id = ?  ",[active,packageId], function (err, response) {
         callback(err,response);
 
@@ -106,6 +120,13 @@ exports.updateContentTypeStatus = function(dbConnection,active,packageId,callbac
 }
 exports.delete = function(dbConnection,packageId,callback){
     var query = dbConnection.query("UPDATE  icn_store_package  SET sp_crud_isactive = 1 WHERE sp_pkg_id = ?  ",[packageId], function (err, response) {
+        callback(err,response);
+    });
+}
+exports.packUsedInPackage = function(dbConnection,packageId,callback){
+    var query = dbConnection.query("SELECT pack.pk_name FROM icn_packs AS pack " +
+                             " JOIN icn_store_package as pk ON pack.pk_id = pk.sp_pk_id " +
+                               "WHERE pk.sp_pkg_id = ?  ",[packageId], function (err, response) {
         callback(err,response);
     });
 }

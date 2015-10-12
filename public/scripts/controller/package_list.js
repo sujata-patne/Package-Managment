@@ -1,4 +1,4 @@
-myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state, ngProgress, Package) {
+myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$state, ngProgress, Package) {
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
     $('#packageListing').addClass('active');
@@ -60,7 +60,6 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
         }
         console.log(data);
         Package.getPackageDetail( data,function( data ){
-            console.log(data)
             $scope.packageList = data.packageByName;
         },function(error){
             console.log(error);
@@ -68,7 +67,14 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
     
     }
 
-    
+    $scope.EditPackage = function(dcId){
+        //$state.go('main-site',{'pkgId':pkgId})
+        console.log(dcId)
+
+        $state.go('main-site', {dcId:dcId});
+        $scope.showPackageData()
+
+    }
     // var first = "A", last = "Z";
     // $scope.alphabets[0] = "1";
     // for(var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {

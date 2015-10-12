@@ -59,6 +59,32 @@ exports.getPackageDetail  = function (req, res, next) {
                       Package.forEach(function(pkg) {
                       var sp_pkg_id = pkg.sp_pkg_id;
                       async.parallel({
+                              packName: function (callback) {
+                                  PackageManager.packUsedInPackage( connection_ikon_cms,sp_pkg_id, function(err,packname){
+                                      callback(err,packname)
+                                  });
+                              },
+                              alacartPackPlanCount: function (callback) {
+                                  async.waterfall([
+                                          function (callback) {
+                                              PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                                  callback(err, result);
+                                              })
+                                          },
+                                          function (exist, callback) {
+                                              if (exist.length > 0) {
+                                                  PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                      callback(err, count);
+                                                  })
+                                              } else {
+                                                  callback(err, 0);
+                                              }
+                                          }
+                                      ],
+                                      function (err, results) {
+                                          callback(err, results);
+                                      });
+                              },
                               valuePackPlanCount: function (callback) {
                                   async.waterfall([
                                           function (callback) {
@@ -108,6 +134,8 @@ exports.getPackageDetail  = function (req, res, next) {
                                   connection_ikon_cms.release();
                                   res.status(500).json(err.message);
                               } else {
+                                  pkg['packName'] = (results.packName.length > 0) ? results.packName[0].pk_name:'';
+                                  pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
                                   pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
                                   pkg['valuePackPlanCount'] = results.valuePackPlanCount;
                                   searchData.push(pkg);
@@ -115,7 +143,7 @@ exports.getPackageDetail  = function (req, res, next) {
                           })
                       })
                       setTimeout(function(){
-                          console.log(searchData)
+                          //console.log(searchData)
                           connection_ikon_cms.release();
                           res.send({packageByName:searchData});
                       }, 200);
@@ -153,6 +181,32 @@ exports.getPackageStartsWith  = function (req, res, next) {
                         Package.forEach(function(pkg) {
                         var sp_pkg_id = pkg.sp_pkg_id;
                         async.parallel({
+                                packName: function (callback) {
+                                    PackageManager.packUsedInPackage( connection_ikon_cms,sp_pkg_id, function(err,packname){
+                                        callback(err,packname)
+                                    });
+                                },
+                            alacartPackPlanCount: function (callback) {
+                                async.waterfall([
+                                    function (callback) {
+                                        PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                            callback(err, result);
+                                        })
+                                    },
+                                    function (exist, callback) {
+                                        if (exist.length > 0) {
+                                            PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                callback(err, count);
+                                            })
+                                        } else {
+                                            callback(err, 0);
+                                        }
+                                    }
+                                ],
+                                function (err, results) {
+                                    callback(err, results);
+                                });
+                            },
                         valuePackPlanCount: function (callback) {
                             async.waterfall([
                                     function (callback) {
@@ -198,10 +252,14 @@ exports.getPackageStartsWith  = function (req, res, next) {
                             }
                         },
                         function (err, results) {
+                            //console.log(results)
                             if (err) {
                                 connection_ikon_cms.release();
                                 res.status(500).json(err.message);
                             } else {
+                                pkg['packName'] = results.packName[0];
+
+                                pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
                                 pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
                                 pkg['valuePackPlanCount'] = results.valuePackPlanCount;
                                 searchData.push(pkg);
@@ -209,7 +267,7 @@ exports.getPackageStartsWith  = function (req, res, next) {
                         })
                     })
                     setTimeout(function(){
-                        console.log(searchData)
+                       // console.log(searchData)
                         connection_ikon_cms.release();
                         res.send({Package:searchData});
                     }, 200);
@@ -288,6 +346,3 @@ exports.delete = function (req, res, next) {
         res.status(500).json(err.message);
     }
 };
-
-
-

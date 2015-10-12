@@ -20,13 +20,10 @@ exports.getAlacartNofferDetails = function (req,res,next){
                     function (alacartNOfferDetails,callback) {
                         if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
                             alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
-                                alacartNOfferDetails.push({contentTypePlanData:contentTypePlanData})
-                                callback(err, alacartNOfferDetails);
+                                callback(null, {alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
                             })
                         } else {
-                            alacartNOfferDetails.push({});
-                            alacartNOfferDetails.push({contentTypePlanData:null})
-                            callback(null, alacartNOfferDetails);
+                            callback(null, {alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:null });
                         }
                     }
                 ],
@@ -154,7 +151,7 @@ exports.editAlacartPackDetails = function (req,res,next){
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
-                        alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, req.body.paosId, function (err, contentTypePlanData) {
+                        /*alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, req.body.paosId, function (err, contentTypePlanData) {
 
                        //  alacartManager.getAlacartPackPlans(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, ContentTypeData) {
                              if (err) {
@@ -166,13 +163,14 @@ exports.editAlacartPackDetails = function (req,res,next){
                                  connection_ikon_cms.release();
                                  res.send( { "success" : true,"status":200, "message":"A-la-cart & Offer Plans added successfully!",contentTypePlanData : contentTypePlanData } );
                              }
-                         });
-                        /*connection_ikon_cms.release();
+                         });*/
+                        connection_ikon_cms.release();
                         res.send({
                             "success": true,
                             "status": 200,
-                            "message": "Package Saved Successfully."
-                        });*/
+                            "message": "Package Saved Successfully.",
+                            pkgId: req.body.packageId
+                        });
                     }
                 });
             })
@@ -255,7 +253,7 @@ exports.addAlacartPackDetails = function (req,res,next){
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
-                        alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, results.paosId, function (err, contentTypePlanData) {
+                       /* alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, results.paosId, function (err, contentTypePlanData) {
                             if (err) {
                                 connection_ikon_cms.release();
                                 res.status(500).json(err.message);
@@ -264,15 +262,17 @@ exports.addAlacartPackDetails = function (req,res,next){
                                 connection_ikon_cms.release();
                                 res.send( { "success" : true,"status":200, "message":"Package added successfully.",offerId:req.body.offerId,pkgId:results.pkgId,paosId:results.paosId, contentTypePlanData : contentTypePlanData } );
                             }
-                        });
-                       /* connection_ikon_cms.release();
+                        });*/
+                        connection_ikon_cms.release();
                         //console.log(results)
 
                         res.send({
                             "success": true,
                             "status": 200,
-                            "message": "Package Saved Successfully."
-                        });*/
+                            "message": "Package Saved Successfully.",
+                            pkgId:results.pkgId
+
+                        });
                     }
                 });
             })

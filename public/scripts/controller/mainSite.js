@@ -12,8 +12,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedSubscriptionPlans = [];
     $scope.distributionChannelId = "";
 
-console.log('test')
-
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
 
@@ -62,11 +60,11 @@ console.log('test')
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
 
     });
-
-    $scope.showPackageData = function(){
+console.log($stateParams.pkgId)
+    $rootScope.showPackageData = function(){
         console.log('sdfsd')
         $rootScope.PackageId = '';
-        $scope.PackageType = 0;
+        $rootScope.PackageType = 0;
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
@@ -80,23 +78,24 @@ console.log('test')
             $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
 
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
-
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
+                $rootScope.PackageType = $scope.mainSitePackageData[0].sp_pkg_type
             }else{
                 //$scope.distributionChannelId = '';
                 $rootScope.PackageId = '';
+                $rootScope.PackageType = '';
             }
             $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
-                $rootScope.paosId = $scope.alacartNofferDetails[0].paos_id;
+                $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
             }else{
                 $scope.offerId = '';
-                $rootScope.paosId = '';
+                $scope.paosId = '';
             }
             $scope.contentTypePlanData = angular.copy(MainSiteData.mainSitePackageData.contentTypePlanData);
             if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {

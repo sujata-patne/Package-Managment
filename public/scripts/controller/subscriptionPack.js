@@ -7,11 +7,10 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
         $scope.subscriptionPackPlans = angular.copy( subscriptionPlanData.subscriptionPlans );
 
     });*/
-    console.log("##"+$rootScope.PackageId)
 
     var data = {
         packageId : $rootScope.PackageId,
-        packageType: $scope.PackageType
+        packageType: $rootScope.PackageType
     }
 
 
@@ -38,36 +37,20 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
         if (isValid) {
-           /* if($stateParams.id){
-                packData.valuePackId = $stateParams.id;
-                ngProgress.start();
-                subscriptionPack.editSubscriptionPack( subscriptionPackData ,function(data){
-                    $scope.result(data);
-
-                },function(error){
-                    console.log(error);
-                });
+            subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
+                console.log( data );
+                $scope.result(data);
                 ngProgress.complete();
-            }else{
-                ngProgress.start();
-                console.log( "subscriptionPackData" );
-                console.log( subscriptionPackData );*/
-                subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
-                    console.log( data );
-                    $scope.result(data);
-                    ngProgress.complete();
-                },function(error){
-                    console.log(error);
-                });
-            //}
+            },function(error){
+                console.log(error);
+            });
         }
-
     }
 
     $scope.result = function( data ){
-
         if(data.success){
-            if( data.selectedSubscriptionPackPlans.length > 0 ) {
+
+            /*if( data.selectedSubscriptionPackPlans.length > 0 ) {
                 $scope.existingSubscriptionPackIds = [];
                 $scope.selectedSubscriptionPlans = [];
 
@@ -77,12 +60,12 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
                     $scope.existingSubscriptionPackIds.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
                 }
                 $scope.success = data.message;
-
             }else{
-                $scope.success = 'Package Added successfully';
-
-            }
+                $scope.success = 'Package Added successfully.';
+            }*/
             toastr.success( $scope.success );
+            $rootScope.PackageId = data.pkgId;
+            $state.go($state.current, {}, {reload: $state.current});
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );
