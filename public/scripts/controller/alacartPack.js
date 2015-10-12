@@ -3,19 +3,25 @@
  */
 
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
-    var data = {
-        packageId : $scope.PackageId,
-        packageType: $scope.PackageType
-    }
-console.log(data)
-    /*alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
 
-        $scope.alacartNofferDetails = angular.copy(alacartPackData.alacartNOfferDetails);
-        if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
-            $scope.alacartPlanIds = {};
-            $scope.contentTypePlanData = {};
+    if($scope.PackageId && $scope.PackageId != null && $scope.PackageId != undefined && $scope.PackageId != '') {
 
-            $scope.contentTypePlanData = angular.copy($scope.alacartNofferDetails[1].contentTypePlanData);
+        var data = {
+            packageId: $scope.PackageId,
+            packageType: $scope.PackageType
+        }
+
+        alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
+
+            $scope.alacartNofferDetails = angular.copy(alacartPackData.alacartNOfferDetails);
+            if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
+                $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
+                $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
+            } else {
+                $scope.offerId = '';
+                $scope.paosId = '';
+            }
+            $scope.contentTypePlanData = angular.copy(alacartPackData.contentTypePlanData);
             if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
                 angular.forEach($scope.contentTypePlanData, function (data) {
                     $scope.alacartPlanIds[data.pct_content_type_id] = {
@@ -23,10 +29,11 @@ console.log(data)
                         streaming: data.pct_stream_id
                     };
                 })
+            } else {
+                $scope.alacartPlanIds = {};
             }
-        }
-    });
-*/
+        });
+    }
     $scope.submitForm = function (isValid) {
         if (!$scope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
@@ -35,14 +42,14 @@ console.log(data)
             var alacartData = {
                 ContentTypes: $scope.ContentTypes,
                 alacartPlansList: $scope.alacartPlanIds,
-                paosId: $rootScope.paosId,
+                paosId: $scope.paosId,
                 offerId: $scope.offerId,
                 packageId: $rootScope.PackageId,
                 packageType: $scope.PackageType,
                 distributionChannelId: $scope.distributionChannelId
             }
             ngProgress.start();
-            if ($rootScope.paosId != undefined && $rootScope.paosId != null && $rootScope.paosId != '') {
+            if ($scope.paosId != undefined && $scope.paosId != null && $scope.paosId != '') {
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
                 });
@@ -58,11 +65,12 @@ console.log(data)
         if (data.success) {
             toastr.success(data.message)
             $scope.successvisible = true;
-
-            $scope.contentTypePlanData = angular.copy(data.contentTypePlanData);
-            $scope.offerId =  data.offerId;
-            $rootScope.paosId =  data.paosId;
             $rootScope.PackageId = data.pkgId;
+            $state.go($state.current, {}, {reload: $state.current});
+
+           /* $scope.contentTypePlanData = angular.copy(data.contentTypePlanData);
+            $scope.offerId =  data.offerId;
+            $scope.paosId =  data.paosId;
             console.log($rootScope.PackageId)
             if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
                 angular.forEach($scope.contentTypePlanData, function (data) {
@@ -73,6 +81,8 @@ console.log(data)
                 })
             }
             console.log($scope.alacartPlanIds)
+            */
+
         }
         else {
             toastr.success(data.message)

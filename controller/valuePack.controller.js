@@ -93,16 +93,9 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
     var deletePackIds = req.body.existingValuePackIds.filter( function( el ) {
         return valuePacks.indexOf( el ) < 0;
     });
-    console.log( 'existingValuePackIds')
-    console.log( req.body.existingValuePackIds)
-    var is_deleted = true;
-    console.log( 'deletePackIds')
-    console.log( deletePackIds)
 
-    console.log( 'selectedValuePacks')
-    console.log( req.body.selectedValuePacks)
-    console.log( 'addValuePackIds')
-    console.log( addValuePackIds)
+    var is_deleted = true;
+
     var deleteValuePackIds = [];
     async.parallel({
             deleteValuePackPlans: function (callback) {
@@ -120,9 +113,6 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
                             var count = deleteValuePackIds.length;
                             function loop(cnt) {
                                 var i = cnt;
-                                console.log("deleteValuePackIds")
-                                console.log( deleteValuePackIds[i])
-                                console.log(  packageData.sp_pkg_id)
                                 valuePackManager.deleteValuePack( connection_ikon_cms, deleteValuePackIds[i], packageData.sp_pkg_id,  function (err, deleteStatus) {
                                     if (err) {
                                         connection_ikon_cms.release();
@@ -237,7 +227,7 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
                 console.log(err.message)
             } else {
 
-                valuePackManager.getSelectedValuePacks( connection_ikon_cms, packageData.sp_pkg_id, function( err, selectedValuePackPlans) {
+                /*valuePackManager.getSelectedValuePacks( connection_ikon_cms, packageData.sp_pkg_id, function( err, selectedValuePackPlans) {
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
@@ -246,13 +236,14 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
                         connection_ikon_cms.release();
                         res.send( { "success" : true,"status":200, "message":"Value pack plan successfully saved for site.",selectedValuePackPlans : selectedValuePackPlans } );
                     }
-                });
+                });*/
 
-                /*res.send({
+                res.send({
                     success: true,
                     "message": "Value pack plan successfully saved for site",
-                    "status": 200
-                });*/
+                    "status": 200,
+                    "pkgId": packageData.sp_pkg_id
+                });
             }
         });
 

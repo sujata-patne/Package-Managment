@@ -12,8 +12,13 @@ exports.getAlacartPackPlans = function(dbConnection, storeId,dcId, callback) {
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
         'WHERE plan.ap_st_id = ?' + str, [storeId], function (err, ContentTypes) {
         callback(err, ContentTypes)
+       /* console.log(' SELECT cd.cd_name, plan.*, (SELECT cd_name FROM catalogue_detail WHERE cd_id = plan.ap_delivery_type) AS delivery_type_name ' +
+        'FROM icn_alacart_plan AS plan ' +
+        'join catalogue_detail as cd ON plan.ap_content_type = cd.cd_id ' +
+        'join multiselect_metadata_detail as mmd ON plan.ap_channel_front = mmd.cmd_group_id ' +
+        'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
+        'WHERE plan.ap_st_id = ' + storeId + " " +str)*/
     });
-    //SELECT cd.cd_name, plan.*,cd1.cd_name, (SELECT cd_name FROM catalogue_detail WHERE cd_id = plan.ap_delivery_type) AS delivery_type_name FROM icn_alacart_plan AS plan  join catalogue_detail as cd ON plan.ap_content_type = cd.cd_id  join multiselect_metadata_detail as mmd ON plan.ap_channel_front = mmd.cmd_group_id  join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id WHERE  plan.ap_st_id = 1 
 }
 exports.addAlacartOfferDetails = function(dbConnection,data,callback){
     var query = dbConnection.query("INSERT INTO `icn_package_alacart_offer_site` SET ? ", data, function (err, response) {

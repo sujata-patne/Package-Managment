@@ -93,10 +93,10 @@ console.log('test')
             $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
-                $rootScope.paosId = $scope.alacartNofferDetails[0].paos_id;
+                $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
             }else{
                 $scope.offerId = '';
-                $rootScope.paosId = '';
+                $scope.paosId = '';
             }
             $scope.contentTypePlanData = angular.copy(MainSiteData.mainSitePackageData.contentTypePlanData);
             if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {

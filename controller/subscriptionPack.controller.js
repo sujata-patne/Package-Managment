@@ -115,15 +115,6 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
     var is_deleted = true;
 
     var deleteSubscriptionPackIds = [];
-    console.log( 'existingSubscriptionPackIds')
-    console.log( req.body.existingSubscriptionPackIds)
-    console.log( 'deletePackIds')
-    console.log( deletePackIds)
-
-    console.log( 'selectedSubscriptionPlans')
-    console.log( req.body.selectedSubscriptionPlans)
-    console.log( 'addSubscriptionPackIds')
-    console.log( addSubscriptionPackIds)
 
     async.parallel({
             deleteSubscriptionPackPlans: function (callback) {
@@ -254,7 +245,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                 res.status(500).json(err.message);
                 console.log(err.message)
             } else {
-                subscriptionPackManager.getSelectedSubscriptionPacks( connection_ikon_cms, packageData.sp_pkg_id, function( err, selectedSubscriptionPlans) {
+                /*subscriptionPackManager.getSelectedSubscriptionPacks( connection_ikon_cms, packageData.sp_pkg_id, function( err, selectedSubscriptionPlans) {
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
@@ -263,12 +254,13 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                         connection_ikon_cms.release();
                         res.send( { "success" : true,"status":200, "message":"Package Saved Successfully.",selectedSubscriptionPackPlans : selectedSubscriptionPlans } );
                     }
+                });*/
+                res.send({
+                     success: true,
+                     "message": "Package Saved Successfully.",
+                     "status": 200,
+                     "pkgId": packageData.sp_pkg_id
                 });
-                /*res.send({
-                 success: true,
-                 "message": "Value pack plan successfully saved for site",
-                 "status": 200
-                 });*/
             }
         });
 

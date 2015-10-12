@@ -24,7 +24,12 @@ exports.getOfferData = function(dbConnection, storeId,dcId, callback) {
         'join multiselect_metadata_detail as mmd ON plan.op_channel_front = mmd.cmd_group_id ' +
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
         'WHERE plan.op_st_id = ? ' + str, [storeId], function (err, ContentTypes) {
-        callback(err, ContentTypes)
+        callback(err, ContentTypes);
+        console.log(' SELECT plan.* ' +
+            'FROM icn_offer_plan AS plan ' +
+            'join multiselect_metadata_detail as mmd ON plan.op_channel_front = mmd.cmd_group_id ' +
+            'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
+            'WHERE plan.op_st_id = '+storeId+ " " + str)
     });
 }
 exports.getMaxAlacartOfferId = function(dbConnection, callback) {
