@@ -365,8 +365,8 @@ CONSTRAINT unc_cat_mstr_id UNIQUE (cm_id)
 CREATE TABLE IF NOT EXISTS  catalogue_detail(
 cd_id 		 	INT(10),  		-- unique id for the detail master
 cd_cm_id	 	INT(7),	 		-- id of the master catalogue
-cd_name			VARCHAR(25),  	-- catalogue label name
-cd_display_name	VARCHAR(40),	-- display name
+cd_name			VARCHAR(100),  	-- catalogue label name
+cd_display_name	VARCHAR(100),	-- display name
 cd_desc		 	INT(10),		-- self join e.g. celeb role.
 cd_desc1		VARCHAR(40)	,	-- can be any desc eg. alias for celeb
 cd_crud_isactive 	int(1),		-- 1. Active, 0.Inactive
@@ -434,7 +434,8 @@ cm_genre							 INT(10),		-- fk:cd_id - genre
 cm_sub_genre						 INT(10),		-- fk:cd_id - sub genre
 cm_protographer						 INT(10),		-- fk:cd_id
 cm_mood								 INT(10),		-- fk:cd_id
-cm_language							 INT(10),		-- fk:cd_id
+cm_language							 INT(10),		-- fk: cmd_group_id
+cm_platform_support                  INT(10),		-- fk: cmd_group_id
 cm_nudity							 INT(1),		-- yes /no
 cm_parental_advisory				 INT(10),		-- fk:cd_id
 cm_location							 INT(10),		-- fk:cd_id
@@ -442,12 +443,12 @@ cm_festival_occasion				 INT(10),		-- fk:cd_id
 cm_religion							 INT(10),		-- fk:cd_id
 cm_cp_content_id					VARCHAR(40),	-- 3rd party cp content id
 cm_content_duration					 INT(10),		-- in seconds
-cm_singer							 INT(10),		-- fk:cd_id
-cm_music_director					 INT(10),		-- fk:cd_id
+cm_singer							 INT(10),		-- fk:cmd_group_id
+cm_music_director					 INT(10),		-- fk:cmd_group_id
 cm_content_quality					 INT(10),		-- fk:cd_id (video quality)
 cm_key_words						 INT(10),		-- fk: cmd_group_id
-cm_raag_tal							 INT(10),		-- fk: cmd_group_id
-cm_instruments						 INT(10),		-- fk: cmd_group_id
+cm_raag_tal							 INT(10),		-- fk: cd_id
+cm_instruments						 INT(10),		-- fk: cd_id
 cm_long_description					VARCHAR(800),	-- long description
 cm_mode								 INT(10),		-- fk:cd_id (single player / multiple player)
 cm_is_app_store_purchase			 INT(1),		-- yes /no
@@ -605,10 +606,18 @@ CREATE TABLE IF NOT EXISTS  icn_pack_usage_rule
 CREATE TABLE IF NOT EXISTS icn_package_alacart_offer_site
 (
 	paos_id						int(7),				-- unique for the package record set
-	paos_pkg_type					int(2),				-- 0: site type, 1: pack dependent
+	-- paos_pkg_type					int(2),				-- 0: site type, 1: pack dependent
 	paos_sp_pkg_id				int(7),					-- fk: package id
 	-- paos_st_id                      int(10),            -- store id
-
+	/*paos_wallpaper					int(7),				-- wallpaper alacart download
+	paos_animation					int(7),				-- animation alacart download
+	paos_fullsong					int(7),				-- full song alacart download
+	paos_truetone					int(7),				-- ringtone alacart download
+	paos_video			            int(7),				-- video alacart download
+	paos_game				        int(7),				-- games/apps alacart download
+	paos_video_stream		        int(7),				-- video alacart stream
+	paos_video_full_song_stream		int(7),				-- video alacart stream
+	paos_audio_full_song_stream		int(7),				-- full song alacart stream */
 	paos_op_id   	          	    int(7),             -- fk: op_id offer plan id
 	paos_is_active					int(1),				-- 0 in-active, 1 active plan
 	paos_created_on					datetime,
@@ -636,7 +645,7 @@ CREATE TABLE IF NOT EXISTS icn_package_value_pack_site
 (
 	pvs_id						int(7),				  -- unique for the package record set
 	pvs_sp_pkg_id				int(7),					-- fk: package id
-	pvs_pkg_type					int(2),				-- 0: site type, 1: pack dependent
+	-- pvs_pkg_type					int(2),				-- 0: site type, 1: pack dependent
 	pvs_vp_id						int(7),				-- fk : vp-id, value plan id (multiselection)
 	-- pvs_st_id                  		int(10),            -- store id
 	pvs_is_active					int(1),				-- 0 in-active, 1 active plan
@@ -653,7 +662,7 @@ CREATE TABLE IF NOT EXISTS icn_package_subscription_site
 (
 	pss_id						int(7),				-- unique for the package record set
 	pss_sp_pkg_id				int(7),					-- fk: package id
-	pss_pkg_type					int(2),				-- 0: site type, 1: pack dependent
+	-- pss_pkg_type					int(2),				-- 0: site type, 1: pack dependent
 	pss_sp_id						int(7),				-- fk : sp-id, subscription plan id (multiselection)
 	-- pss_st_id                	    int(10),            -- store id
 	pss_is_active					int(1),				-- 0 in-active, 1 active plan
@@ -664,21 +673,16 @@ CREATE TABLE IF NOT EXISTS icn_package_subscription_site
 	pss_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
 
-/*
-one record is per plan per content type.
+/* Package and CG Image Mapping */
 
-*/
-CREATE TABLE IF NOT EXISTS icn_package_advance_setting_site
+
+CREATE TABLE IF NOT EXISTS icn_package_cg_image
 (
-	-- pass_st_id                 	    int(10),            -- store id
-	pass_pkg_type					int(2),				-- 0: site type, 1: pack dependent
-	pass_paos_id             	    int(7),       	    -- fk: package_alacart_offer id
-	pass_pvs_id						int(7),             -- fk: package_value_pack id
-	pass_content_type				int(7),		        -- offer content type
-    pass_buy						int(7),	            -- offer buy : in case of offer plan : in case of BAL use -1
-    pass_get						int(7),	            -- offer get : in case of offer plan : in case of BAL use -1
-	pass_value						int(7),				-- value : in case of value pack plan : in case of BAL use -1
-	pass_cg_img_browse            	varchar(400),       -- CG image source
+
+	pci_sp_pkg_id				    int(7),		        -- fk: package id
+    pci_image_size					varchar(50),	    -- different size of images e.g. 640*640, 480*480 etc.
+    pci_cg_img_browse            	varchar(400),       -- CG image source
+	pci_is_default				    int(2),				-- 1. Yes 0. No
 	pass_is_active					int(1),				-- 0 in-active, 1 active plan
 	pass_created_on					datetime,
 	pass_created_by				    varchar(50),
@@ -687,16 +691,52 @@ CREATE TABLE IF NOT EXISTS icn_package_advance_setting_site
 	pass_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
 
+/*
+one record is per plan per content type.
+
+*/
+CREATE TABLE IF NOT EXISTS icn_package_advance_setting_site
+(
+	-- pass_st_id                 	    int(10),            -- store id
+	-- pass_pkg_type					int(2),				-- 0: site type, 1: pack dependent
+	pass_paos_id             	    int(7),       	    -- fk: package_alacart_offer id
+	pass_pvs_id						int(7),             -- fk: package_value_pack id
+	pass_content_type				int(7),		        -- offer content type
+    pass_buy						int(7),	            -- offer buy : in case of offer plan : in case of BAL use -1
+    pass_get						int(7),	            -- offer get : in case of offer plan : in case of BAL use -1
+	pass_value						int(7),				-- value : in case of value pack plan : in case of BAL use -1
+	-- pass_cg_img_browse            	varchar(400),       -- CG image source
+	pass_is_active					int(1),				-- 0 in-active, 1 active plan
+	pass_created_on					datetime,
+	pass_created_by				    varchar(50),
+	pass_modified_on				datetime,
+	pass_modified_by				varchar(50),
+	pass_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
+)ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS  icn_package_arrange_sequence
+(
+    pas_id                         int(10),             -- unique is for this
+	pas_sp_pkg_id				   int(10),	        -- fk: package id
+	pas_plan_id                    int(10),              -- for different package, selected plans
+    pas_plan_type				   int(2),			    -- 0:alacarte, 1: value pack plans, 2:subscription plan
+	pas_arrange_seq				   int(10),			-- arrage sequence of the package vis-a-vis store
+    pas_is_active				   int(1),				-- 0 in-active, 1 active plan
+	pas_created_on				   datetime,
+	pas_created_by				   varchar(50),
+	pas_modified_on				   datetime,
+	pas_modified_by				   varchar(50),
+	pas_crud_isactive 			   int(1)				-- 1. Active, 0.Inactive
+)ENGINE = InnoDB;
 
 -- Store vs Package Map
 
 CREATE TABLE IF NOT EXISTS  icn_store_package
 (
+    sp_pkg_id						int(10),			-- pk : unique id for a package
 	sp_st_id						int(7),				-- fk: store id
 	sp_dc_id                        int(10),            -- distribution channel id e.g. mobile, web etc
-	sp_pkg_id						int(10),			-- unique id for a package
-	sp_pkg_type					    int(2),				-- 0:alacarte, 1: value pack plans, 2:subscription plan
-	sp_arrange_seq					int(10),			-- arrage sequence of the package vis-a-vis store
+	sp_pkg_type                     int(2),				-- 0: site type, 1: pack dependent
 	sp_package_name					varchar(40),		-- name of the package, default: "Site" : "Site" becomes a reserved word
 	sp_package_desc					varchar(200),		-- description of the package
 	sp_is_active					int(1),				-- 0 in-active, 1 active plan
@@ -704,7 +744,8 @@ CREATE TABLE IF NOT EXISTS  icn_store_package
 	sp_created_by				    varchar(50),
 	sp_modified_on					datetime,
 	sp_modified_by					varchar(50),
-	sp_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
+	sp_crud_isactive 				int(1),				-- 1. Active, 0.Inactive
+	PRIMARY KEY (sp_pkg_id)
 )ENGINE = InnoDB;
 
 
@@ -750,5 +791,4 @@ CREATE TABLE IF NOT EXISTS icn_package_notification
 	pn_modified_by					varchar(50),
 	pn_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
-
 

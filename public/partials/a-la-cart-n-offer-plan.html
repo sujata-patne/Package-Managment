@@ -1,6 +1,6 @@
 <form method="post" class="form-horizontal" role="form" name="alacartnofferForm" data-ng-submit="submitForm(alacartnofferForm.$valid)" novalidate>
     <div class="row">
-        <div class="col-md-2"><input type="text" name="paosId" class="form-control" data-ng-model="paosId"></div>
+        <div class="col-md-2"><input type="text" name="paosId" class="form-control" data-ng-model="$root.paosId"></div>
         <div class="col-md-8 col-xs-12">
             <div class="portlet">
                 <div class="portlet-content">
@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12">
-                                    <select data-ng-options="item.ap_id as item.ap_plan_name for item in alacartData | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
+                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
                                         <option value="">--Select Download Plan for {{ContentType.cd_name}} or it's Free--</option>
                                     </select>
                                 </div></div>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="portlet">
+            <div class="portlet" >
                 <div class="portlet-content">
                     <div class="col-md-12">
                         <div class="row">
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12" >
-                                    <select data-ng-options="item.ap_id as item.ap_plan_name for item in alacartData  | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Streaming'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].streaming" >
+                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans  | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Streaming'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].streaming" >
                                         <option value="">--Select Streaming Plan for {{ContentType.cd_name}} or it's Free--</option>
                                     </select>
                                 </div></div>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12" >
-                                    <select data-ng-options="item.op_id as item.op_plan_name for item in OfferData" class="form-control" data-ng-model="offerId" >
+                                    <select style="width:120%" data-ng-options="item.op_id as item.op_plan_name for item in OfferData" class="form-control" data-ng-model="offerId" >
                                         <option value="">--Select Offer Plan--</option>
                                     </select>
                                 </div></div>
@@ -76,7 +76,7 @@
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
                 <button class="btn btn-small" ng-click="proceed(); submitForm(alacartnofferForm.$valid);" ng-disabled="dis()">Next</button>
-                <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+                <button type="reset" ng-disabled="alacartPackPlans.length > 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>
     </div>

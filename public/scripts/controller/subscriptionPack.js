@@ -1,14 +1,16 @@
-myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $stateParams, subscriptionPack ) {
+myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, subscriptionPack ) {
 
     $scope.existingSubscriptionPackIds = [];
+    $scope.selectedSubscriptionPlans = [];
 
-    subscriptionPack.getSubscriptionDetails(function (subscriptionPlanData) {
-
+   /* subscriptionPack.getSubscriptionDetails({distributionChannelId:$scope.distributionChannelId},function (subscriptionPlanData) {
         $scope.subscriptionPackPlans = angular.copy( subscriptionPlanData.subscriptionPlans );
-    });
+
+    });*/
+    console.log("##"+$rootScope.PackageId)
 
     var data = {
-        packageId : $scope.PackageId,
+        packageId : $rootScope.PackageId,
         packageType: $scope.PackageType
     }
 
@@ -18,7 +20,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         $scope.selectedSubscriptionPackPlans = selectedSubscriptionPackData.selectedSubscriptionPlans;
         if( $scope.selectedSubscriptionPackPlans.length > 0 ) {
             for( i = 0; i < $scope.selectedSubscriptionPackPlans.length ; i++ ){
-                //$scope.selectedSubscriptionPlans.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
+                $scope.selectedSubscriptionPlans.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
                 //console.log( $scope.selectedSubscriptionPlans );
                 $scope.existingSubscriptionPackIds.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
             }
@@ -32,11 +34,11 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
         var subscriptionPackData = {
             selectedSubscriptionPlans: $scope.selectedSubscriptionPlans,
             selectedDistributionChannel: $scope.distributionChannelId,
-            packageId : $scope.PackageId,
+            packageId : $rootScope.PackageId,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
         if (isValid) {
-            if($stateParams.id){
+           /* if($stateParams.id){
                 packData.valuePackId = $stateParams.id;
                 ngProgress.start();
                 subscriptionPack.editSubscriptionPack( subscriptionPackData ,function(data){
@@ -49,7 +51,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
             }else{
                 ngProgress.start();
                 console.log( "subscriptionPackData" );
-                console.log( subscriptionPackData );
+                console.log( subscriptionPackData );*/
                 subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
                     console.log( data );
                     $scope.result(data);
@@ -57,7 +59,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
                 },function(error){
                     console.log(error);
                 });
-            }
+            //}
         }
 
     }
@@ -65,9 +67,21 @@ myApp.controller('subscriptionPackCtrl', function ($scope, $state, ngProgress, $
     $scope.result = function( data ){
 
         if(data.success){
-            //$scope.getResultData(data);
-            $scope.success = data.message;
-            //$scope.successvisible = true;
+            if( data.selectedSubscriptionPackPlans.length > 0 ) {
+                $scope.existingSubscriptionPackIds = [];
+                $scope.selectedSubscriptionPlans = [];
+
+                for( i = 0; i < data.selectedSubscriptionPackPlans.length ; i++ ){
+                    $scope.selectedSubscriptionPlans.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
+                    //console.log( $scope.selectedSubscriptionPlans );
+                    $scope.existingSubscriptionPackIds.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
+                }
+                $scope.success = data.message;
+
+            }else{
+                $scope.success = 'Package Added successfully';
+
+            }
             toastr.success( $scope.success );
         }else{
             $scope.error = data.message;

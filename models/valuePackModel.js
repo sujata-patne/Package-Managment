@@ -1,3 +1,14 @@
+
+exports.getValuePackPlansByStoreId = function(dbConnection, storeId, callback) {
+
+    var query = dbConnection.query('select vp_id, vp_plan_name ' +
+        'FROM icn_valuepack_plan '+
+        'WHERE vp_st_id = ? ', [storeId],
+        function ( err, valuePackPlans ) {
+            callback(err, valuePackPlans );
+        }
+    )
+}
 exports.createMainSiteValuePackPlan = function (dbConnection, data, callback) {
     dbConnection.query('INSERT INTO icn_package_value_pack_site SET ?', data, function (err, result) {
         callback( err, result );
@@ -12,9 +23,9 @@ exports.getLastInsertedValuePackId = function( dbConnection, callback ) {
 
 exports.getSelectedValuePacks = function( dbConnection,packageId, callback ){
     var query = dbConnection.query('SELECT pvs_vp_id FROM  icn_package_value_pack_site , icn_valuepack_plan '+
-                  ' WHERE icn_package_value_pack_site.pvs_sp_pkg_id = ? AND ISNULL( icn_package_value_pack_site.pvs_crud_isactive )  AND icn_package_value_pack_site.pvs_vp_id = icn_valuepack_plan.vp_id ',[packageId],
+        ' WHERE icn_package_value_pack_site.pvs_sp_pkg_id = ? AND ISNULL( icn_package_value_pack_site.pvs_crud_isactive )  AND icn_package_value_pack_site.pvs_vp_id = icn_valuepack_plan.vp_id ',[packageId],
         function( err, response ) {
-                      callback( err, response );
+            callback( err, response );
         });
 }
 
@@ -29,10 +40,10 @@ exports.getValuePacksByIds = function( dbConnection,valuePackIds, vp_pkg_id, cal
 }
 
 exports.deleteValuePack = function (dbConnection, pvsId, sp_pkg_id, callback ) {
-    var query = dbConnection.query('UPDATE icn_package_value_pack_site SET pvs_crud_isactive = ? WHERE pvs_vp_id = ? AND pvs_sp_pkg_id = ? ',
-        [ pvsId, pvsId,  sp_pkg_id ],function( err, result ) {
+    var query = dbConnection.query('UPDATE icn_package_value_pack_site SET pvs_crud_isactive = ? WHERE pvs_id = ? AND pvs_sp_pkg_id = ? ',
+        [ pvsId, pvsId,sp_pkg_id ],function( err, result ) {
             if( err ){
-                callback( err, null );
+                callback( err, false );
             }else {
                 callback( null, true );
             }

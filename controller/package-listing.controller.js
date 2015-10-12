@@ -288,6 +288,15 @@ exports.delete = function (req, res, next) {
         res.status(500).json(err.message);
     }
 
+<<<<<<< HEAD
 };
 
 
+=======
+                res.redirect('/accountlogin');
+            }
+        }catch(err){
+                 res.status(500).json(err.message);
+      }
+};
+>>>>>>> 11ac97ba6203631450a886b082ecb722d5248298
