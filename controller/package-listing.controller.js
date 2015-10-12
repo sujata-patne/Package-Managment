@@ -153,6 +153,27 @@ exports.getPackageStartsWith  = function (req, res, next) {
                         Package.forEach(function(pkg) {
                         var sp_pkg_id = pkg.sp_pkg_id;
                         async.parallel({
+                            alacartPackPlanCount: function (callback) {
+                                async.waterfall([
+                                    function (callback) {
+                                        PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                            callback(err, result);
+                                        })
+                                    },
+                                    function (exist, callback) {
+                                        if (exist.length > 0) {
+                                            PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                callback(err, count);
+                                            })
+                                        } else {
+                                            callback(err, 0);
+                                        }
+                                    }
+                                ],
+                                function (err, results) {
+                                    callback(err, results);
+                                });
+                            },
                         valuePackPlanCount: function (callback) {
                             async.waterfall([
                                     function (callback) {
@@ -198,10 +219,12 @@ exports.getPackageStartsWith  = function (req, res, next) {
                             }
                         },
                         function (err, results) {
+                            console.log(results)
                             if (err) {
                                 connection_ikon_cms.release();
                                 res.status(500).json(err.message);
                             } else {
+                                pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
                                 pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
                                 pkg['valuePackPlanCount'] = results.valuePackPlanCount;
                                 searchData.push(pkg);
@@ -287,16 +310,4 @@ exports.delete = function (req, res, next) {
     }catch(err){
         res.status(500).json(err.message);
     }
-
-<<<<<<< HEAD
 };
-
-
-=======
-                res.redirect('/accountlogin');
-            }
-        }catch(err){
-                 res.status(500).json(err.message);
-      }
-};
->>>>>>> 11ac97ba6203631450a886b082ecb722d5248298
