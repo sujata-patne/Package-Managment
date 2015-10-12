@@ -234,7 +234,7 @@ exports.blockUnBlockContentType = function (req, res, next) {
                 mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                          async.parallel({
                             updateContentTypeStatus : function(callback){
-                             PackageManager.updateContentTypeStatus( connection_ikon_cms, req.body.packId,req.body.contentTypeId,req.body.active, function(err,response){
+                             PackageManager.updateContentTypeStatus( connection_ikon_cms,req.body.active, req.body.packageId, function(err,response){
                                      callback(err, response);
                                 });
                             }
@@ -246,7 +246,7 @@ exports.blockUnBlockContentType = function (req, res, next) {
                                         console.log(err.message);
                                      }else{
                                         connection_ikon_cms.release();
-                                        res.send({ success: true, message: 'Content Type ' + req.body.Status + ' successfully.' });
+                                        res.send({ success: true, message: ' Package '  +  req.body.Status + ' successfully.' });
                                      }
                         });
                 });
@@ -258,36 +258,45 @@ exports.blockUnBlockContentType = function (req, res, next) {
         }
 
 };
-
-
-exports.getContentTypesByPack = function (req, res, next) {
+exports.delete = function (req, res, next) {
     try {
-            if (req.session && req.session.package_UserName) {
-                mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                    async.parallel({
-                         PackContentTypes: function (callback) {
+        if (req.session && req.session.package_UserName) {
 
-                            PackageManager.getContentTypesByPackId( connection_ikon_cms, req.body.packId, function(err,PackContentTypes){
-                                callback(err, PackContentTypes);
-                            });
-                        }
-                    },
-                     function (err, results) {
-                            if (err) {
-                                connection_ikon_cms.release();
-                                res.status(500).json(err.message);
-                                console.log(err.message);
-                            } else {
-                                connection_ikon_cms.release();
-                                res.send(results);
-                            }
-                      });
-                   });
-            }else{
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.parallel({
+                    delete: function(callback){
+                        PackageManager.delete( connection_ikon_cms, req.body.packageId, function(err,response){
+                            callback(err, response);
+                        });
+                    }
 
+                },function(err,results){
+                    if(err){
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message);
+                    }else{
+                        connection_ikon_cms.release();
+                        res.send({ success: true, message: ' Package '  +  req.body.Status + ' successfully.' });
+                    }
+                });
+            });
+        }else{
+            res.redirect('/accountlogin');
+        }
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+
+<<<<<<< HEAD
+};
+
+
+=======
                 res.redirect('/accountlogin');
             }
         }catch(err){
                  res.status(500).json(err.message);
       }
 };
+>>>>>>> 11ac97ba6203631450a886b082ecb722d5248298

@@ -50,6 +50,8 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
 
     $scope.distributionChannelChange = function(){
         $scope.search_title="";
+        $('#src_'+$scope.alpha).css('font-weight','normal');
+        $('#src_'+$scope.alpha).css('font-size','small');
         var data = {
             title_text : ($scope.alpha)? $scope.alpha:$scope.search_title,
             st_date : $scope.StartDate,
@@ -58,6 +60,7 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
         }
         console.log(data);
         Package.getPackageDetail( data,function( data ){
+            console.log(data)
             $scope.packageList = data.packageByName;
         },function(error){
             console.log(error);
@@ -121,7 +124,6 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
                         distributionChannelId : $scope.distributionChannel
 
                      }
-                     console.log(criteria);
                     Package.getPackageDetail(criteria,function( data ){
                              $scope.packageList = data.packageByName;
                     },function(error){
@@ -138,29 +140,23 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
                 console.log(error);
     });
 
-     $scope.EditPack = function ( pctID,type_added_name ) {
-        type_added_name = type_added_name.toLowerCase() == "rule based" ? "rule" : type_added_name.toLowerCase();
-        // $window.location.href = "/#/search-content-"+displayName+"/" + pctID;
-        $state.go('search-content-'+type_added_name, {pctId:pctID}); 
-    }
 
-    $scope.BlockUnBlockContentType = function( packId,contentTypeId, isActive ){
+    $scope.BlockUnBlockContentType = function( packageId, isActive ){
                     var active = 1;
                     if (isActive == 1) {
                         active = 0;
                     }
                     if (confirm("Are you want to sure " + (active == 0 ? 'block' : 'unblock') + ' this plan ?')) {
                         var data = {
-                            contentTypeId: contentTypeId,
                             active: active,
-                            packId: packId,
+                            packageId: packageId,
                             Status: active == 0 ? 'blocked' : 'unblocked'
                         }
                         ngProgress.start();
                         Package.blockUnBlockContentType(data, function (data) {
                             if (data.success) {
-                                $scope.getContentTypesByPackage();
-                                $scope.success = data.message;
+                                $scope.distributionChannelChange();
+                                toastr.success(data.message);
                                 $scope.successvisible = true;
                             }
                             else {
@@ -175,18 +171,31 @@ myApp.controller('PackageListCtrl', function ($scope, $http, $stateParams,$state
             
 
     }
-     $scope.getContentTypesByPackage = function(){
-            var grid = {
-                            packId : $scope.selectedPack
-                       };
-             Package.getContentTypesByPack(grid,function(data){
-                    $scope.isAdded  = true;
-                    $scope.pack_added_date = data.PackContentTypes[0].pk_created_on;
-                    $scope.pack_modified_date = data.PackContentTypes[0].pk_modified_on;
-                    $scope.pack_added_name = data.PackContentTypes[0].pk_name;
-                    $scope.type_added_name = data.PackContentTypes[0].type; 
-                    $scope.pack_grid = data.PackContentTypes;
-             });
+    $scope.Delete = function( packageId )
+    {
+        if (confirm("Are you want to sure " + 'delete' + ' this plan ?')) {
+            var data = {
+                packageId: packageId,
+                Status: 'delete'
+            }
+            ngProgress.start();
+            Package.delete(data, function (data) {
+
+                if (data.success) {
+                    $scope.distributionChannelChange();
+                    toastr.success(data.message);
+                    $scope.successvisible = true;
+                }
+                else {
+                    $scope.error = data.message;
+                    $scope.errorvisible = true;
+                }
+                ngProgress.complete();
+            },function(err){
+                console.log(err);
+            });
+        }
     }
+
 
 });

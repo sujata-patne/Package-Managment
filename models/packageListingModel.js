@@ -11,7 +11,7 @@ exports.getStore = function(dbConnection, storeId, callback) {
 exports.getPackageByName = function(dbConnection,dc_id, storeId, callback) {
 
     var query = dbConnection.query('select sp_package_name,sp_pkg_type from icn_store_package as st '+
-        ' where st.sp_dc_id = ? AND st.sp_st_id = ?  ' , [dc_id , storeId],  function (err, packageByName) {
+        ' where st.sp_dc_id = ? AND st.sp_st_id = ? AND ISNULL(st.sp_crud_isactive ) ' , [dc_id , storeId],  function (err, packageByName) {
         callback(err, packageByName);
     });
 } 
@@ -27,7 +27,7 @@ exports.getAllPackageForListStartsWith = function( dbConnection,data, callback )
     }
 
     var query = dbConnection.query("Select * from icn_store_package as pk " +
-           "WHERE pk.sp_st_id = ? " +whereCond+ "  group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
+           "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
            callback( err,response );
        });
 }
@@ -62,7 +62,7 @@ exports.getAllPackageForList = function( dbConnection,data, callback ) {
 
 
     var query = dbConnection.query("SELECT * from icn_store_package as pk " +
-        "WHERE pk.sp_st_id = ? " + whereCond + 
+        "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)    " + whereCond +
         " group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
         callback( err,response );
     });
@@ -96,4 +96,16 @@ exports.existSubscriptionByPkgId = function( dbConnection,pkgId, callback) {
             callback(err, SubscriptionPlans );
         }
     )
+}
+exports.updateContentTypeStatus = function(dbConnection,active,packageId,callback){
+    console.log('UPDATE  icn_store_package  SET sp_is_active = '+active+' WHERE sp_pkg_id = '+packageId);
+    var query = dbConnection.query("UPDATE  icn_store_package  SET sp_is_active = ? WHERE sp_pkg_id = ?  ",[active,packageId], function (err, response) {
+        callback(err,response);
+
+    });
+}
+exports.delete = function(dbConnection,packageId,callback){
+    var query = dbConnection.query("UPDATE  icn_store_package  SET sp_crud_isactive = 1 WHERE sp_pkg_id = ?  ",[packageId], function (err, response) {
+        callback(err,response);
+    });
 }

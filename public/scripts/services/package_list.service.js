@@ -41,12 +41,12 @@ myApp.service('Package', ['$http', function ($http) {
             error(err);
         });
     }
-this.getContentTypesByPack = function ( data, success, error ) {
-        $http.post(this.baseRestUrl + '/getContentTypesByPack',data).success(function (items) {
+
+    this.delete = function ( data, success, error ) {
+        $http.post(this.baseRestUrl + '/delete',data).success(function (items) {
             success(items);
         }).error(function (err) {
             error(err);
         });
     }
-    
 }]);
