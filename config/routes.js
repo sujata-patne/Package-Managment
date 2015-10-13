@@ -9,6 +9,7 @@ module.exports = function(app){
     require('../routes/subscriptionPack')(app);
     require('../routes/packageListing')(app);
     require('../routes/advanceSetting')(app);
+    require('../routes/arrangePlans')(app);
 
     app.use('/*', function(req,res,next){
         res.status(404).json({"error":"No such service present"});

@@ -1,14 +1,13 @@
-<form method="post" class="form-horizontal" role="form" name="alacartnofferForm" data-ng-submit="submitForm(alacartnofferForm.$valid)" novalidate>
-    <div class="row">
-        <div class="col-md-2"></div>
+<form method="post" class="form-horizontal" role="form" name="arrangePlansForm" data-ng-submit="submitarrangePlansForm(arrangePlansForm.$valid)" novalidate>
+    <div class="row" style="margin-left:20%">
         <div class="col-md-8 col-xs-12">
+
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}} </span>
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}} </span>
             <div class="portlet">
                 <div class="portlet-content">
-                    <div class="col-md-12">
-                        <div class="row">
                             <div class="col-md-12 col-xs-12">
-                                <div class="table-responsive">
-                                    <div id="user-exportable">
+                                <div class="table-responsive" id="user-exportable" >
                                         <table id="arrangePlans" class="table table-striped table-bordered table-checkable">
                                             <thead>
                                             <tr>
@@ -18,8 +17,8 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr data-ng-repeat="plans in PlanLists | startFrom:listcurrentPage*listpageSize | limitTo:listpageSize ">
-                                                <td class="col-md-1 col-xs-1 text-center">{{plans.planName)}}&nbsp;&nbsp;<span class="text-center" ng-show="published[content.cm_id]"><i class="fa fa-check" style="color:green"></i></span></td>
+                                            <tr>
+                                                <td class="col-md-1 col-xs-1 text-center">{{offerPlan.op_plan_name }}&nbsp;&nbsp;<span class="text-center" ng-show="published[content.cm_id]"><i class="fa fa-check" style="color:green"></i></span></td>
                                                 <td class="col-md-2 col-xs-2">{{plans.plantType}}</td>
                                                 <td class="col-md-1 col-xs-1">
                                                     <input type="number" min="1" class="form-control" name="sequence[]" ng-model="sequence[plans.planId]" ng-change="checkForDuplicates(content.cm_id)" ng-model-options='{ debounce: 1000 }' >
@@ -36,29 +35,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" ng-show="PlanLists.length  > 0">
-                            <div class="col-md-12 col-xs-12">
-                                <div class="col-xs-3 col-md-3">
-                                    <button type="button" class="btn btn-primary btn-w-xs" title="Previous" data-ng-disabled="listcurrentPage == 0" data-ng-click="listcurrentPage=listcurrentPage-1">Previous</button>
-                                </div>
-                                <div class="col-xs-6 col-md-6"></div>
-                                <div class="col-xs-3 col-md-3 text-right">
-                                    <button type="button" class="btn btn-primary btn-w-xs" title="Next" data-ng-disabled="listcurrentPage >= searchContentList.length/listpageSize - 1" data-ng-click="listcurrentPage=listcurrentPage+1">Next</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="col-md-offset-5 col-md-7" >
-                                    <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
-                                    <button class="btn btn-small" ng-click="proceed(); submitForm(alacartnofferForm.$valid);" ng-disabled="dis()">Next</button>
-                                    <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
-                                </div>
-                            </div>
+                    </div>
+            </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-offset-5 col-md-7" >
+                            <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" title="Save">Submit</button>
+                            <button class="btn btn-small" ng-click="submitarrangePlansForm(arrangePlansForm.$valid);proceed()" ng-disable="dis()">Next</button>
+                            <button type="reset" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 </form>

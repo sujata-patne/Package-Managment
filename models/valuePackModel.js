@@ -52,7 +52,7 @@ exports.deleteValuePack = function (dbConnection, pvsId, sp_pkg_id, callback ) {
 }
 
 exports.valuePackExists = function( dbConnection, pvsId, sp_pkg_id, callback ) {
-    console.log( "SELECT pvs_id FROM icn_package_value_pack_site WHERE pvs_vp_id = " + pvsId +" AND IS NOT NULL( pvs_crud_isactive ) AND pvs_sp_pkg_id = " + sp_pkg_id  );
+   // console.log( "SELECT pvs_id FROM icn_package_value_pack_site WHERE pvs_vp_id = " + pvsId +" AND IS NOT NULL( pvs_crud_isactive ) AND pvs_sp_pkg_id = " + sp_pkg_id  );
     var query = dbConnection.query('SELECT pvs_id FROM icn_package_value_pack_site WHERE pvs_vp_id = ? AND ( pvs_crud_isactive ) IS NOT NULL AND pvs_sp_pkg_id = ? ',
         [ pvsId, sp_pkg_id ], function (err, result) {
             callback(err, result)
@@ -61,7 +61,7 @@ exports.valuePackExists = function( dbConnection, pvsId, sp_pkg_id, callback ) {
 }
 
 exports.updateValuePack = function( dbConnection, pvsId, callback ) {
-    console.log( "inside update");
+    //console.log( "inside update");
     var query = dbConnection.query('UPDATE icn_package_value_pack_site SET pvs_crud_isactive = NULL WHERE pvs_id = ?',
         [pvsId], function (err, result) {
             callback(err, result)

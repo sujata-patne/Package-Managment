@@ -62,8 +62,8 @@ exports.getSubscriptionPacksByIds = function( dbConnection, subscriptionPackIds,
 }
 
 exports.deleteSubscriptionPack = function (dbConnection, pssId, sp_pkg_id, callback ) {
-    console.log("pssId");
-    console.log(pssId);
+   // console.log("pssId");
+    //console.log(pssId);
     var query = dbConnection.query('UPDATE icn_package_subscription_site SET pss_crud_isactive = ? WHERE pss_id = ? AND pss_sp_pkg_id = ?',
         [ pssId, pssId, sp_pkg_id ],function( err, result ) {
             if( err ){
