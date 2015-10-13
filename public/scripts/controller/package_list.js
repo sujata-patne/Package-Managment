@@ -58,7 +58,6 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
             end_date :$scope.EndDate,
             distributionChannelId : $scope.distributionChannel
         }
-        console.log(data);
         Package.getPackageDetail( data,function( data ){
             $scope.packageList = data.packageByName;
         },function(error){
@@ -71,8 +70,8 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         //$state.go('main-site',{'pkgId':pkgId})
         console.log(dcId)
 
-        $state.go('main-site', {dcId:dcId});
-        $scope.showPackageData()
+        $state.go('main-site',{'dcId':dcId});
+        $rootScope.showPackageData();
 
     }
     // var first = "A", last = "Z";
@@ -99,7 +98,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
             }
             Package.getPackageStartsWith(criteria,function( data ){
                 $scope.packageList = data.Package;
-                console.log($scope.packageList)
+               // console.log($scope.packageList)
             },function(error){
                 console.log(error);
             });

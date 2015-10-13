@@ -60,7 +60,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
 
     });
-console.log($stateParams.pkgId)
     $rootScope.showPackageData = function(){
         console.log('sdfsd')
         $rootScope.PackageId = '';

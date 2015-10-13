@@ -131,24 +131,26 @@ exports.getPackageDetail  = function (req, res, next) {
                                           );
                                         }
                                     },
-                                      function (err, results) {
-                                          if (err) {
-                                              connection_ikon_cms.release();
-                                              res.status(500).json(err.message);
-                                          } else {
-                                              pkg['packName'] = (results.packName.length > 0) ? results.packName[0].pk_name:'';
-                                              pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
-                                              pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
-                                              pkg['valuePackPlanCount'] = results.valuePackPlanCount;
-                                              searchData.push(pkg);
-                                          }
-                                      })
-                                  })
-                                  setTimeout(function(){
-                                      //console.log(searchData)
-                                      connection_ikon_cms.release();
-                                      res.send({packageByName:searchData});
-                                  }, 200);
+
+                          function (err, results) {
+                              if (err) {
+                                  connection_ikon_cms.release();
+                                  res.status(500).json(err.message);
+                              } else {
+                                  pkg['packName'] = (results.packName.length > 0) ? results.packName[0].pk_name : '';
+                                  pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
+                                  pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
+                                  pkg['valuePackPlanCount'] = results.valuePackPlanCount;
+                                  searchData.push(pkg);
+                              }
+                          })
+                      })
+                      setTimeout(function(){
+                          console.log(searchData)
+                          connection_ikon_cms.release();
+                          res.send({packageByName:searchData});
+                      }, 200);
+
                   }
               });
             })
@@ -257,8 +259,7 @@ exports.getPackageStartsWith  = function (req, res, next) {
                                 connection_ikon_cms.release();
                                 res.status(500).json(err.message);
                             } else {
-                                pkg['packName'] = results.packName[0];
-
+                                pkg['packName'] = (results.packName.length > 0) ? results.packName[0].pk_name : '';
                                 pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
                                 pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
                                 pkg['valuePackPlanCount'] = results.valuePackPlanCount;

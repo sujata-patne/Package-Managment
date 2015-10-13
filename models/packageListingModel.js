@@ -26,7 +26,7 @@ exports.getAllPackageForListStartsWith = function( dbConnection,data, callback )
         whereCond += " AND pk.sp_dc_id = " + data.distributionChannelId;
     }
 
-    var query = dbConnection.query("Select pk.*, pack. pk_name from icn_store_package as pk " +
+    var query = dbConnection.query("Select * from icn_store_package as pk " +
            "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
            callback( err,response );
        });
