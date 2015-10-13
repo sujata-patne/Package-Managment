@@ -332,6 +332,7 @@ exports.editSetting = function(req, res, next) {
                                 loop1(0);
                                 function loop1( cnt ) {
                                     var i = cnt;
+
                                     saveValuePackForSetting(_.keys(req.body.valuePlanSetting)[i],req.body.valuePlanSetting,req.body.totalLength - 1,true);
                                     if(cnt == count){
                                         // connection_ikon_cms.release();
@@ -377,7 +378,6 @@ function saveValuePackForSetting(pvs_vp_id,valueObj,contentTypeLength,toUpdate){
                 pass_content_type : parseInt(_.pairs(valueObj[pvs_vp_id])[i][0]),
                 pass_value :  _.pairs(valueObj[pvs_vp_id])[i][1]
             }
-
 
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                     if(toUpdate == true){

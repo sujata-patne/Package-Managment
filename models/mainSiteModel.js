@@ -134,7 +134,7 @@ exports.getPackageValuePack = function( dbConnection, packageId, callback ) {
     }
     var query = dbConnection.query('SELECT * FROM `icn_package_value_pack_site`,`icn_valuepack_plan` WHERE '+
         'icn_package_value_pack_site.pvs_sp_pkg_id = ? AND '+
-        'icn_package_value_pack_site.pvs_vp_id = icn_valuepack_plan.vp_id',packageId, function( err, response ) {
+        'icn_package_value_pack_site.pvs_vp_id = icn_valuepack_plan.vp_id AND icn_package_value_pack_site.pvs_crud_isactive IS NULL',packageId, function( err, response ) {
         callback( err, response );
     });
 }

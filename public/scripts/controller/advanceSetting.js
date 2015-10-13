@@ -1,5 +1,5 @@
 myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
-	ngProgress.color('yellowgreen');
+	  ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";
     $scope.successvisible = false;
@@ -201,7 +201,8 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
                         //Key here is the plan id 
                         // console.log('Plan id::'+key);
                         //change to check :: vp_id ==> pvs_id 
-                        var result_arr = _.findWhere($scope.valuePlans, {pvs_id: parseInt(key)});
+                        var result_arr = _.findWhere($scope.valuePlans, {pvs_vp_id: parseInt(key)});
+
                         var total_download_limit = result_arr.vp_download_limit;
                         var  vp_name = result_arr.vp_plan_name;
                         var computed_sum = 0;

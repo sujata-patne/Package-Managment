@@ -108,47 +108,47 @@ exports.getPackageDetail  = function (req, res, next) {
                               },
                               subscriptionPlanCount: function (callback) {
                                   /*count for subscription*/
-                      async.waterfall([
-                            function (callback) {
-                            PackageManager.existSubscriptionByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
-                              callback(err, result);
-                                              })
+                                  async.waterfall([
+                                          function (callback) {
+
+                                              PackageManager.existSubscriptionByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                                callback(err, result);
+                                                                })
                                           },
-                            function (exist, callback) {
-                            if (exist.length > 0) {
-                            PackageManager.countSubscriptionPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
-                              callback(err, count);
-                                              })
-                                        } else {
-                                              callback(err, 0);
+                                          function (exist, callback) {
+                                                if (exist.length > 0) {
+                                                        PackageManager.countSubscriptionPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                             callback(err, count);
+                                                         })
+                                                } else {
+                                                      callback(err, 0);
+                                                }
                                           }
-                                        }
-                                      ],
+                                    ],
                                       function (err, results) {
-                                          callback(err, results);
-                                      });
-                              }
-                          },
-                          function (err, results) {
-                              if (err) {
-                                  connection_ikon_cms.release();
-                                  res.status(500).json(err.message);
-                              } else {
-                                  pkg['packName'] = (results.packName.length > 0) ? results.packName[0].pk_name:'';
-                                  pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
-                                  pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
-                                  pkg['valuePackPlanCount'] = results.valuePackPlanCount;
-                                  searchData.push(pkg);
-                              }
-                          })
-                      })
-                      setTimeout(function(){
-                          //console.log(searchData)
-                          connection_ikon_cms.release();
-                          res.send({packageByName:searchData});
-                      }, 200);
-
-
+                                                callback(err, results);
+                                            }
+                                          );
+                                        }
+                                    },
+                                      function (err, results) {
+                                          if (err) {
+                                              connection_ikon_cms.release();
+                                              res.status(500).json(err.message);
+                                          } else {
+                                              pkg['packName'] = (results.packName.length > 0) ? results.packName[0].pk_name:'';
+                                              pkg['alacartPackPlanCount'] = results.alacartPackPlanCount;
+                                              pkg['subscriptionPlanCount'] = results.subscriptionPlanCount;
+                                              pkg['valuePackPlanCount'] = results.valuePackPlanCount;
+                                              searchData.push(pkg);
+                                          }
+                                      })
+                                  })
+                                  setTimeout(function(){
+                                      //console.log(searchData)
+                                      connection_ikon_cms.release();
+                                      res.send({packageByName:searchData});
+                                  }, 200);
                   }
               });
             })
@@ -266,7 +266,7 @@ exports.getPackageStartsWith  = function (req, res, next) {
                             }
                         })
                     })
-                    setTimeout(function(){
+                    setTimeout(function(){  
                        // console.log(searchData)
                         connection_ikon_cms.release();
                         res.send({Package:searchData});
