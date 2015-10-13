@@ -43,3 +43,20 @@ exports.updateValueSetting = function( dbConnection, valueplanId,contentTypeId, 
         callback( err, response );
     });
 }
+
+exports.saveCGImageSetting = function( dbConnection, data, callback ) {
+    var query = dbConnection.query('INSERT INTO icn_package_cg_image SET ? ',data, function( err, response ) {
+        callback( err, response );
+    });
+}
+
+exports.CGImageExists = function( dbConnection,packageId, callback ) {
+    var query = dbConnection.query('SELECT * FROM icn_package_cg_image WHERE pci_sp_pkg_id =  ? AND pass_crud_isactive IS NULL',packageId, function( err, response ) {
+        callback( err, response );
+    });
+}
+exports.DeleteCGImage = function( dbConnection,packageId, callback ) {
+    var query = dbConnection.query('UPDATE icn_package_cg_image SET pass_crud_isactive = '+packageId+' WHERE pci_sp_pkg_id =  ? ',packageId, function( err, response ) {
+        callback( err, response );
+    });
+}

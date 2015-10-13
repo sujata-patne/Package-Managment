@@ -7,4 +7,6 @@ module.exports = function (app) {
         .post(advanceSetting.addSetting);
     app.route('/editSetting')
         .post(advanceSetting.editSetting);
+    app.route('/UploadFile')
+        .post(advanceSetting.UploadFile);
 }

@@ -1,4 +1,4 @@
-myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite, advanceSetting) {
+myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
 	ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";
@@ -24,9 +24,11 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
     }
     advanceSetting.getData(preData,function(data){
     	$scope.contentTypes = data.ContentTypes;
-        console.log($scope.contentTypes);
+      console.log($scope.contentTypes);
     	$scope.offerPlan = data.PackageOffer;
     	$scope.valuePlans = data.PackageValuePacks;
+      //Getting the base CG image to show in thumbnail : 
+        $scope.cgimage = _.findWhere(data.CGImageData, {pci_is_default: 1});
         $scope.valueDataForUpdate = data.ValueDataForUpdate;
         $scope.offerDataForUpdate = data.OfferDataForUpdate;
         if($scope.offerDataForUpdate.length > 0){
@@ -89,16 +91,90 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
         });
     }
 
-    $scope.valueTotal = function(contentTypeId){
-   		$scope.totalGet = 0;
-    	//compute total buy
-    	angular.forEach($scope.offerGetSetting,function(value,key){
-    		if(value > 0){
-    			$scope.totalGet += parseInt(value);
-    		}
-    	});
+    // $scope.valueTotal = function(contentTypeId){
+   	// 	$scope.totalvalue = 0;
+    // 	//compute total buy
+    // 	angular.forEach($scope.offerGetSetting,function(value,key){
+    // 		if(value > 0){
+    // 			$scope.totalvalue += parseInt(value);
+    // 		}
+    // 	});
+    // }
+
+    $scope.fileUploads = [];
+    $scope.uploadSubmit = function(index){
+      console.log('in upload submit');
+             $scope.files = $scope.fileUploads;
+             var valid = true;
+             if($scope.files.length == 0){
+                valid = false;
+                toastr.error("Please select images to upload.");
+             }
+             if($scope.files[index].length > 1){
+                valid = false;
+                toastr.error("Max 1 files allowed per content type");
+             }
+             if(valid){
+                      angular.forEach($scope.files, function(file) {
+                        if (file && !file.$error) {
+                            file.upload = Upload.upload({
+                              url: '/UploadFile',
+                              fields: {'packageId': $scope.PackageId},
+                              file: file
+                            });
+
+                            file.upload.then(function (response) {
+                              $timeout(function () {
+                                file.result = response.data;
+                              });
+                            }, function (response) {
+                              if (response.status > 0)
+                                $scope.errorMsg = response.status + ': ' + response.data;
+                            });
+
+                            file.upload.progress(function (evt) {
+                                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                // console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                                $("#progress_id").html("Uploaded: "+progressPercentage+"%");
+                                $scope.fileUploads[index].progress = Math.min(100, parseInt(100.0 * 
+                                                       evt.loaded / evt.total));
+
+                                if( progressPercentage == 100 ){
+                                    setTimeout(function(){
+                                        // window.location.reload();
+                                         $("#progress_id").html('');
+                                    },3000);
+                                }
+                            });
+                        }   
+                     }); 
+             }
+           
     }
 
+ // $scope.filesubmit = function() {
+ //      if (advanceSettingForm.form.file.$valid && $scope.file && !$scope.file.$error) {
+ //          $scope.upload($scope.file);
+ //      }else{
+ //        console.log('not valid');
+ //      }
+ //      console.log('in submit');
+ //    };
+
+  // $scope.upload = function (file) {
+  //       // Upload.upload({
+  //       //     url: 'upload/url',
+  //       //     data: {file: file, 'username': $scope.username}
+  //       // }).then(function (resp) {
+  //       //     console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+  //       // }, function (resp) {
+  //       //     console.log('Error status: ' + resp.status);
+  //       // }, function (evt) {
+  //       //     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+  //       //     console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+  //       // });
+  //     console.log('in upload');
+  //   };
 
     $scope.submitAdvanceSettingForm = function(isValid){
       if (!$scope.distributionChannelId) {
@@ -130,9 +206,10 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
                         var  vp_name = result_arr.vp_plan_name;
                         var computed_sum = 0;
                         angular.forEach(value,function(v,k){
-                            computed_sum += parseInt(v);
+                          if(v != 'BAL'){
+                              computed_sum += parseInt(v);
+                          }
                         });
-
                         if(computed_sum > total_download_limit){
                             isValid = false;
                             toastr.error('In Plan '+vp_name+': Computed sum more than the total');
@@ -195,5 +272,32 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
         }
 
     }
+
+$(document).ready(function() {
+
+        // $("a.grouped_elements").fancybox();
+
+        $("a.grouped_elements").fancybox({
+            'transitionIn'  :   'elastic',
+            'transitionOut' :   'elastic',
+            'speedIn'       :   600, 
+            'speedOut'      :   200, 
+            'maxWidth'      :   400,
+            'maxHeight'     :   400,
+            // 'overlayShow'   :   false,
+            'showCloseButton' : true
+        });
+            $('.fancybox').fancybox();
+        
+            $('.fancybox-audio').fancybox({
+                'maxWidth'      :   400,
+                'maxHeight'     :   400,
+            });
+        
+            $(".fancybox-video").fancybox({
+                'maxWidth': '70%',
+                'maxHeight': '70%'
+            });
+    });
 
 });

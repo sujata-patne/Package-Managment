@@ -26,6 +26,14 @@ myApp.service('advanceSetting', ['$http', function ($http) {
         });
     }
 
+     service.UploadFile = function (data, success, error) {
+        $http.post(service.baseRestUrl + '/UploadFile', data).success(function (items) {
+            success(items);
+        }).error(function (err) {
+            error(err);
+        });
+    }
+
     return service;
 
 }]);
