@@ -146,11 +146,10 @@ exports.getPackageDetail  = function (req, res, next) {
                           })
                       })
                       setTimeout(function(){
-                          console.log(searchData)
+                          //console.log(searchData)
                           connection_ikon_cms.release();
                           res.send({packageByName:searchData});
                       }, 200);
-
                   }
               });
             })

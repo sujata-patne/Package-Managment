@@ -1,4 +1,4 @@
-myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
+myApp.controller('advanceSettingCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
 	  ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";
@@ -177,7 +177,7 @@ myApp.controller('advanceSettingCtrl', function ($scope, $state, ngProgress, $st
   //   };
 
     $scope.submitAdvanceSettingForm = function(isValid){
-      if (!$scope.distributionChannelId) {
+      if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
             $scope.errorvisible = true;
         }else{

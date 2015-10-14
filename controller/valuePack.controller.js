@@ -13,7 +13,7 @@ exports.getSelectedValuePacks = function( req, res, next ) {
     try{
         if( req.session && req.session.package_UserName && req.session.package_StoreId ) {
             mysql.getConnection('CMS', function( err, connection_ikon_cms) {
-                console.log( req.body.packageId );
+                //console.log( req.body.packageId );
                 valuePackManager.getSelectedValuePacks( connection_ikon_cms, req.body.packageId, function( err, selectedValuePackPlans) {
                     if (err) {
                         connection_ikon_cms.release();
@@ -36,7 +36,7 @@ exports.addValuePackToMainSite = function(req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId,req.body.selectedDistributionChannel, function( err, packageData ) {
-                    console.log( packageData.length );
+                    //console.log( packageData.length );
                     if( packageData.length == 0 ) {
                         mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
                             if (err) {
@@ -57,8 +57,8 @@ exports.addValuePackToMainSite = function(req, res, next) {
 
                                 };
                                 mainSiteManager.addStorePackage(connection_ikon_cms, data, function (err, storePlan) {
-                                    console.log("coming");
-                                    console.log(storePlan);
+                                    //console.log("coming");
+                                  //  console.log(storePlan);
                                     if (err) {
                                         connection_ikon_cms.release();
                                         res.status(500).json(err.message);
@@ -69,7 +69,7 @@ exports.addValuePackToMainSite = function(req, res, next) {
                             }
                         });
                     } else {
-                        console.log("inside else");
+                        //console.log("inside else");
                         addValuePackPlan( req, res, connection_ikon_cms, packageData[0] );
                     }
                 });
@@ -143,7 +143,7 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
                     loop(0);
                     function loop(cnt) {
                         var i = cnt;
-                        console.log( addValuePackIds[i] );
+                        //console.log( addValuePackIds[i] );
                         valuePackManager.valuePackExists( connection_ikon_cms, addValuePackIds[i], packageData.sp_pkg_id, function (err, response ) {
 
                             if( response != undefined && response.length > 0   ) {
@@ -152,7 +152,7 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
                                         connection_ikon_cms.release();
                                         res.status(500).json(err.message);
                                     } else {
-                                        console.log("updateValuePack")
+                                        //console.log("updateValuePack")
                                         cnt = cnt + 1;
                                         if( cnt == count ) {
 
@@ -171,7 +171,7 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
                                 });
                             }
                             else {
-                                console.log("insertValuePack")
+                                //console.log("insertValuePack")
 
                                 valuePackManager.getLastInsertedValuePackId(connection_ikon_cms, function (err, lastInsertedId) {
                                     if (err) {
@@ -220,7 +220,7 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
             }
         },
         function (err, results) {
-            console.log(results)
+            //console.log(results)
             if (err) {
                 connection_ikon_cms.release();
                 res.status(500).json(err.message);
@@ -262,7 +262,7 @@ function addValuePackPlan( req, res, connection_ikon_cms, packageData ) {
 }
 
 function addValuePackPlan123( req, res, connection_ikon_cms, packageData ) {
-    console.log( packageData );
+    //console.log( packageData );
 
     var valuePacks = req.body.selectedValuePacks;
     var addValuePackIds = valuePacks.filter( function( el ) {
@@ -277,12 +277,12 @@ function addValuePackPlan123( req, res, connection_ikon_cms, packageData ) {
 
     var deleteValuePackIds = [];
 
-    console.log( addValuePackIds );
+    /*console.log( addValuePackIds );
     console.log("dlete");
-    console.log( deletePackIds );
+    console.log( deletePackIds );*/
 
     if( deletePackIds.length > 0 ) {
-        console.log( deleteValuePackIds );
+        //console.log( deleteValuePackIds );
         valuePackManager.getValuePacksByIds( connection_ikon_cms, deletePackIds, packageData.sp_pkg_id, function( err, response ) {
 
             if(response[0].value_pack_ids !== null){
@@ -319,10 +319,9 @@ function addValuePackPlan123( req, res, connection_ikon_cms, packageData ) {
         loop(0);
         function loop(cnt) {
             var i = cnt;
-            console.log( addValuePackIds[i] );
+            //console.log( addValuePackIds[i] );
             valuePackManager.valuePackExists( connection_ikon_cms, addValuePackIds[i], packageData.sp_pkg_id, function (err, response ) {
-                console.log("response");
-                console.log( response );
+
                 if( response != undefined && response.length > 0   ) {
                     valuePackManager.updateValuePack(connection_ikon_cms, response[0].pvs_id, function( err, response ) {
                         if (err) {

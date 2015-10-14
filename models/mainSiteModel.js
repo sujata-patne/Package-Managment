@@ -25,11 +25,11 @@ exports.getOfferData = function(dbConnection, storeId,dcId, callback) {
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
         'WHERE plan.op_st_id = ? ' + str, [storeId], function (err, ContentTypes) {
         callback(err, ContentTypes);
-        console.log(' SELECT plan.* ' +
+        /*console.log(' SELECT plan.* ' +
             'FROM icn_offer_plan AS plan ' +
             'join multiselect_metadata_detail as mmd ON plan.op_channel_front = mmd.cmd_group_id ' +
             'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
-            'WHERE plan.op_st_id = '+storeId+ " " + str)
+            'WHERE plan.op_st_id = '+storeId+ " " + str)*/
     });
 }
 exports.getMaxAlacartOfferId = function(dbConnection, callback) {
@@ -81,6 +81,7 @@ exports.existingContentTypesInPack = function(dbConnection,paosId, callback){
     });
 }
 exports.getMainSitePackageData = function(dbConnection,storeId, dcId, callback){
+    console.log('SELECT * FROM icn_store_package WHERE sp_st_id = '+storeId+' AND sp_dc_id = '+dcId+' AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ')
     var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,dcId], function (err, response) {
         callback(err,response);
     });

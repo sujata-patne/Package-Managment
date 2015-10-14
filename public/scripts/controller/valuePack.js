@@ -24,7 +24,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
         $scope.errorvisible = false;
         var valuePackData = {
             selectedValuePacks: $scope.selectedValuePacks,
-            selectedDistributionChannel: $scope.distributionChannelId,
+            selectedDistributionChannel: $rootScope.distributionChannelId,
             packageId : $rootScope.PackageId,
             existingValuePackIds: $scope.existingValuePackIds
         };

@@ -2,6 +2,7 @@
  * Created by sujata.patne on 29-09-2015.
  */
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+    console.log('mainsite')
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
 
@@ -10,13 +11,13 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    $scope.distributionChannelId = "";
 
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
 
     $('#main-site').addClass('active');
-
+    console.log('$stateParams')
+    console.log($stateParams)
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"main-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"main-site.valuepack", active: false },
@@ -27,7 +28,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     //default form display for a-la-cart and offer plan
 
     $scope.proceed = function() {
-        
         if($scope.tabIndex !== ( $scope.tabs.length - 1 ) ){
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
@@ -54,20 +54,25 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     MainSite.getMainSiteData(function (MainSiteData) {
-
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
-
     });
-    $rootScope.showPackageData = function(){
-        console.log('sdfsd')
+
+    $scope.getPackageData = function(){
+        console.log('getPackageData')
+        $scope.showPackageData();
+        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+    }
+    $scope.showPackageData = function(){
+        console.log('showPackageData')
+        console.log($rootScope.distributionChannelId)
+
         $rootScope.PackageId = '';
         $rootScope.PackageType = 0;
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
-
-        MainSite.showPackageData({distributionChannelId:$scope.distributionChannelId},function (MainSiteData) {
+        MainSite.showPackageData({distributionChannelId:$rootScope.distributionChannelId},function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
@@ -80,11 +85,11 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
-                $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
+                $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
                 $rootScope.PackageType = $scope.mainSitePackageData[0].sp_pkg_type
             }else{
-                //$scope.distributionChannelId = '';
+                //$rootScope.distributionChannelId = '';
                 $rootScope.PackageId = '';
                 $rootScope.PackageType = '';
             }
@@ -105,12 +110,15 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                     };
                 })
             }
-            $state.go($state.current, {}, {reload: $state.current});
+            console.log(MainSiteData)
+
         })
     }
 
-   // $scope.showPackageData();
-
+    if($rootScope.distributionChannelId != ''){
+        console.log('alacart')
+        $scope.showPackageData();
+    }
     $scope.resetForm = function () {
         $scope.selectedValuePacks = [];
         $scope.selectedSubscriptionPlans = [];

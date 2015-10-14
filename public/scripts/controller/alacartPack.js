@@ -4,6 +4,7 @@
 
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
 
+
     if($scope.PackageId && $scope.PackageId != null && $scope.PackageId != undefined && $scope.PackageId != '') {
 
         var data = {
@@ -34,8 +35,9 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             }
         });
     }
+
     $scope.submitForm = function (isValid) {
-        if (!$scope.distributionChannelId) {
+        if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
             $scope.errorvisible = true;
         } else {
@@ -46,7 +48,7 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                 offerId: $scope.offerId,
                 packageId: $rootScope.PackageId,
                 packageType: $scope.PackageType,
-                distributionChannelId: $scope.distributionChannelId
+                distributionChannelId: $rootScope.distributionChannelId
             }
             ngProgress.start();
             if ($scope.paosId != undefined && $scope.paosId != null && $scope.paosId != '') {

@@ -63,17 +63,15 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         },function(error){
             console.log(error);
         });
-    
+
     }
 
     $scope.EditPackage = function(dcId){
-        //$state.go('main-site',{'pkgId':pkgId})
-        console.log(dcId)
-
-        $state.go('main-site',{'dcId':dcId});
-        $rootScope.showPackageData();
-
+        $rootScope.distributionChannelId = dcId;
+        console.log('dcId '+ dcId)
+        $state.go('main-site');
     }
+
     // var first = "A", last = "Z";
     // $scope.alphabets[0] = "1";
     // for(var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {

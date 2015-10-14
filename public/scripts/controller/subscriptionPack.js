@@ -32,7 +32,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
         $scope.errorvisible = false;
         var subscriptionPackData = {
             selectedSubscriptionPlans: $scope.selectedSubscriptionPlans,
-            selectedDistributionChannel: $scope.distributionChannelId,
+            selectedDistributionChannel:  $rootScope.distributionChannelId,
             packageId : $rootScope.PackageId,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
