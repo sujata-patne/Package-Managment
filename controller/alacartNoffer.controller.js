@@ -188,20 +188,31 @@ exports.addAlacartPackDetails = function (req,res,next){
                 async.waterfall([
                     function(callback){
                         //Get store package
-                        mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId,function( err, packageData ) {
+                        //Package type added to  getMainSitePackageData
+                        mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId,req.body.packageType,function( err, packageData ) {
                             if(packageData.length > 0){
                                 callback(err, packageData[0].sp_pkg_id);
                             }else{
                                 mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
                                     var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
+                                    
+                                    //Main site 
                                     var storePackage = {
                                         sp_pkg_id: pkgId,
                                         sp_package_name: 'MainSite '+req.body.distributionChannelId,
+                                        sp_pk_id : 0, //pack id
                                         sp_st_id: req.session.package_StoreId,
                                         sp_dc_id: req.body.distributionChannelId,
                                         sp_pkg_type: req.body.packageType, //site type
                                         sp_is_active: 1
                                     };
+
+                                    //Individual Pack modifications
+                                    if(req.body.packageType == 1){
+                                        storePackage.sp_package_name = req.body.packageName;
+                                        storePackage.sp_pk_id = req.body.packId;
+                                    }
+                                
                                     if(addStorePackage(connection_ikon_cms,storePackage)){
                                         callback(null,pkgId);
                                     }else{

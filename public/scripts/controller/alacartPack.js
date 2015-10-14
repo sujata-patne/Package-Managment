@@ -5,11 +5,11 @@
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
 
 
-    if($scope.PackageId && $scope.PackageId != null && $scope.PackageId != undefined && $scope.PackageId != '') {
+    if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
 
         var data = {
-            packageId: $scope.PackageId,
-            packageType: $scope.PackageType
+            packageId: $rootScope.PackageId,
+            packageType: $rootScope.PackageType
         }
 
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
@@ -47,7 +47,9 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                 paosId: $scope.paosId,
                 offerId: $scope.offerId,
                 packageId: $rootScope.PackageId,
-                packageType: $scope.PackageType,
+                packageType: $rootScope.PackageType,
+                packId : $rootScope.selectedPack,
+                packageName : $rootScope.packageName,
                 distributionChannelId: $rootScope.distributionChannelId
             }
             ngProgress.start();

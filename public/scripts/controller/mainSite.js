@@ -72,7 +72,9 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $rootScope.PackageType = 0;
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
-        MainSite.showPackageData({distributionChannelId:$rootScope.distributionChannelId},function (MainSiteData) {
+
+
+        MainSite.showPackageData({distributionChannelId:$scope.distributionChannelId,packageType : $rootScope.PackageType},function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
@@ -91,7 +93,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             }else{
                 //$rootScope.distributionChannelId = '';
                 $rootScope.PackageId = '';
-                $rootScope.PackageType = '';
+                $rootScope.PackageType = 0;
             }
             $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {

@@ -1,4 +1,4 @@
-myApp.controller('advanceSettingCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
+myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
 	  ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";
@@ -13,13 +13,13 @@ myApp.controller('advanceSettingCtrl', function ($scope, $rootScope, $state, ngP
     var preData;
 
     preData = {
-    	packageId : $scope.PackageId
+    	packageId : $rootScope.PackageId
     }
 
 
 
-    if($scope.PackageId != ""){
-       // console.log('PackageId '+$scope.PackageId);
+    if($rootScope.PackageId != ""){
+       // console.log('PackageId '+$rootScope.PackageId);
 
     }
     advanceSetting.getData(preData,function(data){
@@ -119,7 +119,7 @@ myApp.controller('advanceSettingCtrl', function ($scope, $rootScope, $state, ngP
                         if (file && !file.$error) {
                             file.upload = Upload.upload({
                               url: '/UploadFile',
-                              fields: {'packageId': $scope.PackageId},
+                              fields: {'packageId': $rootScope.PackageId},
                               file: file
                             });
 
@@ -176,7 +176,8 @@ myApp.controller('advanceSettingCtrl', function ($scope, $rootScope, $state, ngP
   //     console.log('in upload');
   //   };
 
-    $scope.submitAdvanceSettingForm = function(isValid){
+
+  $scope.submitAdvanceSettingForm = function(isValid){
       if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
             $scope.errorvisible = true;

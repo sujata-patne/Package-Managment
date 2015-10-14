@@ -34,6 +34,9 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             selectedSubscriptionPlans: $scope.selectedSubscriptionPlans,
             selectedDistributionChannel:  $rootScope.distributionChannelId,
             packageId : $rootScope.PackageId,
+            packageType: $rootScope.PackageType,
+            packId : $rootScope.selectedPack,
+            packageName : $rootScope.packageName,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
         if (isValid) {
@@ -49,7 +52,6 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
     $scope.result = function( data ){
         if(data.success){
-
             /*if( data.selectedSubscriptionPackPlans.length > 0 ) {
                 $scope.existingSubscriptionPackIds = [];
                 $scope.selectedSubscriptionPlans = [];
@@ -63,7 +65,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             }else{
                 $scope.success = 'Package Added successfully.';
             }*/
-            toastr.success( $scope.success );
+            toastr.success( 'Successful' );
             $rootScope.PackageId = data.pkgId;
             $state.go($state.current, {}, {reload: $state.current});
         }else{

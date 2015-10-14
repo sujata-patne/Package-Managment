@@ -47,7 +47,7 @@ exports.showPackageData = function(req, res, next)  {
                     mainSitePackageData : function (callback){
                         async.waterfall([
                             function (callback) {
-                                mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, packageDetails) {
+                                mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId,req.body.packageType, function (err, packageDetails) {
                                     callback(err, packageDetails);
                                 })
                             },
@@ -100,6 +100,7 @@ exports.showPackageData = function(req, res, next)  {
                         res.status(500).json(err.message);
                     } else {
                       //  console.log(results)
+                        connection_ikon_cms.release();
                         res.send(results);
 
                        // callback(err, results);
@@ -133,6 +134,11 @@ exports.getMainSiteData = function(req, res, next) {
                     distributionChannels: function (callback) {
                         mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
                             callback(err, distributionChannels);
+                        });
+                    },
+                    packs : function (callback){
+                        mainSiteManager.getAllPacks(connection_ikon_cms,req.session.package_StoreId, function(err, packs){
+                            callback(err,packs);
                         });
                     }
                 },

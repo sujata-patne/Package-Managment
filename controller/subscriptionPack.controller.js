@@ -56,7 +56,8 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId,req.body.selectedDistributionChannel, function( err, packageData ) {
+                //Package type added to  getMainSitePackageData
+                mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId,req.body.selectedDistributionChannel,req.body.packageType, function( err, packageData ) {
                     //console.log( packageData.length );
                     if( packageData.length == 0 ) {
                         mainSiteManager.getMaxStorePackageId(connection_ikon_cms, function (err, MaxPkgId) {
@@ -71,13 +72,20 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
                                     sp_st_id: req.session.package_StoreId,
                                     sp_package_name: 'MainSite '+req.body.selectedDistributionChannel,
                                     sp_dc_id: req.body.selectedDistributionChannel,
-                                    sp_pkg_type: 0,
+                                    sp_pkg_type: req.body.packageType,
+                                    sp_pk_id : 0, // pack id
                                     sp_is_active: 1,
                                     sp_created_on: new Date(),
                                     sp_created_by: req.session.package_UserId,
                                     sp_modified_on: new Date(),
                                     sp_modified_by: req.session.package_UserId
                                 };
+                                  //Individual Pack modifications
+                                if(req.body.packageType == 1){
+                                        data.sp_package_name = req.body.packageName;
+                                        data.sp_pk_id = req.body.packId;
+                                }
+
                                 mainSiteManager.addStorePackage(connection_ikon_cms, data, function (err, storePlan) {
                                     if (err) {
                                         connection_ikon_cms.release();
