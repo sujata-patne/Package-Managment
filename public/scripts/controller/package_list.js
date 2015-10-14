@@ -66,10 +66,18 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
 
     }
 
-    $scope.EditPackage = function(dcId){
+    $scope.EditPackage = function(pkgId,dcId, pkgType){
+        $rootScope.PackageId = pkgId;
         $rootScope.distributionChannelId = dcId;
+        $rootScope.PackageType = pkgType;
         console.log('dcId '+ dcId)
-        $state.go('main-site');
+        if($rootScope.PackageType === 1){
+            $state.go('pack-site');
+
+        }else{
+            $state.go('main-site');
+
+        }
     }
 
     // var first = "A", last = "Z";

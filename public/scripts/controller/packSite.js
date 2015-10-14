@@ -7,7 +7,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    $scope.distributionChannelId = "";
 
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
@@ -15,6 +14,13 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $('#pack-site').addClass('active');
     $rootScope.packageName = '';
     $rootScope.selectedPack = '';
+
+    $rootScope.PackageType = 1;
+    //$rootScope.PackageId = '';
+   // $rootScope.distributionChannelId = "";
+
+    $scope.offerId = '';
+    $scope.paosId = '';
 
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"pack-site.alacart", active: true },
@@ -59,15 +65,19 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.StorePacks = angular.copy(PackSiteData.packs);
     });
 
-
+    $scope.getPackageData = function(){
+        console.log('getPackageData')
+        $scope.showPackageData();
+        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+    }
     $rootScope.showPackageData = function(){
-        console.log('sdfsd')
-        $rootScope.PackageId = '';
-        $rootScope.PackageType = 1;
+        console.log('showpackage')
+
+
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
-        MainSite.showPackSitePackageData({distributionChannelId:$scope.distributionChannelId,packageType : $rootScope.PackageType},function (PackSiteData) {
+        MainSite.showPackSitePackageData({pkgId:$rootScope.PackageId,distributionChannelId:$rootScope.distributionChannelId,packageType : $rootScope.PackageType},function (PackSiteData) {
             $scope.OfferData = angular.copy(PackSiteData.OfferData);
             $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
@@ -77,7 +87,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.valuePackPlans = angular.copy(PackSiteData.valuePackPlans);
 
             $scope.subscriptionPackPlans = angular.copy(PackSiteData.subscriptionPackPlans);
-            $scope.packSitePackageData = angular.copy(PackSiteData.mainSitePackageData.packageDetails);
+            $scope.packSitePackageData = angular.copy(PackSiteData.individualPackageDetails);
 
             if ($scope.packSitePackageData != null && $scope.packSitePackageData.length > 0) {
                 $scope.distributionChannelId = $scope.packSitePackageData[0].sp_dc_id;

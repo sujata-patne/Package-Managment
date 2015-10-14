@@ -53,12 +53,15 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                 distributionChannelId: $rootScope.distributionChannelId
             }
             ngProgress.start();
-            if ($scope.paosId != undefined && $scope.paosId != null && $scope.paosId != '') {
-                alacartPack.editAlacartNOffer(alacartData, function (data) {
+            console.log( "submit " + $rootScope.PackageId)
+            if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '') {
+                console.log('edit')
+                    alacartPack.editAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
                 });
             } else {
-                alacartPack.addAlacartNOffer(alacartData, function (data) {
+                console.log('add')
+                    alacartPack.addAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
                 });
             }

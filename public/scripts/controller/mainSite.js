@@ -8,6 +8,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $scope.selectedStore = [];
 
+    $rootScope.PackageType = 0;
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
@@ -16,8 +17,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $('.removeSubactiveClass').removeClass('active');
 
     $('#main-site').addClass('active');
-    console.log('$stateParams')
-    console.log($stateParams)
+
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"main-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"main-site.valuepack", active: false },
@@ -66,15 +66,13 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
     $scope.showPackageData = function(){
         console.log('showPackageData')
-        console.log($rootScope.distributionChannelId)
+        console.log($rootScope.PackageId)
 
-        $rootScope.PackageId = '';
-        $rootScope.PackageType = 0;
+
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
-
-        MainSite.showPackageData({distributionChannelId:$scope.distributionChannelId,packageType : $rootScope.PackageType},function (MainSiteData) {
+        MainSite.showPackageData({pkgId:$rootScope.PackageId,distributionChannelId:$rootScope.distributionChannelId,packageType : $rootScope.PackageType},function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
@@ -84,7 +82,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
 
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
-            $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
+            $scope.mainSitePackageData = angular.copy(MainSiteData.mainsitePackageDetails);
 
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
@@ -117,7 +115,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         })
     }
 
-    if($rootScope.distributionChannelId != ''){
+    if($rootScope.PackageId != '' && $rootScope.PackageId != null && $rootScope.PackageId != undefined){
         console.log('alacart')
         $scope.showPackageData();
     }

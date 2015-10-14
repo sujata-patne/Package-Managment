@@ -82,11 +82,14 @@ exports.existingContentTypesInPack = function(dbConnection,paosId, callback){
 }
 
 exports.getMainSitePackageData = function(dbConnection,storeId, dcId,packageType, callback){
-    console.log('SELECT * FROM icn_store_package WHERE sp_st_id = '+storeId+' AND sp_dc_id = '+dcId+' AND sp_pkg_type = '+packageType+' AND sp_is_active = 1 AND ISNULL(sp_crud_isactive)');
     var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,dcId,packageType], function (err, response) {
         callback(err,response);
     });
-    console.log('-----------------------');
+}
+exports.getIndividualPackageData = function(dbConnection,storeId,pkgId, callback){
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_pkg_id = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,pkgId], function (err, response) {
+        callback(err,response);
+    });
 }
 exports.getAlacartNOfferDetails = function(dbConnection,pkgId, callback){
     var query = dbConnection.query("SELECT paos.* FROM icn_package_alacart_offer_site as paos " +
