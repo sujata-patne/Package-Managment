@@ -10,8 +10,6 @@ var alacartManager = require('../models/alacartModel');
 var async = require("async");
 
 exports.showPackageData = function(req, res, next)  {
-    console.log("pkgId"+req.body.pkgId)
-console.log(req.body)
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -46,8 +44,13 @@ console.log(req.body)
                             callback(err, subscriptionPackPlans);
                         });
                     },
-                    mainsitePackageDetails: function (callback){
+                    /*mainsitePackageDetails: function (callback){
                         mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId,req.body.packageType, function (err, packageDetails) {
+                            console.log('packageDetails')
+                            console.log("pkgId : "+req.body.pkgId)
+                            if (req.body.pkgId != null && req.body.pkgId != undefined && req.body.pkgId != '') {
+                                req.body.pkgId = packageDetails[0].sp_pkg_id;
+                            }
                             callback(err, packageDetails);
                         })
                     },
@@ -55,39 +58,37 @@ console.log(req.body)
                         mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, individualPackageDetails) {
                             callback(err, individualPackageDetails);
                         })
-                    },
+                    },*/
                     mainSitePackageData : function (callback){
-                        //async.waterfall([
-
-                            /*function (callback) {
-                                mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId,req.body.packageType, function (err, packageDetails) {
-                                    callback(err, packageDetails);
-                                })
-                            },*/
-                          //  function (packageDetails, callback) {
-                                //if (packageDetails != null && packageDetails.length > 0) {
+                        async.waterfall([
+                            function (callback) {
                                 if (req.body.pkgId != null && req.body.pkgId != undefined && req.body.pkgId != '') {
+                                    mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
+                                        callback(err, packageDetails);
+                                    })
+                                }else{
+                                    mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId,req.body.packageType, function (err, packageDetails) {
+                                        callback(err, packageDetails);
+                                    })
+                                }
+                            },
+                            function (packageDetails, callback) {
+                                if (packageDetails != null && packageDetails.length > 0) {
                                     async.waterfall([
                                         function (callback) {
-                                                alacartManager.getAlacartNOfferDetails(connection_ikon_cms, req.body.pkgId, function (err, alacartNOfferDetails) {
-                                                    callback(err, alacartNOfferDetails); //packageDetails[0].sp_pkg_id
+                                            alacartManager.getAlacartNOfferDetails(connection_ikon_cms, packageDetails[0].sp_pkg_id, function (err, alacartNOfferDetails) {
+                                                callback(err, alacartNOfferDetails);
+                                            })
+                                        },
+                                        function (alacartNOfferDetails,callback) {
+                                            if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
+                                                alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
+                                                    callback(null, {packageDetails:packageDetails, alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
                                                 })
-                                            },
-                                        function (alacartNOfferDetails, callback) {
-                                                if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
-                                                    alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
-                                                        callback(null, {
-                                                            alacartNOfferDetails: alacartNOfferDetails,
-                                                            contentTypePlanData: contentTypePlanData
-                                                        });
-                                                    })
-                                                } else {
-                                                    callback(null, {
-                                                        alacartNOfferDetails: alacartNOfferDetails,
-                                                        contentTypePlanData: null
-                                                    });
-                                                }
+                                            } else {
+                                                callback(null, {packageDetails:packageDetails,alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:null });
                                             }
+                                        }
                                     ],
                                     function (err, results) {
                                         if (err) {
@@ -98,10 +99,10 @@ console.log(req.body)
                                         }
                                     })
                                 } else {
-                                     callback(null, { alacartNOfferDetails:null,contentTypePlanData:null});
+                                    callback(null, {packageDetails:packageDetails, alacartNOfferDetails:null,contentTypePlanData:null});
                                 }
                             }
-                        /*],
+                        ],
                         function (err, results) {
                             if (err) {
                                 connection_ikon_cms.release();
@@ -112,7 +113,7 @@ console.log(req.body)
                                 //res.send(results);
                             }
                         })
-                    }*/
+                    }
                 },
                 function (err, results) {
                     if (err) {

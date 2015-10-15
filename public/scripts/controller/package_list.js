@@ -71,6 +71,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $rootScope.distributionChannelId = dcId;
         $rootScope.PackageType = pkgType;
         console.log('dcId '+ dcId)
+        $rootScope.action = 'edit';
         if($rootScope.PackageType === 1){
             $state.go('pack-site');
 
