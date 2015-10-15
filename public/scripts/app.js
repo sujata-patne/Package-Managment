@@ -69,6 +69,10 @@ myApp.config(function ($stateProvider) {
             templateUrl: 'partials/arrange-plans.html',
             controller: 'arrangePlanCtrl'
         })
+        .state('pack-site.individualcontent', {
+            templateUrl: 'partials/individualcontent.html',
+            controller: 'individualContentCtrl'
+        })
         .state('accountforgot', {
             templateUrl: 'partials/account-changepassword.html',
             controller: '',

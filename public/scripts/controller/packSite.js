@@ -26,7 +26,8 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         { title:"Value Pack Plans",  state:"pack-site.valuepack", active: false },
         { title:"Subscription Plans",  state:"pack-site.subscription" , active: false },
         { title:"Advance Settings", state:"pack-site.advancesetting" , active: false },
-        { title:"Arrange Plans",  state:"pack-site.arrangeplan" , active: false }
+        { title:"Arrange Plans",  state:"pack-site.arrangeplan" , active: false },
+        { title:"Individual Content",  state:"pack-site.individualcontent" , active: false }
     ];
     //default form display for a-la-cart and offer plan
 

@@ -1,0 +1,78 @@
+<form method="post" class="form-horizontal" role="form" name="valuePackOfferForm" data-ng-submit="submitIndividualContentForm(valuePackOfferForm.$valid)" novalidate>
+    <div class="row">
+        <div class="col-md-2 col-xs-4"></div>
+        
+        <div class="col-md-8 col-xs-4">
+              <div class="form-group">
+                    <label for="contenttypes" class="col-md-3 control-label">Content Type : </label>
+                    <div class="col-md-6">
+                        <select name="contenttypes" data-ng-options="item.cd_id as item.cd_name for item in contentTypes" class="form-control" data-ng-model="selectedContentType" data-ng-change="changeContentType()">
+                            <option value=""> --Select Content Type-- </option>
+                        </select>
+                    </div>
+              </div>
+              <div class="form-group">
+                    <label for="alacartplans" class="col-md-3 control-label">A-la-Cart Plans List : </label>
+                    <div class="col-md-6">
+                        <select name="contenttypes" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartplans" class="form-control" data-ng-model="selectedPlanId">
+                             <option value=""> --Select Alacart Plan-- </option>
+                        </select>
+                    </div>
+              </div> 
+               <div class="table-responsive">
+                                    <div id="user-exportable">
+                                        <table id="arrangePlans" class="table table-striped table-bordered table-checkable">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center">Content Id</th>
+                                                <th class="text-center">Preview</th>
+                                                <th class="text-center">Movie/Album</th>
+                                                <th class="text-center">Current Plan</th>
+                                                <th class="text-center">Select</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="item in contentData ">
+                                                <td class="col-md-1 col-xs-1 text-center">
+                                                    {{item.cm_id}}&nbsp;&nbsp;
+                                                </td>
+                                                <td class="col-md-2 col-xs-2">
+                                                    <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                </td>
+                                                <td class="col-md-4 col-xs-4">
+                                                    {{item.cm_display_title}}
+                                                </td>
+                                                <td>
+                                                    -
+                                                </td>
+                                                {{final_selectedContent}}
+                                                <td>
+                                                    <!-- {{selectedContent}} -->
+                                                    <input type="checkbox" name="selectedContent"  ng-model="selectedContent[item.cm_id]" data-ng-change="changeContent()"/>
+                                                </td>
+                                            </tr>
+                                          <!--   <tr ng-hide="PlanLists.length > 0">
+                                                <td colspan="7">
+                                                    No Records found for given search criteria.
+                                                </td>
+                                            </tr> -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+            </div>  
+        </div>
+        <div class="col-md-2 col-xs-4"></div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-offset-5 col-md-7" >
+                <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
+                <!-- <button class="btn btn-small" ng-click="proceed()" ng-disable="dis()">{{buttonLabel}}</button> -->
+                <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+            </div>
+        </div>
+    </div>
+</form>
+
