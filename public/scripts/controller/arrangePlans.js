@@ -20,6 +20,10 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     }
     Arrangeplans.getArrangePlansData(preData,function(data) {
         $scope.AlacartPlans = data.PackageAlacartPacks;
+        $scope.selectedPlans = data.selectedPlans;
+
+        console.log($scope.selectedPlans)
+        var index = $scope.finalarray.length;
         if( $scope.AlacartPlans.length>0) {
             //angular.forEach($scope.AlacartPlans, function (value, key) {
             var obj = {}
@@ -27,8 +31,9 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_name'] = 'All Plans';
             obj['plan_type'] = 'A-La-Cart';
           //  obj['pas_id'] = '';
-
+            obj['seq_id'] = index++;
             $scope.finalarray.push(obj);
+            $scope.sequenceData.push({'pas_id':''});
         }
         $scope.offerPlan = data.PackageOffer;
         angular.forEach($scope.offerPlan, function (value, key) {
@@ -36,8 +41,10 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_id'] = value.op_id;
             obj['plan_name'] = value.op_plan_name;
             obj['plan_type'] = 'Offer';
-           // obj['pas_id'] = '';
+            obj['seq_id'] = index++;
             $scope.finalarray.push(obj);
+            $scope.sequenceData.push({'pas_id':''});
+
         });
         $scope.valuePlans = data.PackageValuePacks;
         angular.forEach($scope.valuePlans, function (value, key) {
@@ -46,8 +53,10 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_id'] = value.vp_id;
             obj['plan_name'] = value.vp_plan_name;
             obj['plan_type'] = 'ValuePack';
-            //obj['pas_id'] = '';
+            obj['seq_id'] = index++;
             $scope.finalarray.push(obj);
+            $scope.sequenceData.push({'pas_id':''});
+
 
         });
         $scope.subscriptionPlans = data.PackageSubscriptionPacks;
@@ -56,8 +65,10 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_id'] = value.sp_id;
             obj['plan_name'] = value.sp_plan_name;
             obj['plan_type'] = 'Subscription Plan';
-          //  obj['pas_id'] = '';
+            obj['seq_id'] = index++;
             $scope.finalarray.push(obj);
+            $scope.sequenceData.push({'pas_id':''});
+
         });
         // $scope.AlacartPlans = data.PackageAlacartPacks;
         // if( $scope.AlacartPlans.length>0) {
@@ -70,12 +81,12 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         // }
     });
     $scope.arrangeContent = function () {
-        angular.forEach($scope.sequence,function(value,key) {
+        /*angular.forEach($scope.sequence,function(value,key) {
             var data = {};
             data[key] = value;
             $scope.arrangedContentList[key] = value;
-        })
-        console.log($scope.sequence)
+        })*/
+
 
     }
     $scope.submitForm = function(){
@@ -87,8 +98,8 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         }
         var data ={
             packageId : $rootScope.PackageId,
-            arrangedContentList:$scope.arrangedContentList,
             finalarray:$scope.finalarray,
+            sequenceData: $scope.sequenceData
            }
 
         Arrangeplans.AddArrangedContents( data , function (data) {
@@ -103,16 +114,17 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         })
     }
     $scope.checkForDuplicates = function(id) {
+        console.log('duplicate')
         var unique = [];
         var duplicate = [];
         var previous_value = 0;
-        angular.forEach($scope.sequence,function(value,key) {
+        angular.forEach($scope.sequenceData,function(value,key) {
             if( unique.length == 0 ) {
-                unique.push( parseInt( value ) );
-            } else if( unique.indexOf(parseInt( value ) ) == -1 ) {
-                unique.push( parseInt( value ) );
+                unique.push( parseInt( value.pas_arrange_seq ) );
+            } else if( unique.indexOf(parseInt( value.pas_arrange_seq ) ) == -1 ) {
+                unique.push( parseInt( value.pas_arrange_seq ) );
             } else {
-                duplicate.push( parseInt( value ) );
+                duplicate.push( parseInt( value.pas_arrange_seq ) );
             }
             $scope.unique = unique;
             $scope.duplicate = duplicate;

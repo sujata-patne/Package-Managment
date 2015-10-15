@@ -123,6 +123,38 @@ exports.existStorePackage = function(dbConnection,storeId, dcId, callback) {
     });
 }
 
+exports.getSelectedPlans = function (dbConnection, packageId, callback){
+    if(packageId == undefined){
+        packageId = -1;
+    }
+    console.log('(select offer.op_id as plan_id, offer.op_plan_name AS plan_name, "Offer" AS plan_type' +
+        'from icn_offer_plan as offer join icn_package_alacart_offer_site AS paos ON paos.paos_op_id = offer.op_id ' +
+        'WHERE paos_sp_pkg_id = '+packageId+' ) '+
+        ' UNION ' +
+        '(select valuepack.vp_id as plan_id, valuepack.vp_plan_name AS plan_name, "Value Pack" AS plan_type ' +
+        'from icn_valuepack_plan as valuepack join icn_package_value_pack_site AS pvs ON pvs.pvs_vp_id = valuepack.vp_id ' +
+        'WHERE pvs_sp_pkg_id =  '+packageId+'  ) ' +
+        ' UNION ' +
+        '(select sub.sp_id as plan_id, sub.sp_plan_name AS plan_name, "Subscription" AS plan_type ' +
+        'from icn_sub_plan as sub join icn_package_subscription_site AS pss ON pss.pss_sp_id = sub.sp_id ' +
+        'WHERE pss_sp_pkg_id =  '+packageId+'  ) ')
+
+    var query = dbConnection.query('(select CONCAT("1", offer.op_id) AS id, offer.op_id as plan_id, offer.op_plan_name AS plan_name, "Offer" AS plan_type ' +
+        'from icn_offer_plan as offer join icn_package_alacart_offer_site AS paos ON paos.paos_op_id = offer.op_id ' +
+        'WHERE paos_sp_pkg_id = ? ) '+
+        ' UNION ' +
+        '(select CONCAT("2", valuepack.vp_id) AS id, valuepack.vp_id as plan_id, valuepack.vp_plan_name AS plan_name, "Value Pack" AS plan_type ' +
+        'from icn_valuepack_plan as valuepack join icn_package_value_pack_site AS pvs ON pvs.pvs_vp_id = valuepack.vp_id ' +
+        'WHERE pvs_sp_pkg_id = ? ) ' +
+        ' UNION ' +
+        '(select CONCAT("3", sub.sp_id) AS id, sub.sp_id as plan_id, sub.sp_plan_name AS plan_name, "Subscription" AS plan_type ' +
+        'from icn_sub_plan as sub join icn_package_subscription_site AS pss ON pss.pss_sp_id = sub.sp_id ' +
+        'WHERE pss_sp_pkg_id = ? ) ', [packageId,packageId,packageId], function (err, result) {
+        console.log(result)
+        callback( err, result );
+    });
+}
+
 exports.getPackageOfferPlan = function( dbConnection, packageId, callback ) {
     if(packageId == undefined){
         packageId = -1;

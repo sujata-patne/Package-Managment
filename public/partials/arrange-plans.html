@@ -20,7 +20,7 @@
                                             <tr data-ng-repeat="fp in finalarray track by $index">
                                                 <td class="col-md-1 col-xs-1 text-center">{{fp.plan_name}}</td>
                                                 <td class="col-md-2 col-xs-2 text-center">{{fp.plan_type}}</td>
-                                                <td class="col-md-1 col-xs-1"> <input type="number" min="0" class="form-control" name="sequence[$index]" ng-model="sequence[$index]"  ng-change="checkForDuplicates($index); arrangeContent();" ng-model-options='{ debounce: 1000 }' >
+                                                <td class="col-md-1 col-xs-1"> <input type="number" min="0" class="form-control" name="sequenceData[$index]" ng-model="sequenceData[$index].pas_arrange_seq"  ng-change="checkForDuplicates($index);" >
                                                 </td>
                                             </tr>
                                             </tbody>

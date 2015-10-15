@@ -27,6 +27,11 @@ exports.getArrangePlansData = function (req, res, next) {
                                 callback(err, alacartPlans);
                             });
                         },
+                        selectedPlans : function (callback) {
+                            mainSiteManager.getSelectedPlans(connection_ikon_cms, req.body.packageId, function (err, selectedPlans) {
+                                callback(err, selectedPlans);
+                            })
+                        }
                     },
                     function (err, results) {
                         //console.log(results)
@@ -53,52 +58,61 @@ exports.AddArrangedContents = function (req, res, next) {
 
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 var len = req.body.finalarray.length;
+                async.waterfall([
+                    function(callback){
+                        Arrangeplans.deleteArrangeData( connection_ikon_cms, req.body.packageId, function(err,data) {
+                            if (err) {
+                                connection_ikon_cms.release();
+                                console.log(err.message);
+                            } else {
+                                callback(err,req.body.packageId)
+                            }
+                        })
+                    },
+                    function(callback) {
+                        savedata(0);
+                    }
+                ],
+                function (err, results) {
+                    if (err) {
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message)
+                    } else {
+                        connection_ikon_cms.release();
+                        res.send({success: true, message: 'Save Successfully .'});
+                    }
+                })
 
-                savedata(0);
                 function savedata(cnt) {
                     var j = cnt;
-
-                    var arrangeSequenceData = {
-                            pas_sp_pkg_id: req.body.packageId,
-                            pas_plan_id: req.body.finalarray[j].plan_id,
-                            pas_plan_type: req.body.finalarray[j].plan_name,
-                            pas_arrange_seq: req.body.arrangedContentList[j],
-                            pas_is_active:1,
-                            pas_created_on:new Date(),
-                            pas_created_by:req.session.package_UserName,
-                            pas_modified_on:new Date(),
-                            pas_modified_by:req.session.package_UserName,
-                        }
-                    Arrangeplans.existArrangeData(connection_ikon_cms, arrangeSequenceData, function (err, response) {
-                        console.log('arrange response');
-                        console.log(response);
-
-                        if(response != undefined && response.length > 0 ){
-                            Arrangeplans.editArrangeData(connection_ikon_cms, arrangeSequenceData, function (err, response) {
-                                if(err){
-                                    connection_ikon_cms.release();
-                                    console.log(err.message);
-                                }else {
-                                    cnt++;
-                                    if (cnt < len) {
-                                        savedata(cnt);
-                                    }
-                                    else {
-                                        connection_ikon_cms.release();
-                                        res.send({success: true, message: 'Save Successfully .'});
-                                    }
-                                }
-                            });
-                        }else{
-                            Arrangeplans.getMaxArrangeSequenceId( connection_ikon_cms, function(err,MaxPasId) {
+                    async.waterfall([
+                        function(callback) {
+                            Arrangeplans.getMaxArrangeSequenceId(connection_ikon_cms, function (err, MaxPasId) {
                                 var pasId = MaxPasId[0].pas_id != null ? parseInt(MaxPasId[0].pas_id + 1) : 1;
-                                arrangeSequenceData.pas_id  = pasId;
-                                Arrangeplans.addArrangeData(connection_ikon_cms, arrangeSequenceData, function (err, response) {
-                                    if(err){
+                                callback(err, pasId);
+                            })
+                        },
+                        function(pasId, callback) {
+                            var arrangeSequenceData = {
+                                    pas_id: pasId,
+                                    pas_sp_pkg_id: req.body.packageId,
+                                    pas_plan_id: req.body.finalarray[j].plan_id,
+                                    pas_plan_type: req.body.finalarray[j].plan_name,
+                                    pas_arrange_seq: req.body.sequenceData[j].pas_arrange_seq,
+                                    pas_is_active: 1,
+                                    pas_created_on: new Date(),
+                                    pas_created_by: req.session.package_UserName,
+                                    pas_modified_on: new Date(),
+                                    pas_modified_by: req.session.package_UserName,
+                                }
+                            Arrangeplans.addArrangeData(connection_ikon_cms, arrangeSequenceData, function (err, response) {
+                                    if (err) {
                                         connection_ikon_cms.release();
                                         console.log(err.message);
-                                    }else {
+                                    } else {
                                         cnt++;
+                                        console.log(cnt + "" + len)
                                         if (cnt < len) {
                                             savedata(cnt);
                                         }
@@ -108,7 +122,15 @@ exports.AddArrangedContents = function (req, res, next) {
                                         }
                                     }
                                 });
-                            })
+                        }
+                    ],
+                    function (err, results) {
+                        if (err) {
+                            connection_ikon_cms.release();
+                            res.status(500).json(err.message);
+                            console.log(err.message)
+                        } else {
+                            callback(err,true);
                         }
                     })
                 }

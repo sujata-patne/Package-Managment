@@ -97,9 +97,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
             $scope.sequenceData = angular.copy(MainSiteData.mainSitePackageData.arrangeSequenceData);
-            angular.forEach($scope.sequenceData, function (data,key) {
-                $scope.sequence.push(data.pas_arrange_seq);
-            })
+
             console.log($scope.sequence)
 
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
