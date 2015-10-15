@@ -128,8 +128,6 @@ exports.showPackageData = function(req, res, next)  {
                         } else {
                             connection_ikon_cms.release();
                             res.send(results);
-
-                            // callback(err, results);
                         }
                     })
 

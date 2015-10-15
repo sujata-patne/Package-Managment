@@ -59,8 +59,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
-        console.log('mainsite : '+$scope.action)
-
+       console.log('mainsite : '+$scope.action)
         if($rootScope.action !== 'edit'){
             $rootScope.distributionChannelId = "";
             $rootScope.PackageId = '';
@@ -76,6 +75,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
     $scope.showPackageData = function(){
         /*if($rootScope.action !== 'edit'){
+            $rootScope.action = 'add';
             $rootScope.distributionChannelId = "";
             $rootScope.PackageId = '';
             $scope.offerId = '';
