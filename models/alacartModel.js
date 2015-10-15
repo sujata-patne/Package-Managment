@@ -27,7 +27,7 @@ exports.addAlacartOfferDetails = function(dbConnection,data,callback){
 }
 
 exports.editAlacartOfferDetails = function(dbConnection,data,callback){
-    var query = dbConnection.query("UPDATE `icn_package_alacart_offer_site` SET ? WHERE paos_id = ? ", [data, data.paos_id], function (err, response) {
+    var query = dbConnection.query("UPDATE `icn_package_alacart_offer_site` SET ? WHERE paos_sp_pkg_id = ? ", [data, data.paos_sp_pkg_id], function (err, response) {
         callback(err,response);
     });
 }
@@ -50,7 +50,6 @@ exports.addAlacartPack = function(dbConnection,data,callback){
 
 exports.getAlacartNOfferDetails = function(dbConnection,pkgId, callback){
     var query = dbConnection.query("SELECT paos.* FROM icn_package_alacart_offer_site as paos " +
-            // "JOIN icn_package_content_type AS pct ON pct.pct_paos_id =  paos.paos_id AND pct_is_active = 1 AND ISNULL(pct.pct_crud_isactive) " +
         "WHERE paos_sp_pkg_id = ? AND paos_is_active = 1 AND ISNULL(paos_crud_isactive) ", [pkgId], function (err, response) {
         callback(err,response);
     });

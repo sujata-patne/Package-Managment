@@ -13,7 +13,6 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.alacartarray=[];
     $scope.array=[];
     var preData;
-    $scope.sequence = [];
     $scope.arrangedContentList ={};
 
     preData = {
@@ -27,6 +26,8 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_id'] = $scope.AlacartPlans[0].paos_id;
             obj['plan_name'] = 'All Plans';
             obj['plan_type'] = 'A-La-Cart';
+          //  obj['pas_id'] = '';
+
             $scope.finalarray.push(obj);
         }
         $scope.offerPlan = data.PackageOffer;
@@ -35,6 +36,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_id'] = value.op_id;
             obj['plan_name'] = value.op_plan_name;
             obj['plan_type'] = 'Offer';
+           // obj['pas_id'] = '';
             $scope.finalarray.push(obj);
         });
         $scope.valuePlans = data.PackageValuePacks;
@@ -44,6 +46,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_id'] = value.vp_id;
             obj['plan_name'] = value.vp_plan_name;
             obj['plan_type'] = 'ValuePack';
+            //obj['pas_id'] = '';
             $scope.finalarray.push(obj);
 
         });
@@ -53,6 +56,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             obj['plan_id'] = value.sp_id;
             obj['plan_name'] = value.sp_plan_name;
             obj['plan_type'] = 'Subscription Plan';
+          //  obj['pas_id'] = '';
             $scope.finalarray.push(obj);
         });
         // $scope.AlacartPlans = data.PackageAlacartPacks;
@@ -65,13 +69,14 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         //     $scope.finalarray.push(obj);
         // }
     });
-
     $scope.arrangeContent = function () {
         angular.forEach($scope.sequence,function(value,key) {
             var data = {};
             data[key] = value;
             $scope.arrangedContentList[key] = value;
         })
+        console.log($scope.sequence)
+
     }
     $scope.submitForm = function(){
 

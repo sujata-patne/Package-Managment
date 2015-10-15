@@ -19,16 +19,19 @@ toastr.options = {
 }
 myApp.config(function ($stateProvider) {
     $stateProvider
-
-
         .state("main-site", {
             templateUrl: 'partials/mainSite.html',
             controller: 'mainSiteCtrl',
-            url: '/main-site/:dcId'
+            url: 'main-site'
+        })
+        .state("pack-site", {
+            templateUrl: 'partials/packSite.html',
+            controller: 'packSiteCtrl',
+            url: '/pack-site/:dcId'
         })
         .state('main-site.alacart', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
-            controller: 'alacartCtrl'
+            controller: 'alacartCtrl',
         })
         .state('main-site.valuepack', {
             templateUrl: 'partials/value-pack-plan.html',
@@ -46,7 +49,26 @@ myApp.config(function ($stateProvider) {
             templateUrl: 'partials/arrange-plans.html',
             controller: 'arrangePlanCtrl'
         })
-
+        .state('pack-site.alacart', {
+            templateUrl: 'partials/a-la-cart-n-offer-plan.html',
+            controller: 'alacartCtrl'
+        })
+        .state('pack-site.valuepack', {
+            templateUrl: 'partials/value-pack-plan.html',
+            controller: 'valuePackCtrl'
+        })
+        .state('pack-site.subscription', {
+            templateUrl: 'partials/subscription-pack-plan.html',
+            controller: 'subscriptionPackCtrl'
+        })
+        .state('pack-site.advancesetting', {
+            templateUrl: 'partials/advancesetting.html',
+            controller: 'advanceSettingCtrl'
+        })
+        .state('pack-site.arrangeplan', {
+            templateUrl: 'partials/arrange-plans.html',
+            controller: 'arrangePlanCtrl'
+        })
         .state('accountforgot', {
             templateUrl: 'partials/account-changepassword.html',
             controller: '',

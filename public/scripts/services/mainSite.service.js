@@ -15,4 +15,17 @@ myApp.service('MainSite', ['$http', function ($http) {
             success(items);
         });
     }
+
+    this.getPackSiteData = function(success){
+        $http.get(this.baseRestUrl + '/getPackSiteData').success(function (items) {
+            success(items);
+        });
+    }
+    this.showPackSitePackageData = function(data, success){
+        $http.post(this.baseRestUrl + '/showPackSitePackageData', data).success(function (items) {
+            success(items);
+        });
+    }
+
+
 }]);

@@ -25,11 +25,11 @@ exports.getOfferData = function(dbConnection, storeId,dcId, callback) {
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
         'WHERE plan.op_st_id = ? ' + str, [storeId], function (err, ContentTypes) {
         callback(err, ContentTypes);
-        console.log(' SELECT plan.* ' +
+        /*console.log(' SELECT plan.* ' +
             'FROM icn_offer_plan AS plan ' +
             'join multiselect_metadata_detail as mmd ON plan.op_channel_front = mmd.cmd_group_id ' +
             'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
-            'WHERE plan.op_st_id = '+storeId+ " " + str)
+            'WHERE plan.op_st_id = '+storeId+ " " + str)*/
     });
 }
 exports.getMaxAlacartOfferId = function(dbConnection, callback) {
@@ -80,8 +80,14 @@ exports.existingContentTypesInPack = function(dbConnection,paosId, callback){
         callback(err,response);
     });
 }
-exports.getMainSitePackageData = function(dbConnection,storeId, dcId, callback){
-    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = 0 AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,dcId], function (err, response) {
+
+exports.getMainSitePackageData = function(dbConnection,storeId, dcId,packageType, callback){
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,dcId,packageType], function (err, response) {
+        callback(err,response);
+    });
+}
+exports.getIndividualPackageData = function(dbConnection,storeId,pkgId, callback){
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_pkg_id = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,pkgId], function (err, response) {
         callback(err,response);
     });
 }
@@ -144,6 +150,13 @@ exports.getContentTypeData = function(dbConnection, storeId, callback) {
     'join catalogue_detail as cd ON plan.ap_content_type = cd.cd_id ' +
     'WHERE plan.ap_st_id = ? ', [storeId], function (err, ContentTypes) {
         callback(err, ContentTypes)
+    });
+}
+
+
+exports.getAllPacks = function(dbConnection,storeId,callback){
+    var query = dbConnection.query("SELECT * FROM `icn_packs` WHERE pk_st_id = ? ", storeId, function (err, response) {
+        callback(err,response);
     });
 }
 

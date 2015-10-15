@@ -4,11 +4,12 @@
 
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
 
-    if($scope.PackageId && $scope.PackageId != null && $scope.PackageId != undefined && $scope.PackageId != '') {
+
+    if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
 
         var data = {
-            packageId: $scope.PackageId,
-            packageType: $scope.PackageType
+            packageId: $rootScope.PackageId,
+            packageType: $rootScope.PackageType
         }
 
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
@@ -34,8 +35,9 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             }
         });
     }
+
     $scope.submitForm = function (isValid) {
-        if (!$scope.distributionChannelId) {
+        if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
             $scope.errorvisible = true;
         } else {
@@ -45,16 +47,21 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                 paosId: $scope.paosId,
                 offerId: $scope.offerId,
                 packageId: $rootScope.PackageId,
-                packageType: $scope.PackageType,
-                distributionChannelId: $scope.distributionChannelId
+                packageType: $rootScope.PackageType,
+                packId : $rootScope.selectedPack,
+                packageName : $rootScope.packageName,
+                distributionChannelId: $rootScope.distributionChannelId
             }
             ngProgress.start();
-            if ($scope.paosId != undefined && $scope.paosId != null && $scope.paosId != '') {
-                alacartPack.editAlacartNOffer(alacartData, function (data) {
+            console.log( "submit " + $rootScope.PackageId)
+            if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '') {
+                console.log('edit')
+                    alacartPack.editAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
                 });
             } else {
-                alacartPack.addAlacartNOffer(alacartData, function (data) {
+                console.log('add')
+                    alacartPack.addAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
                 });
             }

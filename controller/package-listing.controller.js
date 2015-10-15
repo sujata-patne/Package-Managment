@@ -152,7 +152,6 @@ exports.getPackageDetail  = function (req, res, next) {
                           connection_ikon_cms.release();
                           res.send({packageByName:searchData});
                       }, 200);
-
                   }
               });
             })

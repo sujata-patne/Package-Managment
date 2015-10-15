@@ -52,20 +52,44 @@ exports.editAlacartPackDetails = function (req,res,next){
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                     alacartNOffer:function (callback) {
-                        var AlacartOfferData = {
-                            paos_id: req.body.paosId,
-                            paos_sp_pkg_id: req.body.packageId,
-                            paos_op_id: req.body.offerId,
-                            paos_is_active: 1,
-                            paos_modified_on:  new Date(),
-                            paos_modified_by: req.session.package_UserName
-                        }
-                        if (editAlacartOfferDetails(connection_ikon_cms, AlacartOfferData)) {
-                            callback(null, req.body.paosId);
-                        } else {
-                            callback({message: 'Alacart & Offer can not be updated.'}, req.body.paosId);
+
+                        if(req.body.paosId != undefined && req.body.paosId != null && req.body.paosId != ''){
+                            var AlacartOfferData = {
+                                paos_id: req.body.paosId,
+                                paos_sp_pkg_id: req.body.packageId,
+                                paos_op_id: req.body.offerId,
+                                paos_is_active: 1,
+                                paos_modified_on:  new Date(),
+                                paos_modified_by: req.session.package_UserName
+                            }
+                            if (editAlacartOfferDetails(connection_ikon_cms, AlacartOfferData)) {
+                                callback(null, req.body.paosId);
+                            } else {
+                                callback({message: 'Alacart & Offer can not be updated.'}, req.body.paosId);
+                            }
+                        }else{
+                            alacartManager.getMaxAlacartOfferId( connection_ikon_cms, function(err,MaxPaosId){
+                                var paosId = MaxPaosId[0].paos_id != null ?  parseInt(MaxPaosId[0].paos_id + 1) : 1;
+                                console.log("paosId : "+paosId)
+                                var AlacartOfferData = {
+                                    paos_id: paosId,
+                                    paos_sp_pkg_id: req.body.packageId,
+                                    paos_op_id: req.body.offerId,
+                                    paos_is_active: 1,
+                                    paos_modified_on:  new Date(),
+                                    paos_modified_by: req.session.package_UserName
+                                }
+                                req.body.paosId = paosId;
+                                if(addAlacartOfferDetails(connection_ikon_cms,AlacartOfferData)){
+                                    callback(null,paosId);
+                                }else{
+                                    callback({message:'Alacart & Offer can not be added.'},paosId);
+                                }
+                            });
                         }
                     },
+
+
                     contentTypePlans:function ( callback) {
                         var ctCount = req.body.ContentTypes.length;
                         var err = null;
@@ -188,33 +212,88 @@ exports.addAlacartPackDetails = function (req,res,next){
                 async.waterfall([
                     function(callback){
                         //Get store package
-                        mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId,function( err, packageData ) {
-                            if(packageData.length > 0){
-                                callback(err, packageData[0].sp_pkg_id);
-                            }else{
-                                mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
-                                    var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
-                                    var storePackage = {
-                                        sp_pkg_id: pkgId,
-                                        sp_package_name: 'MainSite '+req.body.distributionChannelId,
-                                        sp_st_id: req.session.package_StoreId,
-                                        sp_dc_id: req.body.distributionChannelId,
-                                        sp_pkg_type: req.body.packageType, //site type
-                                        sp_is_active: 1
-                                    };
-                                    if(addStorePackage(connection_ikon_cms,storePackage)){
-                                        callback(null,pkgId);
-                                    }else{
-                                        callback({message:'Package can not be added.'},pkgId);
-                                    }
-                                });
-                            }
-                        })
+                        //Package type added to  getMainSitePackageData
+                        //getPackageTypeData(connection_ikon_cms,req.body);
+                        console.log('req.body')
+                        console.log(req.body)
+                        if(req.body.pkgId != undefined && req.body.packageType === 1 ){
+
+                            mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.body.pkgId, function (err, packageData) {
+                                if(packageData.length > 0){
+                                    callback(err, packageData[0].sp_pkg_id);
+                                }else{
+                                    mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
+                                        var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
+
+                                        //Main site
+                                        var storePackage = {
+                                            sp_pkg_id: pkgId,
+                                            sp_package_name: 'MainSite '+req.body.distributionChannelId,
+                                            sp_pk_id : 0, //pack id
+                                            sp_st_id: req.session.package_StoreId,
+                                            sp_dc_id: req.body.distributionChannelId,
+                                            sp_pkg_type: req.body.packageType, //site type
+                                            sp_is_active: 1
+                                        };
+
+                                        //Individual Pack modifications
+                                        if(req.body.packageType == 1){
+                                            storePackage.sp_package_name = req.body.packageName;
+                                            storePackage.sp_pk_id = req.body.packId;
+                                        }
+
+                                        console.log('storePackage')
+                                        console.log(storePackage)
+                                        if(addStorePackage(connection_ikon_cms,storePackage)){
+                                            callback(null,pkgId);
+                                        }else{
+                                            callback({message:'Package can not be added.'},pkgId);
+                                        }
+                                    });
+                                }
+                            })
+
+                        }else{
+                            mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId,req.body.packageType,function( err, packageData ) {
+                                if(packageData.length > 0){
+                                    callback(err, packageData[0].sp_pkg_id);
+                                }else{
+                                    mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
+                                        var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
+
+                                        //Main site
+                                        var storePackage = {
+                                            sp_pkg_id: pkgId,
+                                            sp_package_name: 'MainSite '+req.body.distributionChannelId,
+                                            sp_pk_id : 0, //pack id
+                                            sp_st_id: req.session.package_StoreId,
+                                            sp_dc_id: req.body.distributionChannelId,
+                                            sp_pkg_type: req.body.packageType, //site type
+                                            sp_is_active: 1
+                                        };
+
+                                        //Individual Pack modifications
+                                        if(req.body.packageType == 1){
+                                            storePackage.sp_package_name = req.body.packageName;
+                                            storePackage.sp_pk_id = req.body.packId;
+                                        }
+
+                                        console.log('storePackage')
+                                        console.log(storePackage)
+                                        if(addStorePackage(connection_ikon_cms,storePackage)){
+                                            callback(null,pkgId);
+                                        }else{
+                                            callback({message:'Package can not be added.'},pkgId);
+                                        }
+                                    });
+                                }
+                            })
+                        }
                     },
                     function(pkgId,callback){
                         alacartManager.getMaxAlacartOfferId( connection_ikon_cms, function(err,MaxPaosId){
                             var paosId = MaxPaosId[0].paos_id != null ?  parseInt(MaxPaosId[0].paos_id + 1) : 1;
-                            //console.log("paosId : "+paosId)
+                            console.log("paosId : "+paosId)
                             var AlacartOfferData = {
                                 paos_id: paosId,
                                 paos_sp_pkg_id: pkgId,
@@ -284,6 +363,84 @@ exports.addAlacartPackDetails = function (req,res,next){
     }
 };
 
+
+function getPackageTypeData( connection_ikon_cms, data, session ){
+    if(data.packageType === 1 ) {
+       /* var functionName = 'getIndividualPackageData('+session.package_StoreId+','+data.pkgId+')';
+    }else{
+        var functionName = 'getMainSitePackageData('+session.package_StoreId+','+data.distributionChannelId+','+data.packageType+')';
+    }*/
+        mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.body.pkgId, function (err, packageData) {
+            if(packageData.length > 0){
+                callback(err, packageData[0].sp_pkg_id);
+            }else{
+                mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
+                    var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
+
+                    //Main site
+                    var storePackage = {
+                        sp_pkg_id: pkgId,
+                        sp_package_name: 'MainSite '+req.body.distributionChannelId,
+                        sp_pk_id : 0, //pack id
+                        sp_st_id: req.session.package_StoreId,
+                        sp_dc_id: req.body.distributionChannelId,
+                        sp_pkg_type: req.body.packageType, //site type
+                        sp_is_active: 1
+                    };
+
+                    //Individual Pack modifications
+                    if(req.body.packageType == 1){
+                        storePackage.sp_package_name = req.body.packageName;
+                        storePackage.sp_pk_id = req.body.packId;
+                    }
+
+                    console.log('storePackage')
+                    console.log(storePackage)
+                    if(addStorePackage(connection_ikon_cms,storePackage)){
+                        callback(null,pkgId);
+                    }else{
+                        callback({message:'Package can not be added.'},pkgId);
+                    }
+                });
+            }
+        })
+    }else {
+        mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId, req.body.packageType, function (err, packageData) {
+            if(packageData.length > 0){
+                callback(err, packageData[0].sp_pkg_id);
+            }else{
+                mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
+                    var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
+
+                    //Main site
+                    var storePackage = {
+                        sp_pkg_id: pkgId,
+                        sp_package_name: 'MainSite '+req.body.distributionChannelId,
+                        sp_pk_id : 0, //pack id
+                        sp_st_id: req.session.package_StoreId,
+                        sp_dc_id: req.body.distributionChannelId,
+                        sp_pkg_type: req.body.packageType, //site type
+                        sp_is_active: 1
+                    };
+
+                    //Individual Pack modifications
+                    if(req.body.packageType == 1){
+                        storePackage.sp_package_name = req.body.packageName;
+                        storePackage.sp_pk_id = req.body.packId;
+                    }
+
+                    console.log('storePackage')
+                    console.log(storePackage)
+                    if(addStorePackage(connection_ikon_cms,storePackage)){
+                        callback(null,pkgId);
+                    }else{
+                        callback({message:'Package can not be added.'},pkgId);
+                    }
+                });
+            }
+        })
+    }
+}
 function addStorePackage( connection_ikon_cms, data ){
     mainSiteManager.addStorePackage( connection_ikon_cms, data, function(err,response ){
         if(err){

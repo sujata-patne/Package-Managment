@@ -2,16 +2,19 @@
  * Created by sujata.patne on 29-09-2015.
  */
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+    console.log('mainsite')
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
+    $scope.sequence = [];
 
     $scope.selectedStore = [];
-
+    $rootScope.PackageType = 0;
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    $scope.distributionChannelId = "";
-
+    if($rootScope.action !== 'edit') {
+        $rootScope.action = 'add';
+    }
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
 
@@ -27,7 +30,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     //default form display for a-la-cart and offer plan
 
     $scope.proceed = function() {
-        
         if($scope.tabIndex !== ( $scope.tabs.length - 1 ) ){
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
@@ -54,20 +56,36 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     MainSite.getMainSiteData(function (MainSiteData) {
-
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
+        console.log('mainsite : '+$scope.action)
 
+        if($rootScope.action !== 'edit'){
+            $rootScope.distributionChannelId = "";
+            $rootScope.PackageId = '';
+            $scope.offerId = '';
+            $scope.paosId = '';
+            $rootScope.PackageType = 0;
+        }
     });
-    $rootScope.showPackageData = function(){
-        console.log('sdfsd')
-        $rootScope.PackageId = '';
-        $rootScope.PackageType = 0;
+
+    $scope.getPackageData = function(){
+        $scope.showPackageData();
+        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+    }
+    $scope.showPackageData = function(){
+        /*if($rootScope.action !== 'edit'){
+            $rootScope.distributionChannelId = "";
+            $rootScope.PackageId = '';
+            $scope.offerId = '';
+            $scope.paosId = '';
+            $rootScope.PackageType = 0;
+        }*/
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
-        MainSite.showPackageData({distributionChannelId:$scope.distributionChannelId},function (MainSiteData) {
+        MainSite.showPackageData({pkgId:$rootScope.PackageId,distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType},function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
@@ -78,18 +96,19 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
+            $scope.sequenceData = angular.copy(MainSiteData.mainSitePackageData.arrangeSequenceData);
+            angular.forEach($scope.sequenceData, function (data,key) {
+                $scope.sequence.push(data.pas_arrange_seq);
+            })
+            console.log($scope.sequence)
 
-            $scope.sequence = angular.copy(MainSiteData.mainSitePackageData.arrangeSequenceData);
-
-console.log($scope.sequence)
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
-                $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
+                $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
                 $rootScope.PackageType = $scope.mainSitePackageData[0].sp_pkg_type
             }else{
-                //$scope.distributionChannelId = '';
                 $rootScope.PackageId = '';
-                $rootScope.PackageType = '';
+                $rootScope.PackageType = 0;
             }
             $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
@@ -108,16 +127,16 @@ console.log($scope.sequence)
                     };
                 })
             }
-            $state.go($state.current, {}, {reload: $state.current});
         })
     }
 
-   // $scope.showPackageData();
-
+    //if($rootScope.PackageId != '' && $rootScope.PackageId != null && $rootScope.PackageId != undefined){
+    if($rootScope.action === 'edit'){
+        $scope.showPackageData();
+    }
     $scope.resetForm = function () {
         $scope.selectedValuePacks = [];
         $scope.selectedSubscriptionPlans = [];
     }
 
 });
-

@@ -69,9 +69,11 @@ exports.AddArrangedContents = function (req, res, next) {
                             pas_modified_on:new Date(),
                             pas_modified_by:req.session.package_UserName,
                         }
-                    console.log(arrangeSequenceData);
                     Arrangeplans.existArrangeData(connection_ikon_cms, arrangeSequenceData, function (err, response) {
-                        if(response.length > 0 ){
+                        console.log('arrange response');
+                        console.log(response);
+
+                        if(response != undefined && response.length > 0 ){
                             Arrangeplans.editArrangeData(connection_ikon_cms, arrangeSequenceData, function (err, response) {
                                 if(err){
                                     connection_ikon_cms.release();

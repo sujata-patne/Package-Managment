@@ -24,7 +24,7 @@ exports.addArrangeData = function( dbConnection, data, callback ) {
     });
 }
 exports.editArrangeData = function( dbConnection, data, callback ) {
-    var query = dbConnection.query("UPDATE icn_package_arrange_sequence SET ?  WHERE pas_sp_pkg_id = ? AND pas_plan_id = ? AND pas_plan_type IN (?) ", [data.pas_sp_pkg_id,data.pas_plan_id,data.pas_plan_type]  , function( err, response ) {
+    var query = dbConnection.query("UPDATE icn_package_arrange_sequence SET ?  WHERE pas_sp_pkg_id = ? AND pas_plan_id = ?", [data.pas_sp_pkg_id,data.pas_plan_id]  , function( err, response ) {
         callback( err, response );
     });
 }
@@ -34,8 +34,10 @@ exports.getMaxArrangeSequenceId = function(dbConnection, callback) {
     });
 }
 exports.existArrangeData = function(dbConnection, data, callback) {
-    var query = dbConnection.query('SELECT pas_id FROM  icn_package_arrange_sequence WHERE ISNULL(pas_crud_isactive) and pas_sp_pkg_id = ? AND pas_plan_id = ? AND pas_plan_type IN (?) ', [data.pas_sp_pkg_id,data.pas_plan_id,data.pas_plan_type],function (err, pasId) {
-        callback(err,pasId);
+    var query = dbConnection.query("SELECT * FROM  icn_package_arrange_sequence WHERE ISNULL(pas_crud_isactive) AND pas_sp_pkg_id = ? AND pas_plan_id = ?  ", [data.pas_sp_pkg_id,data.pas_plan_id] , function( err, response ) {
+     //   var query = dbConnection.query("SELECT * FROM  icn_package_arrange_sequence WHERE ISNULL(pas_crud_isactive) AND pas_sp_pkg_id = ? AND pas_plan_id = ? AND pas_plan_type IN ('?') ", [data.pas_sp_pkg_id,data.pas_plan_id,data.pas_plan_type], function( err, response ) {
+        console.log(response)
+        callback( err, response );
     });
 }
 exports.getArrangeSequenceData = function(dbConnection,packageId,callback){
