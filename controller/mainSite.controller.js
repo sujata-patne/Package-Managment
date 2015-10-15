@@ -51,21 +51,26 @@ exports.showPackageData = function(req, res, next)  {
                                     callback(err, packageDetails);
                                 })
                             },
-                            function (packageDetails, callback) {
+                                function (packageDetails, callback) {
                                 if (packageDetails != null && packageDetails.length > 0) {
                                     async.waterfall([
-                                        function (callback) {
-                                            alacartManager.getAlacartNOfferDetails(connection_ikon_cms, packageDetails[0].sp_pkg_id, function (err, alacartNOfferDetails) {
-                                                callback(err, alacartNOfferDetails);
+                                        function (packageDetails, callback) {
+                                            Arrangeplans.getArrangeSequenceData(connection_ikon_cms, packageDetails[0].sp_pkg_id, function (err, arrangeSequenceData) {
+                                                callback(err, arrangeSequenceData);
                                             })
                                         },
-                                        function (alacartNOfferDetails,callback) {
+                                        function (arrangeSequenceData,callback) {
+                                            alacartManager.getAlacartNOfferDetails(connection_ikon_cms, packageDetails[0].sp_pkg_id, function (err, alacartNOfferDetails) {
+                                                callback(err, arrangeSequenceData, alacartNOfferDetails);
+                                            })
+                                        },
+                                        function (arrangeSequenceData,alacartNOfferDetails,callback) {
                                             if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
                                                 alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
-                                                    callback(null, {packageDetails:packageDetails, alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
+                                                    callback(null, {arrangeSequenceData: arrangeSequenceData,packageDetails:packageDetails, alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
                                                 })
                                             } else {
-                                                callback(null, {packageDetails:packageDetails,alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:null });
+                                                callback(null, {arrangeSequenceData: arrangeSequenceData, packageDetails:packageDetails,alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:null });
                                             }
                                         }
                                     ],
@@ -78,7 +83,7 @@ exports.showPackageData = function(req, res, next)  {
                                         }
                                     })
                                 } else {
-                                    callback(null, {packageDetails:packageDetails, alacartNOfferDetails:null,contentTypePlanData:null});
+                                    callback(null, {arrangeSequenceData:arrangeSequenceData,packageDetails:packageDetails, alacartNOfferDetails:null,contentTypePlanData:null});
                                 }
                             }
                         ],

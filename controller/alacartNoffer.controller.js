@@ -34,7 +34,7 @@ exports.getAlacartNofferDetails = function (req,res,next){
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        console.log(results)
+                        //console.log(results)
                         res.send(results);
                     }
                 });

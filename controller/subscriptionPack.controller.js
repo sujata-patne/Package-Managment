@@ -121,7 +121,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                 if( deletePackIds.length > 0 ) {
 
                     subscriptionPackManager.getSubscriptionPacksByIds( connection_ikon_cms, deletePackIds, packageData.sp_pkg_id,  function( err, response ) {
-                        console.log( response );
+                        //console.log( response );
                         if(response[0].sub_pack_ids !== null){
                             deleteSubscriptionPackIds = response[0].sub_pack_ids.split(',')
                                 .map(function (element) {
@@ -134,8 +134,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                             var count = deleteSubscriptionPackIds.length;
                             function loop(cnt) {
                                 var i = cnt;
-                                console.log("deleteSubscriptionPackIds")
-                                console.log( deleteSubscriptionPackIds[i])
+
                                 subscriptionPackManager.deleteSubscriptionPack( connection_ikon_cms, deleteSubscriptionPackIds[i],packageData.sp_pkg_id, function (err, deleteStatus) {
                                     if (err) {
                                         connection_ikon_cms.release();
@@ -166,10 +165,9 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                     loop(0);
                     function loop(cnt) {
                         var i = cnt;
-                        console.log( addSubscriptionPackIds[i] );
+                        //console.log( addSubscriptionPackIds[i] );
                         subscriptionPackManager.subscriptionPackExists( connection_ikon_cms, addSubscriptionPackIds[i], packageData.sp_pkg_id, function (err, response ) {
-                            console.log("response");
-                            console.log( response );
+
                             if( response != undefined && response.length > 0   ) {
                                 subscriptionPackManager.updateSubscriptionPack(connection_ikon_cms, response[0].pss_id, function( err, response ) {
                                     if (err) {
@@ -239,7 +237,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
             }
         },
         function (err, results) {
-            console.log(results)
+            //console.log(results)
             if (err) {
                 connection_ikon_cms.release();
                 res.status(500).json(err.message);
@@ -292,20 +290,11 @@ function addSubscriptionPackagePlan123( req, res, connection_ikon_cms, packageDa
     var is_deleted = true;
 
     var deleteSubscriptionPackIds = [];
-    console.log( 'existingSubscriptionPackIds')
-    console.log( req.body.existingSubscriptionPackIds)
-    console.log( 'deletePackIds')
-    console.log( deletePackIds)
-
-    console.log( 'selectedSubscriptionPlans')
-    console.log( req.body.selectedSubscriptionPlans)
-    console.log( 'addSubscriptionPackIds')
-    console.log( addSubscriptionPackIds)
 
     if( deletePackIds.length > 0 ) {
 
        subscriptionPackManager.getSubscriptionPacksByIds( connection_ikon_cms, deletePackIds, packageData.sp_pkg_id,  function( err, response ) {
-            console.log( response );
+            //console.log( response );
             if(response[0].sub_pack_ids !== null){
                 deleteSubscriptionPackIds = response[0].sub_pack_ids.split(',')
                     .map(function (element) {
@@ -318,8 +307,7 @@ function addSubscriptionPackagePlan123( req, res, connection_ikon_cms, packageDa
                 var count = deleteSubscriptionPackIds.length;
                 function loop(cnt) {
                     var i = cnt;
-                    console.log("deleteSubscriptionPackIds")
-                    console.log( deleteSubscriptionPackIds[i])
+
                     subscriptionPackManager.deleteSubscriptionPack( connection_ikon_cms, deleteSubscriptionPackIds[i],packageData.sp_pkg_id, function (err, deleteStatus) {
                         if (err) {
                             connection_ikon_cms.release();
@@ -344,8 +332,7 @@ function addSubscriptionPackagePlan123( req, res, connection_ikon_cms, packageDa
         function loop(cnt) {
             var i = cnt;
             subscriptionPackManager.subscriptionPackExists( connection_ikon_cms, addSubscriptionPackIds[i], packageData.sp_pkg_id, function (err, response ) {
-               console.log("response");
-               console.log( response );
+
                 if( response != undefined && response.length > 0   ) {
                     subscriptionPackManager.updateSubscriptionPack(connection_ikon_cms, response[0].pss_id, function( err, response ) {
                         if (err) {

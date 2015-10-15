@@ -79,6 +79,9 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
+            $scope.sequence = angular.copy(MainSiteData.mainSitePackageData.arrangeSequenceData);
+
+console.log($scope.sequence)
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $scope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;

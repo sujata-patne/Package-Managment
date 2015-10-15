@@ -135,7 +135,7 @@ exports.getPackageDetail  = function (req, res, next) {
 
                           function (err, results) {
                               if (err) {
-                                  console.log('fgcfgcfhhfchfch1111');
+                                  //console.log('fgcfgcfhhfchfch1111');
                                   connection_ikon_cms.release();
                                   res.status(500).json(err.message);
                               } else {
@@ -148,7 +148,7 @@ exports.getPackageDetail  = function (req, res, next) {
                           })
                       })
                       setTimeout(function(){
-                          console.log(searchData)
+                          //console.log(searchData)
                           connection_ikon_cms.release();
                           res.send({packageByName:searchData});
                       }, 200);

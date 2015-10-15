@@ -17,16 +17,10 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td class="col-md-1 col-xs-1 text-center">{{offerPlan.op_plan_name }}&nbsp;&nbsp;<span class="text-center" ng-show="published[content.cm_id]"><i class="fa fa-check" style="color:green"></i></span></td>
-                                                <td class="col-md-2 col-xs-2">{{plans.plantType}}</td>
-                                                <td class="col-md-1 col-xs-1">
-                                                    <input type="number" min="1" class="form-control" name="sequence[]" ng-model="sequence[plans.planId]" ng-change="checkForDuplicates(content.cm_id)" ng-model-options='{ debounce: 1000 }' >
-                                                </td>
-                                            </tr>
-                                            <tr ng-hide="PlanLists.length > 0">
-                                                <td colspan="7">
-                                                    No Records found for given search criteria.
+                                            <tr data-ng-repeat="fp in finalarray track by $index">
+                                                <td class="col-md-1 col-xs-1 text-center">{{fp.plan_name}}</td>
+                                                <td class="col-md-2 col-xs-2 text-center">{{fp.plan_type}}</td>
+                                                <td class="col-md-1 col-xs-1"> <input type="number" min="0" class="form-control" name="sequence[]" ng-model="sequence[$index]"  ng-change="checkForDuplicates($index); arrangeContent();" ng-model-options='{ debounce: 1000 }' >
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -41,8 +35,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-offset-5 col-md-7" >
-                            <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" title="Save">Submit</button>
-                            <button class="btn btn-small" ng-click="submitarrangePlansForm(arrangePlansForm.$valid);proceed()" ng-disable="dis()">Next</button>
+                            <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="disable" title="Save"data-ng-click="submitForm()">Submit</button>
+                            <button class="btn btn-small"  ng-disable="dis()">Next</button>
                             <button type="reset" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
                         </div>
                     </div>
