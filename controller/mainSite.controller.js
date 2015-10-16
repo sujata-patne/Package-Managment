@@ -45,29 +45,24 @@ exports.showPackageData = function(req, res, next)  {
                                 callback(err, subscriptionPackPlans);
                             });
                         },
-                        /*mainsitePackageDetails: function (callback){
-                         mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId,req.body.packageType, function (err, packageDetails) {
-                         console.log('packageDetails')
-                         console.log("pkgId : "+req.body.pkgId)
-                         if (req.body.pkgId != null && req.body.pkgId != undefined && req.body.pkgId != '') {
-                         req.body.pkgId = packageDetails[0].sp_pkg_id;
-                         }
-                         callback(err, packageDetails);
-                         })
-                         },
-                         individualPackageDetails: function (callback){
-                         mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, individualPackageDetails) {
-                         callback(err, individualPackageDetails);
-                         })
-                         },*/
                         mainSitePackageData : function (callback){
                             async.waterfall([
                                     function (callback) {
-                                        if (req.body.pkgId != null && req.body.pkgId != undefined && req.body.pkgId != '') {
+                                        if (req.body.packageType === 1 ){
+                                            console.log('individual')
+
+                                            mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
+                                                callback(err, packageDetails );
+                                            })
+                                        }else  if (req.body.pkgId && req.body.pkgId != null && req.body.pkgId != undefined && req.body.pkgId != '') {
+                                            console.log('individual or mainsite')
+
                                             mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
                                                 callback(err, packageDetails);
                                             })
                                         }else{
+                                            console.log('mainsite')
+
                                             mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId,req.body.packageType, function (err, packageDetails) {
                                                 callback(err, packageDetails);
                                             })
@@ -130,7 +125,6 @@ exports.showPackageData = function(req, res, next)  {
                             res.send(results);
                         }
                     })
-
             })
         }else{
             res.redirect('/accountlogin');

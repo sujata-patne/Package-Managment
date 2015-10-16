@@ -70,7 +70,6 @@ exports.editAlacartPackDetails = function (req,res,next){
                         }else{
                             alacartManager.getMaxAlacartOfferId( connection_ikon_cms, function(err,MaxPaosId){
                                 var paosId = MaxPaosId[0].paos_id != null ?  parseInt(MaxPaosId[0].paos_id + 1) : 1;
-                                console.log("paosId : "+paosId)
                                 var AlacartOfferData = {
                                     paos_id: paosId,
                                     paos_sp_pkg_id: req.body.packageId,
@@ -214,8 +213,7 @@ exports.addAlacartPackDetails = function (req,res,next){
                         //Get store package
                         //Package type added to  getMainSitePackageData
                         //getPackageTypeData(connection_ikon_cms,req.body);
-                        console.log('req.body')
-                        console.log(req.body)
+
                         if(req.body.pkgId != undefined && req.body.packageType === 1 ){
 
                             mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.body.pkgId, function (err, packageData) {
@@ -241,9 +239,6 @@ exports.addAlacartPackDetails = function (req,res,next){
                                             storePackage.sp_package_name = req.body.packageName;
                                             storePackage.sp_pk_id = req.body.packId;
                                         }
-
-                                        console.log('storePackage')
-                                        console.log(storePackage)
                                         if(addStorePackage(connection_ikon_cms,storePackage)){
                                             callback(null,pkgId);
                                         }else{
@@ -277,9 +272,6 @@ exports.addAlacartPackDetails = function (req,res,next){
                                             storePackage.sp_package_name = req.body.packageName;
                                             storePackage.sp_pk_id = req.body.packId;
                                         }
-
-                                        console.log('storePackage')
-                                        console.log(storePackage)
                                         if(addStorePackage(connection_ikon_cms,storePackage)){
                                             callback(null,pkgId);
                                         }else{
@@ -394,8 +386,6 @@ function getPackageTypeData( connection_ikon_cms, data, session ){
                         storePackage.sp_pk_id = req.body.packId;
                     }
 
-                    console.log('storePackage')
-                    console.log(storePackage)
                     if(addStorePackage(connection_ikon_cms,storePackage)){
                         callback(null,pkgId);
                     }else{
@@ -429,8 +419,6 @@ function getPackageTypeData( connection_ikon_cms, data, session ){
                         storePackage.sp_pk_id = req.body.packId;
                     }
 
-                    console.log('storePackage')
-                    console.log(storePackage)
                     if(addStorePackage(connection_ikon_cms,storePackage)){
                         callback(null,pkgId);
                     }else{

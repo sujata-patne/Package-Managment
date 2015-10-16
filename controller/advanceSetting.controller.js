@@ -162,10 +162,6 @@ exports.UploadFile =  function (req, res, next) {
                        fs.unlink(tmp_path, function() {
                         if (err) console.log(err);
                        });
-
-                       console.log("File  uploaded!");
-                       
-
                     mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                         async.series([
                            function(callback){

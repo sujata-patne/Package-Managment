@@ -5,14 +5,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     console.log('mainsite')
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
-    $scope.sequence = [];
 
     $scope.selectedStore = [];
     $rootScope.PackageType = 0;
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    if($rootScope.action !== 'edit') {
+    console.log($rootScope.action)
+    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';
     }
     $('.removeActiveClass').removeClass('active');
@@ -59,13 +59,13 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
-       console.log('mainsite : '+$scope.action)
-        if($rootScope.action !== 'edit'){
-            $rootScope.distributionChannelId = "";
-            $rootScope.PackageId = '';
+        console.log('mainsite : '+$scope.action)
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
+            delete $rootScope.distributionChannelId;
+            delete $rootScope.PackageId ;
+
             $scope.offerId = '';
             $scope.paosId = '';
-            $rootScope.PackageType = 0;
         }
     });
 
@@ -74,18 +74,16 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
     }
     $scope.showPackageData = function(){
-        /*if($rootScope.action !== 'edit'){
-            $rootScope.action = 'add';
-            $rootScope.distributionChannelId = "";
-            $rootScope.PackageId = '';
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
+            delete $rootScope.PackageId;
             $scope.offerId = '';
             $scope.paosId = '';
-            $rootScope.PackageType = 0;
-        }*/
+        }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
+        var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
-        MainSite.showPackageData({pkgId:$rootScope.PackageId,distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType},function (MainSiteData) {
+        MainSite.showPackageData(params,function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
@@ -96,9 +94,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
-            $scope.sequenceData = angular.copy(MainSiteData.mainSitePackageData.arrangeSequenceData);
 
-            console.log($scope.sequence)
 
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;

@@ -4,7 +4,8 @@ myApp.service('Arrangeplans', ['$http', function ($http){
 
     //PrePopulate Add Pack form  :
     this.getArrangePlansData = function (data,success, error ) {
-
+console.log('data')
+console.log(data)
         $http.post(this.baseRestUrl + '/getArrangePlansData',data).success(function (items) {
             success(items);
         }).error(function (err) {

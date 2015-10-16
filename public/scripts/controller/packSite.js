@@ -12,14 +12,13 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
-    if($rootScope.action !== 'edit') {
+    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';
     }
     $rootScope.packageName = '';
     $rootScope.selectedPack = '';
 
     $rootScope.PackageType = 1;
-
 
     $('#pack-site').addClass('active');
 
@@ -59,40 +58,45 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.showDeliveryTypes = function(contents){
         return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
-
+    $scope.getPackageData = function(){
+        $rootScope.action = 'add';
+        $scope.showPackageData();
+        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+    }
     MainSite.getPackSiteData(function (PackSiteData) {
 
         $scope.OfferData = angular.copy(PackSiteData.OfferData);
         $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(PackSiteData.packs);
-        console.log('packsite : '+$scope.action)
 
-        if($rootScope.action !== 'edit'){
-            $rootScope.distributionChannelId = "";
-            $rootScope.PackageId = '';
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
+            $rootScope.distributionChannelId = undefined;
+            $rootScope.PackageId = undefined;
+            $rootScope.selectedPack = undefined;
+            $rootScope.packageName = undefined;
             $scope.offerId = '';
             $scope.paosId = '';
-            $rootScope.PackageType = 1;
         }
     });
 
-    $scope.getPackageData = function(){
-        $scope.showPackageData();
-        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
-    }
-    $rootScope.showPackageData = function(){
-       /* if($rootScope.action !== 'edit'){
-            $rootScope.distributionChannelId = "";
-            $rootScope.PackageId = '';
+    $scope.showPackageData = function(){
+
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
+
+            $rootScope.PackageId = undefined;
+            $rootScope.selectedPack = undefined;
+            $rootScope.packageName = undefined;
             $scope.offerId = '';
             $scope.paosId = '';
-            $rootScope.PackageType = 1;
-        }*/
+
+        }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
-        MainSite.showPackSitePackageData({pkgId:$rootScope.PackageId,distributionChannelId:$rootScope.distributionChannelId,packageType : $rootScope.PackageType},function (PackSiteData) {
+        var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
+
+        MainSite.showPackSitePackageData(params,function (PackSiteData) {
             $scope.OfferData = angular.copy(PackSiteData.OfferData);
             $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
