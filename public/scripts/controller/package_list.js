@@ -70,14 +70,12 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $rootScope.PackageId = pkgId;
         $rootScope.distributionChannelId = dcId;
         $rootScope.PackageType = pkgType;
-        console.log('dcId '+ dcId)
         $rootScope.action = 'edit';
         if($rootScope.PackageType === 1){
-            $state.go('pack-site');
+            $state.go('pack-site.alacart');
 
         }else{
-            $state.go('main-site');
-
+            $state.go('main-site.alacart');
         }
     }
 

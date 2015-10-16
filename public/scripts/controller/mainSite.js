@@ -5,21 +5,27 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     console.log('mainsite')
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
-
+    $rootScope.PackageType = 0;
     $scope.selectedStore = [];
     $rootScope.PackageType = 0;
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
     console.log($rootScope.action)
-    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
+   // if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';
-    }
+   // }
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
 
     $('#main-site').addClass('active');
 
+    if($rootScope.PackageType === 1 && $rootScope.PackageId != undefined && $rootScope.action != 'edit'){
+        $rootScope.PackageId = undefined;
+        $rootScope.distributionChannelId = undefined;
+        $rootScope.PackageType = undefined;
+        $rootScope.action = 'add';
+    }
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"main-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"main-site.valuepack", active: false },
@@ -61,11 +67,12 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         console.log('mainsite : '+$scope.action)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-            delete $rootScope.distributionChannelId;
-            delete $rootScope.PackageId ;
+            $rootScope.distributionChannelId = undefined;
+            $rootScope.PackageId = undefined;
+            $rootScope.PackageType = 0;
 
-            $scope.offerId = '';
-            $scope.paosId = '';
+            $scope.offerId = undefined;
+            $scope.paosId = undefined;
         }
     });
 
@@ -75,9 +82,11 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
     $scope.showPackageData = function(){
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-            delete $rootScope.PackageId;
-            $scope.offerId = '';
-            $scope.paosId = '';
+            $rootScope.PackageId = undefined;
+            $scope.offerId = undefined;
+            $scope.paosId = undefined;
+            $rootScope.PackageType = 0;
+
         }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};

@@ -12,16 +12,19 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
-    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
+   /* if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
+        $rootScope.action = 'add';
+    }*/
+    $rootScope.packPackageName = '';
+    $rootScope.packSelectedPack = '';
+    $rootScope.PackageType = 1;
+    $('#pack-site').addClass('active');
+    if($rootScope.PackageType === 1  && $rootScope.PackageId != undefined && $rootScope.action != 'edit'){
+        $rootScope.PackageId = undefined;
+        $rootScope.distributionChannelId = undefined;
+        $rootScope.PackageType = undefined;
         $rootScope.action = 'add';
     }
-    $rootScope.packageName = '';
-    $rootScope.selectedPack = '';
-
-    $rootScope.PackageType = 1;
-
-    $('#pack-site').addClass('active');
-
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"pack-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"pack-site.valuepack", active: false },
@@ -64,31 +67,35 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
     }
     MainSite.getPackSiteData(function (PackSiteData) {
+        console.log('packsite ' + $rootScope.action)
+        if($rootScope.action !== 'edit' || $rootScope.action !== undefined){
+            delete $rootScope.packDistributionChannelId;
+            delete $rootScope.PackageId;
+            delete $rootScope.packselectedPack;
+            delete $rootScope.packPackageName;
+            $rootScope.PackageType = 1;
+
+            $scope.offerId = undefined;
+            $scope.paosId = undefined;
+        }
 
         $scope.OfferData = angular.copy(PackSiteData.OfferData);
         $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(PackSiteData.packs);
 
-        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-            $rootScope.distributionChannelId = undefined;
-            $rootScope.PackageId = undefined;
-            $rootScope.selectedPack = undefined;
-            $rootScope.packageName = undefined;
-            $scope.offerId = '';
-            $scope.paosId = '';
-        }
     });
 
     $scope.showPackageData = function(){
-
+console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
+        console.log($rootScope.action !== 'edit' &&  $rootScope.action !== undefined)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-
-            $rootScope.PackageId = undefined;
-            $rootScope.selectedPack = undefined;
-            $rootScope.packageName = undefined;
-            $scope.offerId = '';
-            $scope.paosId = '';
+            delete $rootScope.PackageId;
+            delete $rootScope.packSelectedPack;
+            delete $rootScope.packPackageName;
+            $rootScope.PackageType = 1;
+            $scope.offerId = undefined;
+            $scope.paosId = undefined;
 
         }
         $scope.alacartPlanIds = {};
@@ -97,6 +104,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
         MainSite.showPackSitePackageData(params,function (PackSiteData) {
+            console.log(PackSiteData)
             $scope.OfferData = angular.copy(PackSiteData.OfferData);
             $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
@@ -110,16 +118,20 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.packSitePackageData = angular.copy(PackSiteData.mainSitePackageData.packageDetails);
 
             if ($scope.packSitePackageData != null && $scope.packSitePackageData.length > 0) {
-                $scope.distributionChannelId = $scope.packSitePackageData[0].sp_dc_id;
+                $rootScope.distributionChannelId = $scope.packSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.packSitePackageData[0].sp_pkg_id;
                 $rootScope.PackageType = $scope.packSitePackageData[0].sp_pkg_type;
-                $rootScope.packageName = $scope.packSitePackageData[0].sp_package_name;
-                $rootScope.selectedPack = $scope.packSitePackageData[0].sp_pk_id;
+                $rootScope.packPackageName = $scope.packSitePackageData[0].sp_package_name;
+                $rootScope.packSelectedPack = $scope.packSitePackageData[0].sp_pk_id;
             }
             $scope.alacartNofferDetails = angular.copy(PackSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
                 $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
+            }else{
+                $scope.alacartNofferDetails = undefined;
+                $scope.offerId = undefined;
+                $scope.paosId = undefined;
             }
             $scope.contentTypePlanData = angular.copy(PackSiteData.mainSitePackageData.contentTypePlanData);
             if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {

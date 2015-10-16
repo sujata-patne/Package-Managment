@@ -6,8 +6,10 @@ var alacartPack = require('../controller/alacartNoffer.controller');
 module.exports = function (app) {
     app.route('/getAlacartNofferDetails')
         .post(alacartPack.getAlacartNofferDetails);
-    app.route('/addAlacartNOffer')
-        .post(alacartPack.addAlacartPackDetails);
-    app.route('/editAlacartNOffer')
-        .post(alacartPack.editAlacartPackDetails);
+    app.route('/addMainsiteAlacartPlanDetails')
+        .post(alacartPack.addMainsiteAlacartPlanDetails);
+    app.route('/editMainsiteAlacartPlanDetails')
+        .post(alacartPack.editMainsiteAlacartPlanDetails);
+    app.route('/addIndividualAlacartPlanDetails')
+        .post(alacartPack.addIndividualAlacartPlanDetails);
 }

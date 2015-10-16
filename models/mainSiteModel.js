@@ -86,6 +86,11 @@ exports.getMainSitePackageData = function(dbConnection,storeId, dcId,packageType
         callback(err,response);
     });
 }
+exports.getUniquePackageName = function(dbConnection,storeId,packageName, callback){
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND lower(sp_package_name) = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,packageName.toLowerCase()], function (err, response) {
+        callback(err,response);
+    });
+}
 exports.getIndividualPackageData = function(dbConnection,storeId,pkgId, callback){
     var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_pkg_id = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,pkgId], function (err, response) {
         callback(err,response);

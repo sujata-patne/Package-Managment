@@ -22,12 +22,12 @@ myApp.config(function ($stateProvider) {
         .state("main-site", {
             templateUrl: 'partials/mainSite.html',
             controller: 'mainSiteCtrl',
-            url: 'main-site'
+            url: '/main-site'
         })
         .state("pack-site", {
             templateUrl: 'partials/packSite.html',
             controller: 'packSiteCtrl',
-            url: '/pack-site/:dcId'
+            url: '/pack-site'
         })
         .state('main-site.alacart', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
