@@ -14,14 +14,30 @@
               <div class="form-group">
                     <label for="alacartplans" class="col-md-3 control-label">A-la-Cart Plans List : </label>
                     <div class="col-md-6">
-                        <select name="contenttypes" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartplans" class="form-control" data-ng-model="selectedPlanId">
+                        <select name="contenttypes" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartplans" class="form-control" data-ng-model="selectedPlanId" ng-change="planChange()">
                              <option value=""> --Select Alacart Plan-- </option>
                         </select>
                     </div>
+              </div>
+
+              <div class="form-group">
+                    <label for="valid_date" class="col-md-3 control-label">Valid Till: </label>
+                    <div class="col-md-6">
+                        <!-- <select name="contenttypes" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartplans" class="form-control" data-ng-model="selectedPlanId" ng-change="planChange()">
+                             <option value=""> --Select Alacart Plan-- </option>
+                        </select> -->
+                        <div class="input-group date">
+                                <input type="text" name="valid_date" class="form-control" bk-auto-focus datepicker-popup="yyyy-MM-dd" data-ng-model="ValidDate" placeholder="Start date" data-ng-disabled="IsDisable" min-date="minDate" data-ng-click="openDatepicker($event)" data-is-open="open1" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" data-ng-click="openDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                        </div>
+                    </div>
               </div> 
-               <div class="table-responsive">
-                                    <div id="user-exportable">
-                                        <table id="arrangePlans" class="table table-striped table-bordered table-checkable">
+               <div class="table-responsive" ng-show="selectedPlanFlag == true && contentTypeFlag == true">
+                                    <span ng-if="contentData.length == 0" style="margin-left:40%"> No records found. </span> 
+                                    <div id="user-exportable" ng-show="contentData.length > 0">
+                                        <table id="arrangePlans" class="table table-striped table-bordered table-checkable" >
                                             <thead>
                                             <tr>
                                                 <th class="text-center">Content Id</th>
@@ -32,22 +48,35 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+
                                             <tr data-ng-repeat="item in contentData ">
                                                 <td class="col-md-1 col-xs-1 text-center">
                                                     {{item.cm_id}}&nbsp;&nbsp;
                                                 </td>
-                                                <td class="col-md-2 col-xs-2">
-                                                    <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                <td class="col-md-2 col-xs-2 text-center">
+                                                    <a class="fancybox grouped_elements" href="http://dailymagic.in{{item.contentUrl}}" ng-if="item.parent_type_name == 'Wallpaper'">
+                                                        <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                    </a>
+                                                    <a  class="fancybox-video fancybox.iframe" ng-if="item.parent_type_name == 'Video' && item.contentUrl != null" href="http://dailymagic.in{{ item.contentUrl }}" title="">
+                                                            <!-- <i class="fa fa-play" style="color:green" title="View"></i> -->
+                                                            <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                    </a>
+                                                    <a class="fancybox-audio fancybox.iframe" ng-if="item.parent_type_name == 'Audio' && item.contentUrl != null" href="{{ item.contentUrl }}" title="">
+                                                        <!-- <i class="fa fa-play" style="color:green" title="View"></i> -->
+                                                          <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                    </a>
+                                                    <i ng-show="item.contentUrl == null && item.parent_type_name == 'Audio'" class="fa fa-play" style="color:red" title="Content not found"></i>
+                                                    <i ng-show="item.contentUrl == null && item.parent_type_name == 'Video'" class="fa fa-play" style="color:red" title="Content not found"></i>
                                                 </td>
                                                 <td class="col-md-4 col-xs-4">
                                                     {{item.cm_display_title}}
                                                 </td>
                                                 <td>
-                                                    -
+                                                    {{current_plan_name}}
                                                 </td>
-                                                {{final_selectedContent}}
                                                 <td>
-                                                    <!-- {{selectedContent}} -->
+                                                   <!--  {{final_selectedContent}}
+                                                    {{selectedContent}} -->
                                                     <input type="checkbox" name="selectedContent"  ng-model="selectedContent[item.cm_id]" data-ng-change="changeContent()"/>
                                                 </td>
                                             </tr>
@@ -68,7 +97,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
-                <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
+                <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="selectedPlanFlag == false || contentTypeFlag == false || contentData.length == 0" title="Save">Submit</button>
                 <!-- <button class="btn btn-small" ng-click="proceed()" ng-disable="dis()">{{buttonLabel}}</button> -->
                 <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>

@@ -2,6 +2,7 @@ var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
 var individualContentManager = require('../models/individualContentModel');
 var async = require("async");
+var moment = require("moment");
 
 
 exports.getIndividualContentData = function(req, res, next) {
@@ -13,7 +14,16 @@ exports.getIndividualContentData = function(req, res, next) {
                         mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
                             callback(err, ContentTypeData)
                         })
-                    }
+                    },
+                    IndividualContentData: function (callback) {
+                      if(req.body.getDataForUpdate){
+                            individualContentManager.getIndividualContentData(connection_ikon_cms, req.session.package_StoreId,req.body.packageId,req.body.packId,req.body.planId, function (err, IndividualContentData) {
+                                callback(err, IndividualContentData)
+                            });
+                      }else{
+                        callback(err,'');
+                      }
+                    },
                 },
                 function (err, results) {
                     //console.log(results)
@@ -80,23 +90,33 @@ exports.addIndividualContent = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-            	 var cnt = 0;
+                 var cnt = 0;
                  var count = req.body.selectedContents.length - 1;
                  loop(0);
                  function loop( cnt ) {
-                 	var i = cnt;
+                    var i = cnt;
                     individualContentManager.getLastInsertedIndividualContentId( connection_ikon_cms,function(err,response){
                         if(err){
 
                         }else{
+                             var validDate;
+                             if(req.body.validDate !== undefined && req.body.validDate != ""){
+                                 validDate = moment(req.body.validDate);
+                                 validDate = validDate.format('YYYY-MM-DD');
+                             }else{
+                                 validDate = '2050-01-01'
+                             }
+
                             var data = {
                                 pic_id : response[0].maxId,
                                 pic_st_id : req.session.package_StoreId,
                                 pic_pk_id : req.body.packId,
                                 pic_ap_id : req.body.alacartPlanId,
                                 pic_pkg_id : req.body.packageId,
-                                pic_cm_id :  req.body.selectedContents[i]
+                                pic_cm_id :  req.body.selectedContents[i],
+                                pic_valid_till : validDate
                             }
+                            console.log('insert..');
                             console.log(data);
                             individualContentManager.saveIndividualContent( connection_ikon_cms,data, function(err,response){
                                 if(err){
@@ -114,6 +134,124 @@ exports.addIndividualContent = function(req, res, next) {
                         }                            
                     });
                  }
+            });
+        }else{
+            res.redirect('/accountlogin');
+        }
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+};
+
+
+exports.editIndividualContent = function(req, res, next) {
+    try {
+        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.series([
+                    function(callback){
+                        if(req.body.selectedContents.length != 0){
+                            individualContentManager.checkRecordExists( connection_ikon_cms, req.session.package_StoreId,req.body.packId,req.body.alacartPlanId,req.body.packageId,function(err,response){
+                                if(err){
+
+                                }else{
+                                    console.log('RR');
+                                    console.log(response);
+                                    if(response.length > 0){
+                                        console.log('in update');
+                                        individualContentManager.updateIndividualContentRecord( connection_ikon_cms, req.session.package_StoreId,req.body.packId,req.body.alacartPlanId,req.body.packageId,function(err,response){
+                                            callback(err,'updated');
+                                        });
+                                    }else{
+                                        callback(err,'record not found');
+                                    }
+                                }
+                            });
+                        }else{
+                            //If nothing is updated : 
+                            //Just update the date : 
+                             var validDate;
+                             console.log(req.body.validDate); 
+                             if(req.body.validDate !== undefined && req.body.validDate != "" && req.body.validDate != null){
+                                 validDate = moment(req.body.validDate);
+                                 validDate = validDate.format('YYYY-MM-DD');
+                             }else{
+                                 validDate = '2050-01-01'
+                             }
+                            var data = {
+                                        pic_st_id : req.session.package_StoreId,
+                                        pic_pk_id : req.body.packId,
+                                        pic_ap_id : req.body.alacartPlanId,
+                                        pic_pkg_id : req.body.packageId,
+                                        pic_valid_till : validDate
+                                    }
+                                individualContentManager.updateIndividualContentDate( connection_ikon_cms, data, function(err,response){
+                                    if(err){
+
+                                    }else{
+                                        callback(null,'');
+                                    }
+                                });
+                        }
+                            
+                    },
+                ],
+                function(err,results){
+                     var cnt = 0;
+                     var count = req.body.selectedContents.length;
+                     console.log('sc...'+req.body.selectedContents);
+                     console.log("count--------  "+count);
+                     if(count == 0){
+                        connection_ikon_cms.release();
+                        res.send({status:200,message:''})
+                     }else{
+                          loop(0);
+                          function loop( cnt ) {
+                            var i = cnt;
+                            individualContentManager.getLastInsertedIndividualContentId( connection_ikon_cms,function(err,response){
+                                if(err){
+
+                                }else{
+
+                                     var validDate;
+                                     if(req.body.validDate !== undefined && req.body.validDate != ""){
+                                         validDate = moment(req.body.validDate);
+                                         validDate = validDate.format('YYYY-MM-DD');
+                                     }else{
+                                        validDate = '2050-01-01'
+                                     }
+
+                                    var data = {
+                                        pic_id : response[0].maxId,
+                                        pic_st_id : req.session.package_StoreId,
+                                        pic_pk_id : req.body.packId,
+                                        pic_ap_id : req.body.alacartPlanId,
+                                        pic_pkg_id : req.body.packageId,
+                                        pic_cm_id :  req.body.selectedContents[i],
+                                        pic_valid_till : validDate
+                                    }
+                                    console.log(data);
+                                    individualContentManager.saveIndividualContent( connection_ikon_cms,data, function(err,response){
+                                        if(err){
+
+                                        }else{
+                                            if( count == cnt ){  
+                                                connection_ikon_cms.release();
+                                                res.send({status:200,message:''})
+                                            }else{
+                                                 cnt = cnt + 1;
+                                                 loop(cnt);
+                                            }                           
+                                        }
+                                    }); 
+                                }                            
+                            });
+                        }
+                     }
+                   
+                });
+
+          
             });
         }else{
             res.redirect('/accountlogin');
