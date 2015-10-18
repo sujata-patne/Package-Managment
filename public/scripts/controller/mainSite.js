@@ -4,6 +4,7 @@
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     console.log('mainsite')
     $scope.tabIndex = 0;
+    $scope.isChild = 1;
     $scope.buttonLabel = "Next";
     $rootScope.PackageType = 0;
     $scope.selectedStore = [];
@@ -65,6 +66,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
+        $scope.StorePacks = angular.copy(MainSiteData.packs);
+
         console.log('mainsite : '+$scope.action)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $rootScope.distributionChannelId = undefined;
@@ -141,5 +144,22 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.selectedValuePacks = [];
         $scope.selectedSubscriptionPlans = [];
     }
+    $scope.$watch( "isChild" , function(n,o){
+        //$scope.setPackageData = function(){
+            if($scope.isChild === true){
+                console.log("if"+$scope.isChild)
+
+                $rootScope.ParentPackageId = $rootScope.PackageId;
+                $rootScope.PackageId = '';
+            }
+            if($scope.isChild === false){
+                console.log("else"+$scope.isChild)
+
+                //$rootScope.PackageId = $rootScope.ParentPackageId;
+                $rootScope.ParentPackageId = '';
+            }
+       // }
+    }, true );
+
 
 });

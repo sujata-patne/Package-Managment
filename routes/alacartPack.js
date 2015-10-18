@@ -12,4 +12,6 @@ module.exports = function (app) {
         .post(alacartPack.editMainsiteAlacartPlanDetails);
     app.route('/addIndividualAlacartPlanDetails')
         .post(alacartPack.addIndividualAlacartPlanDetails);
+    app.route('/editIndividualAlacartPlanDetails')
+        .post(alacartPack.editIndividualAlacartPlanDetails);
 }

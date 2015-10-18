@@ -31,9 +31,9 @@ console.log('alacartPackData')
                         streaming: data.pct_stream_id
                     };
                 })
-            } else{
+            } /*else{
                 $scope.alacartPlanIds = undefined;
-            }
+            }*/
         });
     }
 
@@ -124,7 +124,7 @@ console.log('alacartPackData')
 
         }
         else {
-            toastr.success(data.message)
+            toastr.error(data.message)
             $scope.errorvisible = true;
         }
 

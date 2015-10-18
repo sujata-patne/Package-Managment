@@ -47,6 +47,11 @@ exports.addStorePackage = function(dbConnection,data,callback){
         callback(err,response);
     });
 }
+exports.editStorePackage = function(dbConnection,data,callback){
+    var query = dbConnection.query("UPDATE `icn_store_package` SET ? WHERE sp_pkg_id = ? ", [data, data.sp_pkg_id], function (err, response) {
+        callback(err,response);
+    });
+}
 exports.addAlacartOfferDetails = function(dbConnection,data,callback){
     var query = dbConnection.query("INSERT INTO `icn_package_alacart_offer_site` SET ? ", data, function (err, response) {
         callback(err,response);

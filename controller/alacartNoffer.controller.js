@@ -134,36 +134,17 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                             var editPlansData = {alacartPlansList:req.body.alacartPlansList, paosId:req.body.paosId,packageUserName:req.session.package_UserName,ContentTypes:editContentTypes}
 
                             var deletePlansData = {alacartPlansList:req.body.alacartPlansList, paosId:req.body.paosId,packageUserName:req.session.package_UserName,ContentTypes:deleteContentTypes}
-                            async.parallel({
-                                addContentTypePlans: function (callback) {
-                                    if(addContentTypes && addContentTypes.length > 0) {
-                                        addContentTypePlans(connection_ikon_cms, 0, addPlansData);
-                                    }
-                                    callback(err, addContentTypes);
-                                },
-                                editContentTypePlans: function (callback) {
-                                    if(editContentTypes && editContentTypes.length > 0) {
-                                        editContentTypePlans(connection_ikon_cms, 0, editPlansData);
-                                    }
-                                    callback(err, editContentTypes);
-                                },
-                                deleteAlacartPlans: function (callback) {
-                                    if(deleteContentTypes && deleteContentTypes.length > 0){
-                                        deleteAlacartPlans(connection_ikon_cms,0,deletePlansData);
-                                    }
-                                    callback(err, deleteContentTypes);
-                                }
-                            },
-                            function (err, results) {
-                                if (err) {
-                                    connection_ikon_cms.release();
-                                    res.status(500).json(err.message);
-                                } else {
-                                    callback(err, results);
-                                }
-                            })
+                            var contentTypePackData = {
+                                addContentTypes: addContentTypes,
+                                editContentTypes: editContentTypes,
+                                deleteContentTypes: deleteContentTypes,
+                                addPlansData: addPlansData,
+                                editPlansData: editPlansData,
+                                deletePlansData: deletePlansData
+                            }
+                            editContentTypePack(connection_ikon_cms, contentTypePackData);
+                            callback(err, contentTypePackData);
                         })
-
                     }
                 },
                 function (err, results) {
@@ -172,19 +153,6 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
-                        /*alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, req.body.paosId, function (err, contentTypePlanData) {
-
-                       //  alacartManager.getAlacartPackPlans(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, ContentTypeData) {
-                             if (err) {
-                                 connection_ikon_cms.release();
-                                 res.status(500).json(err.message);
-                                 console.log(err.message)
-                             } else {
-
-                                 connection_ikon_cms.release();
-                                 res.send( { "success" : true,"status":200, "message":"A-la-cart & Offer Plans added successfully!",contentTypePlanData : contentTypePlanData } );
-                             }
-                         });*/
                         connection_ikon_cms.release();
                         res.send({
                             "success": true,
@@ -202,7 +170,6 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
         res.status(500).json(err.message);
     }
 };
-
 exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
@@ -326,32 +293,43 @@ exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
     }
 };
 
-exports.addIndividualAlacartPlanDetails = function (req,res,next) {
+exports.editIndividualAlacartPlanDetails = function (req,res,next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                mainSiteManager.getUniquePackageName( connection_ikon_cms, req.session.package_StoreId, req.body.packageName,function( err, packageData ) {
-                    if (packageData > 0) {
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
-                        } else {
-                            connection_ikon_cms.release();
-                            res.send({
-                                "success": true,
-                                "status": 200,
-                                "message": "Package Name Must be Unique",
-                                "pkgId": undefined
-                            });
+                async.waterfall([
+                    function (callback) {
+                        mainSiteManager.getUniquePackageName( connection_ikon_cms, req.session.package_StoreId, req.body.packageName,function( err, result ) {
+                            if (err) {
+                                connection_ikon_cms.release();
+                                res.status(500).json(err.message);
+                                console.log(err.message)
+                            } else {
+                                if (result.length > 0) {
+                                    callback(err, {'exist': true, 'packageData': result});
+                                } else {
+                                    callback(err, {'exist': false, 'packageData': result});
+                                }
+                            }
+                        })
+                    },
+                    function(data, callback){
+                        if(data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId ){
+                            callback(null, {'exist':data.exist,'message': 'Package Name Must be Unique'});
+                        }else{
+                            callback(null, {'exist':data.exist});
                         }
                     }
-                    else {
-                        async.waterfall([
-                            function (callback) {
-                                mainSiteManager.getMaxStorePackageId(connection_ikon_cms, function (err, MaxPkgId) {
-                                    var pkgId = MaxPkgId[0].pkg_id != null ? parseInt(MaxPkgId[0].pkg_id + 1) : 1;
-                                    //Main site
+                ],
+                function(err, results) {
+                    if (results.message) {
+                        connection_ikon_cms.release();
+                        res.send({"success": false, "message": results.message});
+                    } else {
+                        if (req.body.packageId) {
+                            async.parallel({
+                                updateStorePackage:function (callback) {
+                                    var pkgId = req.body.packageId;
                                     var storePackage = {
                                         sp_pkg_id: pkgId,
                                         sp_package_name: req.body.packageName,
@@ -359,75 +337,164 @@ exports.addIndividualAlacartPlanDetails = function (req,res,next) {
                                         sp_st_id: req.session.package_StoreId,
                                         sp_dc_id: req.body.distributionChannelId,
                                         sp_pkg_type: req.body.packageType, //site type
-                                        sp_is_active: 1
+                                        sp_is_active: 1,
+                                        sp_modified_on:  new Date(),
+                                        sp_modified_by: req.session.package_UserName
                                     };
-                                    if (addStorePackage(connection_ikon_cms, storePackage)) {
+                                    if (editStorePackage(connection_ikon_cms, storePackage)) {
                                         callback(null, pkgId);
                                     } else {
-                                        callback({message: 'Package can not be added.'}, pkgId);
+                                        callback({message: 'Package can not be updated.'}, pkgId);
                                     }
-                                });
-                            },
-                            function (pkgId, callback) {
-                                alacartManager.getMaxAlacartOfferId(connection_ikon_cms, function (err, MaxPaosId) {
-                                    var paosId = MaxPaosId[0].paos_id != null ? parseInt(MaxPaosId[0].paos_id + 1) : 1;
-                                    var AlacartOfferData = {
-                                        paos_id: paosId,
-                                        paos_sp_pkg_id: pkgId,
-                                        paos_op_id: req.body.offerId,
-                                        paos_is_active: 1,
-                                        paos_created_on: new Date(),
-                                        paos_created_by: req.session.package_UserName,
-                                        paos_modified_on: new Date(),
-                                        paos_modified_by: req.session.package_UserName
-                                    }
-                                    if (addAlacartOfferDetails(connection_ikon_cms, AlacartOfferData)) {
-                                        callback(null, pkgId, paosId);
-                                    } else {
-                                        callback({message: 'Alacart & Offer can not be added.'}, pkgId, paosId);
-                                    }
-                                });
-                            },
-                            function (pkgId, paosId, callback) {
-                                var ctCount = req.body.ContentTypes.length;
-                                var err = null;
+                                },
+                                alacartNOffer:function (callback) {
+                                    if(req.body.paosId != undefined && req.body.paosId != null && req.body.paosId != ''){
+                                        var AlacartOfferData = {
+                                            paos_id: req.body.paosId,
+                                            paos_sp_pkg_id: req.body.packageId,
+                                            paos_op_id: req.body.offerId,
+                                            paos_is_active: 1,
+                                            paos_modified_on:  new Date(),
+                                            paos_modified_by: req.session.package_UserName
+                                        }
 
-                                var newContentTypes = Object.keys(req.body.alacartPlansList)
-                                    .map(function (element) {
-                                        return parseInt(element)
+                                        if (editAlacartOfferDetails(connection_ikon_cms, AlacartOfferData)) {
+                                            callback(null, req.body.paosId);
+                                        } else {
+                                            callback({message: 'Alacart & Offer can not be updated.'}, req.body.paosId);
+                                        }
+                                    }else{
+                                        alacartManager.getMaxAlacartOfferId( connection_ikon_cms, function(err,MaxPaosId){
+                                            if (err) {
+                                                connection_ikon_cms.release();
+                                                res.status(500).json(err.message);
+                                                console.log(err.message)
+                                            } else {
+                                                var paosId = MaxPaosId[0].paos_id != null ? parseInt(MaxPaosId[0].paos_id + 1) : 1;
+                                                var AlacartOfferData = {
+                                                    paos_id: paosId,
+                                                    paos_sp_pkg_id: req.body.packageId,
+                                                    paos_op_id: req.body.offerId,
+                                                    paos_is_active: 1,
+                                                    paos_created_on: new Date(),
+                                                    paos_created_by: req.session.package_UserName,
+                                                    paos_modified_on: new Date(),
+                                                    paos_modified_by: req.session.package_UserName
+                                                }
+                                                req.body.paosId = paosId;
+                                                if (addAlacartOfferDetails(connection_ikon_cms, AlacartOfferData)) {
+                                                    callback(null, req.body.paosId);
+                                                } else {
+                                                    callback({message: 'Alacart & Offer can not be added.'}, paosId);
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                contentTypePlans:function ( callback) {
+                                    var ctCount = req.body.ContentTypes.length;
+                                    var err = null;
+                                    var alacartPlansList = req.body.alacartPlansList;
+                                    var contentTypes = [];
+                                    var existingContentTypes = [];
+
+                                    for (var i = 0; i < ctCount; i++) {
+                                        (function () {
+                                            var j = i;
+                                            var ContentTypeId = req.body.ContentTypes[j].cd_id;
+                                            process.nextTick(function() {
+                                                contentTypes.push(ContentTypeId);
+                                            })
+                                        })();
+                                    }
+                                    var newContentTypes  = Object.keys(req.body.alacartPlansList)
+                                        .map(function (element) {
+                                            return parseInt(element)
+                                        });
+                                    var deleteContentTypes = [];
+                                    var editContentTypes = [];
+
+                                    mainSiteManager.existingContentTypesInPack( connection_ikon_cms, req.body.paosId, function(err,result) {
+                                        if (err) {
+                                            connection_ikon_cms.release();
+                                            res.status(500).json(err.message);
+                                            console.log(err.message)
+                                        } else {
+                                            if (result[0].contentTypes !== null) {
+                                                existingContentTypes = result[0].contentTypes.split(',')
+                                                    .map(function (element) {
+                                                        return parseInt(element)
+                                                    });
+                                            }
+                                            var addContentTypes = newContentTypes.filter(function (el) {
+                                                return existingContentTypes.indexOf(el) < 0;
+                                            });
+                                            for (var i = 0; i < existingContentTypes.length; i++) {
+                                                var ContentTypeId = existingContentTypes[i];
+                                                if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0) || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
+                                                    editContentTypes.push(ContentTypeId);
+                                                } else {
+                                                    deleteContentTypes.push(ContentTypeId);
+                                                }
+                                            }
+
+                                            var addPlansData = {
+                                                alacartPlansList: req.body.alacartPlansList,
+                                                paosId: req.body.paosId,
+                                                packageUserName: req.session.package_UserName,
+                                                ContentTypes: addContentTypes
+                                            }
+
+                                            var editPlansData = {
+                                                alacartPlansList: req.body.alacartPlansList,
+                                                paosId: req.body.paosId,
+                                                packageUserName: req.session.package_UserName,
+                                                ContentTypes: editContentTypes
+                                            }
+
+                                            var deletePlansData = {
+                                                alacartPlansList: req.body.alacartPlansList,
+                                                paosId: req.body.paosId,
+                                                packageUserName: req.session.package_UserName,
+                                                ContentTypes: deleteContentTypes
+                                            }
+
+                                            var contentTypePackData = {
+                                                addContentTypes: addContentTypes,
+                                                editContentTypes: editContentTypes,
+                                                deleteContentTypes: deleteContentTypes,
+                                                addPlansData: addPlansData,
+                                                editPlansData: editPlansData,
+                                                deletePlansData: deletePlansData
+                                            }
+                                            editContentTypePack(connection_ikon_cms, contentTypePackData);
+                                            callback(err, contentTypePackData);
+                                        }
+                                    })
+                                }
+                            },
+                            function (err, results) {
+                                console.log(err)
+                                if (err) {
+                                    connection_ikon_cms.release();
+                                    res.status(500).json(err.message);
+                                    console.log(err.message)
+                                } else {
+                                    console.log('edit individaul results')
+                                    console.log(results)
+                                    connection_ikon_cms.release();
+                                    res.send({
+                                        "success": true,
+                                        "status": 200,
+                                        "message": "Package Saved Successfully.",
+                                        pkgId: req.body.packageId
                                     });
-
-
-                                var addPlansData = {
-                                    alacartPlansList: req.body.alacartPlansList,
-                                    pkgId: pkgId,
-                                    paosId: paosId,
-                                    packageUserName: req.session.package_UserName,
-                                    ContentTypes: newContentTypes
                                 }
-                                if (newContentTypes && newContentTypes.length > 0) {
-                                    addContentTypePlans(connection_ikon_cms, 0, addPlansData);
-                                }
-                                callback(null, {pkgId: pkgId, paosId: paosId});
-                            }
-                        ],
-                        function (err, results) {
-                            if (err) {
-                                connection_ikon_cms.release();
-                                res.status(500).json(err.message);
-                                console.log(err.message)
-                            } else {
-                                connection_ikon_cms.release();
-                                res.send({
-                                    "success": true,
-                                    "status": 200,
-                                    "message": "Package Saved Successfully.",
-                                    pkgId: results.pkgId
-                                });
-                            }
-                        });
+                            });
+                        }
                     }
                 })
+
             })
         }else{
             res.redirect('/accountlogin');
@@ -437,148 +504,122 @@ exports.addIndividualAlacartPlanDetails = function (req,res,next) {
     }
 };
 
-exports.addAlacartPackDetails123 = function (req,res,next){
-    console.log('packsite Add')
+exports.addIndividualAlacartPlanDetails = function (req,res,next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.waterfall([
-                    function(callback){
-                        //Get store package
-                        //Package type added to  getMainSitePackageData
-                        //getPackageTypeData(connection_ikon_cms,req.body);
-                        console.log('packsite insert' + req.body.pkgId)
-
-                        if(req.body.pkgId != undefined && req.body.packageType === 1 ){
-
-                            mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.body.pkgId, function (err, packageData) {
-                                if(packageData.length > 0){
-                                    console.log('packsite insert 1')
-
-                                    callback(err, packageData[0].sp_pkg_id);
-                                }else{
-                                    console.log('packsite insert 2')
-
-                                    mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
-                                        var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
-                                        console.log('packsite insert 3 ')
-
-                                        //Main site
-                                        var storePackage = {
-                                            sp_pkg_id: pkgId,
-                                            sp_package_name: req.body.packageName,
-                                            sp_pk_id: req.body.packId,
-                                            sp_st_id: req.session.package_StoreId,
-                                            sp_dc_id: req.body.distributionChannelId,
-                                            sp_pkg_type: req.body.packageType, //site type
-                                            sp_is_active: 1
-                                        };
-
-                                        if(addStorePackage(connection_ikon_cms,storePackage)){
-                                            callback(null,pkgId);
-                                        }else{
-                                            callback({message:'Package can not be added.'},pkgId);
-                                        }
-                                    });
-                                }
-                            })
-
-                        }
-                        else{
-                            mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId,req.body.packageType,function( err, packageData ) {
-                                if(packageData.length > 0){
-                                    callback(err, packageData[0].sp_pkg_id);
-                                }else{
-                                    mainSiteManager.getMaxStorePackageId( connection_ikon_cms, function(err,MaxPkgId){
-                                        var pkgId = MaxPkgId[0].pkg_id != null ?  parseInt(MaxPkgId[0].pkg_id + 1) : 1;
-
-                                        //Main site
-                                        var storePackage = {
-                                            sp_pkg_id: pkgId,
-                                            sp_package_name: 'MainSite '+req.body.distributionChannelId,
-                                            sp_pk_id : 0, //pack id
-                                            sp_st_id: req.session.package_StoreId,
-                                            sp_dc_id: req.body.distributionChannelId,
-                                            sp_pkg_type: req.body.packageType, //site type
-                                            sp_is_active: 1
-                                        };
-                                        /* Individual Pack modifications
-                                        if(req.body.packageType == 1){
-                                            storePackage.sp_package_name = req.body.packageName;
-                                            storePackage.sp_pk_id = req.body.packId;
-                                        }*/
-                                        if(addStorePackage(connection_ikon_cms,storePackage)){
-                                            callback(null,pkgId);
-                                        }else{
-                                            callback({message:'Package can not be added.'},pkgId);
-                                        }
-                                    });
-                                }
-                            })
-                        }
-                    },
-                    function(pkgId,callback){
-                        alacartManager.getMaxAlacartOfferId( connection_ikon_cms, function(err,MaxPaosId){
-                            var paosId = MaxPaosId[0].paos_id != null ?  parseInt(MaxPaosId[0].paos_id + 1) : 1;
-                            console.log("paosId : "+paosId)
-                            var AlacartOfferData = {
-                                paos_id: paosId,
-                                paos_sp_pkg_id: pkgId,
-                                paos_op_id: req.body.offerId,
-                                paos_is_active: 1,
-                                paos_created_on:  new Date(),
-                                paos_created_by: req.session.package_UserName,
-                                paos_modified_on:  new Date(),
-                                paos_modified_by: req.session.package_UserName
-                            }
-                            if(addAlacartOfferDetails(connection_ikon_cms,AlacartOfferData)){
-                                callback(null,pkgId,paosId);
-                            }else{
-                                callback({message:'Alacart & Offer can not be added.'},pkgId,paosId);
-                            }
-                        });
-                    },
-                    function (pkgId,paosId, callback) {
-                        var ctCount = req.body.ContentTypes.length;
-                        var err = null;
-                        var alacartPlansList = req.body.alacartPlansList;
-                        var newContentTypes  = Object.keys(req.body.alacartPlansList)
-                            .map(function (element) {
-                                return parseInt(element)
-                            });
-                        var addPlansData = {alacartPlansList:req.body.alacartPlansList, pkgId:pkgId,paosId:paosId,packageUserName:req.session.package_UserName,ContentTypes:newContentTypes}
-                        if(newContentTypes && newContentTypes.length > 0) {
-                            addContentTypePlans(connection_ikon_cms, 0, addPlansData);
-                        }
-                        callback(null,{pkgId:pkgId,paosId:paosId});
-                    }
-                ],
-                function (err, results) {
-                    if (err) {
-                        connection_ikon_cms.release();
-                        res.status(500).json(err.message);
-                        console.log(err.message)
-                    } else {
-                       /* alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, results.paosId, function (err, contentTypePlanData) {
+                    function (callback) {
+                        mainSiteManager.getUniquePackageName( connection_ikon_cms, req.session.package_StoreId, req.body.packageName,function( err, result ) {
                             if (err) {
                                 connection_ikon_cms.release();
                                 res.status(500).json(err.message);
                                 console.log(err.message)
                             } else {
-                                connection_ikon_cms.release();
-                                res.send( { "success" : true,"status":200, "message":"Package added successfully.",offerId:req.body.offerId,pkgId:results.pkgId,paosId:results.paosId, contentTypePlanData : contentTypePlanData } );
+                                if (result.length > 0) {
+                                    callback(err, {'exist': true, 'packageData': result});
+                                } else {
+                                    callback(err, {'exist': false, 'packageData': result});
+                                }
                             }
-                        });*/
-                        connection_ikon_cms.release();
-                        res.send({
-                            "success": true,
-                            "status": 200,
-                            "message": "Package Saved Successfully.",
-                            pkgId:results.pkgId
-
-                        });
+                        })
+                    },
+                    function(data, callback){
+                        if(data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId ){
+                            callback(null, {'exist':data.exist,'message': 'Package Name Must be Unique'});
+                        }else{
+                            callback(null, {'exist':data.exist});
+                        }
                     }
-                });
+                ],
+                function(err, results) {
+                    if (results.message) {
+                        connection_ikon_cms.release();
+                        res.send({"success": false, "message": results.message});
+                    } else {
+                        if (!req.body.packageId || req.body.packageId === '' || req.body.packageId == undefined || req.body.packageId === null) {
+                            async.waterfall([
+                                function (callback) {
+                                    mainSiteManager.getMaxStorePackageId(connection_ikon_cms, function (err, MaxPkgId) {
+                                        var pkgId = MaxPkgId[0].pkg_id != null ? parseInt(MaxPkgId[0].pkg_id + 1) : 1;
+                                        //Main site
+                                        var storePackage = {
+                                            sp_pkg_id: pkgId,
+                                            sp_package_name: req.body.packageName,
+                                            sp_pk_id: req.body.packId, //pack id
+                                            sp_st_id: req.session.package_StoreId,
+                                            sp_dc_id: req.body.distributionChannelId,
+                                            sp_pkg_type: req.body.packageType, //site type
+                                            sp_is_active: 1
+                                        };
+                                        if (addStorePackage(connection_ikon_cms, storePackage)) {
+                                            callback(null, pkgId);
+                                        } else {
+                                            callback({message: 'Package can not be added.'}, pkgId);
+                                        }
+                                    });
+                                },
+                                function (pkgId, callback) {
+                                    alacartManager.getMaxAlacartOfferId(connection_ikon_cms, function (err, MaxPaosId) {
+                                        var paosId = MaxPaosId[0].paos_id != null ? parseInt(MaxPaosId[0].paos_id + 1) : 1;
+                                        var AlacartOfferData = {
+                                            paos_id: paosId,
+                                            paos_sp_pkg_id: pkgId,
+                                            paos_op_id: req.body.offerId,
+                                            paos_is_active: 1,
+                                            paos_created_on: new Date(),
+                                            paos_created_by: req.session.package_UserName,
+                                            paos_modified_on: new Date(),
+                                            paos_modified_by: req.session.package_UserName
+                                        }
+                                        if (addAlacartOfferDetails(connection_ikon_cms, AlacartOfferData)) {
+                                            callback(null, pkgId, paosId);
+                                        } else {
+                                            callback({message: 'Alacart & Offer can not be added.'}, pkgId, paosId);
+                                        }
+                                    });
+                                },
+                                function (pkgId, paosId, callback) {
+                                    var ctCount = req.body.ContentTypes.length;
+                                    var err = null;
+
+                                    var newContentTypes = Object.keys(req.body.alacartPlansList)
+                                        .map(function (element) {
+                                            return parseInt(element)
+                                        });
+
+                                    var addPlansData = {
+                                        alacartPlansList: req.body.alacartPlansList,
+                                        pkgId: pkgId,
+                                        paosId: paosId,
+                                        packageUserName: req.session.package_UserName,
+                                        ContentTypes: newContentTypes
+                                    }
+                                    if (newContentTypes && newContentTypes.length > 0) {
+                                        addContentTypePlans(connection_ikon_cms, 0, addPlansData);
+                                    }
+                                    callback(null, {pkgId: pkgId, paosId: paosId});
+                                }
+                            ],
+                            function (err, results) {
+                                if (err) {
+                                    connection_ikon_cms.release();
+                                    res.status(500).json(err.message);
+                                    console.log(err.message)
+                                } else {
+                                    connection_ikon_cms.release();
+                                    res.send({
+                                        "success": true,
+                                        "status": 200,
+                                        "message": "Package Saved Successfully.",
+                                        pkgId: results.pkgId
+                                    });
+                                }
+                            });
+                        }
+                    }
+                })
+
             })
         }else{
             res.redirect('/accountlogin');
@@ -587,7 +628,6 @@ exports.addAlacartPackDetails123 = function (req,res,next){
         res.status(500).json(err.message);
     }
 };
-
 
 function getPackageTypeData( connection_ikon_cms, data, session ){
     if(data.packageType === 1 ) {
@@ -672,6 +712,16 @@ function addStorePackage( connection_ikon_cms, data ){
     });
     return true;
 }
+function editStorePackage( connection_ikon_cms, data ){
+    mainSiteManager.editStorePackage( connection_ikon_cms, data, function(err,response ){
+        if(err){
+            connection_ikon_cms.release();
+            console.log(err.message);
+            return false;
+        }
+    });
+    return true;
+}
 
 function addAlacartOfferDetails( connection_ikon_cms, data ){
     alacartManager.addAlacartOfferDetails( connection_ikon_cms, data, function(err,response ){
@@ -693,25 +743,39 @@ function editAlacartOfferDetails( connection_ikon_cms, data ){
     });
     return true;
 }
-function addAlacartPack( connection_ikon_cms, data ){
-    alacartManager.addAlacartPack( connection_ikon_cms, data, function(err,response ){
+
+function editContentTypePack(connection_ikon_cms,data){
+    async.parallel({
+        addContentTypePlans: function (callback) {
+            if(data.addContentTypes && data.addContentTypes.length > 0) {
+                addContentTypePlans(connection_ikon_cms, 0, data.addPlansData);
+            }
+            callback(null, data.addContentTypes);
+        },
+        editContentTypePlans: function (callback) {
+            if(data.editContentTypes && data.editContentTypes.length > 0) {
+                editContentTypePlans(connection_ikon_cms, 0, data.editPlansData);
+            }
+            callback(null, data.editContentTypes);
+        },
+        deleteAlacartPlans: function (callback) {
+            if(data.deleteContentTypes && data.deleteContentTypes.length > 0){
+                deleteAlacartPlans(connection_ikon_cms, 0, data.deletePlansData);
+            }
+            callback(null, data.deleteContentTypes);
+        }
+    },
+    function (err, results) {
+        console.log('function results')
+        console.log(results)
         if(err){
             connection_ikon_cms.release();
             console.log(err.message);
             return false;
+        }else{
+            return true;
         }
-    });
-    return true;
-}
-function editAlacartPack( connection_ikon_cms, data ){
-    alacartManager.editAlacartPack( connection_ikon_cms, data, function(err,response ){
-        if(err){
-            connection_ikon_cms.release();
-            console.log(err.message);
-            return false;
-        }
-    });
-    return true;
+    })
 }
 
 function addContentTypePlans(connection_ikon_cms,cnt,data) {
