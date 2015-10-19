@@ -52,7 +52,6 @@ exports.showPackageData = function(req, res, next)  {
                                         console.log('individual')
 
                                         mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
-                                            console.log(packageDetails)
                                             callback(err, packageDetails );
                                         })
                                     }else  if (req.body.pkgId && req.body.pkgId != null && req.body.pkgId != undefined && req.body.pkgId != '') {

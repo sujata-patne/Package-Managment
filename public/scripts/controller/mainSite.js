@@ -74,6 +74,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $rootScope.distributionChannelId = undefined;
             $rootScope.PackageId = undefined;
             $rootScope.PackageType = 0;
+            $rootScope.packPackageName = '';
 
             $scope.offerId = undefined;
             $scope.paosId = undefined;
@@ -133,6 +134,7 @@ console.log('mainSitePackageData')
                 $rootScope.PackageId = '';
                 $rootScope.PackageType = 0;
                 $rootScope.ParentPackageId = 0;
+                $rootScope.packPackageName = '';
             }
             $scope.alacartNofferDetails = angular.copy(MainSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
@@ -172,6 +174,8 @@ console.log('mainSitePackageData')
             $rootScope.ParentPackageId = $rootScope.PackageId;
             if($rootScope.ParentPackageId != '' || $rootScope.ParentPackageId != 0 || $rootScope.ParentPackageId != undefined){
                 $rootScope.PackageId = '';
+                $rootScope.packPackageName = '';
+
             }
         }
         if($scope.isChild === false  && $rootScope.action !== 'edit'){
@@ -190,10 +194,9 @@ console.log('mainSitePackageData')
             toastr.error('Distribution Channel is required');
             $scope.errorvisible = true;
         } else {
-            console.log('$scope.alacartPlanIds')
-            console.log($scope.alacartPlanIds)
-            var alacartData = {
 
+            var alacartData = {
+                isChild: $scope.isChild,
                 packageId: $rootScope.PackageId,
                 parentPackageId: $rootScope.ParentPackageId,
                 packageType: $rootScope.PackageType,
@@ -201,6 +204,8 @@ console.log('mainSitePackageData')
                 packageName: $rootScope.packPackageName,
                 distributionChannelId: $rootScope.distributionChannelId
             }
+            console.log('$scope.alacartData')
+            console.log(alacartData)
             ngProgress.start();
             if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 console.log('mainsite edit')
