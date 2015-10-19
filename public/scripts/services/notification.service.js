@@ -12,6 +12,10 @@ myApp.service('Notification', ['$http', function ($http) {
             success(items);
         });
     }
-
+    this.addNotificationData = function (data,success) {
+        $http.post(this.baseRestUrl + '/addNotificationData',data).success(function (items) {
+            success(items);
+        });
+    }
 
 }]);

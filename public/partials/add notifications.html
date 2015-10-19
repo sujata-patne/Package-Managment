@@ -10,7 +10,7 @@
                         <label for="after" class="col-sm-5 control-label">After:</label>
                         <div class="col-md-5">
                             <input type="number" name="input" ng-model="days" placeholder="Day" min="0" max="99" required>
-                            <input type="number" name="input" ng-model="hours" placeholder="Hours" min="0" max="24" required>
+                            <input type="number" name="input" ng-model="hours" placeholder="Hours" min="1" max="24" required>
                             <label>of Plan start </label>
                         </div>
                     </div>
@@ -18,12 +18,13 @@
                         <br>
                         <label for="contents" class="col-sm-5 control-label">If no of contents downloaded are: </label>
                         <div class="col-md-2">
-                            <select id="count" type="text" class="form-control input-sm" ng-model="selectedCount" data-ng-options="item.options for item in counts">
+
+                            <select id="count" type="text" name="operator" class="form-control input-sm" ng-model="selectedCount" data-ng-options="item.id as item.option_name for item in counts">
                             <option value=""> --Select-- </option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select id="percent" type="percent" class="form-control input-sm" ng-model="selectedPercent"  data-ng-options="item.options for item in percent">
+                            <select id="percent" type="percent" name="percent" class="form-control input-sm" ng-model="selectedPercent"  data-ng-options="item.id as item.option_name for item in percent">
                             <option value=""> --Select-- </option>
                             </select>
                         </div>
@@ -33,22 +34,26 @@
                         <br>
                         <label for="message" class="col-sm-5 control-label"  >Message text: </label>
                         <div class="col-md-5">
-                            <textarea rows="4" cols="50" ng-model="messagetext"></textarea>
+                            <textarea rows="4" cols="50" name="messagetext" ng-model="messagetext" required></textarea>
+                            <span style="color: red" ng-show="notificationForm.$submitted || notificationForm.messagetext.$dirty">
+                                <span ng-show="notificationForm.messagetext.$error.required">Please Input text .</span>
+                                </span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <br>
                         <label for="count words"class="col-sm-5 control-label">No. of text:</label>
                         <div class="col-md-5">
-                            <input type="number" value="{{messagetext.length}}"/>
+                            <input type="number" value="{{messagetext.length}}" readonly/>
                         </div>
                     </div>
                     <div class="col-md-12">
                          <br>
                          <label for="push between" class="col-sm-5 control-label"> Push Between: </label>
                          <div class="col-md-5">
-                            <input type="time" id="Input" name="input" ng-model="startingTime" required/>
-                          <label>To:</label> <input type="time" id="exampleInput" name="input" ng-model="endingTime" placeholder="HH:mm:ss" min="08:00:00" max="17:00:00" required />
+                             <input type="time" id="Input" name="input" ng-model="startingTime" placeholder="HH:mm:ss" min="00:00:00" max="24:00:00" required />
+                          <label>To:</label>
+                             <input type="time" id="exampleInput" name="input" ng-model="endingTime" placeholder="HH:mm:ss" min="00:00:00" max="24:00:00" required />
                          </div>
                     </div>
 
@@ -56,8 +61,10 @@
                           <br>
                           <label for="push" class="col-sm-5 control-label"> Push: </label>
                           <div class="col-md-5">
-                              <select  id="push"  class="form-control input-sm" ng-model="selectedPush" data-ng-options="item.options for item in push" >
-                              <option value=""> --Select--</option>
+                              <select  id="push" ng-show="selectedCount != undefined && selectedCount != null && selectedPercent != undefined && selectedPercent != null"  class="form-control input-sm" ng-model="selectedPush" data-ng-options="item.id as item.option_name for item in push" >
+                              </select>
+                              <select  id="push1" ng-show="selectedCount == undefined || selectedCount == null || selectedPercent == undefined || selectedPercent == null"  class="form-control input-sm" ng-model="selectedPush" >
+                                <option value="0" ng-selected="selectedCount == undefined || selectedCount == null || selectedPercent == undefined || selectedPercent == null">Once a day</option>
                               </select>
                           </div>
 
@@ -73,7 +80,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
-                <button type="btn btn-small" class="btn btn-primary btn-w-md" title="add">Add</button>
+                <button type="submit" class="btn btn-primary btn-w-md" title="add">Add</button>
                 <button class="btn btn-small">Add More<span ></button>
                 <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>

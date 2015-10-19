@@ -30,7 +30,7 @@ exports.getLastInsertedValueSubscriptionPlanId = function( dbConnection, callbac
 
 exports.getSelectedSubscriptionPacks = function( dbConnection, packageId , callback ){
 
-    var query = dbConnection.query('SELECT pss_sp_id FROM  icn_package_subscription_site, icn_sub_plan '+
+    var query = dbConnection.query('SELECT pss_sp_id,sp_plan_name FROM  icn_package_subscription_site, icn_sub_plan '+
         ' WHERE icn_package_subscription_site.pss_sp_pkg_id = ? AND ISNULL( icn_package_subscription_site.pss_crud_isactive ) AND icn_package_subscription_site.pss_sp_id = icn_sub_plan.sp_id ',[packageId],
         function( err, response ) {
             callback( err, response );
