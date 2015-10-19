@@ -89,6 +89,21 @@ myApp.config(function ($stateProvider) {
             controller: 'PackageListCtrl',
             url: '/packageListing'
         })
+        .state('notifications', {
+            templateUrl: 'partials/notifications.html',
+            controller: 'notificationCtrl',
+            url: '/notifications'
+        })
+        .state('notifications.add', {
+            templateUrl: 'partials/add notifications.html',
+            controller: 'notificationAddCtrl',
+            url: '/notificationsAdd'
+        })
+        .state('notifications.list', {
+            templateUrl: 'partials/list notifications.html',
+            controller: 'notificationListCtrl',
+            url: '/notificationsListing'
+        })
 }).run(function ($state) {
     $state.go("main-site");
 })

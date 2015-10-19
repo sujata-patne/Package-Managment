@@ -1,0 +1,83 @@
+<form method="post" class="form-horizontal" role="form" name="notificationForm" data-ng-submit="submitNotificationForm(notificationForm.$valid)" novalidate>
+    <div class="row">
+        <div class="col-md-1 col-xs-1"></div>
+        <div class="col-md-10 col-xs-10">
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}} </span>
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}} </span>
+            <div class="portlet">
+                <div class="portlet-content">
+                    <div class="col-md-12">
+                        <label for="after" class="col-sm-5 control-label">After:</label>
+                        <div class="col-md-5">
+                            <input type="number" name="input" ng-model="days" placeholder="Day" min="0" max="99" required>
+                            <input type="number" name="input" ng-model="hours" placeholder="Hours" min="0" max="24" required>
+                            <label>of Plan start </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br>
+                        <label for="contents" class="col-sm-5 control-label">If no of contents downloaded are: </label>
+                        <div class="col-md-2">
+                            <select id="count" type="text" class="form-control input-sm" ng-model="selectedCount" data-ng-options="item.options for item in counts">
+                            <option value=""> --Select-- </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="percent" type="percent" class="form-control input-sm" ng-model="selectedPercent"  data-ng-options="item.options for item in percent">
+                            <option value=""> --Select-- </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <br>
+                        <label for="message" class="col-sm-5 control-label"  >Message text: </label>
+                        <div class="col-md-5">
+                            <textarea rows="4" cols="50" ng-model="messagetext"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br>
+                        <label for="count words"class="col-sm-5 control-label">No. of text:</label>
+                        <div class="col-md-5">
+                            <input type="number" value="{{messagetext.length}}"/>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                         <br>
+                         <label for="push between" class="col-sm-5 control-label"> Push Between: </label>
+                         <div class="col-md-5">
+                            <input type="time" id="Input" name="input" ng-model="startingTime" required/>
+                          <label>To:</label> <input type="time" id="exampleInput" name="input" ng-model="endingTime" placeholder="HH:mm:ss" min="08:00:00" max="17:00:00" required />
+                         </div>
+                    </div>
+
+                     <div class="col-md-12">
+                          <br>
+                          <label for="push" class="col-sm-5 control-label"> Push: </label>
+                          <div class="col-md-5">
+                              <select  id="push"  class="form-control input-sm" ng-model="selectedPush" data-ng-options="item.options for item in push" >
+                              <option value=""> --Select--</option>
+                              </select>
+                          </div>
+
+                     </div>
+                </div> <!-- /.row -->
+            </div>
+        </div>
+    </div>
+        <div class="col-md-1 col-xs-1"></div>
+    </div>
+    </div>
+    <br><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-offset-5 col-md-7" >
+                <button type="btn btn-small" class="btn btn-primary btn-w-md" title="add">Add</button>
+                <button class="btn btn-small">Add More<span ></button>
+                <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+            </div>
+        </div>
+    </div>
+</form>
+

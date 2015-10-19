@@ -43,6 +43,7 @@ exports.pages = function (req, res, next) {
         { 'pagename': 'Main Site', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
         { 'pagename': 'Attach Pack', 'href': 'attach-pack', 'id': 'attach-pack', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
          { 'pagename': 'Package Listing', 'href': 'packageListing', 'id': 'packageListing', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
+        { 'pagename': 'Notifications', 'href': 'notifications', 'id': 'notifications', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
         { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
     ];
 
@@ -188,6 +189,7 @@ function getPages(role) {
             { 'pagename': 'Main Site', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Attach Pack', 'href': 'pack-site', 'id': 'pack-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Package Listing', 'href': 'packageListing', 'id': 'package-listing', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
+            { 'pagename': 'Notifications', 'href': 'notifications', 'id': 'notifications', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
         ];
         return pagesjson;

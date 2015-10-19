@@ -1,0 +1,67 @@
+<div class="row">
+<div class="col-md-2 col-xs-2"></div>
+<div class="col-md-8 col-xs-8">
+    <div class="table-responsive">
+        <div id="user-exportable">
+                            <span class="col-md-offset-3 col-md-9 col-xs-12"  data-ng-show="errorvisible" style="color: red;">{{error}}
+                            </span>
+                            <span class="col-md-offset-3 col-md-9 col-xs-12"  data-ng-show="successvisible" style="color: green;">{{success}}
+                            </span>
+            <table id="user-signups" class="table table-striped table-bordered table-checkable">
+                <thead>
+                <tr>
+                    <th class="text-center">After</th>
+                    <th class="text-center">Download</th>
+                    <th class="text-center">Message</th>
+                    <th class="text-center">Push Between</th>
+                    <th class="text-center">Push</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody dir-paginate="item in packageList | itemsPerPage: 8">
+                <tr >
+
+                    <td class="col-md-1 col-xs-1 text-center">{{$index+1}}</td>
+                    <td class="col-md-3 col-xs-3">{{item.sp_package_name}}</td>
+                    <td class="col-md-2 col-xs-2 text-center">{{item.valuePackPlanCount + item.subscriptionPlanCount+item.alacartPackPlanCount}}</td>
+                    <td class="col-md-3 col-xs-3">{{item.packName}}</td>
+                    <td>
+                        <div class="row">
+
+                            <div ng-hide="item.sp_is_active == 0" class="col-md-4 col-xs-4  text-center"><a href="" data-ng-click="EditPackage(item.sp_pkg_id,item.sp_dc_id,item.sp_pkg_type)" title="Edit"><i class="fa fa-edit" title="Edit"></i></a></div>
+                            <div class="col-md-4 col-xs-4  text-center" ng-hide="item.sp_pkg_type == 0" data-ng-if="item.sp_is_active == 1" class="text-right"><a href="" title="Click To Block" data-ng-click="BlockUnBlockContentType(item.sp_pkg_id,item.sp_is_active)"><i class="fa fa-ban text-right red" style="color: green;"></i></a></div>
+                            <div class="col-md-4 col-xs-4 text-center " ng-hide="item.sp_pkg_type == 0" data-ng-if="item.sp_is_active == 0" class="text-right"><a href="" title="Click To UnBlock" data-ng-click="BlockUnBlockContentType(item.sp_pkg_id,item.sp_is_active)"> <i class="fa fa-ban text-right green" style="color: red;"></i></a></div>
+                            <div class="col-md-4 col-xs-4 text-center"><a href="" data-ng-click="Delete(item.sp_pkg_id)" title="Delete"><i class="fa fa-trash-o " title="Delete"></i></a></div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+<div ng-show="packageList.length == 0">
+    <span style="margin-left:40%">No records found for the search.</span>
+</div>
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <div class="col-xs-4 col-md-4">
+            <!-- <button type="button" class="btn btn-primary btn-w-xs" title="Previous" data-ng-disabled="listcurrentPage == 0" data-ng-click="listcurrentPage=listcurrentPage-1">Previous</button> -->
+        </div>
+        <div class="col-xs-4 col-md-4">
+            <!-- <button type="button" class="btn btn-primary btn-w-xs" title="Download" data-ng-click="ExportPlan()">Download in excel</button> -->
+            <dir-pagination-controls></dir-pagination-controls>
+        </div>
+        <div class="col-xs-4 col-md-4 text-right">
+            <!-- <button type="button" class="btn btn-primary btn-w-xs" title="Next" data-ng-disabled="listcurrentPage >= packsList.length/listpageSize - 1" data-ng-click="listcurrentPage=listcurrentPage+1">Next</button> -->
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+

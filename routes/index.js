@@ -1,4 +1,3 @@
-
 var index = require('../controller/index.controller');
 
 module.exports = function (app) {

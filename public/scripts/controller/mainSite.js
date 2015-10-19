@@ -2,7 +2,9 @@
  * Created by sujata.patne on 29-09-2015.
  */
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+
     console.log('mainsite' + $rootScope.action)
+
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
     $rootScope.PackageType = 0;
@@ -67,7 +69,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
-
         console.log('mainsite : '+$scope.action)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $rootScope.distributionChannelId = undefined;

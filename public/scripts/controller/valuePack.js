@@ -28,8 +28,8 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             selectedDistributionChannel: $rootScope.distributionChannelId,
             packageId : $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            packId : $rootScope.selectedPack,
-            packageName : $rootScope.packageName,
+            packId : $rootScope.packSelectedPack,
+            packageName : $rootScope.packPackageName,
             existingValuePackIds: $scope.existingValuePackIds
         };
         if (isValid) {
