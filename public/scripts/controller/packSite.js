@@ -1,6 +1,6 @@
 myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     console.log('packsite')
-
+    $rootScope.ParentPackageId = 0;
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
 

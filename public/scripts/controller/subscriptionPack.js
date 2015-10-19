@@ -10,7 +10,9 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
     var data = {
         packageId : $rootScope.PackageId,
-        packageType: $rootScope.PackageType
+        packageType: $rootScope.PackageType,
+        parentPackageId: $rootScope.ParentPackageId,
+
     }
 
 

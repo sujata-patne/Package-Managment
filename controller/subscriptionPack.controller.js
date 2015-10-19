@@ -57,7 +57,12 @@ exports.addSubscriptionPackToMainSite = function(req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 //Package type added to  getMainSitePackageData
-                mainSiteManager.getMainSitePackageData( connection_ikon_cms, req.session.package_StoreId,req.body.selectedDistributionChannel,req.body.packageType, function( err, packageData ) {
+                var searchData = {
+                    storeId: req.session.package_StoreId,
+                    dcId: req.body.distributionChannelId,
+                    packageType: req.body.packageType
+                }
+                mainSiteManager.getMainSitePackageData( connection_ikon_cms, searchData, function( err, packageData ) {
                     //console.log( packageData.length );
                     if( packageData.length == 0 ) {
                         mainSiteManager.getMaxStorePackageId(connection_ikon_cms, function (err, MaxPkgId) {

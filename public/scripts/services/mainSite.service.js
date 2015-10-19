@@ -26,6 +26,19 @@ myApp.service('MainSite', ['$http', function ($http) {
             success(items);
         });
     }
+    this.addAlacartNOffer = function(data, success){
+        console.log(data)
+        $http.post(this.baseRestUrl + '/addMainsiteAlacartPlanDetails', data).success(function (items) {
+            console.log(items)
+            success(items);
+        });
+    }
 
+    this.editAlacartNOffer = function(data, success){
+        $http.post(this.baseRestUrl + '/editMainsiteAlacartPlanDetails', data).success(function (items) {
+            console.log(items)
+            success(items);
+        });
+    }
 
 }]);

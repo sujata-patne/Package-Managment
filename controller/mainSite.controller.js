@@ -61,10 +61,15 @@ exports.showPackageData = function(req, res, next)  {
                                         mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
                                             callback(err, packageDetails);
                                         })
-                                    }else{
-                                        console.log('mainsite')
+                                    }
+                                    else{
+                                        var searchData = {
+                                            storeId: req.session.package_StoreId,
+                                            dcId: req.body.distributionChannelId,
+                                            packageType: req.body.packageType
+                                        }
 
-                                        mainSiteManager.getMainSitePackageData(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId,req.body.packageType, function (err, packageDetails) {
+                                        mainSiteManager.getMainSitePackageData(connection_ikon_cms, searchData, function (err, packageDetails) {
                                             callback(err, packageDetails);
                                         })
                                     }

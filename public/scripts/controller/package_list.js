@@ -1,7 +1,7 @@
 myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$state, ngProgress, Package) {
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
-    $('#packageListing').addClass('active');
+    $('#package-listing').addClass('active');
     $scope.PageTitle = $state.current.name == "edit-store" ? "Edit " : "Add ";
     // $scope.PageTitle = "Add";
     $scope.success = "";
@@ -72,10 +72,10 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $rootScope.PackageType = pkgType;
         $rootScope.action = 'edit';
         if($rootScope.PackageType === 1){
-            $state.go('pack-site.alacart');
+            $state.go('pack-site');
 
         }else{
-            $state.go('main-site.alacart');
+            $state.go('main-site');
         }
     }
 

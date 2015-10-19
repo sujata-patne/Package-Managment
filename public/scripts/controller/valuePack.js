@@ -2,7 +2,8 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
 
     var data = {
         packageId : $rootScope.PackageId,
-        packageType: $rootScope.PackageType
+        packageType: $rootScope.PackageType,
+        parentPackageId: $rootScope.ParentPackageId,
     }
 
     $scope.existingValuePackIds = [];

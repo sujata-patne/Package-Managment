@@ -86,9 +86,9 @@ exports.existingContentTypesInPack = function(dbConnection,paosId, callback){
     });
 }
 
-exports.getMainSitePackageData = function(dbConnection,storeId, dcId,packageType, callback){
-    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,dcId,packageType], function (err, response) {
-        callback(err,response);
+exports.getMainSitePackageData = function(dbConnection,data, callback){
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = ? AND sp_is_active = 1 AND sp_parent_pkg_id = 0 AND ISNULL(sp_crud_isactive) ", [data.storeId,data.dcId,data.packageType], function (err, response) {
+        callback(err,response); //AND sp_parent_pkg_id = ? ,data.parentPackageId
     });
 }
 exports.getUniquePackageName = function(dbConnection,storeId,packageName, callback){
@@ -98,13 +98,6 @@ exports.getUniquePackageName = function(dbConnection,storeId,packageName, callba
 }
 exports.getIndividualPackageData = function(dbConnection,storeId,pkgId, callback){
     var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_pkg_id = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,pkgId], function (err, response) {
-        callback(err,response);
-    });
-}
-exports.getAlacartNOfferDetails = function(dbConnection,pkgId, callback){
-    var query = dbConnection.query("SELECT paos.* FROM icn_package_alacart_offer_site as paos " +
-       // "JOIN icn_package_content_type AS pct ON pct.pct_paos_id =  paos.paos_id AND pct_is_active = 1 AND ISNULL(pct.pct_crud_isactive) " +
-        "WHERE paos_sp_pkg_id = ? AND paos_is_active = 1 AND ISNULL(paos_crud_isactive) ", [pkgId], function (err, response) {
         callback(err,response);
     });
 }
