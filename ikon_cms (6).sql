@@ -802,6 +802,7 @@ CREATE TABLE IF NOT EXISTS  icn_store_package
     sp_pkg_id						int(10),			-- pk : unique id for a package
 	sp_st_id						int(7),				-- fk: store id
 	sp_dc_id                        int(10),            -- distribution channel id e.g. mobile, web etc
+	sp_parent_pkg_id                int(10),            -- parent package id
 	sp_pk_id                        int(10),            -- fk: pack id
 	sp_pkg_type                     int(2),				-- 0: site type, 1: pack dependent
 	sp_package_name					varchar(40),		-- name of the package, default: "Site" : "Site" becomes a reserved word

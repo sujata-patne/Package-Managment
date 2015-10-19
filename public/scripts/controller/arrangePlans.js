@@ -12,83 +12,37 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.finalarray = [];
     $scope.alacartarray=[];
     $scope.array=[];
-    var preData;
     $scope.arrangedContentList ={};
 
-    preData = {
-        packageId : $rootScope.PackageId
-    }
-    Arrangeplans.getArrangePlansData(preData,function(data) {
-        $scope.AlacartPlans = data.PackageAlacartPacks;
-        $scope.selectedPlans = data.selectedPlans;
+    $scope.sequenceData = [];
+var packageId = $rootScope.PackageId;
+    Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
+        console.log('called default')
+        console.log({packageId:$rootScope.PackageId})
+        $scope.AlacartPlans = data.arrangeSequenceData;
+        var sequence = angular.copy(data.arrangeSequenceData);
 
-        console.log($scope.selectedPlans)
-        var index = $scope.finalarray.length;
-        if( $scope.AlacartPlans.length>0) {
-            //angular.forEach($scope.AlacartPlans, function (value, key) {
-            var obj = {}
+        sequence.forEach(function(plans){
+            if(!_.has($scope.sequenceData,plans.id)){
+                $scope.sequenceData[plans.id] = {};
+            }
+            $scope.sequenceData[plans.id] = {pas_arrange_seq:plans.pas_arrange_seq};
+        })
+
+        $scope.AlacartPlans = data.PackageAlacartPacks;
+        $scope.finalarray = data.selectedPlans;
+        if($scope.AlacartPlans.length > 0){
+            var obj = {};
+            obj['id'] = "4"+$scope.AlacartPlans[0].paos_id;
             obj['plan_id'] = $scope.AlacartPlans[0].paos_id;
             obj['plan_name'] = 'All Plans';
             obj['plan_type'] = 'A-La-Cart';
-          //  obj['pas_id'] = '';
-            obj['seq_id'] = index++;
-            $scope.finalarray.push(obj);
-            $scope.sequenceData.push({'pas_id':''});
+            $scope.finalarray.push(obj)
         }
-        $scope.offerPlan = data.PackageOffer;
-        angular.forEach($scope.offerPlan, function (value, key) {
-            var obj ={}
-            obj['plan_id'] = value.op_id;
-            obj['plan_name'] = value.op_plan_name;
-            obj['plan_type'] = 'Offer';
-            obj['seq_id'] = index++;
-            $scope.finalarray.push(obj);
-            $scope.sequenceData.push({'pas_id':''});
-
-        });
-        $scope.valuePlans = data.PackageValuePacks;
-        angular.forEach($scope.valuePlans, function (value, key) {
-            var obj ={}
-
-            obj['plan_id'] = value.vp_id;
-            obj['plan_name'] = value.vp_plan_name;
-            obj['plan_type'] = 'ValuePack';
-            obj['seq_id'] = index++;
-            $scope.finalarray.push(obj);
-            $scope.sequenceData.push({'pas_id':''});
-
-
-        });
-        $scope.subscriptionPlans = data.PackageSubscriptionPacks;
-        angular.forEach($scope.subscriptionPlans, function (value, key) {
-            var obj ={}
-            obj['plan_id'] = value.sp_id;
-            obj['plan_name'] = value.sp_plan_name;
-            obj['plan_type'] = 'Subscription Plan';
-            obj['seq_id'] = index++;
-            $scope.finalarray.push(obj);
-            $scope.sequenceData.push({'pas_id':''});
-
-        });
-        // $scope.AlacartPlans = data.PackageAlacartPacks;
-        // if( $scope.AlacartPlans.length>0) {
-        //     //angular.forEach($scope.AlacartPlans, function (value, key) {
-        //     var obj = {}
-        //     // obj['plan_id'] = value.ap_id;
-        //     obj['plan_name'] = 'All Plans';
-        //     obj['plan_type'] = 'Alacart';
-        //     $scope.finalarray.push(obj);
-        // }
+        console.log($scope.finalarray)
+        console.log($scope.sequenceData)
     });
-    $scope.arrangeContent = function () {
-        /*angular.forEach($scope.sequence,function(value,key) {
-            var data = {};
-            data[key] = value;
-            $scope.arrangedContentList[key] = value;
-        })*/
 
-
-    }
     $scope.submitForm = function(){
 
         if($scope.arrangedContentList==0)
@@ -96,6 +50,8 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             $scope.disable="true";
             toastr.error("enter the arrange sequence");
         }
+        console.log($scope.finalarray)
+        console.log($scope.sequenceData)
         var data ={
             packageId : $rootScope.PackageId,
             finalarray:$scope.finalarray,
@@ -114,7 +70,6 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         })
     }
     $scope.checkForDuplicates = function(id) {
-        console.log('duplicate')
         var unique = [];
         var duplicate = [];
         var previous_value = 0;
@@ -124,14 +79,20 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             } else if( unique.indexOf(parseInt( value.pas_arrange_seq ) ) == -1 ) {
                 unique.push( parseInt( value.pas_arrange_seq ) );
             } else {
-                duplicate.push( parseInt( value.pas_arrange_seq ) );
+                duplicate.push( parseInt( key) );
             }
             $scope.unique = unique;
             $scope.duplicate = duplicate;
+
         });
         if( $scope.duplicate.length > 0 ) {
             toastr.error("Duplicate values not allowed!");
-            $scope.sequence[id] = "";
+            angular.forEach($scope.duplicate,function(value,key) {
+                console.log($scope.sequenceData[value])
+
+                    $scope.sequenceData[value].pas_arrange_seq = '';
+
+            })
         }
     }
 

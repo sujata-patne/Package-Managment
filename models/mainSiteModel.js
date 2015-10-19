@@ -47,6 +47,11 @@ exports.addStorePackage = function(dbConnection,data,callback){
         callback(err,response);
     });
 }
+exports.editStorePackage = function(dbConnection,data,callback){
+    var query = dbConnection.query("UPDATE `icn_store_package` SET ? WHERE sp_pkg_id = ? ", [data, data.sp_pkg_id], function (err, response) {
+        callback(err,response);
+    });
+}
 exports.addAlacartOfferDetails = function(dbConnection,data,callback){
     var query = dbConnection.query("INSERT INTO `icn_package_alacart_offer_site` SET ? ", data, function (err, response) {
         callback(err,response);
@@ -83,6 +88,11 @@ exports.existingContentTypesInPack = function(dbConnection,paosId, callback){
 
 exports.getMainSitePackageData = function(dbConnection,storeId, dcId,packageType, callback){
     var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND sp_dc_id = ? AND sp_pkg_type = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,dcId,packageType], function (err, response) {
+        callback(err,response);
+    });
+}
+exports.getUniquePackageName = function(dbConnection,storeId,packageName, callback){
+    var query = dbConnection.query("SELECT * FROM icn_store_package WHERE sp_st_id = ? AND lower(sp_package_name) = ? AND sp_is_active = 1 AND ISNULL(sp_crud_isactive) ", [storeId,packageName.toLowerCase()], function (err, response) {
         callback(err,response);
     });
 }
@@ -123,37 +133,6 @@ exports.existStorePackage = function(dbConnection,storeId, dcId, callback) {
     });
 }
 
-exports.getSelectedPlans = function (dbConnection, packageId, callback){
-    if(packageId == undefined){
-        packageId = -1;
-    }
-    console.log('(select offer.op_id as plan_id, offer.op_plan_name AS plan_name, "Offer" AS plan_type' +
-        'from icn_offer_plan as offer join icn_package_alacart_offer_site AS paos ON paos.paos_op_id = offer.op_id ' +
-        'WHERE paos_sp_pkg_id = '+packageId+' ) '+
-        ' UNION ' +
-        '(select valuepack.vp_id as plan_id, valuepack.vp_plan_name AS plan_name, "Value Pack" AS plan_type ' +
-        'from icn_valuepack_plan as valuepack join icn_package_value_pack_site AS pvs ON pvs.pvs_vp_id = valuepack.vp_id ' +
-        'WHERE pvs_sp_pkg_id =  '+packageId+'  ) ' +
-        ' UNION ' +
-        '(select sub.sp_id as plan_id, sub.sp_plan_name AS plan_name, "Subscription" AS plan_type ' +
-        'from icn_sub_plan as sub join icn_package_subscription_site AS pss ON pss.pss_sp_id = sub.sp_id ' +
-        'WHERE pss_sp_pkg_id =  '+packageId+'  ) ')
-
-    var query = dbConnection.query('(select CONCAT("1", offer.op_id) AS id, offer.op_id as plan_id, offer.op_plan_name AS plan_name, "Offer" AS plan_type ' +
-        'from icn_offer_plan as offer join icn_package_alacart_offer_site AS paos ON paos.paos_op_id = offer.op_id ' +
-        'WHERE paos_sp_pkg_id = ? ) '+
-        ' UNION ' +
-        '(select CONCAT("2", valuepack.vp_id) AS id, valuepack.vp_id as plan_id, valuepack.vp_plan_name AS plan_name, "Value Pack" AS plan_type ' +
-        'from icn_valuepack_plan as valuepack join icn_package_value_pack_site AS pvs ON pvs.pvs_vp_id = valuepack.vp_id ' +
-        'WHERE pvs_sp_pkg_id = ? ) ' +
-        ' UNION ' +
-        '(select CONCAT("3", sub.sp_id) AS id, sub.sp_id as plan_id, sub.sp_plan_name AS plan_name, "Subscription" AS plan_type ' +
-        'from icn_sub_plan as sub join icn_package_subscription_site AS pss ON pss.pss_sp_id = sub.sp_id ' +
-        'WHERE pss_sp_pkg_id = ? ) ', [packageId,packageId,packageId], function (err, result) {
-        console.log(result)
-        callback( err, result );
-    });
-}
 
 exports.getPackageOfferPlan = function( dbConnection, packageId, callback ) {
     if(packageId == undefined){

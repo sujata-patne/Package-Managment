@@ -2,8 +2,8 @@ myApp.service('IndividualContent', ['$http', function ($http) {
 
     this.baseRestUrl = "";
 
-    this.getIndividualContentData = function(success){
-        $http.post(this.baseRestUrl + '/getIndividualContentData').success(function (items) {
+    this.getIndividualContentData = function(data,success){
+        $http.post(this.baseRestUrl + '/getIndividualContentData',data).success(function (items) {
             success(items);
         });
     }
@@ -16,6 +16,12 @@ myApp.service('IndividualContent', ['$http', function ($http) {
 
     this.addIndividualContent = function(data,success){
         $http.post(this.baseRestUrl + '/addIndividualContent',data).success(function (items) {
+            success(items);
+        });
+    }
+
+    this.editIndividualContent = function(data,success){
+        $http.post(this.baseRestUrl + '/editIndividualContent',data).success(function (items) {
             success(items);
         });
     }

@@ -13,16 +13,35 @@ myApp.service('alacartPack', ['$http', function ($http) {
     }
 
     this.addAlacartNOffer = function(data, success){
-        $http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
+        /*$http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
             console.log(items)
             success(items);
-        });
+        });*/
+        if(data.packageType === 0){
+            $http.post(this.baseRestUrl + '/addMainsiteAlacartPlanDetails', data).success(function (items) {
+                console.log(items)
+                success(items);
+            });
+        }else{
+            $http.post(this.baseRestUrl + '/addIndividualAlacartPlanDetails', data).success(function (items) {
+                console.log(items)
+                success(items);
+            });
+        }
+
     }
 
     this.editAlacartNOffer = function(data, success){
-        $http.post(this.baseRestUrl + '/editAlacartNOffer', data).success(function (items) {
-            console.log(items)
-            success(items);
-        });
+        if(data.packageType === 0) {
+            $http.post(this.baseRestUrl + '/editMainsiteAlacartPlanDetails', data).success(function (items) {
+                console.log(items)
+                success(items);
+            });
+        }else{
+            $http.post(this.baseRestUrl + '/editIndividualAlacartPlanDetails', data).success(function (items) {
+                console.log(items)
+                success(items);
+            });
+        }
     }
 }]);

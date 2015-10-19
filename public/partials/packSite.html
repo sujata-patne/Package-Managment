@@ -31,7 +31,7 @@
                                 <div class="form-group">
                                    <label for="pack" class="col-md-3 control-label">Select Pack : </label>
                                     <div class="col-md-6">
-                                        <select name="pack" class="form-control" data-ng-model="$root.selectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
+                                        <select name="pack" class="form-control" data-ng-model="$root.packSelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
                                             <option value="">-- Select Pack  --</option>
                                         </select>
                                         <span style="color: red" ng-show="packForm.$submitted || packForm.packtype.$dirty">
@@ -44,7 +44,7 @@
                                 <div class="form-group">
                                    <label for="packagename" class="col-md-3 control-label">Package Title : </label>
                                     <div class="col-md-6">
-                                        <input type="text" name="packagename" class="form-control" data-ng-model="$root.packageName" placeholder="Enter Package name" required>
+                                        <input type="text" name="packagename" class="form-control" data-ng-model="$root.packPackageName" placeholder="Enter Package name" required>
                                     </div>
                                 </div>
                             </div>

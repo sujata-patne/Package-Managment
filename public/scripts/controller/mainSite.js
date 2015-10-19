@@ -3,22 +3,29 @@
  */
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     $scope.tabIndex = 0;
+    $scope.isChild = 1;
     $scope.buttonLabel = "Next";
-    $scope.sequence = [];
-
+    $rootScope.PackageType = 0;
     $scope.selectedStore = [];
     $rootScope.PackageType = 0;
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    if($rootScope.action !== 'edit') {
+    console.log($rootScope.action)
+   // if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';
-    }
+   // }
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
 
     $('#main-site').addClass('active');
 
+    if($rootScope.PackageType === 1 && $rootScope.PackageId != undefined && $rootScope.action != 'edit'){
+        $rootScope.PackageId = undefined;
+        $rootScope.distributionChannelId = undefined;
+        $rootScope.PackageType = undefined;
+        $rootScope.action = 'add';
+    }
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"main-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"main-site.valuepack", active: false },
@@ -58,12 +65,15 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
-        if($rootScope.action !== 'edit'){
-            $rootScope.distributionChannelId = "";
-            $rootScope.PackageId = '';
-            $scope.offerId = '';
-            $scope.paosId = '';
+        $scope.StorePacks = angular.copy(MainSiteData.packs);
+        console.log('mainsite : '+$scope.action)
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
+            $rootScope.distributionChannelId = undefined;
+            $rootScope.PackageId = undefined;
             $rootScope.PackageType = 0;
+
+            $scope.offerId = undefined;
+            $scope.paosId = undefined;
         }
     });
 
@@ -72,18 +82,18 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
     }
     $scope.showPackageData = function(){
-        /*if($rootScope.action !== 'edit'){
-            $rootScope.action = 'add';
-            $rootScope.distributionChannelId = "";
-            $rootScope.PackageId = '';
-            $scope.offerId = '';
-            $scope.paosId = '';
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
+            $rootScope.PackageId = undefined;
+            $scope.offerId = undefined;
+            $scope.paosId = undefined;
             $rootScope.PackageType = 0;
-        }*/
+
+        }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
+        var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
-        MainSite.showPackageData({pkgId:$rootScope.PackageId,distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType},function (MainSiteData) {
+        MainSite.showPackageData(params,function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
@@ -94,9 +104,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
-            $scope.sequenceData = angular.copy(MainSiteData.mainSitePackageData.arrangeSequenceData);
 
-            console.log($scope.sequence)
 
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
@@ -134,5 +142,22 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.selectedValuePacks = [];
         $scope.selectedSubscriptionPlans = [];
     }
+    $scope.$watch( "isChild" , function(n,o){
+        //$scope.setPackageData = function(){
+            if($scope.isChild === true){
+                console.log("if"+$scope.isChild)
+
+                $rootScope.ParentPackageId = $rootScope.PackageId;
+                $rootScope.PackageId = '';
+            }
+            if($scope.isChild === false){
+                console.log("else"+$scope.isChild)
+
+                //$rootScope.PackageId = $rootScope.ParentPackageId;
+                $rootScope.ParentPackageId = '';
+            }
+       // }
+    }, true );
+
 
 });

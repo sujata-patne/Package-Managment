@@ -7,5 +7,6 @@ module.exports = function (app) {
         .post(individualContent.getAlacartPlansByContentType); 
     app.route('/addIndividualContent')
         .post(individualContent.addIndividualContent);
-
+    app.route('/editIndividualContent')
+        .post(individualContent.editIndividualContent);
 }
