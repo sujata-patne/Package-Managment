@@ -33,6 +33,7 @@ myApp.config(function ($stateProvider) {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',
             controller: 'alacartCtrl',
         })
+
         .state('main-site.valuepack', {
             templateUrl: 'partials/value-pack-plan.html',
             controller: 'valuePackCtrl'

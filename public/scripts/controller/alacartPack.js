@@ -3,13 +3,13 @@
  */
 
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
-console.log('$rootScope.PackageType')
-    console.log($rootScope.PackageType)
+console.log('alacartCtrl')
     if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
 console.log('alacart controller ')
         var data = {
             packageId: $rootScope.PackageId,
-            packageType: $rootScope.PackageType
+            packageType: $rootScope.PackageType,
+            parentPackageId: $rootScope.ParentPackageId,
         }
 
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
@@ -51,13 +51,14 @@ console.log('alacartPackData')
                 paosId: $scope.paosId,
                 offerId: $scope.offerId,
                 packageId: $rootScope.PackageId,
+                parentPackageId: $rootScope.ParentPackageId,
                 packageType: $rootScope.PackageType,
                 packId: $rootScope.packSelectedPack,
                 packageName: $rootScope.packPackageName,
                 distributionChannelId: $rootScope.distributionChannelId
             }
             ngProgress.start();
-            if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '') {
+            if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 console.log('mainsite edit')
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
