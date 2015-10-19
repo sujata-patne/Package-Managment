@@ -2,7 +2,6 @@
  * Created by sujata.patne on 29-09-2015.
  */
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
-    console.log('mainsite')
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
     $scope.sequence = [];
@@ -59,7 +58,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
-       console.log('mainsite : '+$scope.action)
         if($rootScope.action !== 'edit'){
             $rootScope.distributionChannelId = "";
             $rootScope.PackageId = '';
