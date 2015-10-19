@@ -35,8 +35,8 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             selectedDistributionChannel:  $rootScope.distributionChannelId,
             packageId : $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            packId : $rootScope.selectedPack,
-            packageName : $rootScope.packageName,
+            packId : $rootScope.packSelectedPack,
+            packageName : $rootScope.packPackageName,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
         if (isValid) {

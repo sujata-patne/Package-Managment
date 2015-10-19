@@ -45,7 +45,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
         $scope.selectedPlanFlag = false;
     	var ctdata = {
     		contentTypeId : $scope.selectedContentType,
-    		packId : $rootScope.selectedPack
+    		packId : $rootScope.packSelectedPack
     	}
     	IndividualContent.getAlacartPlansByContentType(ctdata,function(data){
     		console.log(data);
@@ -53,7 +53,6 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
                     $scope.contentTypeFlag = true;
                     $scope.alacartplans = data.AlaCartPlans;
                     $scope.contentData = data.ContentData;
-                    debugger;
             }else{
                 $scope.contentTypeFlag = false;
             }
@@ -95,7 +94,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
             $scope.selectedContent = [];
 	 		var data = {
 	 			packageId : $rootScope.PackageId,
-	 			packId : $rootScope.selectedPack,
+	 			packId : $rootScope.packSelectedPack,
 	 			planId : $scope.selectedPlanId,
 	 			getDataForUpdate : true
 	 		}
@@ -113,11 +112,11 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
  	
 
     $scope.submitIndividualContentForm = function(){
-        if($scope.selectedPack == undefined){
+        if($rootScope.packSelectedPack == undefined){
             toastr.error('Please select a valid pack');
         }else{
             var data = {
-                packId : $rootScope.selectedPack,
+                packId : $rootScope.packSelectedPack,
                 alacartPlanId : $scope.selectedPlanId,
                 packageId : $rootScope.PackageId,
                 selectedContents : $scope.final_selectedContent,
