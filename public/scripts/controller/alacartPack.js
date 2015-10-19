@@ -38,6 +38,7 @@ console.log('alacartPackData')
     }
 
     $scope.submitForm = function (isValid) {
+        console.log('$scope.alacart submit')
 
         if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
