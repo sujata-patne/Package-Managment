@@ -38,7 +38,7 @@
 
                                         <select ng-show="$root.n_addNotification == true" name="plan" class="form-control" data-ng-model="$root.n_selectedPlans" multiple data-ng-options="item.plan_id as item.plan_name for item in plans"  required>
                                         </select>
-                                        <select ng-show="$root.n_addNotification == false" name="plan" class="form-control" data-ng-model="$root.n_selectedPlans" data-ng-options="item.plan_id as item.plan_name for item in plans"  required>
+                                        <select ng-change="$root.listnotification_onPlanChange()" ng-show="$root.n_addNotification == false" name="plan" class="form-control" data-ng-model="$root.n_selectedPlans" data-ng-options="item.plan_id as item.plan_name for item in plans"  required>
                                             <option value="">Please select plan</option>
                                         </select>
                                     </div>

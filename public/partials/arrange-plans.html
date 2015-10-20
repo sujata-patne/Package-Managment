@@ -16,11 +16,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     <tr data-ng-repeat="fp in finalarray | orderBy:'fp.plan_type':reverse">
+
                                         <td class="col-md-1 col-xs-1 text-center">{{fp.plan_name}}</td>
                                         <td class="col-md-2 col-xs-2 text-center">{{fp.plan_type}}</td>
                                         {{fp}}
-                                        <td class="col-md-1 col-xs-1"> <input type="number" min="0" class="form-control" name="sequenceData[]" ng-model="sequenceData[fp.id].pas_arrange_seq"  ng-change="checkForDuplicates($index);" >
+                                        <td class="col-md-1 col-xs-1"> <input type="number" min="0" class="form-control" name="sequenceData[]" ng-model="sequenceData[fp.id].pas_arrange_seq"  ng-change="checkForDuplicates(fp.id);" >
                                         </td>
                                     </tr>
                                 </tbody>

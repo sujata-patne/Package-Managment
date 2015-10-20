@@ -15,7 +15,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.arrangedContentList ={};
 
     $scope.sequenceData = [];
-var packageId = $rootScope.PackageId;
+    var packageId = $rootScope.PackageId;
     Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
         console.log('called default')
         console.log({packageId:$rootScope.PackageId})
@@ -56,7 +56,7 @@ var packageId = $rootScope.PackageId;
             packageId : $rootScope.PackageId,
             finalarray:$scope.finalarray,
             sequenceData: $scope.sequenceData
-           }
+        }
 
         Arrangeplans.AddArrangedContents( data , function (data) {
             if( data.save === true ) {
@@ -79,7 +79,7 @@ var packageId = $rootScope.PackageId;
             } else if( unique.indexOf(parseInt( value.pas_arrange_seq ) ) == -1 ) {
                 unique.push( parseInt( value.pas_arrange_seq ) );
             } else {
-                duplicate.push( parseInt( key) );
+                duplicate.push( parseInt( id ) );
             }
             $scope.unique = unique;
             $scope.duplicate = duplicate;
@@ -90,7 +90,7 @@ var packageId = $rootScope.PackageId;
             angular.forEach($scope.duplicate,function(value,key) {
                 console.log($scope.sequenceData[value])
 
-                    $scope.sequenceData[value].pas_arrange_seq = '';
+                $scope.sequenceData[value].pas_arrange_seq = '';
 
             })
         }

@@ -8,5 +8,7 @@ module.exports = function (app) {
         .post( notification.addNotificationData);
     app.route('/listNotificationData')
         .post( notification.listNotificationData);
+    app.route('/n_delete')
+        .post(notification.n_delete);
 
 }

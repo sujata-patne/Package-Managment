@@ -22,5 +22,12 @@ myApp.service('Notification', ['$http', function ($http) {
             success(items);
         });
     }
+    this.n_delete = function ( data, success, error ) {
+        $http.post(this.baseRestUrl + '/n_delete',data).success(function (items) {
+            success(items);
+        }).error(function (err) {
+            error(err);
+        });
+    }
 
 }]);

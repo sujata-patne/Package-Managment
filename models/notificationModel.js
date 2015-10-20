@@ -26,7 +26,13 @@ exports.saveNotificationData= function( dbConnection,data, callback) {
 }
 exports.listNotifications= function( dbConnection,pkgId,planIds,planType, callback) {
 
-    var query = dbConnection.query("SELECT * FROM  icn_package_notification WHERE pn_sp_pkg_id = ? AND pn_plan_id = ? AND pn_plan_type = ?",[pkgId,planIds,planType], function ( err, response ) {
+    var query = dbConnection.query("SELECT *,DATE_FORMAT(pn_push_from, '%l %p') as pn_pf,DATE_FORMAT(pn_push_to, '%l %p') as pn_pt  FROM  icn_package_notification WHERE pn_sp_pkg_id = ? AND pn_plan_id = ? AND pn_plan_type = ? AND ISNULl(pn_crud_isactive)",[pkgId,planIds,planType], function ( err, response ) {
         callback( err, response );
+    });
+}
+exports.delete = function(dbConnection,pnId,callback){
+    console.log("UPDATE  icn_package_notification  SET pn_crud_isactive = 1 WHERE pn_id = "+pnId )
+    var query = dbConnection.query("UPDATE  icn_package_notification  SET pn_crud_isactive = 1 WHERE pn_id = ?  ",[pnId], function (err, response) {
+        callback(err,response);
     });
 }

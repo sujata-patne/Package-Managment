@@ -150,6 +150,7 @@ exports.listNotificationData = function(req, res, next) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                         ListNotification : function (callback){
+                            console.log(req.body.PlanId.split('_')[1]);
                             var planId = parseInt(req.body.PlanId.split('_')[1]);
                             var planType = req.body.PlanId.split('_')[0];
                             Notification.listNotifications(connection_ikon_cms,req.body.PackageId,planId,planType, function(err, ListNotification){
@@ -175,6 +176,35 @@ exports.listNotificationData = function(req, res, next) {
             res.redirect('/accountlogin');
         }
     }catch(err){
+        res.status(500).json(err.message);
+    }
+};
+exports.n_delete = function (req, res, next) {
+    try {
+        if (req.session && req.session.package_UserName) {
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.parallel({
+                    delete: function (callback) {
+                        Notification.delete(connection_ikon_cms, req.body.pnId, function (err, response) {
+                            callback(err, response);
+                        });
+                    }
+
+                }, function (err, results) {
+                    if (err) {
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message);
+                    } else {
+                        connection_ikon_cms.release();
+                        res.send({success: true, message: ' Notification ' + req.body.Status + ' successfully.'});
+                    }
+                });
+            });
+        } else {
+            res.redirect('/accountlogin');
+        }
+    } catch (err) {
         res.status(500).json(err.message);
     }
 };
