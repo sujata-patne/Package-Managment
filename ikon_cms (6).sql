@@ -1,7 +1,7 @@
 
-DROP SCHEMA IF EXISTS ikon_cms_new ;
-CREATE SCHEMA IF NOT EXISTS ikon_cms_new DEFAULT CHARACTER SET utf8 ;
-USE ikon_cms_new ;
+DROP SCHEMA IF EXISTS icon_cms ;
+CREATE SCHEMA IF NOT EXISTS icon_cms DEFAULT CHARACTER SET utf8 ;
+USE icon_cms ;
 
 /*Admin Login Detail*/
 
@@ -53,7 +53,7 @@ CREATE TABLE icn_login_detail
 	ld_crud_isactive 	int(1),					-- 1. Active, 0.Inactive
 	PRIMARY KEY (ld_id)
 )ENGINE = INNODB;
-CREATE INDEX idx_login_detail on login_detail(ld_id)using BTREE ;
+CREATE INDEX idx_login_detail on icn_login_detail(ld_id)using BTREE ;
 
 
 /*
@@ -99,7 +99,7 @@ CREATE TABLE icn_vendor_detail
 	vd_crud_isactive 	int(1),						-- 1. Active, 0.Inactive
 	PRIMARY KEY (vd_id)
 )ENGINE = INNODB;
-CREATE INDEX idx_vendor_detail on vendor_detail(vd_id)using BTREE ;
+CREATE INDEX idx_vendor_detail on icn_vendor_detail(vd_id)using BTREE ;
 
 
 /*Store & Icon Management*/
@@ -125,7 +125,7 @@ CREATE TABLE icn_store
 	st_crud_isactive 					int(1),					-- 1. Active, 0.Inactive
 	PRIMARY KEY (st_id)
 )ENGINE = INNODB;
-CREATE INDEX idx_icn_store on icn_store(st_id)using BTREE ;
+CREATE INDEX idx_store on icn_store(st_id)using BTREE ;
 
 /*
 Mannages Store Vs User
@@ -490,7 +490,7 @@ cm_signature						VARCHAR(20),    -- unique id
 cm_state							 INT(10),		-- fk: cd_id - content state
 cm_rank								int(1),			-- content rank
 cm_is_active						int(1),			-- 0. active, 1. inactive content
-cm_thumb_url						varchar(200),	-- thumb url
+-- cm_thumb_url						varchar(200),	-- thumb url
 cm_comment							varchar(200),	--  use for commenting
 cm_live_on							datetime,		-- content live date
 cm_created_on						datetime,
@@ -502,6 +502,25 @@ CONSTRAINT unc_con_meta_id UNIQUE (cm_id)
 
 )ENGINE = InnoDB;
 create index idx_content_metadata on content_metadata(cm_id) using BTREE;
+
+
+/* Content Metadata and Upload thumbnail */
+
+
+CREATE TABLE IF NOT EXISTS content_files_thumbnail
+(
+	cft_cm_id				        int(7),		        -- fk: content metadata id
+    cft_thumbnail_size				varchar(50),	    -- different size of images e.g. 100*100, 125*125 etc.
+    cft_thumbnail_img_browse        varchar(400),       -- thumbnail image source
+	cft_created_on					datetime,
+	cft_created_by				    varchar(50),
+	cft_modified_on				    datetime,
+	cft_modified_by				    varchar(50),
+	cft_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
+)ENGINE = InnoDB;
+CREATE INDEX idx_content_files_thumbnail on content_files_thumbnail(cft_cm_id)using BTREE ;
+
+
 
 
 
@@ -673,7 +692,7 @@ CREATE TABLE IF NOT EXISTS icn_package_alacart_offer_site
 	paos_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
 CREATE INDEX idx_package_alacart_offer_site_pkg on icn_package_alacart_offer_site(paos_sp_pkg_id)using BTREE ;
-CREATE INDEX idx_package_alacart_offer_site_id on icn_package_alacart_offer_site(paos_id)using BTREE ;
+CREATE INDEX idx_package_alacart_offer_site_paos on icn_package_alacart_offer_site(paos_id)using BTREE ;
 
 
 
@@ -709,17 +728,17 @@ CREATE TABLE IF NOT EXISTS icn_package_value_pack_site
 	pvs_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
 CREATE INDEX idx_package_value_pack_site_pkg on icn_package_value_pack_site(pvs_sp_pkg_id)using BTREE ;
-CREATE INDEX idx_package_value_pack_site_id on icn_package_value_pack_site(pvs_id)using BTREE ;
+CREATE INDEX idx_package_value_pack_site_pvs on icn_package_value_pack_site(pvs_id)using BTREE ;
 
 
 
 CREATE TABLE IF NOT EXISTS icn_package_subscription_site
 (
-	pss_id						int(7),				-- unique for the package record set
-	pss_sp_pkg_id				int(7),					-- fk: package id
+	pss_id						    int(7),				-- unique for the package record set
+	pss_sp_pkg_id				    int(7),			    -- fk: package id
 	-- pss_pkg_type					int(2),				-- 0: site type, 1: pack dependent
 	pss_sp_id						int(7),				-- fk : sp-id, subscription plan id (multiselection)
-	-- pss_st_id                	    int(10),            -- store id
+	-- pss_st_id                    int(10),            -- store id
 	pss_is_active					int(1),				-- 0 in-active, 1 active plan
 	pss_created_on					datetime,
 	pss_created_by					varchar(50),
@@ -728,7 +747,7 @@ CREATE TABLE IF NOT EXISTS icn_package_subscription_site
 	pss_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
 CREATE INDEX idx_package_subscription_site_pkg on icn_package_subscription_site(pss_sp_pkg_id)using BTREE ;
-CREATE INDEX idx_package_subscription_site_id on icn_package_subscription_site(pss_id)using BTREE ;
+CREATE INDEX idx_package_subscription_site_pss on icn_package_subscription_site(pss_id)using BTREE ;
 
 /* Package and CG Image Mapping */
 
@@ -740,12 +759,12 @@ CREATE TABLE IF NOT EXISTS icn_package_cg_image
     pci_image_size					varchar(50),	    -- different size of images e.g. 640*640, 480*480 etc.
     pci_cg_img_browse            	varchar(400),       -- CG image source
 	pci_is_default				    int(2),				-- 1. Yes 0. No
-	pass_is_active					int(1),				-- 0 in-active, 1 active plan
-	pass_created_on					datetime,
-	pass_created_by				    varchar(50),
-	pass_modified_on				datetime,
-	pass_modified_by				varchar(50),
-	pass_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
+	pci_is_active					int(1),				-- 0 in-active, 1 active plan
+	pci_created_on					datetime,
+	pci_created_by				    varchar(50),
+	pci_modified_on				datetime,
+	pci_modified_by				varchar(50),
+	pci_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
 CREATE INDEX idx_package_cg_image on icn_package_cg_image(pci_sp_pkg_id)using BTREE ;
 
@@ -783,7 +802,7 @@ CREATE TABLE IF NOT EXISTS  icn_package_arrange_sequence
     pas_id                         int(10),             -- unique is for this
 	pas_sp_pkg_id				   int(10),	        -- fk: package id
 	pas_plan_id                    int(10),              -- for different package, selected plans
-    pas_plan_type				   int(2),			    -- 0:alacarte, 1: value pack plans, 2:subscription plan
+    pas_plan_type				   varchar(20),			    -- alacarte,  value pack plans, subscription plan, offer plan
 	pas_arrange_seq				   int(10),			-- arrage sequence of the package vis-a-vis store
     pas_is_active				   int(1),				-- 0 in-active, 1 active plan
 	pas_created_on				   datetime,
@@ -802,8 +821,8 @@ CREATE TABLE IF NOT EXISTS  icn_store_package
     sp_pkg_id						int(10),			-- pk : unique id for a package
 	sp_st_id						int(7),				-- fk: store id
 	sp_dc_id                        int(10),            -- distribution channel id e.g. mobile, web etc
-	sp_parent_pkg_id                int(10),            -- parent package id
 	sp_pk_id                        int(10),            -- fk: pack id
+	sp_parent_pkg_id                int(10),            -- 0 : Parent , sp_pkg_id : Child pkg
 	sp_pkg_type                     int(2),				-- 0: site type, 1: pack dependent
 	sp_package_name					varchar(40),		-- name of the package, default: "Site" : "Site" becomes a reserved word
 	sp_package_desc					varchar(200),		-- description of the package
@@ -848,10 +867,11 @@ CREATE INDEX idx_package_individual_content_ap on icn_package_individual_content
 CREATE TABLE IF NOT EXISTS icn_package_notification
 (
 	pn_id							int(7),				-- unique key
-	pn_st_id                  		int(10),            -- store id
-	pn_site							int(7),             -- stores the selected site
+	-- pn_st_id                  	int(10),            -- store id
+	pn_sp_pkg_id					int(7),             -- stores the selected package fk: package id
 	pn_plan_start					datetime,			-- start date of notification
-	pn_plan							int(7),				-- select subscription/value plan
+	pn_plan_id						int(7),				-- subscription/value plan id
+	pn_plan_type                    varchar(20),        -- plan type - subscription/value
 	pn_after_day					int(7),				-- notification after days
 	pn_after_hour					int(7),				-- notification after hour
 	pn_cnt_logical_operator       	int(7),				-- setting up operator i.e. lessthan, greaterthan or equalto
@@ -868,6 +888,7 @@ CREATE TABLE IF NOT EXISTS icn_package_notification
 	pn_modified_by					varchar(50),
 	pn_crud_isactive 				int(1)				-- 1. Active, 0.Inactive
 )ENGINE = InnoDB;
-CREATE INDEX idx_package_notification_st on icn_package_notification(pn_st_id)using BTREE ;
-CREATE INDEX idx_package_notification_id on icn_package_notification(pn_id)using BTREE ;
+CREATE INDEX idx_package_notification_pn on icn_package_notification(pn_id)using BTREE ;
+CREATE INDEX idx_package_notification_st on icn_package_notification(pn_sp_pkg_id)using BTREE ;
+
 

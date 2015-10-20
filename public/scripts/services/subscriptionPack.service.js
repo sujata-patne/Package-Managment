@@ -18,11 +18,19 @@ myApp.service('subscriptionPack', ['$http', function ($http) {
     };
 
     this.addSubscriptionPackToMainSite = function (data, success, error) {
-        $http.post(this.baseRestUrl + '/addSubscriptionPackToMainSite',data).success(function (items) {
-            success(items);
-        }).error(function (err) {
-            error(err);
-        });
+        if(data.packageType === 0) {
+            $http.post(this.baseRestUrl + '/saveSubscriptionToMainSite',data).success(function (items) {
+                success(items);
+            }).error(function (err) {
+                error(err);
+            });
+        }else{
+            $http.post(this.baseRestUrl + '/saveSubscriptionToIndividual',data).success(function (items) {
+                success(items);
+            }).error(function (err) {
+                error(err);
+            });
+        }
     };
 
     this.getSelectedSubscriptionPacks = function( data, success, error ) {

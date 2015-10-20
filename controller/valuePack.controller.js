@@ -29,7 +29,7 @@ exports.getSelectedValuePacks = function (req, res, next) {
         res.status(500).json(err.message);
     }
 }
-exports.addValuePackToMainSite = function (req,res,next) {
+exports.saveValuePackToMainSite = function (req,res,next) {
     console.log('add mainsite child')
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
@@ -83,9 +83,9 @@ exports.addValuePackToMainSite = function (req,res,next) {
                                 sp_is_active: 1,
                                 sp_parent_pkg_id: req.body.parentPackageId,
                                 sp_created_on: new Date(),
-                                sp_created_by: req.session.package_UserId,
+                                sp_created_by: req.session.package_UserName,
                                 sp_modified_on: new Date(),
-                                sp_modified_by: req.session.package_UserId
+                                sp_modified_by: req.session.package_UserName
                             };
                             if (req.body.parentPackageId != '' && req.body.parentPackageId != 0 && req.body.parentPackageId != undefined) {
                                 storePackage.sp_package_name = req.body.packageName;
@@ -105,14 +105,22 @@ exports.addValuePackToMainSite = function (req,res,next) {
                                                 connection_ikon_cms.release();
                                                 res.status(500).json(err.message);
                                             } else {
-                                                addValuePackPlan(req, res, connection_ikon_cms, data);
+                                                saveValuePackPlan(req, res, connection_ikon_cms, storePackage);
                                             }
                                         });
                                     }
                                 });
                             } else {
-                                storePackage.sp_pkg_id  = packageData[0].sp_pkg_id;
-                                addValuePackPlan(req, res, connection_ikon_cms, storePackage);
+                                storePackage.sp_pkg_id  = req.body.packageId;
+                                mainSiteManager.editStorePackage( connection_ikon_cms, storePackage, function(err,response ){
+                                    if(err){
+                                        connection_ikon_cms.release();
+                                        console.log(err.message);
+                                        return false;
+                                    }else{
+                                        saveValuePackPlan(req, res, connection_ikon_cms, storePackage);
+                                    }
+                                });
                             }
                         });
                     }
@@ -126,70 +134,101 @@ exports.addValuePackToMainSite = function (req,res,next) {
     }
 };
 
-exports.addValuePackToMainSite123 = function (req, res, next) {
+exports.saveValuePackToIndividual = function (req,res,next) {
+    console.log('add individual ')
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                //Package type added to  getMainSitePackageData
-                var searchData = {
-                    storeId: req.session.package_StoreId,
-                    dcId: req.body.selectedDistributionChannel,
-                    packageType: req.body.packageType
-                }
-                mainSiteManager.getMainSitePackageData( connection_ikon_cms, searchData, function( err, packageData ) {
-                    if( packageData.length == 0 ) {
-                        mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
+                async.waterfall([
+                    function (callback) {
+                        mainSiteManager.getUniquePackageName(connection_ikon_cms, req.session.package_StoreId, req.body.packageName, function (err, result) {
                             if (err) {
-                                console.log(err.message);
                                 connection_ikon_cms.release();
                                 res.status(500).json(err.message);
+                                console.log(err.message)
                             } else {
-                                data = {
-                                    sp_pkg_id: ( lastInsertedId != null ? parseInt(lastInsertedId + 1) : 1 ),
-                                    sp_st_id: req.session.package_StoreId,
-                                    sp_dc_id: req.body.selectedDistributionChannel,
-                                    sp_pkg_type: req.body.packageType,
-                                    sp_package_name: 'MainSite '+req.body.selectedDistributionChannel,
-                                    sp_pk_id : 0, // pack id
-                                    sp_is_active: 1,
-                                    sp_created_on: new Date(),
-                                    sp_created_by: req.session.package_UserId,
-                                    sp_modified_on: new Date(),
-                                    sp_modified_by: req.session.package_UserId
-
-                                };
-
-                                //Individual Pack modifications
-                                if(req.body.packageType == 1){
-                                        data.sp_package_name = req.body.packageName;
-                                        data.sp_pk_id = req.body.packId;
+                                if (result.length > 0) {
+                                    callback(err, {'exist': true, 'packageData': result});
+                                } else {
+                                    callback(err, {'exist': false, 'packageData': result});
                                 }
+                            }
+                        })
+                    },
+                    function (data, callback) {
 
-                                mainSiteManager.addStorePackage(connection_ikon_cms, data, function (err, storePlan) {
+                        if (data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId) {
+                            console.log('not unique')
+                            callback(null, {'exist': data.exist, 'message': 'Package Name Must be Unique'});
+                        } else {
+                            callback(null, {'exist': data.exist});
+                        }
+                    }
+                ],
+                function (err, results) {
+                    if (results.message) {
+                        connection_ikon_cms.release();
+                        res.send({"success": false, "message": results.message});
+                    } else {
+                        mainSiteManager.getIndividualPackageData( connection_ikon_cms, req.session.package_StoreId,req.body.packageId, function( err, packageData ) {
+                            var storePackage = {
+                                sp_st_id: req.session.package_StoreId,
+                                sp_dc_id: req.body.selectedDistributionChannel,
+                                sp_pkg_type: req.body.packageType,
+                                sp_package_name: req.body.packageName,
+                                sp_pk_id :  req.body.packageId, // pack id
+                                sp_is_active: 1,
+                                sp_parent_pkg_id: req.body.parentPackageId,
+                                sp_created_on: new Date(),
+                                sp_created_by: req.session.package_UserName,
+                                sp_modified_on: new Date(),
+                                sp_modified_by: req.session.package_UserName
+                            };
+
+                            if( packageData.length == 0 ) {
+                                mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
                                     if (err) {
+                                        console.log(err.message);
                                         connection_ikon_cms.release();
                                         res.status(500).json(err.message);
                                     } else {
-                                        addValuePackPlan(req, res, connection_ikon_cms, data);
+                                        storePackage.sp_pkg_id = ( lastInsertedId != null ? parseInt(lastInsertedId + 1) : 1 );
+
+                                        mainSiteManager.addStorePackage(connection_ikon_cms, storePackage, function (err, storePlan) {
+                                            if (err) {
+                                                connection_ikon_cms.release();
+                                                res.status(500).json(err.message);
+                                            } else {
+                                                saveValuePackPlan(req, res, connection_ikon_cms, storePackage);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                storePackage.sp_pkg_id  = req.body.packageId;
+                                mainSiteManager.editStorePackage( connection_ikon_cms, storePackage, function(err,response ){
+                                    if(err){
+                                        connection_ikon_cms.release();
+                                        console.log(err.message);
+                                        return false;
+                                    }else{
+                                        saveValuePackPlan(req, res, connection_ikon_cms, storePackage);
                                     }
                                 });
                             }
                         });
-                    } else {
-                        addValuePackPlan(req, res, connection_ikon_cms, packageData[0]);
                     }
-                });
-
-            });
-        } else {
+                })
+            })
+        }else{
             res.redirect('/accountlogin');
         }
-    } catch (err) {
+    }catch(err){
         res.status(500).json(err.message);
     }
-}
+};
 
-function addValuePackPlan(req, res, connection_ikon_cms, packageData) {
+function saveValuePackPlan(req, res, connection_ikon_cms, packageData) {
 
     var valuePacks = req.body.selectedValuePacks;
     var addValuePackIds = valuePacks.filter(function (el) {
@@ -204,17 +243,6 @@ function addValuePackPlan(req, res, connection_ikon_cms, packageData) {
 
     var deleteValuePackIds = [];
     async.parallel({
-            updateStorePackage:function (callback){
-                mainSiteManager.editStorePackage( connection_ikon_cms, packageData, function(err,response ){
-                    if(err){
-                        connection_ikon_cms.release();
-                        console.log(err.message);
-                        return false;
-                    }else{
-                        callback(null, true);
-                    }
-                });
-            },
             deleteValuePackPlans: function (callback) {
                 if (deletePackIds.length > 0) {
                     valuePackManager.getValuePacksByIds(connection_ikon_cms, deletePackIds, packageData.sp_pkg_id, function (err, response) {
@@ -262,6 +290,9 @@ function addValuePackPlan(req, res, connection_ikon_cms, packageData) {
                     function loop(cnt) {
                         var i = cnt;
                         valuePackManager.valuePackExists(connection_ikon_cms, addValuePackIds[i], packageData.sp_pkg_id, function (err, response) {
+
+                            console.log('inside insert/update value pack')
+                            console.log(response)
                             if (response != undefined && response.length > 0) {
                                 valuePackManager.updateValuePack(connection_ikon_cms, response[0].pvs_id, function (err, response) {
                                     if (err) {
@@ -297,9 +328,9 @@ function addValuePackPlan(req, res, connection_ikon_cms, packageData) {
                                             pvs_vp_id: addValuePackIds[i],
                                             pvs_is_active: 1,
                                             pvs_created_on: new Date(),
-                                            pvs_created_by: req.session.package_UserId,
+                                            pvs_created_by: req.session.package_UserName,
                                             pvs_modified_on: new Date(),
-                                            pvs_modified_by: req.session.package_UserId
+                                            pvs_modified_by: req.session.package_UserName
                                         }
 
                                         valuePackManager.createMainSiteValuePackPlan(connection_ikon_cms, valuePackData, function (err, resp) {
@@ -502,5 +533,68 @@ function addValuePackPlan123(req, res, connection_ikon_cms, packageData) {
                 });
             }
         });
+    }
+}
+
+exports.addValuePackToMainSite123 = function (req, res, next) {
+    try {
+        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                //Package type added to  getMainSitePackageData
+                var searchData = {
+                    storeId: req.session.package_StoreId,
+                    dcId: req.body.selectedDistributionChannel,
+                    packageType: req.body.packageType
+                }
+                mainSiteManager.getMainSitePackageData( connection_ikon_cms, searchData, function( err, packageData ) {
+                    if( packageData.length == 0 ) {
+                        mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
+                            if (err) {
+                                console.log(err.message);
+                                connection_ikon_cms.release();
+                                res.status(500).json(err.message);
+                            } else {
+                                data = {
+                                    sp_pkg_id: ( lastInsertedId != null ? parseInt(lastInsertedId + 1) : 1 ),
+                                    sp_st_id: req.session.package_StoreId,
+                                    sp_dc_id: req.body.selectedDistributionChannel,
+                                    sp_pkg_type: req.body.packageType,
+                                    sp_package_name: 'MainSite '+req.body.selectedDistributionChannel,
+                                    sp_pk_id : 0, // pack id
+                                    sp_is_active: 1,
+                                    sp_created_on: new Date(),
+                                    sp_created_by: req.session.package_UserName,
+                                    sp_modified_on: new Date(),
+                                    sp_modified_by: req.session.package_UserName
+
+                                };
+
+                                //Individual Pack modifications
+                                if(req.body.packageType == 1){
+                                    data.sp_package_name = req.body.packageName;
+                                    data.sp_pk_id = req.body.packId;
+                                }
+
+                                mainSiteManager.addStorePackage(connection_ikon_cms, data, function (err, storePlan) {
+                                    if (err) {
+                                        connection_ikon_cms.release();
+                                        res.status(500).json(err.message);
+                                    } else {
+                                        addValuePackPlan(req, res, connection_ikon_cms, data);
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        addValuePackPlan(req, res, connection_ikon_cms, packageData[0]);
+                    }
+                });
+
+            });
+        } else {
+            res.redirect('/accountlogin');
+        }
+    } catch (err) {
+        res.status(500).json(err.message);
     }
 }

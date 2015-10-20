@@ -22,12 +22,14 @@ exports.getOfferPlanSettingDataForUpdate = function( dbConnection, packageId, ca
     });
 }
 exports.getValuePlanSettingDataForUpdate = function( dbConnection, packageId, callback ) {
+    console.log('packageId');
+    console.log(packageId);
     if(packageId == undefined){
         packageId = -1;
     }
-    //console.log('SELECT * FROM `icn_package_advance_setting_site`,`icn_package_value_pack_site`,`icn_store_package` where icn_package_advance_setting_site.pass_pvs_id = icn_package_value_pack_site.pvs_id and icn_store_package.sp_pkg_id = icn_package_value_pack_site.pvs_sp_pkg_id and icn_store_package.sp_pkg_id = ? and ISNULL(icn_package_advance_setting_site.pass_crud_isactive)');
+    console.log('SELECT * FROM `icn_package_advance_setting_site`,`icn_package_value_pack_site`,`icn_store_package` where icn_package_advance_setting_site.pass_pvs_id = icn_package_value_pack_site.pvs_id and icn_store_package.sp_pkg_id = icn_package_value_pack_site.pvs_sp_pkg_id and icn_store_package.sp_pkg_id = '+packageId+' and ISNULL(icn_package_advance_setting_site.pass_crud_isactive)');
     var query = dbConnection.query('SELECT * FROM `icn_package_advance_setting_site`,`icn_package_value_pack_site`,`icn_store_package` '+
-        ' where icn_package_advance_setting_site.pass_pvs_id = icn_package_value_pack_site.pvs_vp_id and '+
+        ' where icn_package_advance_setting_site.pass_pvs_id = icn_package_value_pack_site.pvs_id and '+
         ' icn_store_package.sp_pkg_id = icn_package_value_pack_site.pvs_sp_pkg_id and icn_store_package.sp_pkg_id = ? and ISNULL(icn_package_advance_setting_site.pass_crud_isactive)',packageId, function( err, response ) {
         callback( err, response );
     });
@@ -52,7 +54,7 @@ exports.saveCGImageSetting = function( dbConnection, data, callback ) {
 }
 
 exports.CGImageExists = function( dbConnection,packageId, callback ) {
-    var query = dbConnection.query('SELECT * FROM icn_package_cg_image WHERE pci_sp_pkg_id =  ? AND ISNULL(pass_crud_isactive) ',packageId, function( err, response ) {
+    var query = dbConnection.query('SELECT * FROM icn_package_cg_image WHERE pci_sp_pkg_id =  ? AND ISNULL(pci_crud_isactive) ',packageId, function( err, response ) {
         callback( err, response );
     });
 }

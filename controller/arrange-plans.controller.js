@@ -7,22 +7,6 @@ exports.getArrangePlansData = function (req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                        /*PackageOffer: function (callback) {
-                            mainSiteManager.getPackageOfferPlan(connection_ikon_cms, req.body.packageId, function (err, OfferData) {
-                                callback(err, OfferData)
-                            });
-                        },
-                        PackageValuePacks: function (callback) {
-                            mainSiteManager.getPackageValuePack(connection_ikon_cms, req.body.packageId, function (err, valuePackPlans) {
-                                callback(err, valuePackPlans);
-                            });
-                        },
-                        PackageSubscriptionPacks: function (callback) {
-                            Arrangeplans.getPackageSubscriptionPack(connection_ikon_cms, req.body.packageId, function (err, SubscriptionPlans) {
-                                callback(err, SubscriptionPlans);
-                            });
-                        },*/
-
                         arrangeSequenceData: function (callback) {
                             Arrangeplans.getArrangeSequenceData(connection_ikon_cms, req.body.packageId, function (err, arrangeSequenceData) {
                                 callback(err, arrangeSequenceData);
@@ -40,8 +24,7 @@ exports.getArrangePlansData = function (req, res, next) {
                         }
                     },
                     function (err, results) {
-                        console.log("###"+req.body.packageId)
-                        console.log(req.body)
+
                         if (err) {
                             connection_ikon_cms.release();
                             res.status(500).json(err.message);

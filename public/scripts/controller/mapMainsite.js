@@ -1,7 +1,7 @@
 /**
  * Created by sujata.patne on 19-10-2015.
  */
-myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
+myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     $rootScope.isChild = true;
     console.log('mapMainsite' + $rootScope.isChild)
 

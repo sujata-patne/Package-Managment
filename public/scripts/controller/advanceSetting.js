@@ -17,6 +17,11 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     }
 
 
+
+    if($rootScope.PackageId != ""){
+       // console.log('PackageId '+$rootScope.PackageId);
+
+    }
     advanceSetting.getData(preData,function(data){
     	$scope.contentTypes = data.ContentTypes;
       console.log($scope.contentTypes);
@@ -48,15 +53,15 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
         if($scope.valueDataForUpdate.length > 0){
              $scope.updateFlag = true;
             _.each($scope.valueDataForUpdate, function(el,index){
-                  var pvs_vp_id = el.pvs_vp_id;
+                  var pvs_id = el.pvs_id;
                   var pass_content_type = el.pass_content_type;
                   var pass_value = el.pass_value;
 
-                  if(!_.has($scope.valuePlanSetting,pvs_vp_id)){
-                         $scope.valuePlanSetting[pvs_vp_id] = {};
+                  if(!_.has($scope.valuePlanSetting,pvs_id)){
+                         $scope.valuePlanSetting[pvs_id] = {};
                   }
 
-                  $scope.valuePlanSetting[pvs_vp_id][pass_content_type]  = pass_value == -1 ? 'BAL' : pass_value;
+                  $scope.valuePlanSetting[pvs_id][pass_content_type]  = pass_value == -1 ? 'BAL' : pass_value;
             }); 
         }
     });
@@ -197,7 +202,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
                         //Key here is the plan id 
                         // console.log('Plan id::'+key);
                         //change to check :: vp_id ==> pvs_id 
-                        var result_arr = _.findWhere($scope.valuePlans, {pvs_vp_id: parseInt(key)});
+                        var result_arr = _.findWhere($scope.valuePlans, {pvs_id: parseInt(key)});
 
                         var total_download_limit = result_arr.vp_download_limit;
                         var  vp_name = result_arr.vp_plan_name;
