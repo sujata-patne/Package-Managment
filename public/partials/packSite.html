@@ -19,7 +19,7 @@
                         <div class="portlet-content">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="distributionChannels" class="col-md-3 control-label">Deliver Channel</label>
+                                    <label for="distributionChannels" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Deliver Channel</label>
                                     <div class="col-md-6">
                                         <select name="distributionChannels" data-ng-options="item.cd_id as item.cd_name for item in distributionChannels" class="form-control" data-ng-model="$root.distributionChannelId" ng-change="getPackageData()" >
                                             <option value=""> --Select Store-- </option>
@@ -29,22 +29,25 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                   <label for="pack" class="col-md-3 control-label">Select Pack : </label>
+                                    <label for="pack" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Select Pack </label>
                                     <div class="col-md-6">
-                                        <select name="pack" class="form-control" data-ng-model="$root.packSelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
+                                        <select name="pack" class="form-control" data-ng-model="$root.SelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
                                             <option value="">-- Select Pack  --</option>
                                         </select>
-                                        <span style="color: red" ng-show="packForm.$submitted || packForm.packtype.$dirty">
-                                            <span ng-show="packForm.packtype.$error.required">Please Select Pack.</span>
-                                        </span>
+                                    <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.SelectedPack.$dirty">
+                                        <span ng-show="mainsiteForm.$root.SelectedPack.$error.required">Please Select Pack.</span>
+                                    </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                   <label for="packagename" class="col-md-3 control-label">Package Title : </label>
+                                    <label for="packagename" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Package Title </label>
                                     <div class="col-md-6">
-                                        <input type="text" name="packagename" class="form-control" data-ng-model="$root.packPackageName" placeholder="Enter Package name" required>
+                                        <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" required>
+                                        <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.PackageName.$touched">
+                                            <span ng-show="mainsiteForm.$root.PackageName.$error.required">Package Name is required.</span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>

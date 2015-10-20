@@ -28,12 +28,21 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             selectedDistributionChannel: $rootScope.distributionChannelId,
             packageId : $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            packId : $rootScope.packSelectedPack,
+            packId : $rootScope.SelectedPack,
             parentPackageId: $rootScope.ParentPackageId,
-            packageName : $rootScope.packPackageName,
+            packageName : $rootScope.PackageName,
             existingValuePackIds: $scope.existingValuePackIds
         };
-        if (isValid) {
+        if (!$rootScope.distributionChannelId){
+            toastr.error('Distribution Channel Required');
+            $scope.errorvisible = true;
+        }else if ($rootScope.PackageType == 1 && !$rootScope.SelectedPack){
+            toastr.error('Please Select Pack.');
+            $scope.errorvisible = true;
+        }else if ($rootScope.PackageType == 1 && !$rootScope.PackageName){
+            toastr.error('Package Name Required.');
+            $scope.errorvisible = true;
+        }else if (isValid) {
 
                 valuePack.addValuePackToMainSite(valuePackData,function(data){
                     $scope.result(data);

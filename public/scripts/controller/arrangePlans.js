@@ -15,10 +15,12 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.arrangedContentList ={};
 
     $scope.sequenceData = [];
+
     var packageId = $rootScope.PackageId;
+
     Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
         console.log('called default')
-        console.log({packageId:$rootScope.PackageId})
+        console.log(data)
         $scope.AlacartPlans = data.arrangeSequenceData;
         var sequence = angular.copy(data.arrangeSequenceData);
 

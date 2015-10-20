@@ -46,7 +46,7 @@ exports.getNotificationData = function(req, res, next) {
                             });
                         },
                         ValuePacks : function (callback){
-                            if(req.body.PackageId != undefined) {
+                            if(req.body.PackageId != undefined && req.body.PackageId != 0) {
                                 Notification.getValuePacks(connection_ikon_cms, req.body.PackageId, function (err, ValuePacks) {
                                     callback(err,ValuePacks)
                                 });
@@ -56,7 +56,7 @@ exports.getNotificationData = function(req, res, next) {
                             }
                         },
                         SubscriptionPacks : function (callback){
-                            if(req.body.PackageId != undefined) {
+                            if(req.body.PackageId != undefined && req.body.PackageId != 0) {
                                 Notification.getSubscriptionPacks(connection_ikon_cms, req.body.PackageId, function (err,  SubscriptionPacks) {
                                     callback(err, SubscriptionPacks)
                                 });

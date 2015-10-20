@@ -15,10 +15,28 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
    /* if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';
     }*/
-    $rootScope.packPackageName = '';
-    $rootScope.packSelectedPack = '';
+    $rootScope.PackageName = '';
+    $rootScope.SelectedPack = '';
     $rootScope.PackageType = 1;
     $('#pack-site').addClass('active');
+    $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
+        //save the previous state in a rootScope variable so that it's accessible from everywhere
+        $rootScope.previousState = from;
+    });
+
+    if($rootScope.previousState && new RegExp("main-site").test($rootScope.previousState.name) ){
+        $rootScope.PackageId = 0;
+        $rootScope.distributionChannelId = undefined;
+        $rootScope.PackageType = 1;
+        $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;
+        $scope.offerId = '';
+        $scope.paosId = '';
+        $rootScope.PackageName = '';
+        $rootScope.SelectedPack = undefined;
+
+    }
+
     if($rootScope.PackageType === 1  && $rootScope.PackageId != undefined && $rootScope.action != 'edit'){
         $rootScope.PackageId = undefined;
         $rootScope.distributionChannelId = undefined;
@@ -71,8 +89,8 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         if($rootScope.action !== 'edit' || $rootScope.action !== undefined){
             delete $rootScope.packDistributionChannelId;
             delete $rootScope.PackageId;
-            delete $rootScope.packselectedPack;
-            delete $rootScope.packPackageName;
+            delete $rootScope.SelectedPack;
+            delete $rootScope.PackageName;
             $rootScope.PackageType = 1;
 
             $scope.offerId = undefined;
@@ -91,8 +109,8 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
         console.log($rootScope.action !== 'edit' &&  $rootScope.action !== undefined)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             delete $rootScope.PackageId;
-            delete $rootScope.packSelectedPack;
-            delete $rootScope.packPackageName;
+            delete $rootScope.SelectedPack;
+            delete $rootScope.PackageName;
             $rootScope.PackageType = 1;
             $scope.offerId = undefined;
             $scope.paosId = undefined;
@@ -121,8 +139,8 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
                 $rootScope.distributionChannelId = $scope.packSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.packSitePackageData[0].sp_pkg_id;
                 $rootScope.PackageType = $scope.packSitePackageData[0].sp_pkg_type;
-                $rootScope.packPackageName = $scope.packSitePackageData[0].sp_package_name;
-                $rootScope.packSelectedPack = $scope.packSitePackageData[0].sp_pk_id;
+                $rootScope.PackageName = $scope.packSitePackageData[0].sp_package_name;
+                $rootScope.SelectedPack = $scope.packSitePackageData[0].sp_pk_id;
             }
             $scope.alacartNofferDetails = angular.copy(PackSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {

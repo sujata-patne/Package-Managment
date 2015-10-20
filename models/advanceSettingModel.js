@@ -52,7 +52,7 @@ exports.saveCGImageSetting = function( dbConnection, data, callback ) {
 }
 
 exports.CGImageExists = function( dbConnection,packageId, callback ) {
-    var query = dbConnection.query('SELECT * FROM icn_package_cg_image WHERE pci_sp_pkg_id =  ? AND pass_crud_isactive IS NULL',packageId, function( err, response ) {
+    var query = dbConnection.query('SELECT * FROM icn_package_cg_image WHERE pci_sp_pkg_id =  ? AND ISNULL(pass_crud_isactive) ',packageId, function( err, response ) {
         callback( err, response );
     });
 }

@@ -1,0 +1,47 @@
+<form method="post" class="form-horizontal" role="form" name="mainsiteForm" data-ng-submit="submitMainsiteForm(mainsiteForm.$valid)" novalidate>
+    <div class="col-md-2" ></div>
+    <div class="col-md-8 col-xs-12">
+        <div class="portlet">
+            <div class="portlet-content">
+                <!--<div class="col-md-12"  ng-show="$root.action != 'edit'" />
+                    <div class="form-group">
+                        <label for="isChild" class="col-md-3 control-label" style="text-align: right">Mainsite Child</label>
+                        <div class="col-md-6">
+                            <input type="checkbox" name="isChild" value="1"  ng-model="isChild" >
+                        </div>
+                    </div>
+                </div>-->
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="pack" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Select Pack </label>
+                        <div class="col-md-6">
+                            <select name="pack" class="form-control" data-ng-model="$root.SelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
+                                <option value="">-- Select Pack  --</option>
+                            </select>
+                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.SelectedPack.$dirty">
+                                <span ng-show="mainsiteForm.$root.SelectedPack.$error.required">Please Select Pack.</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="packagename" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Package Title </label>
+                        <div class="col-md-6">
+                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" required>
+                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.PackageName.$touched">
+                                <span ng-show="mainsiteForm.$root.PackageName.$error.required">Package Name is required.</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-offset-5 col-md-7" >
+                        <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
+                        <button type="reset" ng-disabled="alacartPackPlans.length > 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

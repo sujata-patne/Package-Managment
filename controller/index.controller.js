@@ -186,8 +186,12 @@ function getPages(role) {
     if (role == "Super Admin" || role == "Store Manager") {
 
         var pagesjson = [
-            { 'pagename': 'Main Site', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
-            { 'pagename': 'Attach Pack', 'href': 'pack-site', 'id': 'pack-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
+
+            { 'pagename': 'Mainsite', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '2', 'sub': [
+                { 'subpagename': 'Mainsite Package', 'subhref': 'main-site.alacart','id':'main-site', 'subclass': 'fa fa-align-left' },
+                { 'subpagename': 'Map With Mainsite ', 'subhref': 'main-site.map','id':'main-site-map', 'subclass': 'fa fa-align-left' }
+            ] },
+            { 'pagename': 'Packs', 'href': 'pack-site', 'id': 'pack-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Package Listing', 'href': 'packageListing', 'id': 'package-listing', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Notifications', 'href': 'notifications', 'id': 'notifications', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
