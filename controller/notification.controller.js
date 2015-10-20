@@ -144,3 +144,37 @@ exports.addNotificationData = function(req, res, next) {
         res.status(500).json(err.message);
     }
 };
+exports.listNotificationData = function(req, res, next) {
+    try {
+        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.parallel({
+                        ListNotification : function (callback){
+                            var planId = parseInt(req.body.PlanId.split('_')[1]);
+                            var planType = req.body.PlanId.split('_')[0];
+                            Notification.listNotifications(connection_ikon_cms,req.body.PackageId,planId,planType, function(err, ListNotification){
+                                callback(err,ListNotification);
+                            });
+                        }
+                    },
+                    function (err, results) {
+
+                        if (err) {
+                            connection_ikon_cms.release();
+                            res.status(500).json(err.message);
+                            console.log(err.message)
+                        } else {
+                            connection_ikon_cms.release();
+                            console.log(results)
+                            res.send(results);
+                        }
+
+                    });
+            });
+        }else{
+            res.redirect('/accountlogin');
+        }
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+};

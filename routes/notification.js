@@ -6,6 +6,7 @@ module.exports = function (app) {
         .post( notification.getNotificationData);
     app.route('/addNotificationData')
         .post( notification.addNotificationData);
-
+    app.route('/listNotificationData')
+        .post( notification.listNotificationData);
 
 }

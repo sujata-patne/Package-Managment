@@ -24,3 +24,9 @@ exports.saveNotificationData= function( dbConnection,data, callback) {
         callback( err, response );
     });
 }
+exports.listNotifications= function( dbConnection,pkgId,planIds,planType, callback) {
+
+    var query = dbConnection.query("SELECT * FROM  icn_package_notification WHERE pn_sp_pkg_id = ? AND pn_plan_id = ? AND pn_plan_type = ?",[pkgId,planIds,planType], function ( err, response ) {
+        callback( err, response );
+    });
+}

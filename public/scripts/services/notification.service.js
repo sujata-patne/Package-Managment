@@ -17,5 +17,10 @@ myApp.service('Notification', ['$http', function ($http) {
             success(items);
         });
     }
+    this.listNotificationData = function (data,success) {
+        $http.post(this.baseRestUrl + '/listNotificationData',data).success(function (items) {
+            success(items);
+        });
+    }
 
 }]);
