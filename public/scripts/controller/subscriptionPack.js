@@ -38,6 +38,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             packageId : $rootScope.PackageId,
             packageType: $rootScope.PackageType,
             packId : $rootScope.packSelectedPack,
+            parentPackageId: $rootScope.ParentPackageId,
             packageName : $rootScope.packPackageName,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };

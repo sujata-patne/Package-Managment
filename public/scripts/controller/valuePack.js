@@ -29,6 +29,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             packageId : $rootScope.PackageId,
             packageType: $rootScope.PackageType,
             packId : $rootScope.packSelectedPack,
+            parentPackageId: $rootScope.ParentPackageId,
             packageName : $rootScope.packPackageName,
             existingValuePackIds: $scope.existingValuePackIds
         };
