@@ -36,3 +36,21 @@ exports.delete = function(dbConnection,pnId,callback){
         callback(err,response);
     });
 }
+exports.updateContentTypeStatus = function(dbConnection,active,pnId,callback){
+    var query = dbConnection.query("UPDATE icn_package_notification  SET pn_action = ? WHERE pn_id = ?  ",[active,pnId], function (err, response) {
+        callback(err,response);
+
+    });
+}
+
+exports.getNotificationData = function(dbConnection,pnId,callback){
+    var query = dbConnection.query("SELECT *,DATE_FORMAT(pn_push_from, '%H:%i') as pn_pf,DATE_FORMAT(pn_push_to, '%H:%i') as pn_pt  FROM `icn_package_notification` where pn_id = ? ", pnId, function (err, response) {
+        callback(err,response);
+
+    });
+}
+exports.updateNotificationData= function( dbConnection,data, callback) {
+    var query = dbConnection.query("UPDATE icn_package_notification SET ?",data, function ( err, response ) {
+        callback( err, response );
+    });
+}

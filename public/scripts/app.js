@@ -100,14 +100,19 @@ myApp.config(function ($stateProvider) {
             url: '/notifications'
         })
         .state('notifications.add', {
-            templateUrl: 'partials/add notifications.html',
+            templateUrl: 'partials/add-notifications.html',
             controller: 'notificationAddCtrl',
             url: '/notificationsAdd'
         })
         .state('notifications.list', {
-            templateUrl: 'partials/list notifications.html',
+            templateUrl: 'partials/list-notifications.html',
             controller: 'notificationListCtrl',
             url: '/notificationsListing'
+        })
+        .state("edit-notifications", {
+            templateUrl: "partials/add-notifications.html",
+            controller: "notificationAddCtrl",
+            url: "/notificationsAdd/:pn_id/:pn_sp_pkg_id/:pn_plan_id/:pn_plan_type"
         })
 }).run(function ($state) {
     $state.go("main-site");

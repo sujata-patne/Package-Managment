@@ -40,8 +40,6 @@ exports.getArrangePlansData = function (req, res, next) {
                         }
                     },
                     function (err, results) {
-                        console.log("###"+req.body.packageId)
-                        console.log(req.body)
                         if (err) {
                             connection_ikon_cms.release();
                             res.status(500).json(err.message);

@@ -77,8 +77,6 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
             $state.go('main-site.map');
 
         }else{
-            console.log('2')
-
             if($rootScope.PackageType === 1){
                 $state.go('pack-site');
 

@@ -10,5 +10,9 @@ module.exports = function (app) {
         .post( notification.listNotificationData);
     app.route('/n_delete')
         .post(notification.n_delete);
+    app.route('/n_blockUnBlockContentType')
+        .post(notification.n_blockUnBlockContentType);
+    app.route('/updateNotificationData')
+        .post(notification.updateNotificationData);
 
 }

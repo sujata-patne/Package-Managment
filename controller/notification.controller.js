@@ -64,8 +64,19 @@ exports.getNotificationData = function(req, res, next) {
                             else{
                                 callback(null,'');
                             }
+                        },
+                        NotificationData : function (callback){
+                            if(req.body.pnId != undefined && req.body.pnId >= 0) {
+                                Notification.getNotificationData(connection_ikon_cms, req.body.pnId, function (err,  NotificationData ) {
+                                    callback(err,NotificationData )
+                                });
+                            }
+                            else{
+                                callback(null,'');
+                            }
                         }
                     },
+
                     function (err, results) {
 
                         if (err) {
@@ -205,6 +216,82 @@ exports.n_delete = function (req, res, next) {
             res.redirect('/accountlogin');
         }
     } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+exports.n_blockUnBlockContentType = function (req, res, next) {
+    try {
+        if (req.session && req.session.package_UserName) {
+
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.parallel({
+                    updateContentTypeStatus : function(callback){
+                        Notification.updateContentTypeStatus( connection_ikon_cms,req.body.active, req.body.pnId, function(err,response){
+                            callback(err, response);
+                        });
+                    }
+
+                },function(err,results){
+                    if(err){
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message);
+                    }else{
+                        connection_ikon_cms.release();
+                        res.send({ success: true, message: ' Notification '  +  req.body.Status + ' successfully.' });
+                    }
+                });
+            });
+        }else{
+            res.redirect('/accountlogin');
+        }
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+
+};
+exports.updateNotificationData  = function(req, res, next) {
+    try {
+        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.parallel({
+                        NotificationData: function (callback) {
+                            var data = {
+                                pn_id: response[0].maxId,
+                                pn_plan_start: moment(new Date()).add(req.body.Days, 'days').add(req.body.Hours, 'h').format('YYYY-MM-DD'),
+                                pn_after_day: req.body.Days,
+                                pn_after_hour: req.body.Hours,
+                                pn_cnt_logical_operator: req.body.Operator,
+                                pn_cnt_conditional_usage: req.body.Percent,
+                                pn_message: req.body.Message,
+                                pn_push_from: moment(req.body.PushFrom).format('YYYY-MM-DD HH:mm:ss'),
+                                pn_push_to: moment(req.body.PushTo).format('YYYY-MM-DD HH:mm:ss'),
+                                pn_push_type: req.body.Push,
+                                pn_action: 1
+                            }
+
+                            Notification.updateNotificationData(connection_ikon_cms, data, function (err, response) {
+                                callback(err, response);
+                            });
+                        }
+                    },
+                    function (err, results) {
+
+                        if (err) {
+                            connection_ikon_cms.release();
+                            res.status(500).json(err.message);
+                            console.log(err.message)
+                        } else {
+                            connection_ikon_cms.release();
+                            //console.log(results)
+                            res.send(results);
+                        }
+                    });
+            });
+        }else{
+            res.redirect('/accountlogin');
+        }
+    }catch(err){
         res.status(500).json(err.message);
     }
 };

@@ -16,7 +16,6 @@ myApp.controller('notificationListCtrl', function ($scope,$rootScope, $state, ng
             }
             Notification.listNotificationData(Data, function (data) {
                 $scope.NotificationResult = angular.copy(data.ListNotification);
-                console.log(data);
             });
         }else{
             toastr.error('Please Select Package');
@@ -48,9 +47,39 @@ myApp.controller('notificationListCtrl', function ($scope,$rootScope, $state, ng
             });
         }
     }
+    $scope.BlockUnBlockContentType = function( pnId, isActive ){
+        var active = 1;
+        if (isActive == 1) {
+            active = 0;
+        }
+        if (confirm("Are you want to sure " + (active == 0 ? 'block' : 'unblock') + ' this plan ?')) {
+            var data = {
+                active: active,
+                pnId: pnId,
+                Status: active == 0 ? 'blocked' : 'unblocked'
+            }
+            ngProgress.start();
+            Notification.n_blockUnBlockContentType(data, function (data) {
+                if (data.success) {
+                    $rootScope.listnotification_onPlanChange();
+                    toastr.success(data.message);
+                    $scope.successvisible = true;
+                }
+                else {
+                    $scope.error = data.message;
+                    $scope.errorvisible = true;
+                }
+                ngProgress.complete();
+            },function(err){
+                console.log(err);
+            });
+        }
 
 
+    }
 
-
+   $scope.EditNotification = function(pn_id,pn_sp_pkg_id,pn_plan_id,pn_plan_type){
+           $state.go('edit-notifications', {pn_id:pn_id,pn_sp_pkg_id:pn_sp_pkg_id,pn_plan_id:pn_plan_id,pn_plan_type:pn_plan_type});
+   }
 
 });

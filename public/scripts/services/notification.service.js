@@ -29,5 +29,18 @@ myApp.service('Notification', ['$http', function ($http) {
             error(err);
         });
     }
-
+    this.n_blockUnBlockContentType = function ( data, success, error ) {
+        $http.post(this.baseRestUrl + '/n_blockUnBlockContentType',data).success(function (items) {
+            success(items);
+        }).error(function (err) {
+            error(err);
+        });
+    }
+    this.updateNotificationData = function ( data, success, error ) {
+        $http.post(this.baseRestUrl + '/updateNotificationData',data).success(function (items) {
+            success(items);
+        }).error(function (err) {
+            error(err);
+        });
+    }
 }]);

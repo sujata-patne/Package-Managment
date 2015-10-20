@@ -9,6 +9,7 @@ myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngP
     $scope.startingTime = new Date(1970, 0, 1, 00, 00, 0);
     $scope.endingTime = new Date(1970, 0, 1, 00, 00, 0);
     $scope.selectedPush = 0;
+    $scope.edit_state = false;
 $scope.counts =[
     {id:0,option_name:'LessThan'},
     {id:1,option_name:'MoreThan'},
@@ -31,6 +32,30 @@ $scope.counts =[
         {id:0,option_name:'Once a day'},
         {id:1,option_name:'Twice a day'}
     ];
+    if($stateParams.pn_id){
+        $scope.edit_state = true;
+        var data ={
+            pnId:$stateParams.pn_id,
+            state:'edit'
+        }
+        Notification.getNotificationData(data,function(data){
+            debugger;
+            var start_time = data.NotificationData[0].pn_pf;
+            var start_hr = start_time.split(':')[0];
+            var start_min = start_time.split(':')[1];
+            var end_time = data.NotificationData[0].pn_pt;
+            var end_hr = end_time.split(':')[0];
+            var end_min = end_time.split(':')[1];
+            $scope.days =  data.NotificationData[0].pn_after_day,
+            $scope.hours =  data.NotificationData[0].pn_after_hour,
+            $scope.selectedCount =  data.NotificationData[0].pn_cnt_logical_operator,
+            $scope.selectedPercent =  data.NotificationData[0].pn_cnt_conditional_usage,
+            $scope.messagetext =  data.NotificationData[0].pn_message,
+            $scope.startingTime=  new Date(1970, 0, 1, start_hr, start_min, 0),
+            $scope.endingTime =  new Date(1970, 0, 1, end_hr, end_min, 0),
+            $scope.selectedPush=  data.NotificationData[0].pn_push_type
+        })
+    }
     $scope.submitNotificationForm = function (valid){
 
         if($scope.startingTime >= $scope.endingTime ){
@@ -55,15 +80,32 @@ $scope.counts =[
                     PushTo: $scope.endingTime,
                     Push: $scope.selectedPush
                 }
+
+
             Notification.addNotificationData(notificationData, function (data) {
                 toastr.success("save successfully");
 
             });
+
         }else{
                 toastr.error('Please Select Package');
             }
         }
     }
 
-
+    //$scope.update= function(){
+    //    var notificationData = {
+    //        Days: $scope.days == undefined ? 0 : $scope.days,
+    //        Hours: $scope.hours == undefined ? 1 : $scope.hours ,
+    //        Operator: $scope.selectedCount,
+    //        Percent: $scope.selectedPercent,
+    //        Message: $scope.messagetext,
+    //        PushFrom: $scope.startingTime,
+    //        PushTo: $scope.endingTime,
+    //        Push: $scope.selectedPush
+    //    }
+    //    Notification.updateNotificationData(notificationData, function (data) {
+    //        toastr.success("update successfully");
+    //    });
+    //}
 });

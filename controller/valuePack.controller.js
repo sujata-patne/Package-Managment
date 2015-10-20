@@ -105,7 +105,7 @@ exports.addValuePackToMainSite = function (req,res,next) {
                                                 connection_ikon_cms.release();
                                                 res.status(500).json(err.message);
                                             } else {
-                                                addValuePackPlan(req, res, connection_ikon_cms, data);
+                                                addValuePackPlan(req, res, connection_ikon_cms, storePackage);
                                             }
                                         });
                                     }
