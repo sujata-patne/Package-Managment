@@ -45,7 +45,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
         $scope.selectedPlanFlag = false;
     	var ctdata = {
     		contentTypeId : $scope.selectedContentType,
-    		packId : $rootScope.packSelectedPack
+    		packId : $rootScope.SelectedPack
     	}
     	IndividualContent.getAlacartPlansByContentType(ctdata,function(data){
     		console.log(data);
@@ -89,12 +89,12 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
          }catch(err){
              $scope.selectedPlanFlag = false;
          }
-        if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+        if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
 	 		$scope.final_selectedContent = [];
             $scope.selectedContent = [];
 	 		var data = {
 	 			packageId : $rootScope.PackageId,
-	 			packId : $rootScope.packSelectedPack,
+	 			packId : $rootScope.SelectedPack,
 	 			planId : $scope.selectedPlanId,
 	 			getDataForUpdate : true
 	 		}
@@ -112,18 +112,18 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
  	
 
     $scope.submitIndividualContentForm = function(){
-        if($rootScope.packSelectedPack == undefined){
+        if($rootScope.SelectedPack == undefined){
             toastr.error('Please select a valid pack');
         }else{
             var data = {
-                packId : $rootScope.packSelectedPack,
+                packId : $rootScope.SelectedPack,
                 alacartPlanId : $scope.selectedPlanId,
                 packageId : $rootScope.PackageId,
                 selectedContents : $scope.final_selectedContent,
                 validDate : $scope.ValidDate
             }
 
-            if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+            if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 IndividualContent.editIndividualContent(data,function(data){
                     toastr.success('Successful!');
                 });

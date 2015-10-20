@@ -37,12 +37,23 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             selectedDistributionChannel:  $rootScope.distributionChannelId,
             packageId : $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            packId : $rootScope.packSelectedPack,
+            packId : $rootScope.SelectedPack,
             parentPackageId: $rootScope.ParentPackageId,
-            packageName : $rootScope.packPackageName,
+            packageName : $rootScope.PackageName,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
-        if (isValid) {
+
+        if (!$rootScope.distributionChannelId){
+            toastr.error('Distribution Channel Required');
+            $scope.errorvisible = true;
+        }else if ($rootScope.PackageType == 1 && !$rootScope.SelectedPack){
+            toastr.error('Please Select Pack.');
+            $scope.errorvisible = true;
+        }else if ($rootScope.PackageType == 1 && !$rootScope.PackageName){
+            toastr.error('Package Name Required.');
+            $scope.errorvisible = true;
+        }else if (isValid) {
+
             subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
                 console.log( data );
                 $scope.result(data);

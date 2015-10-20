@@ -18,8 +18,8 @@ console.log($state.current)
                 packageId: $rootScope.PackageId,
                 parentPackageId: $rootScope.ParentPackageId,
                 packageType: $rootScope.PackageType,
-                packId: $rootScope.packSelectedPack,
-                packageName: $rootScope.packPackageName,
+                packId: $rootScope.SelectedPack,
+                packageName: $rootScope.PackageName,
                 distributionChannelId: $rootScope.distributionChannelId
             }
 

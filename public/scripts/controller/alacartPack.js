@@ -6,7 +6,7 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
 console.log('alacartCtrl')
     $rootScope.isChild = false;
 
-    if( $rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+    if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
 console.log('alacart controller ')
         var data = {
             packageId: $rootScope.PackageId,
@@ -40,14 +40,16 @@ console.log('alacartPackData')
     }
 
     $scope.submitForm = function (isValid) {
-        console.log('$scope.alacart submit')
-
-        if (!$rootScope.distributionChannelId) {
-            toastr.error('Distribution Channel is required');
+        if (!$rootScope.distributionChannelId){
+            toastr.error('Distribution Channel Required');
             $scope.errorvisible = true;
-        } else {
-            console.log('$scope.alacartPlanIds')
-            console.log($scope.alacartPlanIds)
+        }else if ($rootScope.PackageType == 1 && !$rootScope.SelectedPack){
+            toastr.error('Please Select Pack.');
+            $scope.errorvisible = true;
+        }else if ($rootScope.PackageType == 1 && !$rootScope.PackageName){
+            toastr.error('Package Name Required.');
+            $scope.errorvisible = true;
+        }else if(isValid) {
             var alacartData = {
                 ContentTypes: $scope.ContentTypes,
                 alacartPlansList: $scope.alacartPlanIds,
@@ -56,12 +58,12 @@ console.log('alacartPackData')
                 packageId: $rootScope.PackageId,
                 parentPackageId: $rootScope.ParentPackageId,
                 packageType: $rootScope.PackageType,
-                packId: $rootScope.packSelectedPack,
-                packageName: $rootScope.packPackageName,
+                packId: $rootScope.SelectedPack,
+                packageName: $rootScope.PackageName,
                 distributionChannelId: $rootScope.distributionChannelId
             }
             ngProgress.start();
-            if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
+            if ( $rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 console.log('mainsite edit')
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     $scope.showResponse(data);
@@ -72,35 +74,6 @@ console.log('alacartPackData')
                     $scope.showResponse(data);
                 });
             }
-            /*if($rootScope.PackageType === 1 ){
-
-                console.log( "submit " + $rootScope.PackageType)
-
-                if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '') {
-                    console.log('individual edit')
-                    alacartPack.editAlacartNOffer(alacartData, function (data) {
-                        $scope.showResponse(data);
-                    });
-                } else {
-                    console.log('individual add')
-                    alacartPack.addAlacartNOffer(alacartData, function (data) {
-                        $scope.showResponse(data);
-                    });
-                }
-            }else{
-                ngProgress.start();
-                if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '') {
-                    console.log('mainsite edit')
-                    alacartPack.editAlacartNOffer(alacartData, function (data) {
-                        $scope.showResponse(data);
-                    });
-                } else {
-                    console.log('mainsite add')
-                    alacartPack.addAlacartNOffer(alacartData, function (data) {
-                        $scope.showResponse(data);
-                    });
-                }
-            }*/
         }
     }
 

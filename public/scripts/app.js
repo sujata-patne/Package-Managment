@@ -17,6 +17,7 @@ toastr.options = {
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
 }
+
 myApp.config(function ($stateProvider) {
     $stateProvider
         .state("main-site", {

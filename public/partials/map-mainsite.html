@@ -15,11 +15,11 @@
                     <div class="form-group">
                         <label for="pack" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Select Pack </label>
                         <div class="col-md-6">
-                            <select name="pack" class="form-control" data-ng-model="$root.packSelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
+                            <select name="pack" class="form-control" data-ng-model="$root.SelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
                                 <option value="">-- Select Pack  --</option>
                             </select>
-                            <span style="color: red" ng-show="packForm.$submitted || mainsiteForm.packtype.$dirty">
-                                <span ng-show="mainsiteForm.packtype.$error.required">Please Select Pack.</span>
+                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.SelectedPack.$dirty">
+                                <span ng-show="mainsiteForm.$root.SelectedPack.$error.required">Please Select Pack.</span>
                             </span>
                         </div>
                     </div>
@@ -28,9 +28,9 @@
                     <div class="form-group">
                         <label for="packagename" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Package Title </label>
                         <div class="col-md-6">
-                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.packPackageName" placeholder="Enter Package name" required>
-                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.packPackageName.$touched">
-                                <span ng-show="mainsiteForm.$root.packPackageName.$error.required">Package Name is required.</span>
+                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" required>
+                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.PackageName.$touched">
+                                <span ng-show="mainsiteForm.$root.PackageName.$error.required">Package Name is required.</span>
                             </span>
                         </div>
                     </div>
