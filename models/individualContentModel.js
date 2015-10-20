@@ -19,7 +19,7 @@ exports.getContentData = function( dbConnection,contentTypeId,packId, callback) 
 }
 
 exports.checkRecordExists = function( dbConnection,storeId,packId,alacartPlanId,packageId, callback) {
-	var query = dbConnection.query("SELECT * FROM icn_package_individual_content WHERE pic_st_id = ? AND pic_pk_id = ? AND pic_ap_id = ? AND pic_pkg_id = ? AND pic_crud_isactive IS NULL ",[storeId,packId,alacartPlanId,packageId], function ( err, response ) {
+	var query = dbConnection.query("SELECT * FROM icn_package_individual_content WHERE pic_st_id = ? AND pic_pk_id = ? AND pic_ap_id = ? AND pic_pkg_id = ? AND ISNULL(pic_crud_isactive) ",[storeId,packId,alacartPlanId,packageId], function ( err, response ) {
 		callback( err, response );
 	});
 }
@@ -31,8 +31,8 @@ exports.updateIndividualContentRecord = function( dbConnection,storeId,packId,al
 }
 
 exports.getIndividualContentData = function( dbConnection,storeId,packageId,packId,planId, callback) {
-	console.log("SELECT * FROM icn_package_individual_content WHERE pic_st_id = "+storeId+" AND pic_pkg_id = "+packageId+" AND pic_pk_id = "+packId+"  AND pic_ap_id = "+planId+" AND pic_crud_isactive IS NULL");
-	var query = dbConnection.query("SELECT * FROM icn_package_individual_content WHERE pic_st_id = ? AND pic_pkg_id = ? AND pic_pk_id = ?  AND pic_ap_id = ? AND pic_crud_isactive IS NULL",[storeId,packageId,packId,planId], function ( err, response ) {
+	console.log("SELECT * FROM icn_package_individual_content WHERE pic_st_id = "+storeId+" AND pic_pkg_id = "+packageId+" AND pic_pk_id = "+packId+"  AND pic_ap_id = "+planId+" AND ISNULL(pic_crud_isactive)");
+	var query = dbConnection.query("SELECT * FROM icn_package_individual_content WHERE pic_st_id = ? AND pic_pkg_id = ? AND pic_pk_id = ?  AND pic_ap_id = ? AND ISNULL(pic_crud_isactive) ",[storeId,packageId,packId,planId], function ( err, response ) {
 		callback( err, response );
 	});
 }

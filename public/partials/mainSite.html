@@ -9,9 +9,9 @@
             <div class="row">
                 <div class="col-md-2" >
                     <div class="form-group">
-                        <input type="text" name="pkg_id" class="form-control" data-ng-model="$root.PackageId" >
-                        <input type="text" name="parent_pkg_id" class="form-control" data-ng-model="$root.ParentPackageId">
-                        <input type="text" name="pkg_type" class="form-control" data-ng-model="$root.PackageType">
+                        <input type="text" name="pkg_id" style="width: 50px" data-ng-model="$root.PackageId" >
+                        <input type="text" name="parent_pkg_id" style="width: 50px"  data-ng-model="$root.ParentPackageId">
+                        <input type="text" name="pkg_type" style="width: 50px" data-ng-model="$root.PackageType">
                     </div>
                 </div>
                 <div class="col-md-8 col-xs-12">
@@ -30,69 +30,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12" ng-show="$root.action != 'edit'">
-                                <div class="form-group">
-                                    <label for="isChild" class="col-md-3 control-label" style="text-align: right">Mainsite Child</label>
-                                    <div class="col-md-6">
-                                        <input type="checkbox" name="isChild" value="1"  ng-model="isChild" >
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2"></div>
             </div>
-            <div class="row" ng-hide="$root.ParentPackageId != 0">
+            <div class="row" ng-show="$root.isChild != true">
                 <tabset >
                     <tab ng-repeat="tab in tabs" ui-sref="{{tab.state}}" active="tab.active"  select="setIndex($index)">
                         <tab-heading> {{tab.title}}   </tab-heading>
                     </tab>
                 </tabset>
-                <div ui-view style="min-height: 350px; border: 0px solid red"></div>
             </div>
-            <div class="row"  ng-show="$root.ParentPackageId != 0 && $root.ParentPackageId != '' && $root.ParentPackageId != undefined">
-                <form method="post" class="form-horizontal" role="form" name="mainsiteForm" data-ng-submit="submitMainsiteForm(mainsiteForm.$valid)" novalidate>
-                    <div class="col-md-2" ></div>
-                    <div class="col-md-8 col-xs-12">
-                        <div class="portlet">
-                            <div class="portlet-content">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="pack" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Select Pack </label>
-                                        <div class="col-md-6">
-                                            <select name="pack" class="form-control" data-ng-model="$root.packSelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
-                                                <option value="">-- Select Pack  --</option>
-                                            </select>
-                                            <span style="color: red" ng-show="packForm.$submitted || mainsiteForm.packtype.$dirty">
-                                                <span ng-show="mainsiteForm.packtype.$error.required">Please Select Pack.</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="packagename" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Package Title </label>
-                                        <div class="col-md-6">
-                                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.packPackageName" placeholder="Enter Package name" required>
-                                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.packPackageName.$touched">
-                                                <span ng-show="mainsiteForm.$root.packPackageName.$error.required">Package Name is required.</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="col-md-offset-5 col-md-7" >
-                                        <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
-                                        <button type="reset" ng-disabled="alacartPackPlans.length > 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <div ui-view style="min-height: 350px; border: 0px solid red"></div>
+
+            <!--<div class="row"  ng-show="$root.ParentPackageId != 0 && $root.ParentPackageId != '' && $root.ParentPackageId != undefined">
+            </div>-->
         </div>
     </div>
 </div>

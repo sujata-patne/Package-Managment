@@ -4,7 +4,7 @@ exports.getPackageSubscriptionPack = function( dbConnection, packageId, callback
     }
     var query = dbConnection.query('SELECT * FROM `icn_package_subscription_site`,`icn_sub_plan` WHERE '+
         'icn_package_subscription_site.pss_sp_pkg_id = ? AND '+
-        'icn_package_subscription_site.pss_sp_id = icn_sub_plan.sp_id AND icn_package_subscription_site.pss_crud_isactive IS NULL',packageId, function( err, response ) {
+        'icn_package_subscription_site.pss_sp_id = icn_sub_plan.sp_id AND ISNULL(icn_package_subscription_site.pss_crud_isactive) ',packageId, function( err, response ) {
         callback( err, response );
     });
 }

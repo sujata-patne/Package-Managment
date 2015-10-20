@@ -17,11 +17,6 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     }
 
 
-
-    if($rootScope.PackageId != ""){
-       // console.log('PackageId '+$rootScope.PackageId);
-
-    }
     advanceSetting.getData(preData,function(data){
     	$scope.contentTypes = data.ContentTypes;
       console.log($scope.contentTypes);

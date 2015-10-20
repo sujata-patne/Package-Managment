@@ -66,16 +66,25 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
 
     }
 
-    $scope.EditPackage = function(pkgId,dcId, pkgType){
+    $scope.EditPackage = function(pkgId,dcId,pkgType,parentId){
         $rootScope.PackageId = pkgId;
         $rootScope.distributionChannelId = dcId;
         $rootScope.PackageType = pkgType;
+        $rootScope.ParentPackageId = parentId;
         $rootScope.action = 'edit';
-        if($rootScope.PackageType === 1){
-            $state.go('pack-site');
+        if($rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined && $rootScope.ParentPackageId != ''){
+
+            $state.go('main-site.map');
 
         }else{
-            $state.go('main-site');
+            console.log('2')
+
+            if($rootScope.PackageType === 1){
+                $state.go('pack-site');
+
+            }else{
+                $state.go('main-site');
+            }
         }
     }
 

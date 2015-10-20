@@ -4,7 +4,9 @@
 
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
 console.log('alacartCtrl')
-    if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+    $rootScope.isChild = false;
+
+    if( $rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
 console.log('alacart controller ')
         var data = {
             packageId: $rootScope.PackageId,

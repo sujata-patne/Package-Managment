@@ -5,6 +5,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     console.log('mainsite' + $rootScope.action)
 
+    console.log('Mainsite child' + $rootScope.isChild)
+
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
     $rootScope.PackageType = 0;
@@ -65,6 +67,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     MainSite.getMainSiteData(function (MainSiteData) {
+        console.log('new mapMainsite' + $rootScope.isChild)
+
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
@@ -81,19 +85,15 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }
     });
 
-    $scope.$watch( "isChild" , function(n,o){
-        $scope.setPackageData()
-    }, true );
-
     $scope.getPackageData = function(){
 
         $scope.showPackageData();
-
+console.log('getPackageData')
         $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
     }
     $scope.showPackageData = function(){
-        console.log('$rootScope.action')
-        console.log($rootScope.action)
+        console.log('$rootScope.$state.current')
+        console.log($state.current)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $rootScope.PackageId = undefined;
             $scope.offerId = undefined;
@@ -161,8 +161,17 @@ console.log('mainSitePackageData')
     }
 
     if($rootScope.action === 'edit'){
+        if($rootScope.ParentPackageId != '' && $rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined){
+            angular.forEach($scope.tabs, function(fields){
+                fields.active = false
+            })
+        }
         $scope.showPackageData();
     }
+
+    $scope.$watch( "isChild" , function(n,o){
+        $scope.setPackageData()
+    }, true );
 
     $scope.resetForm = function () {
         $scope.selectedValuePacks = [];
@@ -170,65 +179,21 @@ console.log('mainSitePackageData')
     }
 
     $scope.setPackageData = function(){
-        if($scope.isChild === true && $rootScope.action !== 'edit'){
+        if($rootScope.isChild === true && $rootScope.action !== 'edit'){
             $rootScope.ParentPackageId = $rootScope.PackageId;
             if($rootScope.ParentPackageId != '' || $rootScope.ParentPackageId != 0 || $rootScope.ParentPackageId != undefined){
                 $rootScope.PackageId = 0;
                 $rootScope.packPackageName = '';
             }
         }
-        if($scope.isChild === false  && $rootScope.action !== 'edit'){
-            $rootScope.PackageId = $rootScope.ParentPackageId;
+        if($rootScope.isChild === false  && $rootScope.action !== 'edit'){
+            if($rootScope.ParentPackageId != '' && $rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined) {
+                $rootScope.PackageId = $rootScope.ParentPackageId;
+            }
             if($rootScope.PackageId != '' || $rootScope.PackageId != undefined) {
                 $rootScope.ParentPackageId = 0;
             }
         }
     }
 
-    $scope.submitMainsiteForm = function (isValid) {
-        console.log('$scope.mainsite submit')
-        if (!$rootScope.distributionChannelId) {
-            toastr.error('Distribution Channel is required');
-            $scope.errorvisible = true;
-        } else {
-
-            var alacartData = {
-                isChild: $scope.isChild,
-                packageId: $rootScope.PackageId,
-                parentPackageId: $rootScope.ParentPackageId,
-                packageType: $rootScope.PackageType,
-                packId: $rootScope.packSelectedPack,
-                packageName: $rootScope.packPackageName,
-                distributionChannelId: $rootScope.distributionChannelId
-            }
-
-            ngProgress.start();
-            if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
-                console.log('mainsite edit')
-                MainSite.editAlacartNOffer(alacartData, function (data) {
-                    $scope.showMainsiteResponse(data);
-                });
-            } else {
-                console.log('mainsite add')
-                MainSite.addAlacartNOffer(alacartData, function (data) {
-                    $scope.showMainsiteResponse(data);
-                });
-            }
-        }
-    }
-
-    $scope.showMainsiteResponse = function(data){
-        if (data.success) {
-            toastr.success(data.message)
-            $scope.successvisible = true;
-            $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
-        }
-        else {
-            toastr.error(data.message)
-            $scope.errorvisible = true;
-        }
-
-        ngProgress.complete();
-    }
 });
