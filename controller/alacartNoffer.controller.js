@@ -422,6 +422,7 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                         sp_dc_id: req.body.distributionChannelId,
                                         sp_pkg_type: req.body.packageType, //site type
                                         sp_is_active: 1,
+                                        sp_parent_pkg_id: 0,
                                         sp_modified_on:  new Date(),
                                         sp_modified_by: req.session.package_UserName
                                     };
@@ -635,6 +636,7 @@ exports.addIndividualAlacartPlanDetails = function (req,res,next) {
                                             sp_dc_id: req.body.distributionChannelId,
                                             sp_pkg_type: req.body.packageType, //site type
                                             sp_is_active: 1,
+                                            sp_parent_pkg_id: 0,
                                             sp_created_on: new Date(),
                                             sp_created_by: req.session.package_UserName,
                                             sp_modified_on:	new Date(),
@@ -723,7 +725,7 @@ function getPackageTypeData( connection_ikon_cms, data, session ){
     }else{
         var functionName = 'getMainSitePackageData('+session.package_StoreId+','+data.distributionChannelId+','+data.packageType+')';
     }*/
-        mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.body.pkgId, function (err, packageData) {
+        mainSiteManager.getIndividualPackageData(connection_ikon_cms, session.package_StoreId, req.body.pkgId, function (err, packageData) {
             if(packageData.length > 0){
                 callback(err, packageData[0].sp_pkg_id);
             }else{

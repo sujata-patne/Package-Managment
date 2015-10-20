@@ -43,13 +43,12 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             toastr.error('Package Name Required.');
             $scope.errorvisible = true;
         }else if (isValid) {
-
-                valuePack.addValuePackToMainSite(valuePackData,function(data){
-                    $scope.result(data);
-                    ngProgress.complete();
-                },function(error){
-                    console.log(error);
-                });
+            valuePack.saveValuePackToMainSite(valuePackData,function(data){
+                $scope.result(data);
+                ngProgress.complete();
+            },function(error){
+                console.log(error);
+            });
         }
 
     }
@@ -57,14 +56,6 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
     $scope.result = function( data ){
 
         if(data.success){
-           /* if( data.selectedValuePackPlans.length > 0 ) {
-                $scope.existingValuePackIds = [];
-                $scope.selectedValuePacks = [];
-                for( i = 0; i < data.selectedValuePackPlans.length ; i++ ){
-                    $scope.selectedValuePacks.push(data.selectedValuePackPlans[i].pvs_vp_id );
-                    $scope.existingValuePackIds.push(data.selectedValuePackPlans[i].pvs_vp_id );
-                }
-            }*/
             $scope.success = data.message;
             toastr.success( $scope.success );
             $rootScope.PackageId = data.pkgId;

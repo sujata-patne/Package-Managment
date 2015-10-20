@@ -22,12 +22,13 @@ exports.getOfferPlanSettingDataForUpdate = function( dbConnection, packageId, ca
     });
 }
 exports.getValuePlanSettingDataForUpdate = function( dbConnection, packageId, callback ) {
+    console.log('packageId');
+    console.log(packageId);
     if(packageId == undefined){
         packageId = -1;
     }
-    console.log('SELECT * FROM `icn_package_advance_setting_site`,`icn_package_value_pack_site`,`icn_store_package` where icn_package_advance_setting_site.pass_pvs_id = icn_package_value_pack_site.pvs_id and icn_store_package.sp_pkg_id = icn_package_value_pack_site.pvs_sp_pkg_id and icn_store_package.sp_pkg_id = ? and ISNULL(icn_package_advance_setting_site.pass_crud_isactive)');
     var query = dbConnection.query('SELECT * FROM `icn_package_advance_setting_site`,`icn_package_value_pack_site`,`icn_store_package` '+
-        ' where icn_package_advance_setting_site.pass_pvs_id = icn_package_value_pack_site.pvs_vp_id and '+
+        ' where icn_package_advance_setting_site.pass_pvs_id = icn_package_value_pack_site.pvs_id and '+
         ' icn_store_package.sp_pkg_id = icn_package_value_pack_site.pvs_sp_pkg_id and icn_store_package.sp_pkg_id = ? and ISNULL(icn_package_advance_setting_site.pass_crud_isactive)',packageId, function( err, response ) {
         callback( err, response );
     });

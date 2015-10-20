@@ -15,11 +15,20 @@ myApp.service('valuePack', ['$http', function ($http) {
         });
     }
 
-    this.addValuePackToMainSite = function (data, success, error) {
-        $http.post(this.baseRestUrl + '/addValuePackToMainSite',data).success(function (items) {
-            success(items);
-        }).error(function (err) {
-            error(err);
-        });
+    this.saveValuePackToMainSite = function (data, success, error) {
+        if(data.packageType === 0) {
+            $http.post(this.baseRestUrl + '/saveValuePackToMainSite',data).success(function (items) {
+                success(items);
+            }).error(function (err) {
+                error(err);
+            });
+        }else{
+            $http.post(this.baseRestUrl + '/saveValuePackToIndividual',data).success(function (items) {
+                success(items);
+            }).error(function (err) {
+                error(err);
+            });
+        }
+
     }
 }]);

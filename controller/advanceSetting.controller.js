@@ -328,7 +328,8 @@ exports.editSetting = function(req, res, next) {
                                 loop1(0);
                                 function loop1( cnt ) {
                                     var i = cnt;
-
+console.log('req.body.valuePlanSetting')
+                                    console.log(req.body.valuePlanSetting)
                                     saveValuePackForSetting(_.keys(req.body.valuePlanSetting)[i],req.body.valuePlanSetting,req.body.totalLength - 1,true);
                                     if(cnt == count){
                                         // connection_ikon_cms.release();
@@ -364,15 +365,15 @@ exports.editSetting = function(req, res, next) {
     }
 };
 
-function saveValuePackForSetting(pvs_vp_id,valueObj,contentTypeLength,toUpdate){
+function saveValuePackForSetting(pvs_id,valueObj,contentTypeLength,toUpdate){
      var count = contentTypeLength;
      loop1(0);
      function loop1( cnt ) {
             var i = cnt;
             var data = {
-                pass_pvs_id : parseInt(pvs_vp_id),
-                pass_content_type : parseInt(_.pairs(valueObj[pvs_vp_id])[i][0]),
-                pass_value :  _.pairs(valueObj[pvs_vp_id])[i][1]
+                pass_pvs_id : parseInt(pvs_id),
+                pass_content_type : parseInt(_.pairs(valueObj[pvs_id])[i][0]),
+                pass_value :  _.pairs(valueObj[pvs_id])[i][1]
             }
 
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {

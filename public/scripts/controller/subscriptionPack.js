@@ -79,7 +79,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             }else{
                 $scope.success = 'Package Added successfully.';
             }*/
-            toastr.success( 'Successful' );
+            toastr.success(data.message );
             $rootScope.PackageId = data.pkgId;
             $state.go($state.current, {}, {reload: $state.current});
         }else{
