@@ -1,4 +1,5 @@
 myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, Notification) {
+    $rootScope.n_addNotification = true;
     ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";

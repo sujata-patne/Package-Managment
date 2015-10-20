@@ -92,8 +92,7 @@ console.log('getPackageData')
         $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
     }
     $scope.showPackageData = function(){
-        console.log('$rootScope.$state.current')
-        console.log($state.current)
+
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $rootScope.PackageId = undefined;
             $scope.offerId = undefined;
@@ -103,8 +102,7 @@ console.log('getPackageData')
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
-console.log('param')
-        console.log(params)
+
         MainSite.showPackageData(params,function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
@@ -117,7 +115,7 @@ console.log('param')
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
-console.log('mainSitePackageData')
+            console.log('mainSitePackageData')
             console.log(MainSiteData.mainSitePackageData.packageDetails)
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 console.log('if')
