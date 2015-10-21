@@ -2,7 +2,11 @@
     <div class="content">
         <div class="content-container">
             <div class="content-header">
-                <h2 class="content-header-title">Pack Site Package</h2>
+                <h2 class="content-header-title">
+                    <span ng-show="$root.PackageId >= 0">Edit</span>
+                    <span ng-show="$root.PackageId == '' || $root.PackageId == undefined || $root.PackageId == null">Add New </span>
+
+                    Pack Site Package</h2>
             </div>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}}</span>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}}</span>

@@ -10,18 +10,35 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     $scope.valuePlanSetting = {};
     $scope.updateFlag = false;
     // $scope.valuePlanTotals = {};
-    var preData;
+   
 
-    preData = {
-    	packageId : $rootScope.PackageId
-    }
 
+    $rootScope.$watch('distributionChannelId',function(value,old) {
+      console.log('config value changed :)',value);
+       // $scope.init();
+    }, true);
+
+    //Watching changes in Package Id
+    $rootScope.$watch('PackageId',function(value,old) {
+      console.log('package value changed :)',value);
+       $scope.init();
+    }, true);
 
 
     if($rootScope.PackageId != ""){
        // console.log('PackageId '+$rootScope.PackageId);
 
     }
+
+  $scope.init = function(){
+    var preData;
+
+    preData = {
+      packageId : $rootScope.PackageId
+    }
+
+    console.log('PreData');
+    console.log(preData);
     advanceSetting.getData(preData,function(data){
     	$scope.contentTypes = data.ContentTypes;
       console.log($scope.contentTypes);
@@ -66,7 +83,9 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
         }
     });
 
+}
 
+$scope.init();
    
 
     $scope.offerBuy = function(contentTypeId){

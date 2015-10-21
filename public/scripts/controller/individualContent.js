@@ -113,11 +113,11 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
     $scope.submitIndividualContentForm = function(){
     if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
-            if($rootScope.packSelectedPack == undefined){
+            if($rootScope.SelectedPack == undefined){
                 toastr.error('Please select a valid pack');
             }else{
                 var data = {
-                    packId : $rootScope.packSelectedPack,
+                    packId : $rootScope.SelectedPack,
                     alacartPlanId : $scope.selectedPlanId,
                     packageId : $rootScope.PackageId,
                     selectedContents : $scope.final_selectedContent,
