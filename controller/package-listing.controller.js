@@ -49,9 +49,7 @@ exports.getPackageDetail  = function (req, res, next) {
               }
 
               PackageManager.getAllPackageForList( connection_ikon_cms, data, function(err,Package){
-
                   if (err) {
-
                       connection_ikon_cms.release();
                       res.status(500).json(err.message);
                       console.log(err.message)
@@ -66,25 +64,27 @@ exports.getPackageDetail  = function (req, res, next) {
                                   });
                               },
                               alacartPackPlanCount: function (callback) {
-                                  async.waterfall([
-                                          function (callback) {
-                                              PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
-                                                  callback(err, result);
-                                              })
-                                          },
-                                          function (exist, callback) {
-                                              if (exist.length > 0) {
-                                                  PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
-                                                      callback(err, count);
-                                                  })
-                                              } else {
-                                                  callback(err, 0);
-                                              }
+                                  PackageManager.countOfferPlans(connection_ikon_cms, sp_pkg_id, function (err, offerCount) {
+                                    async.waterfall([
+                                        function (callback) {
+                                          PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                              callback(err, result);
+                                          })
+                                        },
+                                        function (exist, callback) {
+                                          if (exist.length > 0) {
+                                            PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                               callback(err, count);
+                                            })
+                                          } else {
+                                              callback(err, 0);
                                           }
-                                      ],
-                                      function (err, results) {
-                                          callback(err, results);
-                                      });
+                                        }
+                                    ],
+                                    function (err, results) {
+                                        callback(err, results+offerCount);
+                                    });
+                                 })
                               },
                               valuePackPlanCount: function (callback) {
                                   async.waterfall([
@@ -110,30 +110,28 @@ exports.getPackageDetail  = function (req, res, next) {
                               subscriptionPlanCount: function (callback) {
                                   /*count for subscription*/
                                   async.waterfall([
-                                          function (callback) {
+                                      function (callback) {
 
-                                              PackageManager.existSubscriptionByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
-                                                callback(err, result);
-                                                                })
-                                          },
-                                          function (exist, callback) {
-                                                if (exist.length > 0) {
-                                                        PackageManager.countSubscriptionPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
-                                                             callback(err, count);
-                                                         })
-                                                } else {
-                                                      callback(err, 0);
-                                                }
-                                          }
-                                    ],
-                                      function (err, results) {
-                                                callback(err, results);
+                                          PackageManager.existSubscriptionByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                            callback(err, result);
+                                                            })
+                                      },
+                                      function (exist, callback) {
+                                            if (exist.length > 0) {
+                                                    PackageManager.countSubscriptionPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                         callback(err, count);
+                                                     })
+                                            } else {
+                                                  callback(err, 0);
                                             }
-                                          );
-                                        }
-                                    },
-
-                          function (err, results) {
+                                      }
+                                ],
+                                function (err, results) {
+                                    callback(err, results);
+                                });
+                              }
+                        },
+                        function (err, results) {
                               if (err) {
                                   //console.log('fgcfgcfhhfchfch1111');
                                   connection_ikon_cms.release();
@@ -151,7 +149,7 @@ exports.getPackageDetail  = function (req, res, next) {
                           //console.log(searchData)
                           connection_ikon_cms.release();
                           res.send({packageByName:searchData});
-                      }, 200);
+                      }, 500);
                   }
               });
             })
@@ -189,27 +187,29 @@ exports.getPackageStartsWith  = function (req, res, next) {
                                         callback(err,packname)
                                     });
                                 },
-                            alacartPackPlanCount: function (callback) {
+                        alacartPackPlanCount: function (callback) {
+                            PackageManager.countOfferPlans(connection_ikon_cms, sp_pkg_id, function (err, offerCount) {
                                 async.waterfall([
-                                    function (callback) {
-                                        PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
-                                            callback(err, result);
-                                        })
-                                    },
-                                    function (exist, callback) {
-                                        if (exist.length > 0) {
-                                            PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
-                                                callback(err, count);
+                                        function (callback) {
+                                            PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                                callback(err, result);
                                             })
-                                        } else {
-                                            callback(err, 0);
+                                        },
+                                        function (exist, callback) {
+                                            if (exist.length > 0) {
+                                                PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                    callback(err, count);
+                                                })
+                                            } else {
+                                                callback(err, 0);
+                                            }
                                         }
-                                    }
-                                ],
-                                function (err, results) {
-                                    callback(err, results);
-                                });
-                            },
+                                    ],
+                                    function (err, results) {
+                                        callback(err, results+offerCount);
+                                    });
+                            })
+                        },
                         valuePackPlanCount: function (callback) {
                             async.waterfall([
                                     function (callback) {
@@ -272,7 +272,7 @@ exports.getPackageStartsWith  = function (req, res, next) {
                        // console.log(searchData)
                         connection_ikon_cms.release();
                         res.send({Package:searchData});
-                    }, 200);
+                    }, 500);
 
 
                 }

@@ -19,9 +19,8 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
         //save the previous state in a rootScope variable so that it's accessible from everywhere
         $scope.previousState = from;
-        console.log('$rootScope.previousState.indexOf("pack-site")')
-        console.log($scope.previousState.name)
         if($scope.previousState && new RegExp("main-site").test($scope.previousState.name) || $scope.previousState && new RegExp("main-site-map").test($scope.previousState.name) ){
+            console.log($scope.previousState.name +" : "+ $rootScope.action)
 
             $rootScope.PackageId = 0;
             $rootScope.distributionChannelId = undefined;
@@ -35,11 +34,13 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }
     });
 
+    if($rootScope.PackageType === 1 && $rootScope.PackageId != 0 && $rootScope.action != 'edit'){
+        console.log('$rootScope.PackageType')
 
-    if($rootScope.PackageType === 1  && $rootScope.PackageId != undefined && $rootScope.action != 'edit'){
         $rootScope.PackageId = undefined;
         $rootScope.distributionChannelId = undefined;
         $rootScope.PackageType = undefined;
+        $rootScope.ParentPackageId = 0;
         $rootScope.action = 'add';
     }
     $scope.tabs = [
@@ -78,11 +79,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.showDeliveryTypes = function(contents){
         return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
-    $scope.getPackageData = function(){
-        $rootScope.action = 'add';
-        $scope.showPackageData();
-        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
-    }
+
     MainSite.getPackSiteData(function (PackSiteData) {
         console.log('packsite ' + $rootScope.action)
         if($rootScope.action !== 'edit' || $rootScope.action !== undefined){
@@ -104,7 +101,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     });
 
     $scope.showPackageData = function(){
-console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
         console.log($rootScope.action !== 'edit' &&  $rootScope.action !== undefined)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             delete $rootScope.PackageId;
@@ -118,7 +114,7 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
-        var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
+        var params = {distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
         MainSite.showPackSitePackageData(params,function (PackSiteData) {
             console.log(PackSiteData)
@@ -160,6 +156,8 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
                 })
             }
         })
+        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+
     }
 
     if($rootScope.action === 'edit'){
