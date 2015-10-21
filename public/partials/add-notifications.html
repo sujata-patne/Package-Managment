@@ -24,11 +24,9 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select id="percent" type="percent" name="percent" class="form-control input-sm" ng-model="selectedPercent" data-ng-if="selectedCount != 3"  data-ng-options="item.id as item.option_name for item in percent">
+                            <select id="percent" type="percent" name="percent" class="form-control input-sm" ng-hide="selectedCount == 3" ng-model="selectedPercent"   data-ng-options="item.id as item.option_name for item in percent">
                             <option value=""> --Select-- </option>
                             </select>
-                            <select id="percent1" type="percent" name="percent" class="form-control input-sm" ng-model="selectedPercent" data-ng-if="selectedCount == 3" data-ng-init="selectedPercent = 0">
-                                </select>
                         </div>
                     </div>
 
@@ -36,7 +34,7 @@
                         <br>
                         <label for="message" class="col-sm-5 control-label"  >Message text: </label>
                         <div class="col-md-5">
-                            <textarea rows="4" cols="50" name="messagetext" ng-model="messagetext" required></textarea>
+                            <textarea rows="4" cols="50" maxlength="152" name="messagetext" ng-model="messagetext" required></textarea>
                             <span style="color: red" ng-show="notificationForm.$submitted || notificationForm.messagetext.$dirty">
                                 <span ng-show="notificationForm.messagetext.$error.required">Please Input text .</span>
                                 </span>
@@ -46,7 +44,7 @@
                         <br>
                         <label for="count words"class="col-sm-5 control-label">No. of text:</label>
                         <div class="col-md-5">
-                            <input type="number" value="{{messagetext.length}}" readonly/>
+                            <input type="number" value="{{152 - messagetext.length}}" readonly/>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -82,10 +80,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
-                <button ng-show="edit_state == true" class="btn btn-primary btn-w-md"data-ng-click="update()" title="update">Update</button>
+                <button ng-show="edit_state == true"  type="submit" class="btn btn-primary btn-w-md" title="update">Update</button>
                 <button ng-hide="edit_state == true" type="submit" class="btn btn-primary btn-w-md" title="add">Add</button>
-                <button ng-hide="edit_state == true" class="btn btn-small">Add More<span ></button>
-                <button ng-hide="edit_state == true" type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+                <input type="submit" value="AddMore" ng-hide="edit_state == true"  class="btn btn-default btn-w-md" data-ng-click="addMore()" />
+                <button ng-hide="edit_state == true" type="reset" id="reset_btn" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>
     </div>

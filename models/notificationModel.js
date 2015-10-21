@@ -31,13 +31,13 @@ exports.listNotifications= function( dbConnection,pkgId,planIds,planType, callba
     });
 }
 exports.delete = function(dbConnection,pnId,callback){
-    console.log("UPDATE  icn_package_notification  SET pn_crud_isactive = 1 WHERE pn_id = "+pnId )
+
     var query = dbConnection.query("UPDATE  icn_package_notification  SET pn_crud_isactive = 1 WHERE pn_id = ?  ",[pnId], function (err, response) {
         callback(err,response);
     });
 }
 exports.updateContentTypeStatus = function(dbConnection,active,pnId,callback){
-    var query = dbConnection.query("UPDATE icn_package_notification  SET pn_action = ? WHERE pn_id = ?  ",[active,pnId], function (err, response) {
+    var query = dbConnection.query("UPDATE icn_package_notification  SET pn_is_active = ? WHERE pn_id = ?  ",[active,pnId], function (err, response) {
         callback(err,response);
 
     });
@@ -49,8 +49,8 @@ exports.getNotificationData = function(dbConnection,pnId,callback){
 
     });
 }
-exports.updateNotificationData= function( dbConnection,data, callback) {
-    var query = dbConnection.query("UPDATE icn_package_notification SET ?",data, function ( err, response ) {
+exports.updateNotificationData= function( dbConnection,data,pnId, callback) {
+    var query = dbConnection.query("UPDATE icn_package_notification SET  ? WHERE pn_id= ? ",[data,pnId], function ( err, response ) {
         callback( err, response );
     });
 }
