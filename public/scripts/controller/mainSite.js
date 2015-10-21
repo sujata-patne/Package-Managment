@@ -14,31 +14,29 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
+    $scope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
         //save the previous state in a rootScope variable so that it's accessible from everywhere
-        $rootScope.previousState = from;
-    });
+        $scope.previousState = from;
 
-    if($rootScope.previousState && new RegExp("pack-site").test($rootScope.previousState.name) ){
-        console.log('$rootScope.previousState.indexOf("pack-site")')
-        $rootScope.PackageId = 0;
-        $rootScope.distributionChannelId = undefined;
-        $rootScope.PackageType = 0;
-        $rootScope.action = 'add';
-        $rootScope.ParentPackageId = 0;
-        $scope.offerId = '';
-        $scope.paosId = '';
-        $rootScope.PackageName = '';
-        $rootScope.SelectedPack = undefined;
-    }
+        if($scope.previousState && new RegExp("pack-site").test($scope.previousState.name) || $scope.previousState && new RegExp("main-site-map").test($scope.previousState.name) ){
+
+            $rootScope.PackageId = 0;
+            $rootScope.distributionChannelId = undefined;
+            $rootScope.PackageType = 0;
+            $rootScope.action = 'add';
+            $rootScope.ParentPackageId = 0;
+            $scope.offerId = '';
+            $scope.paosId = '';
+            $rootScope.PackageName = '';
+            $rootScope.SelectedPack = undefined;
+        }
+    });
 
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';
         $rootScope.ParentPackageId = 0;
     }
     $('.removeActiveClass').removeClass('active');
-    $('.removeSubactiveClass').removeClass('active');
-
     $('#main-site').addClass('active');
 
     if($rootScope.PackageType === 1 && $rootScope.PackageId != 0 && $rootScope.action != 'edit'){
@@ -86,13 +84,11 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     MainSite.getMainSiteData(function (MainSiteData) {
-        console.log('new mapMainsite' + $rootScope.isChild)
 
         $scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
-        console.log('mainsite : '+$scope.action)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $rootScope.distributionChannelId = undefined;
             $rootScope.PackageId = 0;
@@ -105,14 +101,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }
     });
 
-    $scope.getPackageData = function(){
-
-        $scope.showPackageData();
-console.log('getPackageData')
-        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
-    }
-
-
     $scope.showPackageData = function(){
 
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
@@ -123,7 +111,7 @@ console.log('getPackageData')
         }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
-        var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
+        var params = {distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}; //pkgId:$rootScope.PackageId,
 
         MainSite.showPackageData(params,function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
@@ -135,6 +123,7 @@ console.log('getPackageData')
             $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
 
             $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
+
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
             console.log('mainSitePackageData')
@@ -178,46 +167,19 @@ console.log('getPackageData')
                 })
             }
 
-            $scope.setPackageData()
+            $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+
         })
     }
 
     if($rootScope.action === 'edit'){
-        if($rootScope.ParentPackageId != '' && $rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined){
-            angular.forEach($scope.tabs, function(fields){
-                fields.active = false
-            })
-        }
         $scope.showPackageData();
     }
-
-    $scope.$watch( "isChild" , function(n,o){
-        $scope.setPackageData()
-    }, true );
 
     $scope.resetForm = function () {
         $scope.selectedValuePacks = [];
         $scope.selectedSubscriptionPlans = [];
     }
 
-    $scope.setPackageData = function(){
-        if($rootScope.isChild === true && $rootScope.action !== 'edit'){
-            $rootScope.ParentPackageId = $rootScope.PackageId;
-            if($rootScope.ParentPackageId != '' || $rootScope.ParentPackageId != 0 || $rootScope.ParentPackageId != undefined){
-                $rootScope.PackageId = 0;
-                $rootScope.PackageName = '';
-                $rootScope.SelectedPack = undefined;
-
-            }
-        }
-        if($rootScope.isChild === false  && $rootScope.action !== 'edit'){
-            if($rootScope.ParentPackageId != '' && $rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined) {
-                $rootScope.PackageId = $rootScope.ParentPackageId;
-            }
-            if($rootScope.PackageId != '' || $rootScope.PackageId != 0 || $rootScope.PackageId != undefined) {
-                $rootScope.ParentPackageId = 0;
-            }
-        }
-    }
 
 });

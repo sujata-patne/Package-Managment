@@ -30,9 +30,10 @@ myApp.config(function ($stateProvider) {
             controller: 'packSiteCtrl',
             url: '/pack-site'
         })
-        .state('main-site.map', {
+        .state('main-site-map', {
             templateUrl: 'partials/map-mainsite.html',
             controller: 'mapMainsiteCtrl',
+            url: '/maping'
         })
         .state('main-site.alacart', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',

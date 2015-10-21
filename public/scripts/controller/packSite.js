@@ -9,33 +9,32 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-
-    $('.removeActiveClass').removeClass('active');
-    $('.removeSubactiveClass').removeClass('active');
-   /* if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
-        $rootScope.action = 'add';
-    }*/
     $rootScope.PackageName = '';
     $rootScope.SelectedPack = '';
     $rootScope.PackageType = 1;
+
+    $('.removeActiveClass').removeClass('active');
+
     $('#pack-site').addClass('active');
-    $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
+    $scope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
         //save the previous state in a rootScope variable so that it's accessible from everywhere
-        $rootScope.previousState = from;
+        $scope.previousState = from;
+        console.log('$rootScope.previousState.indexOf("pack-site")')
+        console.log($scope.previousState.name)
+        if($scope.previousState && new RegExp("main-site").test($scope.previousState.name) || $scope.previousState && new RegExp("main-site-map").test($scope.previousState.name) ){
+
+            $rootScope.PackageId = 0;
+            $rootScope.distributionChannelId = undefined;
+            $rootScope.PackageType = 1;
+            $rootScope.action = 'add';
+            $rootScope.ParentPackageId = 0;
+            $scope.offerId = '';
+            $scope.paosId = '';
+            $rootScope.PackageName = '';
+            $rootScope.SelectedPack = undefined;
+        }
     });
 
-    if($rootScope.previousState && new RegExp("main-site").test($rootScope.previousState.name) ){
-        $rootScope.PackageId = 0;
-        $rootScope.distributionChannelId = undefined;
-        $rootScope.PackageType = 1;
-        $rootScope.action = 'add';
-        $rootScope.ParentPackageId = 0;
-        $scope.offerId = '';
-        $scope.paosId = '';
-        $rootScope.PackageName = '';
-        $rootScope.SelectedPack = undefined;
-
-    }
 
     if($rootScope.PackageType === 1  && $rootScope.PackageId != undefined && $rootScope.action != 'edit'){
         $rootScope.PackageId = undefined;
@@ -162,7 +161,7 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
             }
         })
     }
-    //if($rootScope.PackageId != '' && $rootScope.PackageId != null && $rootScope.PackageId != undefined){
+
     if($rootScope.action === 'edit'){
         $scope.showPackageData();
     }

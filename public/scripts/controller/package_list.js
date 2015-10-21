@@ -74,7 +74,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $rootScope.action = 'edit';
         if($rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined && $rootScope.ParentPackageId != ''){
 
-            $state.go('main-site.map');
+            $state.go('main-site-map');
 
         }else{
             if($rootScope.PackageType === 1){
@@ -156,7 +156,6 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
     },function(error){
         console.log(error);
     });
-
 
     $scope.BlockUnBlockContentType = function( packageId, isActive ){
         var active = 1;

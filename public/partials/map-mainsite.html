@@ -1,47 +1,71 @@
-<form method="post" class="form-horizontal" role="form" name="mainsiteForm" data-ng-submit="submitMainsiteForm(mainsiteForm.$valid)" novalidate>
-    <div class="col-md-2" ></div>
-    <div class="col-md-8 col-xs-12">
-        <div class="portlet">
-            <div class="portlet-content">
-                <!--<div class="col-md-12"  ng-show="$root.action != 'edit'" />
-                    <div class="form-group">
-                        <label for="isChild" class="col-md-3 control-label" style="text-align: right">Mainsite Child</label>
-                        <div class="col-md-6">
-                            <input type="checkbox" name="isChild" value="1"  ng-model="isChild" >
-                        </div>
-                    </div>
-                </div>-->
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="pack" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Select Pack </label>
-                        <div class="col-md-6">
-                            <select name="pack" class="form-control" data-ng-model="$root.SelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
-                                <option value="">-- Select Pack  --</option>
-                            </select>
-                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.SelectedPack.$dirty">
-                                <span ng-show="mainsiteForm.$root.SelectedPack.$error.required">Please Select Pack.</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="packagename" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Package Title </label>
-                        <div class="col-md-6">
-                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" required>
-                            <span style="color: red" ng-show="mainsiteForm.$submitted || mainsiteForm.$root.PackageName.$touched">
-                                <span ng-show="mainsiteForm.$root.PackageName.$error.required">Package Name is required.</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-offset-5 col-md-7" >
-                        <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
-                        <button type="reset" ng-disabled="alacartPackPlans.length > 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
-                    </div>
-                </div>
+<div class="container">
+    <div class="content">
+        <div class="content-container">
+            <div class="content-header">
+                <h2 class="content-header-title">Main Site Package</h2>
             </div>
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}}</span>
+            <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}}</span>
+            <form method="post" class="form-horizontal" role="form" name="mainsiteMapForm" data-ng-submit="submitMainsiteForm(mainsiteMapForm.$valid)" novalidate>
+                <div class="row">
+                    <div class="col-md-2" >
+                        <div class="form-group">
+                            <input type="text" name="pkg_id" style="width: 50px" data-ng-model="$root.PackageId" >
+                            <input type="text" name="parent_pkg_id" style="width: 50px"  data-ng-model="$root.ParentPackageId">
+                            <input type="text" name="pkg_type" style="width: 50px" data-ng-model="$root.PackageType">
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-xs-12">
+                        <div class="portlet">
+                            <div class="portlet-content">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="distributionChannels" class="col-md-3 control-label" style="text-align: right"><span class="asterisk padding-right-5">*</span>Deliver Channel</label>
+                                        <div class="col-md-6">
+                                            <select name="distributionChannels" data-ng-options="item.cd_id as item.cd_name for item in distributionChannels" class="form-control" data-ng-model="$root.distributionChannelId" ng-change="showPackageData()" required="true" >
+                                                <option value=""> --Select Store-- </option>
+                                            </select>
+                                            <span style="color: red" ng-show="mainsiteMapForm.$submitted || mainsiteMapForm.distributionChannels.$touched">
+                                                <span ng-show="mainsiteMapForm.distributionChannels.$error.required">Delivery Channel is required.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="pack" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Select Pack </label>
+                                        <div class="col-md-6">
+                                            <select name="pack" class="form-control" data-ng-model="$root.SelectedPack" data-ng-options="item.pk_id as item.pk_name for item in StorePacks"  required>
+                                                <option value="">-- Select Pack  --</option>
+                                            </select>
+                                            <span style="color: red" ng-show="mainsiteMapForm.$submitted || mainsiteMapForm.pack.$touched">
+                                                <span ng-show="mainsiteMapForm.pack.$error.required">Please Select Pack.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="packagename" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Package Title </label>
+                                        <div class="col-md-6">
+                                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" required>
+                                            <span style="color: red" ng-show="mainsiteMapForm.$submitted || mainsiteMapForm.packagename.$touched">
+                                                <span ng-show="mainsiteMapForm.packagename.$error.required">Package Name is required.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-offset-5 col-md-7" >
+                                        <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
+                                        <button type="reset" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</form>
+</div>
