@@ -14,13 +14,13 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
 
 
     $rootScope.$watch('distributionChannelId',function(value,old) {
-      console.log('config value changed :)',value);
+      // console.log('config value changed :)',value);
        // $scope.init();
     }, true);
 
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
-      console.log('package value changed :)',value);
+      // console.log('package value changed :)',value);
        $scope.init();
     }, true);
 
@@ -293,7 +293,6 @@ $scope.init();
         }
 
     }
-
 $(document).ready(function() {
 
         // $("a.grouped_elements").fancybox();

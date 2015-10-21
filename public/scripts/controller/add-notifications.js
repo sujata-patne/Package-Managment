@@ -1,4 +1,4 @@
-myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, Notification) {
+myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams,$timeout, Notification) {
     $rootScope.n_addNotification = true;
     ngProgress.color('yellowgreen');
     ngProgress.height('3px');
@@ -10,6 +10,7 @@ myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngP
     $scope.endingTime = new Date(1970, 0, 1, 00, 00, 0);
     $scope.selectedPush = 0;
     $scope.edit_state = false;
+    $scope.addMore_flag = false;
 $scope.counts =[
     {id:0,option_name:'LessThan'},
     {id:1,option_name:'MoreThan'},
@@ -56,23 +57,40 @@ $scope.counts =[
             $scope.selectedPush=  data.NotificationData[0].pn_push_type
         })
     }
-    $scope.submitNotificationForm = function (valid){
+    $scope.submitNotificationForm = function (valid) {
+            if ($scope.startingTime >= $scope.endingTime) {
+                 toastr.error('Start time  should be smaller than End time.');
+            }else if($scope.messagetext == undefined){
+            }
+        else if ($stateParams.pn_id) {
+            var notificationData = {
+                pnId: $stateParams.pn_id,
+                Days: $scope.days == undefined ? 0 : $scope.days,
+                Hours: $scope.hours == undefined ? 1 : $scope.hours,
+                Operator: $scope.selectedCount,
+                Percent: $scope.selectedPercent,
+                Message: $scope.messagetext,
+                PushFrom: $scope.startingTime,
+                PushTo: $scope.endingTime,
+                Push: $scope.selectedPush
+            }
+            Notification.updateNotificationData(notificationData, function (data) {
+                toastr.success("update successfully");
+            });
 
-        if($scope.startingTime >= $scope.endingTime ){
-            toastr.error('Start time  should be smaller than End time.');
         }
-        else if($rootScope.n_selectedPlans.length == 0){
+        else if ($rootScope.n_selectedPlans.length == 0) {
             toastr.error('Please Select Plan');
         }
         else {
 
-            if ($rootScope.n_selectedPackage && $rootScope.n_selectedPackage != null && $rootScope.n_selectedPackage != undefined && $rootScope.n_selectedPackage != ''){
+            if ($rootScope.n_selectedPackage && $rootScope.n_selectedPackage != null && $rootScope.n_selectedPackage != undefined && $rootScope.n_selectedPackage != '') {
 
                 var notificationData = {
                     PackageId: $rootScope.n_selectedPackage,
                     PlanId: $rootScope.n_selectedPlans,
                     Days: $scope.days == undefined ? 0 : $scope.days,
-                    Hours: $scope.hours == undefined ? 1 : $scope.hours ,
+                    Hours: $scope.hours == undefined ? 1 : $scope.hours,
                     Operator: $scope.selectedCount,
                     Percent: $scope.selectedPercent,
                     Message: $scope.messagetext,
@@ -82,30 +100,36 @@ $scope.counts =[
                 }
 
 
-            Notification.addNotificationData(notificationData, function (data) {
-                toastr.success("save successfully");
+                Notification.addNotificationData(notificationData, function (data) {
 
-            });
+                    toastr.success("save successfully");
 
-        }else{
+                    if($scope.addMore_flag){
+                        alert('Yo!');
+                        //$timeout(function() {
+                        //    angular.element('#reset_btn').triggerHandler('click');
+                        //});
+                        $timeout(function() {
+                            $('#reset_btn').trigger('click');
+                            $scope.resetForm();
+                            $scope.startingTime = new Date(1970, 0, 1, 00, 00, 0);
+                            $scope.endingTime = new Date(1970, 0, 1, 00, 00, 0);
+                        });
+                    }
+                });
+
+            }
+            else {
                 toastr.error('Please Select Package');
             }
         }
-    }
 
-    //$scope.update= function(){
-    //    var notificationData = {
-    //        Days: $scope.days == undefined ? 0 : $scope.days,
-    //        Hours: $scope.hours == undefined ? 1 : $scope.hours ,
-    //        Operator: $scope.selectedCount,
-    //        Percent: $scope.selectedPercent,
-    //        Message: $scope.messagetext,
-    //        PushFrom: $scope.startingTime,
-    //        PushTo: $scope.endingTime,
-    //        Push: $scope.selectedPush
-    //    }
-    //    Notification.updateNotificationData(notificationData, function (data) {
-    //        toastr.success("update successfully");
-    //    });
-    //}
+    }
+$scope.addMore= function(){
+    $scope.addMore_flag = true;
+}
+$scope.resetForm = function(){
+    $scope.messagetext = undefined;
+}
+
 });

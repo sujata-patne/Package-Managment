@@ -127,7 +127,7 @@ exports.addNotificationData = function(req, res, next) {
                                 pn_push_from: moment(req.body.PushFrom).format('YYYY-MM-DD HH:mm:ss'),
                                 pn_push_to: moment(req.body.PushTo).format('YYYY-MM-DD HH:mm:ss'),
                                 pn_push_type: req.body.Push,
-                                pn_action: 1
+                                pn_is_active: 1
                             }
 
                             Notification.saveNotificationData(connection_ikon_cms, data, function (err, response) {
@@ -160,14 +160,21 @@ exports.listNotificationData = function(req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                        ListNotification : function (callback){
-                            console.log(req.body.PlanId.split('_')[1]);
-                            var planId = parseInt(req.body.PlanId.split('_')[1]);
-                            var planType = req.body.PlanId.split('_')[0];
-                            Notification.listNotifications(connection_ikon_cms,req.body.PackageId,planId,planType, function(err, ListNotification){
-                                callback(err,ListNotification);
-                            });
+                        ListNotification : function (callback) {
+                            console.log(req.body.PlanId)
+                            if (req.body.PlanId) {
+                                var planId = parseInt(req.body.PlanId.split('_')[1]);
+                                var planType = req.body.PlanId.split('_')[0];
+                                Notification.listNotifications(connection_ikon_cms, req.body.PackageId, planId, planType, function (err, ListNotification) {
+                                    callback(err, ListNotification);
+                                });
+                            }
+                            else
+                            {
+                                callback(null,'');
+                            }
                         }
+
                     },
                     function (err, results) {
 
@@ -257,7 +264,6 @@ exports.updateNotificationData  = function(req, res, next) {
                 async.parallel({
                         NotificationData: function (callback) {
                             var data = {
-                                pn_id: response[0].maxId,
                                 pn_plan_start: moment(new Date()).add(req.body.Days, 'days').add(req.body.Hours, 'h').format('YYYY-MM-DD'),
                                 pn_after_day: req.body.Days,
                                 pn_after_hour: req.body.Hours,
@@ -266,11 +272,10 @@ exports.updateNotificationData  = function(req, res, next) {
                                 pn_message: req.body.Message,
                                 pn_push_from: moment(req.body.PushFrom).format('YYYY-MM-DD HH:mm:ss'),
                                 pn_push_to: moment(req.body.PushTo).format('YYYY-MM-DD HH:mm:ss'),
-                                pn_push_type: req.body.Push,
-                                pn_action: 1
+                                pn_push_type: req.body.Push
                             }
 
-                            Notification.updateNotificationData(connection_ikon_cms, data, function (err, response) {
+                            Notification.updateNotificationData(connection_ikon_cms, data,req.body.pnId, function (err, response) {
                                 callback(err, response);
                             });
                         }

@@ -16,9 +16,22 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
 
     $scope.sequenceData = [];
 
-    var packageId = $rootScope.PackageId;
+   
 
-    Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
+    $rootScope.$watch('distributionChannelId',function(value,old) {
+      // console.log('config value changed :)',value);
+       // $scope.init();
+    }, true);
+
+    //Watching changes in Package Id
+    $rootScope.$watch('PackageId',function(value,old) {
+       console.log('package value changed :)',value);
+       $scope.init();
+    }, true);
+
+$scope.init = function(){
+        var packageId = $rootScope.PackageId;
+        Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
         console.log('called default')
         console.log(data)
         $scope.AlacartPlans = data.arrangeSequenceData;
@@ -44,33 +57,45 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         console.log($scope.finalarray)
         console.log($scope.sequenceData)
     });
+}
+
+$scope.init();
 
     $scope.submitForm = function(){
+    //Get the length of filled values.
+        var arrlength = $scope.sequenceData.filter(function(e){return e;});
+        arrlength = arrlength.filter(function(e){return e.pas_arrange_seq != null; });
+        debugger;
+        
+        if(arrlength.length == $scope.finalarray.length){
+                if($scope.arrangedContentList==0)
+                {
+                    $scope.disable="true";
+                    toastr.error("enter the arrange sequence");
+                }
+                console.log($scope.finalarray)
+                console.log($scope.sequenceData)
+                var data ={
+                    packageId : $rootScope.PackageId,
+                    finalarray:$scope.finalarray,
+                    sequenceData: $scope.sequenceData
+                }
 
-        if($scope.arrangedContentList==0)
-        {
-            $scope.disable="true";
-            toastr.error("enter the arrange sequence");
+                Arrangeplans.AddArrangedContents( data , function (data) {
+                    if( data.save === true ) {
+                        toastr.save(data.message);
+                    }else {
+                        toastr.success(data.message);
+                    }
+                },function(error){
+                    console.log(error)
+                    toastr.error(error)
+                })
+        }else{
+            toastr.error('Please fill all the values');
         }
-        console.log($scope.finalarray)
-        console.log($scope.sequenceData)
-        var data ={
-            packageId : $rootScope.PackageId,
-            finalarray:$scope.finalarray,
-            sequenceData: $scope.sequenceData
-        }
-
-        Arrangeplans.AddArrangedContents( data , function (data) {
-            if( data.save === true ) {
-                toastr.save(data.message);
-            }else {
-                toastr.success(data.message);
-            }
-        },function(error){
-            console.log(error)
-            toastr.error(error)
-        })
     }
+
     $scope.checkForDuplicates = function(id) {
         var unique = [];
         var duplicate = [];

@@ -184,7 +184,8 @@ exports.saveValuePackToIndividual = function (req,res,next) {
                                 sp_modified_on: new Date(),
                                 sp_modified_by: req.session.package_UserName
                             };
-
+                            console.log(storePackage);
+                            console.log(req.body);
                             if( packageData.length == 0 ) {
                                 mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
                                     if (err) {

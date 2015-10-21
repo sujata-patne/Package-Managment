@@ -54,7 +54,7 @@
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead> 
-                                  <tbody dir-paginate="item in packageList | itemsPerPage: 8">
+                                  <tbody ng-show="distributionChannel != undefined && distributionChannel != null" dir-paginate="item in packageList | itemsPerPage: 8">
                                     <tr >
                                            
                                         <td class="col-md-1 col-xs-1 text-center">{{$index+1}}</td>
@@ -76,6 +76,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div ng-show="distributionChannel == undefined || distributionChannel == null">
+                <span style="margin-left:40%">Please select the Distribution channel</span>
             </div>
              <div ng-show="packageList.length == 0">
                         <span style="margin-left:40%">No records found for the search.</span>
@@ -135,6 +138,7 @@
                         <br/><br/>
                         <div class="col-md-12 text-center">
                             <button type="button" ng-click="searchByTitle()" class="btn btn-default btn-w-xs" >Search</button>
+                            <button type="button" ng-click="showAllPackage()" class="btn btn-default btn-w-xs" >Show All Package</button>
                            
                         </div>
                     </div>
