@@ -50,8 +50,8 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
 
     $scope.distributionChannelChange = function(){
         $scope.search_title="";
-        $('#src_'+$scope.alpha).css('font-weight','normal');
-        $('#src_'+$scope.alpha).css('font-size','small');
+        //$('#src_'+$scope.alpha).css('font-weight','normal');
+        //$('#src_'+$scope.alpha).css('font-size','small');
         var data = {
             title_text : ($scope.alpha)? $scope.alpha:$scope.search_title,
             st_date : $scope.StartDate,
@@ -85,7 +85,9 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
             }
         }
     }
-
+    $scope.showAllPackage = function(){
+        window.location.reload();
+    }
     // var first = "A", last = "Z";
     // $scope.alphabets[0] = "1";
     // for(var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {
