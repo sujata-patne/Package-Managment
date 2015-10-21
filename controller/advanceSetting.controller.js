@@ -46,9 +46,14 @@ exports.getData = function(req, res, next) {
                         });
                     },
                     CGImageData: function (callback) {
-                        advanceSettingManager.CGImageExists(connection_ikon_cms,req.body.packageId, function (err, CGImageData) {
-                            callback(err, CGImageData);
-                        });
+                        if(req.body.packageId){
+                              advanceSettingManager.CGImageExists(connection_ikon_cms,req.body.packageId, function (err, CGImageData) {
+                                 callback(err, CGImageData);
+                            });
+                        }else{
+                          callback(null,'');
+                        }
+                      
                     }
                 },
                 function (err, results) {

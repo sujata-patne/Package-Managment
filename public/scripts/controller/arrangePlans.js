@@ -46,31 +46,40 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     });
 
     $scope.submitForm = function(){
+    //Get the length of filled values.
+        var arrlength = $scope.sequenceData.filter(function(e){return e;});
+        arrlength = arrlength.filter(function(e){return e.pas_arrange_seq != null; });
+        debugger;
+        
+        if(arrlength.length == $scope.finalarray.length){
+                if($scope.arrangedContentList==0)
+                {
+                    $scope.disable="true";
+                    toastr.error("enter the arrange sequence");
+                }
+                console.log($scope.finalarray)
+                console.log($scope.sequenceData)
+                var data ={
+                    packageId : $rootScope.PackageId,
+                    finalarray:$scope.finalarray,
+                    sequenceData: $scope.sequenceData
+                }
 
-        if($scope.arrangedContentList==0)
-        {
-            $scope.disable="true";
-            toastr.error("enter the arrange sequence");
+                Arrangeplans.AddArrangedContents( data , function (data) {
+                    if( data.save === true ) {
+                        toastr.save(data.message);
+                    }else {
+                        toastr.success(data.message);
+                    }
+                },function(error){
+                    console.log(error)
+                    toastr.error(error)
+                })
+        }else{
+            toastr.error('Please fill all the values');
         }
-        console.log($scope.finalarray)
-        console.log($scope.sequenceData)
-        var data ={
-            packageId : $rootScope.PackageId,
-            finalarray:$scope.finalarray,
-            sequenceData: $scope.sequenceData
-        }
-
-        Arrangeplans.AddArrangedContents( data , function (data) {
-            if( data.save === true ) {
-                toastr.save(data.message);
-            }else {
-                toastr.success(data.message);
-            }
-        },function(error){
-            console.log(error)
-            toastr.error(error)
-        })
     }
+
     $scope.checkForDuplicates = function(id) {
         var unique = [];
         var duplicate = [];
