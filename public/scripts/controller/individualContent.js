@@ -112,27 +112,33 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
  	
 
     $scope.submitIndividualContentForm = function(){
-        if($rootScope.SelectedPack == undefined){
-            toastr.error('Please select a valid pack');
-        }else{
-            var data = {
-                packId : $rootScope.SelectedPack,
-                alacartPlanId : $scope.selectedPlanId,
-                packageId : $rootScope.PackageId,
-                selectedContents : $scope.final_selectedContent,
-                validDate : $scope.ValidDate
+    if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+            if($rootScope.SelectedPack == undefined){
+                toastr.error('Please select a valid pack');
+            }else{
+                var data = {
+                    packId : $rootScope.SelectedPack,
+                    alacartPlanId : $scope.selectedPlanId,
+                    packageId : $rootScope.PackageId,
+                    selectedContents : $scope.final_selectedContent,
+                    validDate : $scope.ValidDate
+                }
+
+                if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+                    IndividualContent.editIndividualContent(data,function(data){
+                        toastr.success('Successful!');
+                    });
+                }else{
+                    IndividualContent.addIndividualContent(data,function(data){
+                        toastr.success('Successful!');
+                    });
+                }    
             }
 
-            if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
-                IndividualContent.editIndividualContent(data,function(data){
-                    toastr.success('Successful!');
-                });
-            }else{
-                IndividualContent.addIndividualContent(data,function(data){
-                    toastr.success('Successful!');
-                });
-            }    
+        }else{
+            toastr.error('Please select a package');
         }
+
     }
 
 

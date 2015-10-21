@@ -176,7 +176,7 @@ exports.saveValuePackToIndividual = function (req,res,next) {
                                 sp_dc_id: req.body.selectedDistributionChannel,
                                 sp_pkg_type: req.body.packageType,
                                 sp_package_name: req.body.packageName,
-                                sp_pk_id :  req.body.packageId, // pack id
+                                sp_pk_id :  req.body.packId, // pack id
                                 sp_is_active: 1,
                                 sp_parent_pkg_id: req.body.parentPackageId,
                                 sp_created_on: new Date(),
@@ -184,7 +184,8 @@ exports.saveValuePackToIndividual = function (req,res,next) {
                                 sp_modified_on: new Date(),
                                 sp_modified_by: req.session.package_UserName
                             };
-
+                            console.log(storePackage);
+                            console.log(req.body);
                             if( packageData.length == 0 ) {
                                 mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
                                     if (err) {
