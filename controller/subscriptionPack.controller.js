@@ -155,7 +155,7 @@ exports.saveSubscriptionPackToMainSite = function(req, res, next) {
     }
 }
 
-exports.saveSubscriptionToIndividual = function(req, res, next) {
+exports.saveSubscriptionPackToIndividual = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {

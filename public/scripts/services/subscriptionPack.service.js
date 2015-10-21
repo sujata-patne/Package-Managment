@@ -19,13 +19,13 @@ myApp.service('subscriptionPack', ['$http', function ($http) {
 
     this.addSubscriptionPackToMainSite = function (data, success, error) {
         if(data.packageType === 0) {
-            $http.post(this.baseRestUrl + '/saveSubscriptionToMainSite',data).success(function (items) {
+            $http.post(this.baseRestUrl + '/saveSubscriptionPackToMainSite',data).success(function (items) {
                 success(items);
             }).error(function (err) {
                 error(err);
             });
         }else{
-            $http.post(this.baseRestUrl + '/saveSubscriptionToIndividual',data).success(function (items) {
+            $http.post(this.baseRestUrl + '/saveSubscriptionPackToIndividual',data).success(function (items) {
                 success(items);
             }).error(function (err) {
                 error(err);

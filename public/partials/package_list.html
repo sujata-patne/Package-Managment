@@ -59,11 +59,12 @@
                                            
                                         <td class="col-md-1 col-xs-1 text-center">{{$index+1}}</td>
                                         <td class="col-md-3 col-xs-3">{{item.sp_package_name}}</td>
-                                        <td class="col-md-2 col-xs-2 text-center">{{item.valuePackPlanCount + item.subscriptionPlanCount+item.alacartPackPlanCount}}</td>
+                                        <td class="col-md-2 col-xs-2 text-center">
+                                            <span ng-show="item.sp_parent_pkg_id == 0">{{item.valuePackPlanCount + item.subscriptionPlanCount+item.alacartPackPlanCount}}</span>
+                                            <span ng-show="item.sp_parent_pkg_id > 0">Child</span>
+                                        </td>
                                         <td class="col-md-3 col-xs-3">{{item.packName}}</td>
-                                         <td>
-                                        <div class="row">
-
+                                        <td><div class="row">
                                             <div ng-hide="item.sp_is_active == 0" class="col-md-4 col-xs-4  text-center"><a href="" data-ng-click="EditPackage(item.sp_pkg_id,item.sp_dc_id,item.sp_pkg_type,item.sp_parent_pkg_id)" title="Edit"><i class="fa fa-edit" title="Edit"></i></a></div>
                                             <div class="col-md-4 col-xs-4  text-center" ng-hide="item.sp_pkg_type == 0" data-ng-if="item.sp_is_active == 1" class="text-right"><a href="" title="Click To Block" data-ng-click="BlockUnBlockContentType(item.sp_pkg_id,item.sp_is_active)"><i class="fa fa-ban text-right red" style="color: green;"></i></a></div>
                                             <div class="col-md-4 col-xs-4 text-center " ng-hide="item.sp_pkg_type == 0" data-ng-if="item.sp_is_active == 0" class="text-right"><a href="" title="Click To UnBlock" data-ng-click="BlockUnBlockContentType(item.sp_pkg_id,item.sp_is_active)"> <i class="fa fa-ban text-right green" style="color: red;"></i></a></div>
