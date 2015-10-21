@@ -181,7 +181,6 @@ exports.saveSubscriptionToIndividual = function(req, res, next) {
                             callback(null, {'exist': data.exist, 'message': 'Package Name Must be Unique'});
                         } else {
                             console.log(' unique')
-
                             callback(null, {'exist': data.exist});
                         }
                     }
