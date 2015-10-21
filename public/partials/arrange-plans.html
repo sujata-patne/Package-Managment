@@ -3,7 +3,8 @@
         <div class="col-md-8 col-xs-12">
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}} </span>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}} </span>
-            <div class="portlet">
+
+            <div class="portlet" ng-show="finalarray.length > 0">
                 <div class="portlet-content">
                     <div class="col-md-12 col-xs-12">
                         <div class="table-responsive" id="user-exportable" >
@@ -30,9 +31,14 @@
                     </div>
                 </div>
             </div>
+            <div class="portlet" ng-show="finalarray.length == 0"> 
+                <div class="portlet-content">
+                    Please create a package / Plans
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="finalarray.length > 0">
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="disable" title="Save"data-ng-click="submitForm()">Submit</button>

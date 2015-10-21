@@ -122,7 +122,7 @@ exports.addSetting = function(req, res, next) {
                                 if(cnt == count){
                                     callback(null);
                                 }else{
-                                    connection_ikon_cms.release();
+                                    // connection_ikon_cms.release();
                                     cnt = cnt + 1;
                                     loop1(cnt);
                                 }

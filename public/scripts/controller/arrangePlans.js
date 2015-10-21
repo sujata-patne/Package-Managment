@@ -16,9 +16,22 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
 
     $scope.sequenceData = [];
 
-    var packageId = $rootScope.PackageId;
+   
 
-    Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
+    $rootScope.$watch('distributionChannelId',function(value,old) {
+      // console.log('config value changed :)',value);
+       // $scope.init();
+    }, true);
+
+    //Watching changes in Package Id
+    $rootScope.$watch('PackageId',function(value,old) {
+       console.log('package value changed :)',value);
+       $scope.init();
+    }, true);
+
+$scope.init = function(){
+        var packageId = $rootScope.PackageId;
+        Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
         console.log('called default')
         console.log(data)
         $scope.AlacartPlans = data.arrangeSequenceData;
@@ -44,6 +57,9 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         console.log($scope.finalarray)
         console.log($scope.sequenceData)
     });
+}
+
+$scope.init();
 
     $scope.submitForm = function(){
     //Get the length of filled values.
