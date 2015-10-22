@@ -1,4 +1,4 @@
-<form method="post" class="form-horizontal" role="form" name="arrangePlansForm" data-ng-submit="submitarrangePlansForm(arrangePlansForm.$valid)" novalidate>
+<form method="post" class="form-horizontal" role="form" name="arrangePlansForm" data-ng-submit="submitArrangePlansForm(arrangePlansForm.$valid)" novalidate>
     <div class="row" style="margin-left:20%">
         <div class="col-md-8 col-xs-12">
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}} </span>
@@ -17,9 +17,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     <tr data-ng-repeat="fp in finalarray | orderBy:'fp.plan_type':reverse">
-
                                         <td class="col-md-1 col-xs-1 text-center">{{fp.plan_name}}</td>
                                         <td class="col-md-2 col-xs-2 text-center">{{fp.plan_type}}</td>
                                         <td class="col-md-1 col-xs-1"> <input type="number" min="0" class="form-control" name="sequenceData[]" ng-model="sequenceData[fp.id].pas_arrange_seq"  ng-change="checkForDuplicates(fp.id);" >
@@ -42,7 +40,7 @@
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="disable" title="Save"data-ng-click="submitForm()">Submit</button>
-                <button class="btn btn-small"  ng-disable="dis()">Next</button>
+                <button type="button" class="btn btn-small" ng-click="nextButtonPressed = 1;submitArrangePlansForm(arrangePlansForm.$valid);" ng-disabled="dis()">Next</button>
                 <button type="reset" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>

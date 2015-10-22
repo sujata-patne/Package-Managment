@@ -92,9 +92,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         }
     }
     $scope.submitMainsiteForm = function (isValid) {
-        console.log('$rootScope.ParentPackageId')
-        console.log($rootScope.ParentPackageId)
-        console.log('$scope.mainsite submit')
+
         if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
             $scope.errorvisible = true;

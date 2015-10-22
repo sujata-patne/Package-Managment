@@ -13,7 +13,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.alacartarray=[];
     $scope.array=[];
     $scope.arrangedContentList ={};
-
+    $scope.nextButtonPressed = 0;
     $scope.sequenceData = [];
 
    
@@ -61,7 +61,7 @@ $scope.init = function(){
 
 $scope.init();
 
-    $scope.submitForm = function(){
+    $scope.submitArrangePlansForm = function(){
     //Get the length of filled values.
         var arrlength = $scope.sequenceData.filter(function(e){return e;});
         arrlength = arrlength.filter(function(e){return e.pas_arrange_seq != null; });
@@ -73,8 +73,7 @@ $scope.init();
                     $scope.disable="true";
                     toastr.error("enter the arrange sequence");
                 }
-                console.log($scope.finalarray)
-                console.log($scope.sequenceData)
+
                 var data ={
                     packageId : $rootScope.PackageId,
                     finalarray:$scope.finalarray,
@@ -82,11 +81,17 @@ $scope.init();
                 }
 
                 Arrangeplans.AddArrangedContents( data , function (data) {
-                    if( data.save === true ) {
-                        toastr.save(data.message);
-                    }else {
-                        toastr.success(data.message);
+
+                    toastr.success(data.message);
+                    if($scope.nextButtonPressed){
+                        console.log('if in next button')
+                        $rootScope.proceed();
+                    }else{
+                        console.log('else in next button')
+
+                        $state.go($state.current, {}, {reload: $state.current});
                     }
+
                 },function(error){
                     console.log(error)
                     toastr.error(error)

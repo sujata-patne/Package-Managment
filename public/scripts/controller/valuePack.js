@@ -1,4 +1,5 @@
 myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, valuePack ) {
+    $scope.nextButtonPressed = 0;
 
     var data = {
         packageId : $rootScope.PackageId,
@@ -18,7 +19,6 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             }
         }
     });
-
 
     $scope.submitValuePackForm = function( isValid ) {
         $scope.successvisible = false;
@@ -44,7 +44,17 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             $scope.errorvisible = true;
         }else if (isValid) {
             valuePack.saveValuePackToMainSite(valuePackData,function(data){
-                $scope.result(data);
+                if($scope.nextButtonPressed){
+                    toastr.success(data.message );
+                    $rootScope.PackageId = data.pkgId;
+                    console.log('if in submit')
+
+                    $rootScope.proceed();
+
+                }else{
+                    console.log('else in submit')
+                    $scope.result(data);
+                }
                 ngProgress.complete();
             },function(error){
                 console.log(error);

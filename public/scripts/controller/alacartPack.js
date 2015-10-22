@@ -6,6 +6,8 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
 console.log('alacartCtrl')
     $rootScope.isChild = false;
 
+    $scope.nextButtonPressed = 0;
+
     if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
 console.log('alacart controller ')
         var data = {
@@ -39,7 +41,7 @@ console.log('alacartPackData')
         });
     }
 
-    $scope.submitForm = function (isValid) {
+    $scope.submitAlacartForm = function (isValid) {
         if (!$rootScope.distributionChannelId){
             toastr.error('Distribution Channel Required');
             $scope.errorvisible = true;
@@ -66,12 +68,23 @@ console.log('alacartPackData')
             if ( $rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 console.log('mainsite edit')
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
-                    $scope.showResponse(data);
+                    if($scope.nextButtonPressed){
+                        $rootScope.proceed();
+
+                    }else{
+                        $scope.showResponse(data);
+                    }
                 });
             } else {
                 console.log('mainsite add')
                 alacartPack.addAlacartNOffer(alacartData, function (data) {
-                    $scope.showResponse(data);
+                    if($scope.nextButtonPressed){
+                        toastr.success(data.message)
+                        $rootScope.PackageId = data.pkgId;
+                        $rootScope.proceed();
+                    }else{
+                        $scope.showResponse(data);
+                    }
                 });
             }
         }
@@ -83,21 +96,6 @@ console.log('alacartPackData')
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
             $state.go($state.current, {}, {reload: $state.current});
-
-           /* $scope.contentTypePlanData = angular.copy(data.contentTypePlanData);
-            $scope.offerId =  data.offerId;
-            $scope.paosId =  data.paosId;
-            console.log($rootScope.PackageId)
-            if ($scope.contentTypePlanData != null && $scope.contentTypePlanData.length > 0) {
-                angular.forEach($scope.contentTypePlanData, function (data) {
-                    $scope.alacartPlanIds[data.pct_content_type_id] = {
-                        download: data.pct_download_id,
-                        streaming: data.pct_stream_id
-                    };
-                })
-            }
-            console.log($scope.alacartPlanIds)
-            */
 
         }
         else {

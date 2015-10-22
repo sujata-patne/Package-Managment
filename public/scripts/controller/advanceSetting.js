@@ -10,7 +10,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     $scope.valuePlanSetting = {};
     $scope.updateFlag = false;
     // $scope.valuePlanTotals = {};
-   
+   $scope.nextButtonPressed = 0;
 
 
     $rootScope.$watch('distributionChannelId',function(value,old) {
@@ -215,7 +215,7 @@ $scope.init();
                           isValid = false;
                       }
                   }
-                
+
 
                     angular.forEach($scope.valuePlanSetting,function(value,key){
                         //Key here is the plan id 
@@ -280,14 +280,24 @@ $scope.init();
 
                       if($scope.updateFlag){
                            advanceSetting.editSetting(newSetting,function(data){
-                                toastr.success('Successfully Updated!');
+                               if($scope.nextButtonPressed){
+                                   $rootScope.proceed();
+                               }else{
+                                   $state.go($state.current, {}, {reload: $state.current});
+                               }
+                               toastr.success('Successfully Updated!');
                            });
                       }else{
                            $scope.updateFlag = true;
                            advanceSetting.addSetting(newSetting,function(data){
-                                toastr.success('Successfully Added!');
+                               if($scope.nextButtonPressed){
+                                   $rootScope.proceed();
+
+                               }else{
+                                   $state.go($state.current, {}, {reload: $state.current});
+                               }
+                               toastr.success('Successfully Added!');
                            });
-                        
                       }
                     }
         }

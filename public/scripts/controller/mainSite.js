@@ -39,7 +39,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $('.removeActiveClass').removeClass('active');
     $('#main-site').addClass('active');
 
-    if($rootScope.PackageType === 1 && $rootScope.PackageId != 0 && $rootScope.action != 'edit'){
+    if($rootScope.PackageType === 0 && $rootScope.PackageId != 0 && $rootScope.action != 'edit'){
         $rootScope.PackageId = 0;
         $rootScope.distributionChannelId = undefined;
         $rootScope.PackageType = undefined;
@@ -57,12 +57,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     ];
     //default form display for a-la-cart and offer plan
 
-    $scope.proceed = function() {
+    $rootScope.proceed = function() {
         if($scope.tabIndex !== ( $scope.tabs.length - 1 ) ){
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
-            $state.transitionTo($scope.tabs[$scope.tabIndex].state);
+            $state.go($scope.tabs[$scope.tabIndex].state,{}, {reload: $state.current});
+            console.log('next Pressed')
+            console.log($scope.tabIndex)
         }
     };
 
@@ -74,9 +76,9 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
-        $state.transitionTo($scope.tabs[$scope.tabIndex].state);
+        $state.go($scope.tabs[$scope.tabIndex].state);
         //default form display for a-la-cart and offer plan
-        $state.transitionTo($scope.tabs[$scope.tabIndex]['state']);
+        $state.go($scope.tabs[$scope.tabIndex]['state']);
     }
 
     $scope.showDeliveryTypes = function(contents){

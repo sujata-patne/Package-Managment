@@ -2,7 +2,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
     $scope.existingSubscriptionPackIds = [];
     $scope.selectedSubscriptionPlans = [];
-
+    $scope.nextButtonPressed = 0;
    /* subscriptionPack.getSubscriptionDetails({distributionChannelId:$scope.distributionChannelId},function (subscriptionPlanData) {
         $scope.subscriptionPackPlans = angular.copy( subscriptionPlanData.subscriptionPlans );
 
@@ -55,8 +55,18 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
         }else if (isValid) {
 
             subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
-                console.log( data );
-                $scope.result(data);
+                if($scope.nextButtonPressed){
+                    toastr.success(data.message );
+                    $rootScope.PackageId = data.pkgId;
+
+                    $rootScope.proceed();
+
+                }else{
+                    console.log('else in submit')
+
+                    $scope.result(data);
+                }
+
                 ngProgress.complete();
             },function(error){
                 console.log(error);
@@ -66,19 +76,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
     $scope.result = function( data ){
         if(data.success){
-            /*if( data.selectedSubscriptionPackPlans.length > 0 ) {
-                $scope.existingSubscriptionPackIds = [];
-                $scope.selectedSubscriptionPlans = [];
 
-                for( i = 0; i < data.selectedSubscriptionPackPlans.length ; i++ ){
-                    $scope.selectedSubscriptionPlans.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
-                    //console.log( $scope.selectedSubscriptionPlans );
-                    $scope.existingSubscriptionPackIds.push(data.selectedSubscriptionPackPlans[i].pss_sp_id );
-                }
-                $scope.success = data.message;
-            }else{
-                $scope.success = 'Package Added successfully.';
-            }*/
             toastr.success(data.message );
             $rootScope.PackageId = data.pkgId;
             $state.go($state.current, {}, {reload: $state.current});
