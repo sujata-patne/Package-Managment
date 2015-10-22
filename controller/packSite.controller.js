@@ -142,7 +142,7 @@ exports.getPackSiteData = function(req, res, next) {
                         });
                     },
                     packs : function (callback){
-                        packSiteManager.getAllPacks(connection_ikon_cms,req.session.package_StoreId, function(err, packs){
+                        mainSiteManager.getAllPacks(connection_ikon_cms,req.session.package_StoreId, function(err, packs){
                             callback(err,packs);
                         });
                     }
