@@ -65,7 +65,7 @@ exports.getPackageDetail  = function (req, res, next) {
                                       callback(err,packname)
                                   });
                               },
-                              alacartPackPlanCount: function (callback) {
+                              /*alacartPackPlanCount: function (callback) {
                                   async.waterfall([
                                           function (callback) {
                                               PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
@@ -85,6 +85,29 @@ exports.getPackageDetail  = function (req, res, next) {
                                       function (err, results) {
                                           callback(err, results);
                                       });
+                              },*/
+                              alacartPackPlanCount: function (callback) {
+                                  PackageManager.countOfferPlans(connection_ikon_cms, sp_pkg_id, function (err, offerCount) {
+                                      async.waterfall([
+                                              function (callback) {
+                                                  PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                                      callback(err, result);
+                                                  })
+                                              },
+                                              function (exist, callback) {
+                                                  if (exist.length > 0) {
+                                                      PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                          callback(err, count);
+                                                      })
+                                                  } else {
+                                                      callback(err, 0);
+                                                  }
+                                              }
+                                          ],
+                                          function (err, results) {
+                                              callback(err, results+offerCount);
+                                          });
+                                  })
                               },
                               valuePackPlanCount: function (callback) {
                                   async.waterfall([
@@ -189,7 +212,7 @@ exports.getPackageStartsWith  = function (req, res, next) {
                                         callback(err,packname)
                                     });
                                 },
-                            alacartPackPlanCount: function (callback) {
+                            /*alacartPackPlanCount: function (callback) {
                                 async.waterfall([
                                     function (callback) {
                                         PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
@@ -209,7 +232,30 @@ exports.getPackageStartsWith  = function (req, res, next) {
                                 function (err, results) {
                                     callback(err, results);
                                 });
-                            },
+                            },*/
+                                alacartPackPlanCount: function (callback) {
+                                    PackageManager.countOfferPlans(connection_ikon_cms, sp_pkg_id, function (err, offerCount) {
+                                        async.waterfall([
+                                                function (callback) {
+                                                    PackageManager.existAlacartPackByPkgId(connection_ikon_cms, sp_pkg_id, function (err, result) {
+                                                        callback(err, result);
+                                                    })
+                                                },
+                                                function (exist, callback) {
+                                                    if (exist.length > 0) {
+                                                        PackageManager.countAlacartPackPlans(connection_ikon_cms, sp_pkg_id, function (err, count) {
+                                                            callback(err, count);
+                                                        })
+                                                    } else {
+                                                        callback(err, 0);
+                                                    }
+                                                }
+                                            ],
+                                            function (err, results) {
+                                                callback(err, results+offerCount);
+                                            });
+                                    })
+                                },
                         valuePackPlanCount: function (callback) {
                             async.waterfall([
                                     function (callback) {

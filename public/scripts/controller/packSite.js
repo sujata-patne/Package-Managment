@@ -1,28 +1,21 @@
 myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
-    console.log('packsite')
     $rootScope.ParentPackageId = 0;
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
-
+    $rootScope.PackageType = 1;
     $scope.selectedStore = [];
-
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
     $rootScope.PackageName = '';
     $rootScope.SelectedPack = '';
-    $rootScope.PackageType = 1;
-
     $('.removeActiveClass').removeClass('active');
-
     $('#pack-site').addClass('active');
+
     $scope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
         //save the previous state in a rootScope variable so that it's accessible from everywhere
         $scope.previousState = from;
-        console.log('$rootScope.previousState.indexOf("pack-site")')
-        console.log($scope.previousState.name)
         if($scope.previousState && new RegExp("main-site").test($scope.previousState.name) || $scope.previousState && new RegExp("main-site-map").test($scope.previousState.name) ){
-
             $rootScope.PackageId = 0;
             $rootScope.distributionChannelId = undefined;
             $rootScope.PackageType = 1;
@@ -35,12 +28,14 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }
     });
 
-
-    if($rootScope.PackageType === 1  && $rootScope.PackageId != undefined && $rootScope.action != 'edit'){
-        $rootScope.PackageId = undefined;
+    if($rootScope.PackageType === 1 && ($rootScope.PackageId != 0 || $rootScope.PackageId != undefined || $rootScope.PackageId != '') && $rootScope.action != 'edit'){
+        $rootScope.PackageId = 0;
         $rootScope.distributionChannelId = undefined;
         $rootScope.PackageType = undefined;
         $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;
+        $scope.offerId = '';
+        $scope.paosId = '';
     }
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"pack-site.alacart", active: true },
@@ -86,12 +81,12 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     MainSite.getPackSiteData(function (PackSiteData) {
         console.log('packsite ' + $rootScope.action)
         if($rootScope.action !== 'edit' || $rootScope.action !== undefined){
-            delete $rootScope.packDistributionChannelId;
+            delete $rootScope.distributionChannelId;
             delete $rootScope.PackageId;
             delete $rootScope.SelectedPack;
             delete $rootScope.PackageName;
             $rootScope.PackageType = 1;
-
+            $rootScope.ParentPackageId = 0;
             $scope.offerId = undefined;
             $scope.paosId = undefined;
         }
@@ -104,8 +99,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     });
 
     $scope.showPackageData = function(){
-console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
-        console.log($rootScope.action !== 'edit' &&  $rootScope.action !== undefined)
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             delete $rootScope.PackageId;
             delete $rootScope.SelectedPack;
@@ -113,7 +106,6 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
             $rootScope.PackageType = 1;
             $scope.offerId = undefined;
             $scope.paosId = undefined;
-
         }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
@@ -121,7 +113,6 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
         MainSite.showPackSitePackageData(params,function (PackSiteData) {
-            console.log(PackSiteData)
             $scope.OfferData = angular.copy(PackSiteData.OfferData);
             $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
@@ -160,6 +151,7 @@ console.log('$rootScope.action !== "edit" &&  $rootScope.action !== undefined')
                 })
             }
         })
+
     }
 
     if($rootScope.action === 'edit'){

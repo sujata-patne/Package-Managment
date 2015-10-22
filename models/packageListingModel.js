@@ -130,3 +130,13 @@ exports.packUsedInPackage = function(dbConnection,packageId,callback){
         callback(err,response);
     });
 }
+exports.countOfferPlans = function( dbConnection,pkgId, callback) {
+    var query = dbConnection.query('SELECT alacart.paos_op_id as cnt from icn_package_alacart_offer_site AS alacart ' +
+        ' WHERE paos_sp_pkg_id = ? AND alacart.paos_op_id != 0 ', [pkgId], function (err, offerCount) {
+        if(offerCount.length > 0){
+            callback(err, 1);
+        }else{
+            callback(err, 0);
+        }
+    });
+}

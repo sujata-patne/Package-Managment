@@ -3,7 +3,6 @@
  */
 var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
-var packSiteManager = require('../models/packSiteModel');
 var valuePackManager = require('../models/valuePackModel');
 var subscriptionPackManager = require('../models/subscriptionPackModel');
 var alacartManager = require('../models/alacartModel');
@@ -142,13 +141,12 @@ exports.getPackSiteData = function(req, res, next) {
                         });
                     },
                     packs : function (callback){
-                        packSiteManager.getAllPacks(connection_ikon_cms,req.session.package_StoreId, function(err, packs){
+                        mainSiteManager.getAllPacks(connection_ikon_cms,req.session.package_StoreId, function(err, packs){
                             callback(err,packs);
                         });
                     }
                 },
                 function (err, results) {
-
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
