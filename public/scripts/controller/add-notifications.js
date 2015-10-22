@@ -105,7 +105,6 @@ $scope.counts =[
                     toastr.success("save successfully");
 
                     if($scope.addMore_flag){
-                        alert('Yo!');
                         //$timeout(function() {
                         //    angular.element('#reset_btn').triggerHandler('click');
                         //});

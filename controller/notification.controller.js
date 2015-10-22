@@ -112,7 +112,7 @@ exports.addNotificationData = function(req, res, next) {
                         }else {
                             var planId = parseInt(req.body.PlanId[i].split('_')[1]);
                             var planType = req.body.PlanId[i].split('_')[0];
-                            console.log(moment(req.body.PushFrom).format('YYYY-MM-DD, HH:mm:ss'))
+                            //console.log(moment(req.body.PushFrom).format('YYYY-MM-DD, HH:mm:ss'))
                             var data = {
                                 pn_id: response[0].maxId,
                                 pn_sp_pkg_id: req.body.PackageId,
@@ -161,7 +161,7 @@ exports.listNotificationData = function(req, res, next) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                         ListNotification : function (callback) {
-                            console.log(req.body.PlanId)
+                            //console.log(req.body.PlanId)
                             if (req.body.PlanId) {
                                 var planId = parseInt(req.body.PlanId.split('_')[1]);
                                 var planType = req.body.PlanId.split('_')[0];
@@ -184,7 +184,7 @@ exports.listNotificationData = function(req, res, next) {
                             console.log(err.message)
                         } else {
                             connection_ikon_cms.release();
-                            console.log(results)
+                           // console.log(results)
                             res.send(results);
                         }
 
