@@ -1,5 +1,5 @@
 myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
-	  ngProgress.color('yellowgreen');
+    ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";
     $scope.successvisible = false;
@@ -10,7 +10,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     $scope.valuePlanSetting = {};
     $scope.updateFlag = false;
     // $scope.valuePlanTotals = {};
-   $scope.nextButtonPressed = 0;
+   
 
 
     $rootScope.$watch('distributionChannelId',function(value,old) {
@@ -40,10 +40,10 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     console.log('PreData');
     console.log(preData);
     advanceSetting.getData(preData,function(data){
-    	$scope.contentTypes = data.ContentTypes;
+      $scope.contentTypes = data.ContentTypes;
       console.log($scope.contentTypes);
-    	$scope.offerPlan = data.PackageOffer;
-    	$scope.valuePlans = data.PackageValuePacks;
+      $scope.offerPlan = data.PackageOffer;
+      $scope.valuePlans = data.PackageValuePacks;
       //Getting the base CG image to show in thumbnail : 
         $scope.cgimage = _.findWhere(data.CGImageData, {pci_is_default: 1});
         $scope.valueDataForUpdate = data.ValueDataForUpdate;
@@ -111,13 +111,13 @@ $scope.init();
     }
 
     // $scope.valueTotal = function(contentTypeId){
-   	// 	$scope.totalvalue = 0;
-    // 	//compute total buy
-    // 	angular.forEach($scope.offerGetSetting,function(value,key){
-    // 		if(value > 0){
-    // 			$scope.totalvalue += parseInt(value);
-    // 		}
-    // 	});
+    //  $scope.totalvalue = 0;
+    //  //compute total buy
+    //  angular.forEach($scope.offerGetSetting,function(value,key){
+    //    if(value > 0){
+    //      $scope.totalvalue += parseInt(value);
+    //    }
+    //  });
     // }
 
     $scope.fileUploads = [];
@@ -215,7 +215,7 @@ $scope.init();
                           isValid = false;
                       }
                   }
-
+                
 
                     angular.forEach($scope.valuePlanSetting,function(value,key){
                         //Key here is the plan id 
@@ -280,24 +280,14 @@ $scope.init();
 
                       if($scope.updateFlag){
                            advanceSetting.editSetting(newSetting,function(data){
-                               if($scope.nextButtonPressed){
-                                   $rootScope.proceed();
-                               }else{
-                                   $state.go($state.current, {}, {reload: $state.current});
-                               }
-                               toastr.success('Successfully Updated!');
+                                toastr.success('Successfully Updated!');
                            });
                       }else{
                            $scope.updateFlag = true;
                            advanceSetting.addSetting(newSetting,function(data){
-                               if($scope.nextButtonPressed){
-                                   $rootScope.proceed();
-
-                               }else{
-                                   $state.go($state.current, {}, {reload: $state.current});
-                               }
-                               toastr.success('Successfully Added!');
+                                toastr.success('Successfully Added!');
                            });
+                        
                       }
                     }
         }

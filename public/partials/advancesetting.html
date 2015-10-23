@@ -25,14 +25,15 @@
                                 <td style="width:30px;">
                                     <!-- {{offerBuySetting[0][152] = 2}} -->
                                     <!-- {{offerBuySetting}} -->
-                                    <input type="text" ng-model="offerBuySetting[$index][item.cd_id]" name="offerbuy_{{$index}}" ng-change="offerBuy(item.cd_id)" class="form-control" ng-pattern="/^([0-9]+|BAL)$/" required />
+
+                                    <input ng-hide="offerPlan.length == 0" type="text" ng-model="offerBuySetting[$index][item.cd_id]" name="offerbuy_{{$index}}" ng-change="offerBuy(item.cd_id)" class="form-control" ng-pattern="/^([0-9]+|BAL)$/" required />
                                                      <span style="color: red" ng-show="advanceSettingForm.$submitted || advanceSettingForm.offerbuy_{{$index}}.$dirty">
                                                         <span ng-show="advanceSettingForm.offerbuy_{{$index}}.$error.pattern">Please use numbers or BAL in offer buy only</span>
                                                         <span ng-show="advanceSettingForm.offerbuy_{{$index}}.$error.required">This field is required.</span>
                                                     </span>
                                 </td>
                                 <td style="width:30px;">
-                                    <input type="text" name="offerget_{{$index}}" ng-model="offerGetSetting[$index][item.cd_id]" ng-change="offerGet(item.cd_id)" ng-pattern="/^([0-9]+|BAL)$/" class="form-control" required />
+                                    <input ng-hide="offerPlan.length == 0" type="text" name="offerget_{{$index}}" ng-model="offerGetSetting[$index][item.cd_id]" ng-change="offerGet(item.cd_id)" ng-pattern="/^([0-9]+|BAL)$/" class="form-control" required />
                                                     <span style="color: red" ng-show="advanceSettingForm.$submitted || advanceSettingForm.offerget_{{$index}}.$dirty">
                                                         <span ng-show="advanceSettingForm.offerget_{{$index}}.$error.pattern">Please use numbers or BAL in offer get only</span>
                                                         <span ng-show="advanceSettingForm.offerget_{{$index}}.$error.required">This field is required.</span>
@@ -51,7 +52,7 @@
                     <div class="col-md-12" ng-hide="valuePlans.length == 0">
                         <label for="valuePlans" class="col-sm-3 control-label">Value Pack Plans :  </label>
                         <table class="table table-striped table-bordered">
-                            <thead >
+                            <thead>
                             <tr>
                                 <th style="width:30px;" class="text-center">Content Type</th>
                                 <th style="width:30px;" class="text-center" ng-repeat="item in valuePlans">{{item.vp_plan_name}}</th>
@@ -133,7 +134,7 @@
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" title="Save">Submit</button>
-                <button type="button" class="btn btn-small" ng-click=" nextButtonPressed= 1; submitAdvanceSettingForm(advanceSettingForm.$valid);" ng-disable="dis()">{{buttonLabel}}</button>
+                <button type="button" class="btn btn-small" ng-click="submitAdvanceSettingForm(advanceSettingForm.$valid);proceed()" ng-disable="dis()">{{buttonLabel}}</button>
                 <button type="reset" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>
