@@ -43,10 +43,11 @@ $scope.init = function(){
             }
             $scope.sequenceData[plans.id] = {pas_arrange_seq:plans.pas_arrange_seq};
         })
+        var isAlacartPlansExist = data.isAlacartPlansExist;
 
         $scope.AlacartPlans = data.PackageAlacartPacks;
         $scope.finalarray = data.selectedPlans;
-        if($scope.AlacartPlans.length > 0){
+        if(isAlacartPlansExist > 0){
             var obj = {};
             obj['id'] = "4"+$scope.AlacartPlans[0].paos_id;
             obj['plan_id'] = $scope.AlacartPlans[0].paos_id;
@@ -59,7 +60,6 @@ $scope.init = function(){
     });
 }
 
-$scope.init();
 
     $scope.submitArrangePlansForm = function(){
     //Get the length of filled values.

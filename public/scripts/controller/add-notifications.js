@@ -16,7 +16,7 @@ myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngP
     }else{
         if($rootScope.n_selectedPlans != undefined && $rootScope.n_selectedPlans.length > 0){
             $rootScope.n_selectedPlans = undefined
-        }   
+        }
     }
 
 $scope.counts =[
@@ -105,7 +105,7 @@ $scope.counts =[
             }
             Notification.updateNotificationData(notificationData, function (data) {
                 toastr.success("update successfully");
-                $state.go('notifications.list');
+                $state.go("notifications.list");
             });
         }
         else {

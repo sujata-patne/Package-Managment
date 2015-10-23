@@ -8,13 +8,24 @@ exports.getPackageSubscriptionPack = function( dbConnection, packageId, callback
         callback( err, response );
     });
 }
+exports.existAlacartPlans = function( dbConnection, packageId, callback){
+    var query = dbConnection.query('SELECT paos.* FROM `icn_package_alacart_offer_site` AS paos ' +
+        'JOIN icn_package_content_type as pct ON pct.pct_paos_id = paos.paos_id AND ISNULL(pct.pct_crud_isactive) ' +
+        'WHERE paos.paos_sp_pkg_id = ? AND ISNULL(paos.paos_crud_isactive)',packageId, function( err, response ) {
+
+        if(response.length > 0){
+           callback( err, 1 );
+       }else{
+           callback( err, 0 );
+       }
+    });
+}
 exports.getPackageAlacartPack = function( dbConnection, packageId, callback ) {
     if(packageId == undefined){
         packageId = -1;
     }
     var query = dbConnection.query('SELECT paos.*, ap.* FROM `icn_package_alacart_offer_site` AS paos,`icn_alacart_plan` AS ap WHERE '+
-        'paos.paos_sp_pkg_id = ? AND '+
-        'paos.paos_op_id =ap.ap_id AND ISNULL(paos.paos_crud_isactive) ',packageId, function( err, response ) {
+        'paos.paos_sp_pkg_id = ? AND ISNULL(paos.paos_crud_isactive) ',packageId, function( err, response ) {
         callback( err, response );
     });
 }
