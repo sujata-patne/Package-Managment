@@ -9,8 +9,9 @@
                     <div class="col-md-12">
                         <label for="after" class="col-sm-5 control-label">After:</label>
                         <div class="col-md-5">
-                            <input type="number" name="input" ng-model="days" placeholder="Day" min="0" max="99" required>
-                            <input type="number" name="input" ng-model="hours" placeholder="Hours" min="1" max="24" required>
+                         <!--    <input type="text" ng-model="pnId"  /> -->
+                            <input type="number" name="input" ng-model="days" data-ng-change="getPushData()" placeholder="Day" min="1" max="99" required>
+                            <input type="number" name="input" ng-model="hours"  data-ng-change="getPushData()" placeholder="Hours" min="1" max="24" required>
                             <label>of Plan start </label>
                         </div>
                     </div>
@@ -19,12 +20,12 @@
                         <label for="contents" class="col-sm-5 control-label">If no of contents downloaded are: </label>
                         <div class="col-md-2">
 
-                            <select id="count" type="text" name="operator" class="form-control input-sm" ng-model="selectedCount" data-ng-options="item.id as item.option_name for item in counts">
+                            <select id="count" type="text" name="operator" class="form-control input-sm" data-ng-change="getPushData()"  ng-model="selectedCount" data-ng-options="item.id as item.option_name for item in counts">
                             <option value=""> --Select-- </option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select id="percent" type="percent" name="percent" class="form-control input-sm" ng-hide="selectedCount == 3" ng-model="selectedPercent"   data-ng-options="item.id as item.option_name for item in percent">
+                            <select id="percent" type="percent" name="percent" class="form-control input-sm" data-ng-change="getPushData()"  ng-hide="selectedCount == 3" ng-model="selectedPercent"   data-ng-options="item.id as item.option_name for item in percent">
                             <option value=""> --Select-- </option>
                             </select>
                         </div>
@@ -36,7 +37,7 @@
                         <div class="col-md-5">
                             <textarea rows="4" cols="50" maxlength="152" name="messagetext" ng-model="messagetext" required></textarea>
                             <span style="color: red" ng-show="notificationForm.$submitted || notificationForm.messagetext.$dirty">
-                                <span ng-show="notificationForm.messagetext.$error.required">Please Input text .</span>
+                                <span ng-show="notificationForm.messagetext.$error.required"></span>
                                 </span>
                         </div>
                     </div>
@@ -69,10 +70,7 @@
                           <br>
                           <label for="push" class="col-sm-5 control-label"> Push: </label>
                           <div class="col-md-5">
-                              <select  id="push" ng-show="selectedCount != undefined && selectedCount != null && selectedPercent != undefined && selectedPercent != null"  class="form-control input-sm" ng-model="selectedPush" data-ng-options="item.id as item.option_name for item in push" >
-                              </select>
-                              <select  id="push1" ng-show="selectedCount == undefined || selectedCount == null || selectedPercent == undefined || selectedPercent == null"  class="form-control input-sm" ng-model="selectedPush" >
-                                <option value="0" ng-selected="selectedCount == undefined || selectedCount == null || selectedPercent == undefined || selectedPercent == null">Once a day</option>
+                              <select  id="push"  class="form-control input-sm" ng-model="selectedPush" data-ng-options="item.id as item.option_name for item in push" >
                               </select>
                           </div>
 
@@ -89,11 +87,10 @@
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
                 <button ng-show="edit_state == true"  type="submit" class="btn btn-primary btn-w-md" title="update">Update</button>
-                <button  ng-hide="edit_state == true" type="submit" class="btn btn-primary btn-w-md" title="add">Add</button>
+                <button ng-hide="edit_state == true" type="submit" class="btn btn-primary btn-w-md" title="add">Add</button>
                 <input type="submit" value="AddMore" ng-hide="edit_state == true"  class="btn btn-default btn-w-md" data-ng-click="addMore()" />
                 <button ng-hide="edit_state == true" type="reset" id="reset_btn" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>
     </div>
 </form>
-

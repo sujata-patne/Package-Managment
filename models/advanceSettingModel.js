@@ -46,6 +46,12 @@ exports.updateValueSetting = function( dbConnection, valueplanId,contentTypeId, 
     });
 }
 
+exports.deleteValueSetting = function( dbConnection, valueplanId, callback ) {
+    var query = dbConnection.query('UPDATE icn_package_advance_setting_site SET pass_crud_isactive = '+valueplanId+' WHERE pass_pvs_id = ?',[valueplanId], function( err, response ) {
+        callback( err, response );
+    });
+}
+
 exports.saveCGImageSetting = function( dbConnection, data, callback ) {
     var query = dbConnection.query('INSERT INTO icn_package_cg_image SET ? ',data, function( err, response ) {
         callback( err, response );

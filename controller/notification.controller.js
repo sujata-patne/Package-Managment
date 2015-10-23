@@ -129,11 +129,12 @@ exports.addNotificationData = function(req, res, next) {
                                 pn_push_type: req.body.Push,
                                 pn_is_active: 1
                             }
-
+                            console.log(data);
                             Notification.saveNotificationData(connection_ikon_cms, data, function (err, response) {
                                 if (err) {
 
                                 } else {
+                                    console.log('in save ..');
                                     if (count == cnt) {
                                         connection_ikon_cms.release();
                                         res.send({status: 200, message: ''})
