@@ -144,20 +144,29 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                                     })
                                 })();
                             }
-                            var newContentTypes = [];
-                            for (var i = 0; i < req.body.alacartPlansList.length; i++) {
-                                var newContentTypeId = req.body.alacartPlansList[i];
 
-                                if ((req.body.alacartPlansList[newContentTypeId].download && req.body.alacartPlansList[newContentTypeId].download != null && req.body.alacartPlansList[newContentTypeId].download != 0)
-                                || (req.body.alacartPlansList[newContentTypeId].streaming && req.body.alacartPlansList[newContentTypeId].streaming != null && req.body.alacartPlansList[newContentTypeId].streaming != 0)) {
+                            for (var i = 0; i < Object.keys(req.body.alacartPlansList).length; i++) {
+                                var newContentTypeId = Object.keys(req.body.alacartPlansList)[i];
+                                //console.log('newContentTypeId')
+                                //console.log( req.body.alacartPlansList[newContentTypeId].download)
 
-                                    var newPlan = Object.keys(req.body.alacartPlansList)
+                                var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : '';
+                                var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : '';
+                                //console.log('downloadId && streamingId')
+                               // console.log( downloadId + " : "+streamingId)
+                                if ((downloadId !== '' && downloadId !== null && downloadId !== 0) && (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
+
+                                    var newContentTypes = Object.keys(req.body.alacartPlansList)
                                         .map(function (element) {
                                             return parseInt(element)
                                         });
-                                    newContentTypes.push(newPlan);
+                                }else{
+                                   var newContentTypes = [];
                                 }
                             }
+                            //console.log('newContentTypes')
+                           // console.log( newContentTypes )
+
                             var deleteContentTypes = [];
                             var editContentTypes = [];
 
@@ -168,14 +177,18 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                                             return parseInt(element)
                                         });
                                 }
-                                var addContentTypes = newContentTypes.filter(function (el) {
-                                    return existingContentTypes.indexOf(el) < 0;
-                                });
+                                if(newContentTypeId.length > 0){
+                                    var addContentTypes = newContentTypes.filter(function (el) {
+                                        return existingContentTypes.indexOf(el) < 0;
+                                    });
+                                }else{
+                                    var addContentTypes = [];
+                                }
+
 
                                 for (var i = 0; i < existingContentTypes.length; i++) {
                                     var ContentTypeId = existingContentTypes[i];
-                                    console.log('req.body.alacartPlansList[ContentTypeId]')
-                                    console.log(req.body.alacartPlansList[ContentTypeId])
+
                                     if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0)
                                         || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
                                         editContentTypes.push(ContentTypeId);
@@ -534,18 +547,23 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                             })
                                         })();
                                     }
-                                    var newContentTypes = [];
-                                    for (var i = 0; i < req.body.alacartPlansList.length; i++) {
-                                        var newContentTypeId = req.body.alacartPlansList[i];
+                                    for (var i = 0; i < Object.keys(req.body.alacartPlansList).length; i++) {
+                                        var newContentTypeId = Object.keys(req.body.alacartPlansList)[i];
+                                        //console.log('newContentTypeId')
+                                        //console.log( req.body.alacartPlansList[newContentTypeId].download)
 
-                                        if ((req.body.alacartPlansList[newContentTypeId].download && req.body.alacartPlansList[newContentTypeId].download != null && req.body.alacartPlansList[newContentTypeId].download != 0)
-                                            || (req.body.alacartPlansList[newContentTypeId].streaming && req.body.alacartPlansList[newContentTypeId].streaming != null && req.body.alacartPlansList[newContentTypeId].streaming != 0)) {
+                                        var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : '';
+                                        var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : '';
+                                        //console.log('downloadId && streamingId')
+                                        // console.log( downloadId + " : "+streamingId)
+                                        if ((downloadId !== '' && downloadId !== null && downloadId !== 0) && (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
 
-                                            var newPlan = Object.keys(req.body.alacartPlansList)
+                                            var newContentTypes = Object.keys(req.body.alacartPlansList)
                                                 .map(function (element) {
                                                     return parseInt(element)
                                                 });
-                                            newContentTypes.push(newPlan);
+                                        }else{
+                                            var newContentTypes = [];
                                         }
                                     }
                                     /*var newContentTypes  = Object.keys(req.body.alacartPlansList)
