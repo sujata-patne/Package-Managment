@@ -65,7 +65,6 @@ $scope.init();
     //Get the length of filled values.
         var arrlength = $scope.sequenceData.filter(function(e){return e;});
         arrlength = arrlength.filter(function(e){return e.pas_arrange_seq != null; });
-        debugger;
         
         if(arrlength.length == $scope.finalarray.length){
                 if($scope.arrangedContentList==0)

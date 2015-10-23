@@ -4,6 +4,7 @@
 var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
 var alacartManager = require('../models/alacartModel');
+var advanceSettingManager = require('../models/advanceSettingModel');
 var async = require("async");
 /*A-la-cart-n-offer details for package*/
 
@@ -50,6 +51,20 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
+                    updateAdvanceSetting:function(callback){
+                        alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,res){
+                            if(res[0].paos_op_id != req.body.paosId){
+                                advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,res){
+                                    if(err){}else{
+                                        callback(null,'');
+                                    }
+                                })
+                            }else{
+                                callback(null,'');
+                            }
+                            
+                        });
+                    },
                     updateStorePackage:function (callback) {
                         var pkgId = req.body.packageId;
                         var storePackage = {
@@ -412,6 +427,20 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                     } else {
                         if (req.body.packageId) {
                             async.parallel({
+                                updateAdvanceSetting:function(callback){
+                                    alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,res){
+                                        if(res[0].paos_op_id != req.body.paosId){
+                                            advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,res){
+                                                if(err){}else{
+                                                    callback(null,'');
+                                                }
+                                            })
+                                        }else{
+                                            callback(null,'');
+                                        }
+                                        
+                                    });
+                                },
                                 updateStorePackage:function (callback) {
                                     var pkgId = req.body.packageId;
                                     var storePackage = {

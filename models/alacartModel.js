@@ -60,3 +60,11 @@ exports.getContentTypeAlacartPlan = function(dbConnection,paosId, callback){
         callback(err,response);
     });
 }
+
+
+//To be used in advance setting ..if offer plan gets changed..
+exports.selectOfferIdByPAOSID = function(dbConnection,paosId,callback){
+    var query = dbConnection.query("SELECT paos_op_id FROM  `icn_package_alacart_offer_site` WHERE paos_id = ?",paosId, function (err, response) {
+        callback(err,response);
+    });
+}
