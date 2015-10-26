@@ -11,7 +11,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.errorvisible = false;
     $scope.finalarray = [];
     $scope.alacartarray=[];
-    $scope.array=[];
+    //$scope.array=[];
     $scope.arrangedContentList ={};
     $scope.nextButtonPressed = 0;
     $scope.sequenceData = [];
@@ -129,6 +129,9 @@ console.log('isAlacartPlansExist');
 
             })
         }
+    }
+    $scope.resetForm = function(id) {
+        $scope.sequenceData = [];
     }
 
 
