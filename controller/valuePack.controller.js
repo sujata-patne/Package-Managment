@@ -7,6 +7,7 @@
 var mysql = require('../config/db').pool;
 var valuePackManager = require('../models/valuePackModel');
 var mainSiteManager = require('../models/mainSiteModel');
+var advanceSettingManager = require('../models/advanceSettingModel');
 var async = require("async");
 
 exports.getSelectedValuePacks = function (req, res, next) {
@@ -253,7 +254,18 @@ function saveValuePackPlan(req, res, connection_ikon_cms, packageData) {
                             var count = deleteValuePackIds.length;
 
                             function loop(cnt) {
+
                                 var i = cnt;
+
+                                //When value pack is removed .. removing its advance setting too..
+                                advanceSettingManager.deleteValueSetting( connection_ikon_cms, deleteValuePackIds[i], function(err,deleteSetting){
+                                    if(err){
+                                        connection_ikon_cms.release();
+                                        res.status(500).json(err.message);
+                                    }
+                                });
+                                //--------------------------------------------------------------
+
                                 valuePackManager.deleteValuePack(connection_ikon_cms, deleteValuePackIds[i], packageData.sp_pkg_id, function (err, deleteStatus) {
                                     if (err) {
                                         connection_ikon_cms.release();
@@ -264,6 +276,7 @@ function saveValuePackPlan(req, res, connection_ikon_cms, packageData) {
                                             is_deleted = true;
                                             callback(null, true);
                                         } else {
+
                                             loop(cnt);
                                         }
                                     }

@@ -9,7 +9,7 @@
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}} </span>
             <div class="portlet">
                 <div class="portlet-content">
-                    <div class="col-md-12" ng-hide="offerPlan.length == 0">
+                    <div class="col-md-12" ng-if="offerPlan.length > 0">
                         <label for="offerPlan" class=" control-label">Offer Plan : {{offerPlan[0].op_plan_name}} </label>
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -26,14 +26,14 @@
                                     <!-- {{offerBuySetting[0][152] = 2}} -->
                                     <!-- {{offerBuySetting}} -->
 
-                                    <input ng-hide="offerPlan.length == 0" type="text" ng-model="offerBuySetting[$index][item.cd_id]" name="offerbuy_{{$index}}" ng-change="offerBuy(item.cd_id)" class="form-control" ng-pattern="/^([0-9]+|BAL)$/" required />
+                                    <input ng-if="offerPlan.length > 0" type="text" ng-model="offerBuySetting[$index][item.cd_id]" name="offerbuy_{{$index}}" ng-change="offerBuy(item.cd_id)" class="form-control" ng-pattern="/^([0-9]+|BAL)$/" required />
                                                      <span style="color: red" ng-show="advanceSettingForm.$submitted || advanceSettingForm.offerbuy_{{$index}}.$dirty">
                                                         <span ng-show="advanceSettingForm.offerbuy_{{$index}}.$error.pattern">Please use numbers or BAL in offer buy only</span>
                                                         <span ng-show="advanceSettingForm.offerbuy_{{$index}}.$error.required">This field is required.</span>
                                                     </span>
                                 </td>
                                 <td style="width:30px;">
-                                    <input ng-hide="offerPlan.length == 0" type="text" name="offerget_{{$index}}" ng-model="offerGetSetting[$index][item.cd_id]" ng-change="offerGet(item.cd_id)" ng-pattern="/^([0-9]+|BAL)$/" class="form-control" required />
+                                    <input ng-if="offerPlan.length > 0" type="text" name="offerget_{{$index}}" ng-model="offerGetSetting[$index][item.cd_id]" ng-change="offerGet(item.cd_id)" ng-pattern="/^([0-9]+|BAL)$/" class="form-control" required />
                                                     <span style="color: red" ng-show="advanceSettingForm.$submitted || advanceSettingForm.offerget_{{$index}}.$dirty">
                                                         <span ng-show="advanceSettingForm.offerget_{{$index}}.$error.pattern">Please use numbers or BAL in offer get only</span>
                                                         <span ng-show="advanceSettingForm.offerget_{{$index}}.$error.required">This field is required.</span>
@@ -49,7 +49,7 @@
                         </table>
                     </div>
                     <!-- Value Pack Plans -->
-                    <div class="col-md-12" ng-hide="valuePlans.length == 0">
+                    <div class="col-md-12" ng-if="valuePlans.length > 0">
                         <label for="valuePlans" class="col-sm-3 control-label">Value Pack Plans :  </label>
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -62,7 +62,7 @@
                             <tr ng-repeat="item in contentTypes">
                                 <td style="width:30px;" >{{item.cd_name}}</td>
                                 <td style="width:30px;" ng-repeat="vp in valuePlans">
-                                    <input  type="text" name="vp_{{vp.pvs_id}}_{{item.cd_id}}" ng-model="valuePlanSetting[vp.pvs_id][item.cd_id]"  class="form-control" ng-pattern="/^([0-9]+|BAL)$/" required />
+                                    <input ng-if="valuePlans.length > 0" type="text" name="vp_{{vp.pvs_id}}_{{item.cd_id}}" ng-model="valuePlanSetting[vp.pvs_id][item.cd_id]"  class="form-control" ng-pattern="/^([0-9]+|BAL)$/" required />
                                             <span style="color: red" ng-show="advanceSettingForm.$submitted || advanceSettingForm.vp_{{pvs_id}}_{{item.cd_id}}.$dirty">
                                                 <span ng-show="advanceSettingForm.vp_{{vp.pvs_id}}_{{item.cd_id}}.$error.pattern">Please use numbers or BAL in the field.</span>
                                                 <span ng-show="advanceSettingForm.vp_{{vp.pvs_id}}_{{item.cd_id}}.$error.required">This field is required.</span>
@@ -98,11 +98,10 @@
                          Image thumbnail: <img ngf-thumbnail="file || '/thumb.jpg'"> -->
                         <!-- <form name="form"> -->
                         <button  ngf-select ng-model="fileUploads[0]"
-                                 accept="image/*" ngf-pattern="'.jpg,.png,.gif,.jpeg'" ngf-max-height="1000" ngf-max-size="1MB">
+                                 accept="image/*" ngf-pattern="'.jpg,.png,.gif,.jpeg'" ngf-max-height="1000" ngf-max-size="1MB" ngf-max-width="640" ngf-min-width="640" ngf-max-height="640" ngf-min-height="640">
                             <i class="fa fa-upload" style="color:green" title="Select Files"></i>
                         </button>
                         <input type="button" value="Upload" ng-click="uploadSubmit(0)" />
-
                                           <span ng-if="cgimage != ''">
                                               <a class="fancybox grouped_elements" href="{{cgimage.pci_cg_img_browse}}" ng-if="cgimage != ''" >
                                                   <img ng-src="{{cgimage.pci_cg_img_browse}}" width="50"

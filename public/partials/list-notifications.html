@@ -21,7 +21,10 @@
                 <tbody dir-paginate="item in NotificationResult | itemsPerPage: 8">
                 <tr >
 
-                    <td class="col-md-1 col-xs-1 text-center">{{item.pn_after_day}}day {{item.pn_after_hour}}hour</td>
+                     <td class="col-md-1 col-xs-1 text-center"ng-if="item.pn_after_day != null || item.pn_after_day != undefined && item.pn_after_hour != null || item.pn_after_hour != undefined "> 
+                         <span ng-show="item.pn_after_day > 0" >{{item.pn_after_day}}  day </span>
+                        <span ng-show="item.pn_after_hour > 0" >{{item.pn_after_hour}} hr </span> </td>
+                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_after_day == null && item.pn_after_day == undefined && item.pn_after_hour == null && item.pn_after_hour == undefined "> - </td>
                     <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 0"> < {{item.pn_cnt_conditional_usage}}% </td>
                     <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 1"> > {{item.pn_cnt_conditional_usage}}% </td>
                     <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 2"> equal to {{item.pn_cnt_conditional_usage}}% </td>
@@ -32,7 +35,7 @@
                     <td class="col-md-3 col-xs-3 text-center">{{item.pn_push_type}}</td>
                     <td>
                         <div class="row">
-                            <div  class="col-md-3 col-xs-3  text-center"><a href="" data-ng-click="EditNotification(item.pn_id,item.pn_sp_pkg_id,item.pn_plan_id,item.pn_plan_type)" title="Edit"><i class="fa fa-edit" title="Edit"></i></a></div>
+                            <div  class="col-md-3 col-xs-3  text-center" ng-hide="item.pn_is_active == 0"><a href="" data-ng-click="EditNotification(item.pn_id,item.pn_sp_pkg_id,item.pn_plan_id,item.pn_plan_type)" title="Edit"><i class="fa fa-edit" title="Edit"></i></a></div>
                             <div class="col-md-3 col-xs-3  text-center" data-ng-if="item.pn_is_active == 1" class="text-right"><a href="" title="Click To Block" data-ng-click="BlockUnBlockContentType(item.pn_id,item.pn_is_active)"><i class="fa fa-ban text-right red" style="color: green;"></i></a></div>
                             <div class="col-md-3 col-xs-3 text-center " data-ng-if="item.pn_is_active == 0" class="text-right"><a href="" title="Click To UnBlock" data-ng-click="BlockUnBlockContentType(item.pn_id,item.pn_is_active)"> <i class="fa fa-ban text-right green" style="color: red;"></i></a></div>
                             <div class="col-md-3 col-xs-3 text-center"><a href="" data-ng-click="Delete(item.pn_id)" title="Delete"><i class="fa fa-trash-o " title="Delete"></i></a></div>
@@ -53,7 +56,7 @@
         <div class="col-xs-4 col-md-4">
             <!-- <button type="button" class="btn btn-primary btn-w-xs" title="Previous" data-ng-disabled="listcurrentPage == 0" data-ng-click="listcurrentPage=listcurrentPage-1">Previous</button> -->
         </div>
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-4 col-md-4" ng-hide="itemsPerPage < 8">
             <!-- <button type="button" class="btn btn-primary btn-w-xs" title="Download" data-ng-click="ExportPlan()">Download in excel</button> -->
             <dir-pagination-controls></dir-pagination-controls>
         </div>

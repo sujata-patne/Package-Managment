@@ -38,9 +38,20 @@ exports.updateOfferSetting = function( dbConnection, offerplanId,contentTypeId, 
         callback( err, response );
     });
 }
+exports.deleteOfferSetting = function( dbConnection, offerplanId,callback ) {
+    var query = dbConnection.query('UPDATE icn_package_advance_setting_site SET pass_crud_isactive = '+offerplanId+' WHERE pass_paos_id = ? ',[offerplanId], function( err, response ) {
+        callback( err, response );
+    });
+}
 
 exports.updateValueSetting = function( dbConnection, valueplanId,contentTypeId, callback ) {
     var query = dbConnection.query('UPDATE icn_package_advance_setting_site SET pass_crud_isactive = '+valueplanId+' WHERE pass_pvs_id = ? AND pass_content_type = ?',[valueplanId,contentTypeId], function( err, response ) {
+        callback( err, response );
+    });
+}
+
+exports.deleteValueSetting = function( dbConnection, valueplanId, callback ) {
+    var query = dbConnection.query('UPDATE icn_package_advance_setting_site SET pass_crud_isactive = '+valueplanId+' WHERE pass_pvs_id = ?',[valueplanId], function( err, response ) {
         callback( err, response );
     });
 }

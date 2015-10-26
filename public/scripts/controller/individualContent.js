@@ -136,7 +136,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
             }
 
         }else{
-            toastr.error('Please select a package');
+            toastr.error('Please select a package. To create a package select the appropriate plans.');
         }
 
     }

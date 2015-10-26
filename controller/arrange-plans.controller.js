@@ -21,6 +21,11 @@ exports.getArrangePlansData = function (req, res, next) {
                             Arrangeplans.getSelectedPlans(connection_ikon_cms, req.body.packageId, function (err, selectedPlans) {
                                 callback(err, selectedPlans);
                             })
+                        },
+                        isAlacartPlansExist : function (callback) {
+                            Arrangeplans.existAlacartPlans(connection_ikon_cms, req.body.packageId, function (err, isAlacartPlansExist) {
+                                callback(err, isAlacartPlansExist);
+                            })
                         }
                     },
                     function (err, results) {
