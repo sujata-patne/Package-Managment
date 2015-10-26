@@ -45,6 +45,8 @@ $scope.init = function(){
                 $scope.sequenceData[plans.id] = {pas_arrange_seq: plans.pas_arrange_seq};
             })
             var isAlacartPlansExist = data.isAlacartPlansExist;
+console.log('isAlacartPlansExist');
+            console.log(isAlacartPlansExist);
 
             $scope.AlacartPlans = data.PackageAlacartPacks;
             $scope.finalarray = data.selectedPlans;

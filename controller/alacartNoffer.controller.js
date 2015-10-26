@@ -144,32 +144,29 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                                     })
                                 })();
                             }
-
+                            var newContentTypes = [];
                             for (var i = 0; i < Object.keys(req.body.alacartPlansList).length; i++) {
                                 var newContentTypeId = Object.keys(req.body.alacartPlansList)[i];
-                                //console.log('newContentTypeId')
-                                //console.log( req.body.alacartPlansList[newContentTypeId].download)
-
+                                console.log('newContentTypeId')
+                                console.log(newContentTypeId)
+                                console.log('req.body.alacartPlansList[newContentTypeId]')
+                                console.log(req.body.alacartPlansList[newContentTypeId])
                                 var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : '';
                                 var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : '';
-                                //console.log('downloadId && streamingId')
-                               // console.log( downloadId + " : "+streamingId)
-                                if ((downloadId !== '' && downloadId !== null && downloadId !== 0) && (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
 
-                                    var newContentTypes = Object.keys(req.body.alacartPlansList)
+                                if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
+                                    newContentTypes = Object.keys(req.body.alacartPlansList)
                                         .map(function (element) {
                                             return parseInt(element)
                                         });
-                                }else{
-                                   var newContentTypes = [];
                                 }
                             }
-                            //console.log('newContentTypes')
-                           // console.log( newContentTypes )
+                            console.log('newContentTypes')
+                            console.log( newContentTypes )
 
                             var deleteContentTypes = [];
                             var editContentTypes = [];
-
+                            var addContentTypes = [];
                             mainSiteManager.existingContentTypesInPack(connection_ikon_cms, req.body.paosId, function (err, result) {
                                 if (result[0].contentTypes != null && result[0].contentTypes != '' && result[0].contentTypes != undefined ) {
                                     existingContentTypes = result[0].contentTypes.split(',')
@@ -177,14 +174,11 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                                             return parseInt(element)
                                         });
                                 }
-                                if(newContentTypeId.length > 0){
-                                    var addContentTypes = newContentTypes.filter(function (el) {
+                                if(newContentTypes != undefined && newContentTypes.length > 0){
+                                    addContentTypes = newContentTypes.filter(function (el) {
                                         return existingContentTypes.indexOf(el) < 0;
                                     });
-                                }else{
-                                    var addContentTypes = [];
                                 }
-
 
                                 for (var i = 0; i < existingContentTypes.length; i++) {
                                     var ContentTypeId = existingContentTypes[i];
@@ -547,32 +541,23 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                             })
                                         })();
                                     }
+                                    var newContentTypes = [];
                                     for (var i = 0; i < Object.keys(req.body.alacartPlansList).length; i++) {
                                         var newContentTypeId = Object.keys(req.body.alacartPlansList)[i];
-                                        //console.log('newContentTypeId')
-                                        //console.log( req.body.alacartPlansList[newContentTypeId].download)
 
                                         var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : '';
                                         var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : '';
-                                        //console.log('downloadId && streamingId')
-                                        // console.log( downloadId + " : "+streamingId)
-                                        if ((downloadId !== '' && downloadId !== null && downloadId !== 0) && (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
 
-                                            var newContentTypes = Object.keys(req.body.alacartPlansList)
+                                        if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
+                                            newContentTypes = Object.keys(req.body.alacartPlansList)
                                                 .map(function (element) {
                                                     return parseInt(element)
                                                 });
-                                        }else{
-                                            var newContentTypes = [];
                                         }
                                     }
-                                    /*var newContentTypes  = Object.keys(req.body.alacartPlansList)
-                                        .map(function (element) {
-                                            return parseInt(element)
-                                        });*/
                                     var deleteContentTypes = [];
                                     var editContentTypes = [];
-
+                                    var addContentTypes = [];
                                     mainSiteManager.existingContentTypesInPack( connection_ikon_cms, req.body.paosId, function(err,result) {
                                         if (err) {
                                             connection_ikon_cms.release();
@@ -585,9 +570,11 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                                         return parseInt(element)
                                                     });
                                             }
-                                            var addContentTypes = newContentTypes.filter(function (el) {
-                                                return existingContentTypes.indexOf(el) < 0;
-                                            });
+                                            if(newContentTypes != undefined && newContentTypes.length > 0 ){
+                                                var addContentTypes = newContentTypes.filter(function (el) {
+                                                    return existingContentTypes.indexOf(el) < 0;
+                                                });
+                                            }
                                             for (var i = 0; i < existingContentTypes.length; i++) {
                                                 var ContentTypeId = existingContentTypes[i];
                                                 if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0) || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
