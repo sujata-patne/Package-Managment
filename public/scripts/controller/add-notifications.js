@@ -89,6 +89,10 @@ $scope.counts =[
                     toastr.error('Please select both options in no of contents downloaded.');
             }else if( ($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null) ){
                      toastr.error('Please select both options in no of contents downloaded.');
+            }else if( $scope.days < 0 || $scope.days > 99){
+                     toastr.error('Days should be between 0 to 99.');
+            }else if( $scope.hours < 0 || $scope.hours > 24){
+                     toastr.error('Hours should be between 0 to 24.');
             }
         else if ($stateParams.pn_id) {
 
