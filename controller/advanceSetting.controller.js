@@ -200,8 +200,8 @@ exports.UploadFile =  function (req, res, next) {
                                 }); 
                             },
                             function(callback){
-                                absPath = '/contentFiles/480_'+files.file.name;
-                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=480:480 ' + __dirname + '/../public/contentFiles/480_'+files.file.name);
+                                absPath = '/contentFiles/480X480_'+files.file.name;
+                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=480:480 ' + __dirname + '/../public/contentFiles/480X480_'+files.file.name);
                                 var cgdata = {
                                     pci_sp_pkg_id : fields.packageId,
                                     pci_image_size : '480X480',
@@ -213,8 +213,8 @@ exports.UploadFile =  function (req, res, next) {
                                  }); 
                             },
                             function(callback){
-                                absPath = '/contentFiles/420_'+files.file.name;
-                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=420:420 ' + __dirname + '/../public/contentFiles/420_'+files.file.name);
+                                absPath = '/contentFiles/420X420_'+files.file.name;
+                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=420:420 ' + __dirname + '/../public/contentFiles/420X420_'+files.file.name);
                                 var cgdata = {
                                     pci_sp_pkg_id : fields.packageId,
                                     pci_image_size : '420X420',
@@ -226,8 +226,8 @@ exports.UploadFile =  function (req, res, next) {
                                  }); 
                             },
                             function(callback){
-                                absPath = '/contentFiles/360_'+files.file.name;
-                                    shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=360:360 ' + __dirname + '/../public/contentFiles/360_'+files.file.name);
+                                absPath = '/contentFiles/360X360_'+files.file.name;
+                                    shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=360:360 ' + __dirname + '/../public/contentFiles/360X360_'+files.file.name);
                                 var cgdata = {
                                     pci_sp_pkg_id : fields.packageId,
                                     pci_image_size : '360X360',
@@ -238,8 +238,8 @@ exports.UploadFile =  function (req, res, next) {
                                             callback(err,'InsertBaseCGImage');
                                  }); 
                             }, function(callback){
-                                absPath = '/contentFiles/320_'+files.file.name;
-                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=320:320 ' + __dirname + '/../public/contentFiles/320_'+files.file.name);
+                                absPath = '/contentFiles/320X320_'+files.file.name;
+                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=320:320 ' + __dirname + '/../public/contentFiles/320X320_'+files.file.name);
                                 var cgdata = {
                                     pci_sp_pkg_id : fields.packageId,
                                     pci_image_size : '320X320',
@@ -250,8 +250,8 @@ exports.UploadFile =  function (req, res, next) {
                                             callback(err,'InsertBaseCGImage');
                                  }); 
                             }, function(callback){
-                                absPath = '/contentFiles/240_'+files.file.name;
-                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=240:240 ' + __dirname + '/../public/contentFiles/240_'+files.file.name);
+                                absPath = '/contentFiles/240X240_'+files.file.name;
+                                shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=240:240 ' + __dirname + '/../public/contentFiles/240X240_'+files.file.name);
                                 var cgdata = {
                                     pci_sp_pkg_id : fields.packageId,
                                     pci_image_size : '240X240',
@@ -262,8 +262,8 @@ exports.UploadFile =  function (req, res, next) {
                                             callback(err,'InsertBaseCGImage');
                                  }); 
                             }, function(callback){
-                                absPath = '/contentFiles/176_'+files.file.name;
-                                 shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=176:176 ' + __dirname + '/../public/contentFiles/176_'+files.file.name);
+                                absPath = '/contentFiles/176X176_'+files.file.name;
+                                 shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=176:176 ' + __dirname + '/../public/contentFiles/176X176_'+files.file.name);
                                 var cgdata = {
                                     pci_sp_pkg_id : fields.packageId,
                                     pci_image_size : '176X176',

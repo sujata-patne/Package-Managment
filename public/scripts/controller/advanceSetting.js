@@ -1,4 +1,4 @@
-myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
+myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $state, ngProgress, $stateParams, MainSite,Upload, advanceSetting) {
     ngProgress.color('yellowgreen');
     ngProgress.height('3px');
     $scope.success = "";
@@ -9,6 +9,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     $scope.offerGetSetting = {};
     $scope.valuePlanSetting = {};
     $scope.updateFlag = false;
+
     // $scope.valuePlanTotals = {};
    
 
@@ -37,8 +38,8 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
       packageId : $rootScope.PackageId
     }
 
-    console.log('PreData');
-    console.log(preData);
+    // console.log('PreData');
+    // console.log(preData);
     advanceSetting.getData(preData,function(data){
       $scope.contentTypes = data.ContentTypes;
       console.log($scope.contentTypes);
@@ -124,9 +125,22 @@ $scope.init();
     //  });
     // }
 
+    $scope.getCGImage = function(){
+         var preData;
+
+          preData = {
+            packageId : $rootScope.PackageId
+          }
+
+          advanceSetting.getData(preData,function(data){
+               //Getting the base CG image to show in thumbnail : 
+               $scope.cgimage = _.findWhere(data.CGImageData, {pci_is_default: 1});
+          });
+    }
+
     $scope.fileUploads = [];
     $scope.uploadSubmit = function(index){
-      console.log('in upload submit');
+
              $scope.files = $scope.fileUploads;
              var valid = true;
              if($scope.files.length == 0){
@@ -139,6 +153,7 @@ $scope.init();
              }
              if(valid){
                       angular.forEach($scope.files, function(file) {
+                        console.log(file);
                         if (file && !file.$error) {
                             file.upload = Upload.upload({
                               url: '/UploadFile',
@@ -162,11 +177,19 @@ $scope.init();
                                 $scope.fileUploads[index].progress = Math.min(100, parseInt(100.0 * 
                                                        evt.loaded / evt.total));
 
+                                
+
                                 if( progressPercentage == 100 ){
                                     setTimeout(function(){
                                         // window.location.reload();
                                          $("#progress_id").html('');
+                                         
                                     },3000);
+                                     setTimeout(function(){
+                                        // window.location.reload();
+                                         // $("#progress_id").html('');
+                                         $scope.getCGImage();
+                                    },2000);
                                 }
                             });
                         }   
