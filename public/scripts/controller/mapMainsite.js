@@ -32,26 +32,23 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
         MainSite.showPackageData(params,function (MainSiteData) {
+
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
 
-            $scope.alacartPackPlans = angular.copy(MainSiteData.alacartPackPlans);
-
-            $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
-
-            $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
-
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
-            console.log('mainSitePackageData')
-            console.log(MainSiteData.mainSitePackageData.packageDetails)
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 console.log('if')
                 $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
                 $rootScope.PackageType = $scope.mainSitePackageData[0].sp_pkg_type;
                 $rootScope.PackageName = $scope.mainSitePackageData[0].sp_package_name;
+
+                console.log('$rootScope.PackageName')
+                console.log($rootScope.PackageName)
+
                 $rootScope.SelectedPack = $scope.mainSitePackageData[0].sp_pk_id;
                 if($rootScope.action === 'edit') {
                     $rootScope.ParentPackageId = $scope.mainSitePackageData[0].sp_parent_pkg_id;
@@ -96,6 +93,12 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
             $scope.errorvisible = true;
+        }else if (!$rootScope.SelectedPack) {
+            toastr.error('Please select Pack');
+            $scope.errorvisible = true;
+        }else if (!$rootScope.PackageName) {
+            toastr.error('Package Title is required');
+            $scope.errorvisible = true;
         }else if (!$rootScope.ParentPackageId) {
             toastr.error('Please Create Mainsite Package before mapping.');
             $scope.errorvisible = true;
@@ -130,7 +133,8 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
+            $scope.showPackageData();
+            //$state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
         }
         else {
             toastr.error(data.message)

@@ -71,8 +71,6 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                         }
                     },
                     alacartNOffer:function (callback) {
-                        console.log('req.body.parentPackageId')
-                        console.log(req.body.parentPackageId)
                         if(req.body.parentPackageId != '' && req.body.parentPackageId != 0 && req.body.parentPackageId != undefined) {
                             callback(null, req.body.packageId);
                         }else {
@@ -215,7 +213,6 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
     }
 };
 exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
-    console.log('add mainsite child')
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -241,11 +238,8 @@ exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
                     },
                     function (data, callback) {
                         if (data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId) {
-                            console.log('not unique')
                             callback(null, {'exist': data.exist, 'message': 'Package Name Must be Unique'});
                         } else {
-                            console.log(' unique')
-
                             callback(null, {'exist': data.exist});
                         }
                     }
@@ -305,7 +299,6 @@ exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
                                     } else {
                                         alacartManager.getMaxAlacartOfferId(connection_ikon_cms, function (err, MaxPaosId) {
                                             var paosId = MaxPaosId[0].paos_id != null ? parseInt(MaxPaosId[0].paos_id + 1) : 1;
-                                            console.log("paosId : " + paosId)
                                             var AlacartOfferData = {
                                                 paos_id: paosId,
                                                 paos_sp_pkg_id: pkgId,
@@ -565,8 +558,6 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                     res.status(500).json(err.message);
                                     console.log(err.message)
                                 } else {
-                                    console.log('edit individaul results')
-                                    console.log(results)
                                     connection_ikon_cms.release();
                                     res.send({
                                         "success": true,
@@ -861,8 +852,6 @@ function editContentTypePack(connection_ikon_cms,data){
         }
     },
     function (err, results) {
-        console.log('function results')
-        console.log(results)
         if(err){
             connection_ikon_cms.release();
             console.log(err.message);

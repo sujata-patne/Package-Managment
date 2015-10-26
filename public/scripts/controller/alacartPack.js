@@ -95,7 +95,7 @@ console.log('alacartPackData')
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
+            $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
 
         }
         else {

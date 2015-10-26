@@ -22,7 +22,6 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
         if( $scope.selectedSubscriptionPackPlans.length > 0 ) {
             for( i = 0; i < $scope.selectedSubscriptionPackPlans.length ; i++ ){
                 $scope.selectedSubscriptionPlans.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
-                //console.log( $scope.selectedSubscriptionPlans );
                 $scope.existingSubscriptionPackIds.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
             }
         }
@@ -79,7 +78,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
             toastr.success(data.message );
             $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
+            $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );

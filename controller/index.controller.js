@@ -134,7 +134,6 @@ exports.authenticate = function (req, res, next) {
     try {
         mysql.getConnection('CMS', function (err, connection_ikon_cms) {
             userManager.getUserDetails( connection_ikon_cms, req.body.username, req.body.password, function( err, userDetails ){
-                //console.log( userDetails[0] );
                 if (err) {
                     res.render('account-login', { error: 'Error in database connection.' });
                 } else {
@@ -142,7 +141,6 @@ exports.authenticate = function (req, res, next) {
                         //console.log('Got user Detail'+userDetails);
                         if (userDetails[0].ld_active == 1) {
                             if(userDetails[0].ld_role == 'Store Manager') {
-                                //console.log('asdmkalsm');
                                 var session = req.session;
                                 session.package_UserId = userDetails[0].ld_id;
                                 session.package_UserRole = userDetails[0].ld_role;
@@ -288,7 +286,6 @@ exports.changePassword = function (req, res) {
         if (req.session) {
             if (req.session.package_UserName) {
                 var session = req.session;
-                //console.log( req.session.package_Email );
                 mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                     if(req.body.oldpassword == session.package_Password) {
                         userManager.updateUser( connection_ikon_cms, req.body.newpassword, new Date(), session.package_UserId, function( err, response ) {

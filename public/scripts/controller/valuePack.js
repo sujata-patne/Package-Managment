@@ -69,7 +69,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             $scope.success = data.message;
             toastr.success( $scope.success );
             $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
+            $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );

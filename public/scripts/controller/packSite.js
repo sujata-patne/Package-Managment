@@ -11,7 +11,8 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $rootScope.SelectedPack = '';
     $('.removeActiveClass').removeClass('active');
     $('#pack-site').addClass('active');
-
+console.log('$stateParams')
+console.log($stateParams)
     $scope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
         //save the previous state in a rootScope variable so that it's accessible from everywhere
         $scope.previousState = from;
@@ -53,7 +54,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
-            $state.go($scope.tabs[$scope.tabIndex].state,{}, {reload: $state.current});
+            $state.go($scope.tabs[$scope.tabIndex].state,{packageId:$rootScope.PackageId}, {reload: $state.current});
             console.log('next Pressed')
 
             console.log($scope.tabIndex)
@@ -79,7 +80,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.getPackageData = function(){
         $rootScope.action = 'add';
         $scope.showPackageData();
-        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+        $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
     }
     MainSite.getPackSiteData(function (PackSiteData) {
         console.log('packsite ' + $rootScope.action)

@@ -9,26 +9,12 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
     $scope.offerGetSetting = {};
     $scope.valuePlanSetting = {};
     $scope.updateFlag = false;
-    // $scope.valuePlanTotals = {};
-   
-
-
-    $rootScope.$watch('distributionChannelId',function(value,old) {
-      // console.log('config value changed :)',value);
-       // $scope.init();
-    }, true);
 
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
       // console.log('package value changed :)',value);
        $scope.init();
     }, true);
-
-
-    if($rootScope.PackageId != ""){
-       // console.log('PackageId '+$rootScope.PackageId);
-
-    }
 
   $scope.init = function(){
     var preData;
@@ -37,8 +23,6 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope, $state, ngPr
       packageId : $rootScope.PackageId
     }
 
-    console.log('PreData');
-    console.log(preData);
     advanceSetting.getData(preData,function(data){
       $scope.contentTypes = data.ContentTypes;
       console.log($scope.contentTypes);
@@ -153,7 +137,6 @@ $scope.init();
 
                             file.upload.progress(function (evt) {
                                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                // console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                                 $("#progress_id").html("Uploaded: "+progressPercentage+"%");
                                 $scope.fileUploads[index].progress = Math.min(100, parseInt(100.0 * 
                                                        evt.loaded / evt.total));
@@ -170,31 +153,6 @@ $scope.init();
              }
            
     }
-
- // $scope.filesubmit = function() {
- //      if (advanceSettingForm.form.file.$valid && $scope.file && !$scope.file.$error) {
- //          $scope.upload($scope.file);
- //      }else{
- //        console.log('not valid');
- //      }
- //      console.log('in submit');
- //    };
-
-  // $scope.upload = function (file) {
-  //       // Upload.upload({
-  //       //     url: 'upload/url',
-  //       //     data: {file: file, 'username': $scope.username}
-  //       // }).then(function (resp) {
-  //       //     console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-  //       // }, function (resp) {
-  //       //     console.log('Error status: ' + resp.status);
-  //       // }, function (evt) {
-  //       //     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-  //       //     console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-  //       // });
-  //     console.log('in upload');
-  //   };
-
 
   $scope.submitAdvanceSettingForm = function(isValid){
       if (!$rootScope.distributionChannelId) {
@@ -285,6 +243,7 @@ $scope.init();
                       }else{
                            $scope.updateFlag = true;
                            advanceSetting.addSetting(newSetting,function(data){
+
                                 toastr.success('Successfully Added!');
                            });
                         

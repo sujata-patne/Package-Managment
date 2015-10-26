@@ -16,13 +16,6 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.nextButtonPressed = 0;
     $scope.sequenceData = [];
 
-   
-
-    $rootScope.$watch('distributionChannelId',function(value,old) {
-      // console.log('config value changed :)',value);
-       // $scope.init();
-    }, true);
-
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
        console.log('package value changed :)',value);
@@ -89,7 +82,7 @@ $scope.init();
                     }else{
                         console.log('else in next button')
 
-                        $state.go($state.current, {}, {reload: $state.current});
+                        $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
                     }
 
                 },function(error){

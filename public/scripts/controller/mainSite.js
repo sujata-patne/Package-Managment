@@ -62,7 +62,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
-            $state.go($scope.tabs[$scope.tabIndex].state,{}, {reload: $state.current});
+            $state.go($scope.tabs[$scope.tabIndex].state,{packageId:$rootScope.PackageId}, {reload: $state.current});
             console.log('next Pressed')
             console.log($scope.tabIndex)
         }
@@ -113,7 +113,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
-        var params = {distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}; //pkgId:$rootScope.PackageId,
+        var params = {pkgId:$rootScope.PackageId,distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}; //pkgId:$rootScope.PackageId,
 
         MainSite.showPackageData(params,function (MainSiteData) {
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
@@ -141,7 +141,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                 if($rootScope.action === 'edit') {
                     $rootScope.ParentPackageId = $scope.mainSitePackageData[0].sp_parent_pkg_id;
                 }
-
             }else{
                 console.log('else')
                 $rootScope.PackageId = 0;
@@ -169,8 +168,9 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                 })
             }
 
-            $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
-
+            $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+console.log('$state')
+            console.log($state.current)
         })
     }
 

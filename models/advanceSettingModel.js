@@ -22,8 +22,7 @@ exports.getOfferPlanSettingDataForUpdate = function( dbConnection, packageId, ca
     });
 }
 exports.getValuePlanSettingDataForUpdate = function( dbConnection, packageId, callback ) {
-    console.log('packageId');
-    console.log(packageId);
+
     if(packageId == undefined){
         packageId = -1;
     }

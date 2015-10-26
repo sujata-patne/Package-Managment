@@ -34,7 +34,6 @@ exports.getSelectedSubscriptionPacks = function( req, res, next ) {
     try{
         if( req.session && req.session.package_UserName && req.session.package_StoreId ) {
             mysql.getConnection('CMS', function( err, connection_ikon_cms) {
-                //console.log( req.body.packageId );
                 subscriptionPackManager.getSelectedSubscriptionPacks( connection_ikon_cms, req.body.packageId, function( err, selectedSubscriptionPlans) {
                     if (err) {
                         connection_ikon_cms.release();
@@ -78,11 +77,8 @@ exports.saveSubscriptionPackToMainSite = function(req, res, next) {
                     },
                     function (data, callback) {
                         if (data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId) {
-                            console.log('not unique')
                             callback(null, {'exist': data.exist, 'message': 'Package Name Must be Unique'});
                         } else {
-                            console.log(' unique')
-
                             callback(null, {'exist': data.exist});
                         }
                     }
@@ -177,10 +173,8 @@ exports.saveSubscriptionPackToIndividual = function(req, res, next) {
                     },
                     function (data, callback) {
                         if (data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId) {
-                            console.log('not unique')
                             callback(null, {'exist': data.exist, 'message': 'Package Name Must be Unique'});
                         } else {
-                            console.log(' unique')
                             callback(null, {'exist': data.exist});
                         }
                     }
@@ -270,7 +264,6 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
         deleteSubscriptionPackPlans: function (callback) {
             if( deletePackIds.length > 0 ) {
                 subscriptionPackManager.getSubscriptionPacksByIds( connection_ikon_cms, deletePackIds, packageData.sp_pkg_id,  function( err, response ) {
-                    //console.log( response );
                     if(response[0].sub_pack_ids !== null){
                         deleteSubscriptionPackIds = response[0].sub_pack_ids.split(',')
                             .map(function (element) {
@@ -369,7 +362,6 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
         }
     },
     function (err, results) {
-        //console.log(results)
         if (err) {
             connection_ikon_cms.release();
             res.status(500).json(err.message);
@@ -403,7 +395,6 @@ function addSubscriptionPackagePlan123( req, res, connection_ikon_cms, packageDa
     if( deletePackIds.length > 0 ) {
 
        subscriptionPackManager.getSubscriptionPacksByIds( connection_ikon_cms, deletePackIds, packageData.sp_pkg_id,  function( err, response ) {
-            //console.log( response );
             if(response[0].sub_pack_ids !== null){
                 deleteSubscriptionPackIds = response[0].sub_pack_ids.split(',')
                     .map(function (element) {
@@ -525,7 +516,6 @@ exports.addSubscriptionPackToMainSite123 = function(req, res, next) {
                     packageType: req.body.packageType
                 }
                 mainSiteManager.getMainSitePackageData( connection_ikon_cms, searchData, function( err, packageData ) {
-                    //console.log( packageData.length );
                     if( packageData.length == 0 ) {
                         mainSiteManager.getMaxStorePackageId(connection_ikon_cms, function (err, MaxPkgId) {
                             if (err) {

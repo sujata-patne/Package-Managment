@@ -13,10 +13,6 @@ myApp.service('alacartPack', ['$http', function ($http) {
     }
 
     this.addAlacartNOffer = function(data, success){
-        /*$http.post(this.baseRestUrl + '/addAlacartNOffer', data).success(function (items) {
-            console.log(items)
-            success(items);
-        });*/
         if(data.packageType === 0){
             $http.post(this.baseRestUrl + '/addMainsiteAlacartPlanDetails', data).success(function (items) {
                 console.log(items)

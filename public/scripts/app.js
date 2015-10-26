@@ -23,17 +23,17 @@ myApp.config(function ($stateProvider) {
         .state("main-site", {
             templateUrl: 'partials/mainSite.html',
             controller: 'mainSiteCtrl',
-            url: '/main-site'
+            url: '/main-site/:packageId'
         })
         .state("pack-site", {
             templateUrl: 'partials/packSite.html',
             controller: 'packSiteCtrl',
-            url: '/pack-site'
+            url: '/pack-site/:packageId'
         })
         .state('main-site-map', {
             templateUrl: 'partials/map-mainsite.html',
             controller: 'mapMainsiteCtrl',
-            url: '/maping'
+            url: '/maping/:packageId'
         })
         .state('main-site.alacart', {
             templateUrl: 'partials/a-la-cart-n-offer-plan.html',

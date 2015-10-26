@@ -35,19 +35,6 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $scope.open2 = !$scope.open2;
     }
 
-
-
-    /* var data = {
-     distributionChannelId : $scope.distributionChannel
-     }
-
-     Package.getPackageDetail( data,function( data ){
-     $scope.packageName = data.packageByName;
-     console.log( $scope.packageName);
-     },function(error){
-     console.log(error);
-     });*/
-
     $scope.distributionChannelChange = function(){
         $scope.search_title="";
         //$('#src_'+$scope.alpha).css('font-weight','normal');
@@ -74,14 +61,14 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $rootScope.action = 'edit';
         if($rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined && $rootScope.ParentPackageId != ''){
 
-            $state.go('main-site-map');
+            $state.go('main-site-map',{packageId:$rootScope.PackageId});
 
         }else{
             if($rootScope.PackageType === 1){
-                $state.go('pack-site');
+                $state.go('pack-site',{packageId:$rootScope.PackageId});
 
             }else{
-                $state.go('main-site');
+                $state.go('main-site',{packageId:$rootScope.PackageId});
             }
         }
     }
@@ -112,7 +99,6 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         }
         Package.getPackageStartsWith(criteria,function( data ){
             $scope.packageList = data.Package;
-            // console.log($scope.packageList)
         },function(error){
             console.log(error);
         });

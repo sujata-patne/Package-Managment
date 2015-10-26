@@ -26,14 +26,12 @@ exports.getIndividualContentData = function(req, res, next) {
                     },
                 },
                 function (err, results) {
-                    //console.log(results)
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        //console.log(results);
                         res.send(results);
                     }
                 });
@@ -72,7 +70,6 @@ exports.getAlacartPlansByContentType = function(req, res, next) {
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        //console.log(results);
                         res.send(results);
                     }
                 });
@@ -116,8 +113,6 @@ exports.addIndividualContent = function(req, res, next) {
                                 pic_cm_id :  req.body.selectedContents[i],
                                 pic_valid_till : validDate
                             }
-                            console.log('insert..');
-                            console.log(data);
                             individualContentManager.saveIndividualContent( connection_ikon_cms,data, function(err,response){
                                 if(err){
 
@@ -155,8 +150,6 @@ exports.editIndividualContent = function(req, res, next) {
                                 if(err){
 
                                 }else{
-                                    console.log('RR');
-                                    console.log(response);
                                     if(response.length > 0){
                                         console.log('in update');
                                         individualContentManager.updateIndividualContentRecord( connection_ikon_cms, req.session.package_StoreId,req.body.packId,req.body.alacartPlanId,req.body.packageId,function(err,response){
@@ -171,7 +164,6 @@ exports.editIndividualContent = function(req, res, next) {
                             //If nothing is updated : 
                             //Just update the date : 
                              var validDate;
-                             console.log(req.body.validDate); 
                              if(req.body.validDate !== undefined && req.body.validDate != "" && req.body.validDate != null){
                                  validDate = moment(req.body.validDate);
                                  validDate = validDate.format('YYYY-MM-DD');
@@ -199,8 +191,6 @@ exports.editIndividualContent = function(req, res, next) {
                 function(err,results){
                      var cnt = 0;
                      var count = req.body.selectedContents.length;
-                     console.log('sc...'+req.body.selectedContents);
-                     console.log("count--------  "+count);
                      if(count == 0){
                         connection_ikon_cms.release();
                         res.send({status:200,message:''})

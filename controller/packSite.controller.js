@@ -104,9 +104,7 @@ exports.showPackSitePackageData = function(req, res, next)  {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
                     } else {
-                      //  console.log(results)
                         res.send(results);
-
                        // callback(err, results);
                     }
                 })
@@ -153,7 +151,6 @@ exports.getPackSiteData = function(req, res, next) {
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        //console.log(results)
                         res.send(results);
                     }
                 });

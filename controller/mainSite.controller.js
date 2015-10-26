@@ -49,14 +49,11 @@ exports.showPackageData = function(req, res, next)  {
                         async.waterfall([
                                 function (callback) {
                                     if (req.body.packageType === 1 ){
-                                        console.log('individual')
 
                                         mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
                                             callback(err, packageDetails );
                                         })
                                     }else  if (req.body.pkgId && req.body.pkgId != null && req.body.pkgId != undefined && req.body.pkgId != '') {
-                                        console.log('individual or mainsite')
-
                                         mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
                                             callback(err, packageDetails);
                                         })
@@ -173,7 +170,6 @@ exports.getMainSiteData = function(req, res, next) {
                             console.log(err.message)
                         } else {
                             connection_ikon_cms.release();
-                            //console.log(results)
                             res.send(results);
                         }
                     });
