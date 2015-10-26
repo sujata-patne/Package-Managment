@@ -8,6 +8,7 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         {title: "List Of Notifications", state: "notifications.list", active: false}
     ];
     $rootScope.n_selectedPlans = [];
+
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);

@@ -5,20 +5,17 @@
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
 console.log('alacartCtrl')
     $rootScope.isChild = false;
-
     $scope.nextButtonPressed = 0;
-
+console.log('$stateParams')
+console.log($stateParams)
     if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
-console.log('alacart controller ')
         var data = {
             packageId: $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            parentPackageId: $rootScope.ParentPackageId,
+            parentPackageId: $rootScope.ParentPackageId
         }
-
+        console.log('in alacart $stateParams')
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
-console.log('alacartPackData')
-            console.log(alacartPackData)
             $scope.alacartNofferDetails = angular.copy(alacartPackData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
@@ -35,9 +32,7 @@ console.log('alacartPackData')
                         streaming: data.pct_stream_id
                     };
                 })
-            } /*else{
-                $scope.alacartPlanIds = undefined;
-            }*/
+            }
         });
     }
 

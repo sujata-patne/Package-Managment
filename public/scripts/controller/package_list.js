@@ -59,13 +59,16 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $rootScope.PackageType = pkgType;
         $rootScope.ParentPackageId = parentId;
         $rootScope.action = 'edit';
-        if($rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined && $rootScope.ParentPackageId != ''){
-            $state.go('main-site-map',{packageId:$rootScope.PackageId});
-        }else{
-            if($rootScope.PackageType === 1){
-                $state.go('pack-site',{packageId:$rootScope.PackageId});
-            }else{
-                $state.go('main-site',{packageId:$rootScope.PackageId});
+        if($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+
+            if ($rootScope.ParentPackageId != 0 && $rootScope.ParentPackageId != undefined && $rootScope.ParentPackageId != '') {
+                $state.go('main-site-map', {packageId: $rootScope.PackageId});
+            } else {
+                if ($rootScope.PackageType === 1) {
+                    $state.go('pack-site', {packageId: $rootScope.PackageId});
+                } else {
+                    $state.go('main-site', {packageId: $rootScope.PackageId});
+                }
             }
         }
     }

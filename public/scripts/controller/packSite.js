@@ -12,26 +12,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $('.removeActiveClass').removeClass('active');
     $('#pack-site').addClass('active');
 
-    if($rootScope.previousState && new RegExp("main-site").test($scope.previousState.name) ){
-        $rootScope.PackageId = 0;
-        $rootScope.distributionChannelId = undefined;
-        $rootScope.PackageType = 1;
-        $rootScope.action = 'add';
-        $rootScope.ParentPackageId = 0;
-        $scope.offerId = '';
-        $scope.paosId = '';
-        $rootScope.PackageName = '';
-        $rootScope.SelectedPack = undefined;
-    }
-    if($rootScope.PackageType === 1 && ($rootScope.PackageId != 0 || $rootScope.PackageId != undefined || $rootScope.PackageId != '') && $rootScope.action != 'edit'){
-        $rootScope.PackageId = 0;
-        $rootScope.distributionChannelId = undefined;
-        $rootScope.PackageType = undefined;
-        $rootScope.action = 'add';
-        $rootScope.ParentPackageId = 0;
-        $scope.offerId = '';
-        $scope.paosId = '';
-    }
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"pack-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"pack-site.valuepack", active: false },
@@ -43,14 +23,12 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     //default form display for a-la-cart and offer plan
 
     $rootScope.proceed = function() {
-
         if($scope.tabIndex !== ( $scope.tabs.length - 1 ) ){
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
             $state.go($scope.tabs[$scope.tabIndex].state,{packageId:$rootScope.PackageId}, {reload: $state.current});
             console.log('next Pressed')
-
             console.log($scope.tabIndex)
         }
     };
@@ -60,59 +38,63 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             return true;
         }
     };
-
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
-        $state.transitionTo($scope.tabs[$scope.tabIndex].state);
+        $state.go($scope.tabs[$scope.tabIndex].state);
         //default form display for a-la-cart and offer plan
-        $state.transitionTo($scope.tabs[$scope.tabIndex]['state']);
+        $state.go($scope.tabs[$scope.tabIndex]['state']);
+    }
+    if($stateParams.packageId){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }
+    $scope.setEmptyPackage = function (){
+        $rootScope.PackageId = 0;
+        $rootScope.PackageType = 1;
+        $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;
+        $rootScope.PackageName = '';
+        $rootScope.SelectedPack = undefined;
+        $scope.offerId = '';
+        $scope.paosId = '';
+    }
+    if($rootScope.previousState && new RegExp("main-site").test($scope.previousState.name) ){
+        $rootScope.distributionChannelId = undefined;
+        $scope.setEmptyPackage()
+    }
+    if($rootScope.PackageType === 1 && $rootScope.PackageId != 0 && $rootScope.action != 'edit'){
+        $scope.setEmptyPackage();
     }
 
     $scope.showDeliveryTypes = function(contents){
         return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
+
     $scope.getPackageData = function(){
-        console.log('getPackageData')
         $rootScope.action = 'add';
         $scope.showPackageData();
         $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
     }
     MainSite.getPackSiteData(function (PackSiteData) {
-        console.log('packsite ' + $rootScope.action)
-        if($rootScope.action !== 'edit' || $rootScope.action !== undefined){
-            $rootScope.PackageId = 0;
-            $rootScope.distributionChannelId = undefined;
-            $rootScope.PackageType = 1;
-            $rootScope.action = 'add';
-            $rootScope.ParentPackageId = 0;
-            $scope.offerId = '';
-            $scope.paosId = '';
-            $rootScope.PackageName = '';
-            $rootScope.SelectedPack = undefined;
-        }
-
         $scope.OfferData = angular.copy(PackSiteData.OfferData);
         $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(PackSiteData.packs);
-
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
+            $scope.setEmptyPackage();
+        }
     });
 
     $scope.showPackageData = function(){
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-            delete $rootScope.PackageId;
-            delete $rootScope.SelectedPack;
-            delete $rootScope.PackageName;
-            $rootScope.PackageType = 1;
-            $scope.offerId = undefined;
-            $scope.paosId = undefined;
+            $scope.setEmptyPackage();
         }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
-        var params = {pkgId:$rootScope.PackageId}//, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
+        var params = {pkgId: $rootScope.PackageId}//, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
-        MainSite.showPackSitePackageData(params,function (PackSiteData) {
+        MainSite.showPackageData(params, function (PackSiteData) {
             $scope.OfferData = angular.copy(PackSiteData.OfferData);
             $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
@@ -131,12 +113,14 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                 $rootScope.PackageType = $scope.packSitePackageData[0].sp_pkg_type;
                 $rootScope.PackageName = $scope.packSitePackageData[0].sp_package_name;
                 $rootScope.SelectedPack = $scope.packSitePackageData[0].sp_pk_id;
+            }else {
+                $scope.setEmptyPackage();
             }
             $scope.alacartNofferDetails = angular.copy(PackSiteData.mainSitePackageData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
                 $scope.paosId = $scope.alacartNofferDetails[0].paos_id;
-            }else{
+            } else {
                 $scope.alacartNofferDetails = undefined;
                 $scope.offerId = undefined;
                 $scope.paosId = undefined;
@@ -151,6 +135,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                 })
             }
         })
+
     }
 
     if($rootScope.action === 'edit'){
@@ -160,5 +145,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.selectedValuePacks = [];
         $scope.selectedSubscriptionPlans = [];
     }
+
 
 });
