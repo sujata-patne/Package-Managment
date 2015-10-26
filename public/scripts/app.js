@@ -115,6 +115,10 @@ myApp.config(function ($stateProvider) {
             controller: "notificationAddCtrl",
             url: "/notificationsAdd/:pn_id/:pn_sp_pkg_id/:pn_plan_id/:pn_plan_type"
         })
-}).run(function ($state) {
-    $state.go("main-site");
+
+    }).run(function ($state,$rootScope) {
+        $state.go("main-site");
+        $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
+            $rootScope.previousState = from;
+        })
 })

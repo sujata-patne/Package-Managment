@@ -14,23 +14,20 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    $scope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
-        //save the previous state in a rootScope variable so that it's accessible from everywhere
-        $scope.previousState = from;
 
-        if($scope.previousState && new RegExp("pack-site").test($scope.previousState.name) || $scope.previousState && new RegExp("main-site-map").test($scope.previousState.name) ){
+    if($rootScope.previousState && new RegExp("pack-site").test($scope.previousState.name)
+        || $rootScope.previousState && new RegExp("main-site-map").test($scope.previousState.name) ){
 
-            $rootScope.PackageId = 0;
-            $rootScope.distributionChannelId = undefined;
-            $rootScope.PackageType = 0;
-            $rootScope.action = 'add';
-            $rootScope.ParentPackageId = 0;
-            $scope.offerId = '';
-            $scope.paosId = '';
-            $rootScope.PackageName = '';
-            $rootScope.SelectedPack = undefined;
-        }
-    });
+        $rootScope.PackageId = 0;
+        $rootScope.distributionChannelId = undefined;
+        $rootScope.PackageType = 0;
+        $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;
+        $scope.offerId = '';
+        $scope.paosId = '';
+        $rootScope.PackageName = '';
+        $rootScope.SelectedPack = undefined;
+    }
 
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';

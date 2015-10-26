@@ -8,9 +8,18 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     $('#main-site-map').addClass('active');
     $rootScope.PackageType = 0;
 
-    MainSite.getMainSiteData(function (MainSiteData) {
-        console.log('new mapMainsite' + $rootScope.isChild)
+    if($rootScope.previousState && new RegExp("pack-site").test($scope.previousState.name)
+        || $rootScope.previousState && new RegExp("main-site").test($scope.previousState.name) ){
 
+        $rootScope.PackageId = 0;
+        $rootScope.distributionChannelId = undefined;
+        $rootScope.PackageType = 0;
+        $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;
+        $rootScope.PackageName = '';
+        $rootScope.SelectedPack = undefined;
+    }
+    MainSite.getMainSiteData(function (MainSiteData) {
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
 
