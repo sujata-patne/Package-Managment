@@ -56,7 +56,7 @@
         <div class="col-xs-4 col-md-4">
             <!-- <button type="button" class="btn btn-primary btn-w-xs" title="Previous" data-ng-disabled="listcurrentPage == 0" data-ng-click="listcurrentPage=listcurrentPage-1">Previous</button> -->
         </div>
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-4 col-md-4" ng-hide="itemsPerPage < 8">
             <!-- <button type="button" class="btn btn-primary btn-w-xs" title="Download" data-ng-click="ExportPlan()">Download in excel</button> -->
             <dir-pagination-controls></dir-pagination-controls>
         </div>

@@ -31,35 +31,37 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
 
 $scope.init = function(){
         var packageId = $rootScope.PackageId;
-        Arrangeplans.getArrangePlansData({packageId:packageId},function(data) {
-        console.log('called default')
-        console.log(data)
-        $scope.AlacartPlans = data.arrangeSequenceData;
-        var sequence = angular.copy(data.arrangeSequenceData);
+    if($rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != null) {
+        Arrangeplans.getArrangePlansData({packageId: packageId}, function (data) {
+            console.log('called default')
+            console.log(data)
+            $scope.AlacartPlans = data.arrangeSequenceData;
+            var sequence = angular.copy(data.arrangeSequenceData);
 
-        sequence.forEach(function(plans){
-            if(!_.has($scope.sequenceData,plans.id)){
-                $scope.sequenceData[plans.id] = {};
+            sequence.forEach(function (plans) {
+                if (!_.has($scope.sequenceData, plans.id)) {
+                    $scope.sequenceData[plans.id] = {};
+                }
+                $scope.sequenceData[plans.id] = {pas_arrange_seq: plans.pas_arrange_seq};
+            })
+            var isAlacartPlansExist = data.isAlacartPlansExist;
+
+            $scope.AlacartPlans = data.PackageAlacartPacks;
+            $scope.finalarray = data.selectedPlans;
+            if (isAlacartPlansExist > 0) {
+                var obj = {};
+                obj['id'] = "4" + $scope.AlacartPlans[0].paos_id;
+                obj['plan_id'] = $scope.AlacartPlans[0].paos_id;
+                obj['plan_name'] = 'All Plans';
+                obj['plan_type'] = 'A-La-Cart';
+                $scope.finalarray.push(obj)
             }
-            $scope.sequenceData[plans.id] = {pas_arrange_seq:plans.pas_arrange_seq};
-        })
-
-        $scope.AlacartPlans = data.PackageAlacartPacks;
-        $scope.finalarray = data.selectedPlans;
-        if($scope.AlacartPlans.length > 0){
-            var obj = {};
-            obj['id'] = "4"+$scope.AlacartPlans[0].paos_id;
-            obj['plan_id'] = $scope.AlacartPlans[0].paos_id;
-            obj['plan_name'] = 'All Plans';
-            obj['plan_type'] = 'A-La-Cart';
-            $scope.finalarray.push(obj)
-        }
-        console.log($scope.finalarray)
-        console.log($scope.sequenceData)
-    });
+            console.log($scope.finalarray)
+            console.log($scope.sequenceData)
+        });
+    }
 }
 
-$scope.init();
 
     $scope.submitArrangePlansForm = function(){
     //Get the length of filled values.
