@@ -16,7 +16,10 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         $state.go($scope.tabs[$scope.tabIndex]['state']);
     }
 
-
+    if($stateParams.packageId){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }
     Notification.getDistributionChannel(function (data) {
         $rootScope.distributionChannels = angular.copy(data.distributionChannels);
     });

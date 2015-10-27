@@ -9,10 +9,8 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     $rootScope.PackageType = 0;
 
     if($stateParams.packageId){
-        console.log('inside $statepartam')
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
-        console.log($rootScope.PackageId)
     }
     $scope.setEmptyPackage = function(){
         $rootScope.PackageId = 0;

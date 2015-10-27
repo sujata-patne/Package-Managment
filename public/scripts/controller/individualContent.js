@@ -16,6 +16,8 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
     $scope.minDate = date.setDate((new Date()).getDate() - 0);
 
     var predata = {};
+
+
     IndividualContent.getIndividualContentData(predata,function(data){
     	$scope.contentTypes = data.ContentTypes;
     });

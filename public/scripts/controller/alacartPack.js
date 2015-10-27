@@ -6,15 +6,16 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
 console.log('alacartCtrl')
     $rootScope.isChild = false;
     $scope.nextButtonPressed = 0;
-console.log('$stateParams')
-console.log($stateParams)
-    if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+
+   // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
+    /*if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
+        console.log('in alacart details controller' + $rootScope.PackageId)
+
         var data = {
             packageId: $rootScope.PackageId,
             packageType: $rootScope.PackageType,
             parentPackageId: $rootScope.ParentPackageId
         }
-        console.log('in alacart $stateParams')
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
             $scope.alacartNofferDetails = angular.copy(alacartPackData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
@@ -35,7 +36,7 @@ console.log($stateParams)
             }
         });
     }
-
+*/
     $scope.submitAlacartForm = function (isValid) {
         if (!$rootScope.distributionChannelId){
             toastr.error('Distribution Channel Required');
@@ -76,6 +77,8 @@ console.log($stateParams)
                     if($scope.nextButtonPressed){
                         toastr.success(data.message)
                         $rootScope.PackageId = data.pkgId;
+                        $rootScope.action = 'edit';
+
                         $rootScope.proceed();
                     }else{
                         $scope.showResponse(data);
@@ -90,6 +93,8 @@ console.log($stateParams)
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
+            $rootScope.action = 'edit';
+
             $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
 
         }

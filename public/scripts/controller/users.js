@@ -96,7 +96,7 @@ myApp.controller('usersCtrl', function ($scope, $http, ngProgress, $timeout, Use
                                             $scope.UserList = angular.copy(users.UserData);
                                             $scope.UserRole = angular.copy(users.UserRole);
                                         });
-                                        $state.transitionTo('users');
+                                        $state.go('users');
                                         $scope.FullName = "";
                                         $scope.UserName = "";
                                         $scope.EmailId = "";
@@ -137,7 +137,7 @@ myApp.controller('usersCtrl', function ($scope, $http, ngProgress, $timeout, Use
                                             $scope.UserList = angular.copy(users.UserData);
                                             $scope.UserRole = angular.copy(users.UserRole);
                                         });
-                                        $state.transitionTo('users');
+                                        $state.go('users');
                                         //$window.location.href = "#add-edit";
                                         $scope.success = "Record Updated successfully.";
                                     }

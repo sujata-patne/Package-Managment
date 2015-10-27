@@ -22,6 +22,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
        $scope.init();
     }, true);
 
+
 $scope.init = function(){
         var packageId = $rootScope.PackageId;
     if($rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != null) {

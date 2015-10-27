@@ -72,9 +72,6 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
 
 }
 
-$scope.init();
-   
-
     $scope.offerBuy = function(contentTypeId){
         $scope.totalBuy = 0;
         //compute total buy
@@ -180,7 +177,7 @@ $scope.init();
     }
 
     $scope.submitAdvanceSettingForm = function(isValid){
-    console.log(isValid);
+        console.log('submit valuepack')
         if(isValid) {
             if (!$rootScope.distributionChannelId) {
                 toastr.error('Distribution Channel is required');
