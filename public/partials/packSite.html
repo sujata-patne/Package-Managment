@@ -2,11 +2,7 @@
     <div class="content">
         <div class="content-container">
             <div class="content-header">
-                <h2 class="content-header-title">
-                    <span ng-show="$root.PackageId >= 0">Edit</span>
-                    <span ng-show="$root.PackageId == '' || $root.PackageId == undefined || $root.PackageId == null">Add New </span>
-
-                    Pack Site Package</h2>
+                <h2 class="content-header-title">{{actionName}} Pack Site Package</h2>
             </div>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}}</span>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}}</span>
@@ -23,7 +19,7 @@
                         <div class="portlet-content">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="distributionChannels" class="col-md-3 control-label">Deliver Channel</label>
+                                    <label for="distributionChannels" class="col-md-3 control-label" ><span class="asterisk padding-right-5">*</span>Deliver Channel</label>
                                     <div class="col-md-6">
                                         <select name="distributionChannels" data-ng-options="item.cd_id as item.cd_name for item in distributionChannels" class="form-control" data-ng-model="$root.distributionChannelId" ng-change="showPackageData()" required="true" >
                                             <option value=""> --Select Store-- </option>

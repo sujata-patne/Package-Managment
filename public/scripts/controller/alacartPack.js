@@ -3,12 +3,11 @@
  */
 
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
-console.log('alacartCtrl')
     $rootScope.isChild = false;
     $scope.nextButtonPressed = 0;
 
    // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
-    /*if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
+    if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
         console.log('in alacart details controller' + $rootScope.PackageId)
 
         var data = {
@@ -36,7 +35,7 @@ console.log('alacartCtrl')
             }
         });
     }
-*/
+
     $scope.submitAlacartForm = function (isValid) {
         if (!$rootScope.distributionChannelId){
             toastr.error('Distribution Channel Required');
@@ -62,23 +61,22 @@ console.log('alacartCtrl')
             }
             ngProgress.start();
             if ( $rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
-                console.log('mainsite edit')
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
+                        toastr.success(data.message)
+                        $rootScope.PackageId = data.pkgId;
+                        $rootScope.action = 'edit';
                         $rootScope.proceed();
-
                     }else{
                         $scope.showResponse(data);
                     }
                 });
             } else {
-                console.log('mainsite add')
                 alacartPack.addAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
                         toastr.success(data.message)
                         $rootScope.PackageId = data.pkgId;
                         $rootScope.action = 'edit';
-
                         $rootScope.proceed();
                     }else{
                         $scope.showResponse(data);
@@ -94,8 +92,7 @@ console.log('alacartCtrl')
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
-
-            $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
+            $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
 
         }
         else {

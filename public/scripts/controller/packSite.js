@@ -8,9 +8,15 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
     $rootScope.PackageName = '';
+
+    $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
     $rootScope.SelectedPack = '';
     $('.removeActiveClass').removeClass('active');
     $('#pack-site').addClass('active');
+    if($stateParams.packageId){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }
     $scope.setEmptyPackage = function(){
         console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
@@ -138,7 +144,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                     };
                 })
             }
-            $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+            $state.go($state.current, {}, {reload: $state.current});
 
         })
     }

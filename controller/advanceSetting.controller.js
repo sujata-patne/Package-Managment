@@ -7,6 +7,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var inspect = require('util-inspect');
 var shell = require('shelljs');
+$scope.nextButtonPressed = 0;
 
 // var ffmpeg = require('ffmpeg');
 
@@ -137,7 +138,10 @@ exports.addSetting = function(req, res, next) {
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        res.send(results);
+                        //res.send(results);
+                        res.send({"success": true,
+                            "status": 200,
+                            message: "Successfully Added"});
                     }
                 });
             });
@@ -352,7 +356,10 @@ exports.editSetting = function(req, res, next) {
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        res.send(results);
+                        //res.send(results);
+                        res.send({"success": true,
+                            "status": 200,
+                            message: "Successfully Updated"});
                     }
                 });
             });

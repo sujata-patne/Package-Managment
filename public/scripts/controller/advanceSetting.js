@@ -9,6 +9,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
     $scope.offerGetSetting = {};
     $scope.valuePlanSetting = {};
     $scope.updateFlag = false;
+    $scope.nextButtonPressed = 0;
 
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
@@ -71,6 +72,9 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
     });
 
 }
+
+$scope.init();
+
 
     $scope.offerBuy = function(contentTypeId){
         $scope.totalBuy = 0;
@@ -177,7 +181,6 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
     }
 
     $scope.submitAdvanceSettingForm = function(isValid){
-        console.log('submit valuepack')
         if(isValid) {
             if (!$rootScope.distributionChannelId) {
                 toastr.error('Distribution Channel is required');
@@ -270,9 +273,10 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                         advanceSetting.addSetting(newSetting, function (data) {
                             toastr.success('Successfully Added!');
                         });
-
                     }
-
+                    if($scope.nextButtonPressed) {
+                        $rootScope.proceed();
+                    }
                 }
             }
         }

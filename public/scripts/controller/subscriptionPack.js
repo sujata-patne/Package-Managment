@@ -75,13 +75,14 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
     $scope.result = function( data ){
         console.log('submit valuepack')
+        console.log($state.current)
 
         if(data.success){
 
             toastr.success(data.message );
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
-            $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
+            $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );

@@ -73,7 +73,7 @@ console.log('submit valuepack')
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
 
-            $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
+            $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );
