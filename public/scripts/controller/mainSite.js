@@ -29,13 +29,12 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $rootScope.SelectedPack = undefined;
     }
 
-    if($rootScope.previousState && new RegExp("pack-site").test($scope.previousState.name)
+    if($rootScope.previousState && new RegExp("pack").test($scope.previousState.name)
         || $rootScope.previousState && new RegExp("main-site-map").test($scope.previousState.name) ){
         $rootScope.distributionChannelId = undefined;
         console.log('previousState')
         $scope.setEmptyPackage();
     }
-
 
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         $rootScope.action = 'add';

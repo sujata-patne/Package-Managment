@@ -61,11 +61,8 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
                     $rootScope.proceed();
 
                 }else{
-                    console.log('else in submit')
-
                     $scope.result(data);
                 }
-
                 ngProgress.complete();
             },function(error){
                 console.log(error);
@@ -74,8 +71,6 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
     }
 
     $scope.result = function( data ){
-        console.log('submit valuepack')
-        console.log($state.current)
 
         if(data.success){
 

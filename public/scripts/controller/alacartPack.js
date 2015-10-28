@@ -8,7 +8,6 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
 
    // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
     if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
-        console.log('in alacart details controller' + $rootScope.PackageId)
 
         var data = {
             packageId: $rootScope.PackageId,

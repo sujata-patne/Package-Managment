@@ -18,7 +18,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $rootScope.action = 'edit';
     }
     $scope.setEmptyPackage = function(){
-        console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
         $rootScope.PackageType = 1;
         $rootScope.action = 'add';

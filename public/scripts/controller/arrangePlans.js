@@ -81,7 +81,6 @@ $scope.init = function(){
                     }
 
                 },function(error){
-                    console.log(error)
                     toastr.error(error)
                 })
         }else{
