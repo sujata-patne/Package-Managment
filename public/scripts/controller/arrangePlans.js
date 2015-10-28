@@ -25,7 +25,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
 $scope.init = function(){
         var packageId = $rootScope.PackageId;
     if($rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != null) {
-        Arrangeplans.getArrangePlansData({packageId: packageId}, function (data) {
+        Arrangeplans.getArrangePlansData({pkgId: packageId}, function (data) {
 
             $scope.AlacartPlans = data.arrangeSequenceData;
             var sequence = angular.copy(data.arrangeSequenceData);
@@ -54,6 +54,7 @@ $scope.init = function(){
 
 
     $scope.submitArrangePlansForm = function(){
+        console.log('submitArrangePlansForm')
     //Get the length of filled values.
         var arrlength = $scope.sequenceData.filter(function(e){return e;});
         arrlength = arrlength.filter(function(e){return e.pas_arrange_seq != null; });
@@ -77,7 +78,7 @@ $scope.init = function(){
                     if($scope.nextButtonPressed){
                         $rootScope.proceed();
                     }else{
-                        $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
+                        $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
                     }
 
                 },function(error){

@@ -30,7 +30,7 @@ myApp.config(function ($stateProvider) {
             controller: 'packSiteCtrl',
             url: '/pack-site/:packageId'
         })
-        .state('main-site-map', {
+        .state('map-mainsite', {
             templateUrl: 'partials/map-mainsite.html',
             controller: 'mapMainsiteCtrl',
             url: '/maping/:packageId'

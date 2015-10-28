@@ -5,7 +5,7 @@
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
     $rootScope.isChild = false;
     $scope.nextButtonPressed = 0;
-
+console.log('alacartCtrl')
    // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
     if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
 

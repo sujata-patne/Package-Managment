@@ -185,7 +185,7 @@ function getPages(role) {
 
         var pagesjson = [
             { 'pagename': 'Mainsite', 'href': 'main-site', 'id': 'main-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': []},
-            { 'pagename': 'Map Mainsite', 'href': 'main-site-map', 'id': 'main-site-map', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': []},
+            { 'pagename': 'Map Mainsite', 'href': 'map-mainsite', 'id': 'map-mainsite', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': []},
             { 'pagename': 'Packs', 'href': 'pack-site', 'id': 'pack-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Package Listing', 'href': 'packageListing', 'id': 'package-listing', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Notifications', 'href': 'notifications', 'id': 'notifications', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },

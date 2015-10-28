@@ -23,7 +23,7 @@ exports.createMainSiteSubscriptionPackPlan = function (dbConnection, data, callb
 }
 
 exports.getLastInsertedValueSubscriptionPlanId = function( dbConnection, callback ) {
-    var query = dbConnection.query('SELECT MAX( pss_id ) as sub_pack_id FROM icn_package_subscription_site', function( err, response ) {
+    var query = dbConnection.query('SELECT MAX( pss_id ) as sub_pack_id FROM icn_package_subscription_site WHERE ISNULL(pss_crud_isactive) ', function( err, response ) {
         callback( err, response[0].sub_pack_id );
     });
 }

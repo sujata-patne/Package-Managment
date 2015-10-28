@@ -1,4 +1,5 @@
 myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+    console.log('packSiteCtrl')
     $rootScope.ParentPackageId = 0;
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
@@ -8,6 +9,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
     $rootScope.PackageName = '';
+    $scope.setDistributionChannelId = 0;
 
     $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
     $rootScope.SelectedPack = '';
@@ -27,7 +29,10 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $rootScope.PackageName = '';
         $rootScope.SelectedPack = undefined;
     }
-    if($rootScope.previousState && new RegExp("main-site").test($scope.previousState.name) ){
+
+    if($rootScope.previousState && (new RegExp("main-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+        $scope.setDistributionChannelId = 0;
+
         $rootScope.distributionChannelId = undefined;
         $scope.setEmptyPackage();
     }
@@ -50,7 +55,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
-            $state.go($scope.tabs[$scope.tabIndex].state,{}, {reload: $scope.tabs[$scope.tabIndex].state});
+            $state.go($scope.tabs[$scope.tabIndex].state,{});//, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
 
@@ -62,24 +67,27 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
-        if($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined){
-            $state.go($scope.tabs[$scope.tabIndex].state, {}, {reload: $scope.tabs[$scope.tabIndex].state});
-        }else{
-            $state.go($scope.tabs[$scope.tabIndex].state);
-        }
+        $state.go($scope.tabs[$scope.tabIndex].state,  {}, {reload:false});
+
         //default form display for a-la-cart and offer plan
-        if($scope.tabIndex == 0){
+        /*if($scope.tabIndex == 0){
             $state.go($scope.tabs[$scope.tabIndex]['state']);
-        }
+        }*/
     }
 
     $scope.showDeliveryTypes = function(contents){
         return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
     $scope.getPackageData = function(){
-        $rootScope.action = 'add';
+        console.log('getPackageData');
+        $scope.setDistributionChannelId = 1;
+        $rootScope.PackageId = '';
+        console.log('$scope.setDistributionChannelId' + $scope.setDistributionChannelId)
         $scope.showPackageData();
-        $state.go($state.current, {}, {reload: $state.current}); //'dcId':$rootScope.distributionChannelId
+        console.log('getPackageData 1');
+
+        //$state.go('main-site', {packageId:$rootScope.PackageId});
+
     }
     MainSite.getPackSiteData(function (PackSiteData) {
         $scope.OfferData = angular.copy(PackSiteData.OfferData);
@@ -143,7 +151,20 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                     };
                 })
             }
-            $state.go($state.current, {}, {reload: $state.current});
+            if( $scope.setDistributionChannelId !== 1 ){
+                $rootScope.action = 'edit';
+                console.log('setDistributionChannel '+$rootScope.PackageId)
+                if($rootScope.PackageId != '' && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined){
+                    console.log(' $scope.setDistributionChannelId if 1')
+                    $state.go($state.current, {packageId:$rootScope.PackageId});
+                }else{
+                    console.log(' $scope.setDistributionChannelId else 1')
+                    $state.go($state.current, {packageId:undefined});
+                }
+            }else{
+                console.log(' $scope.setDistributionChannelId else')
+                $state.go($state.current, {packageId:$rootScope.PackageId});
+            }
 
         })
     }

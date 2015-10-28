@@ -2,9 +2,10 @@
  * Created by sujata.patne on 19-10-2015.
  */
 myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+    console.log('mapMainsiteCtrl')
     $rootScope.isChild = true;
-     $('.removeActiveClass').removeClass('active');
-    $('#main-site-map').addClass('active');
+    $('.removeActiveClass').removeClass('active');
+    $('#map-mainsite').addClass('active');
     $rootScope.PackageType = 0;
 
     if($stateParams.packageId){
@@ -21,8 +22,9 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $rootScope.PackageName = '';
         $rootScope.SelectedPack = undefined;
     }
-    if($rootScope.previousState && new RegExp("pack").test($scope.previousState.name)
-        || $rootScope.previousState && new RegExp("main-site").test($scope.previousState.name) ){
+
+    if($rootScope.previousState && (new RegExp("pack-site").test($scope.previousState.name) || new RegExp("main-site").test($scope.previousState.name) )){
+
         $rootScope.distributionChannelId = undefined;
         $scope.setEmptyPackage();
     }
