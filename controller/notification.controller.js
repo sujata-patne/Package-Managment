@@ -6,6 +6,7 @@ var async = require("async");
 var moment = require("moment");
 
 exports.getDistributionChannel = function(req, res, next) {
+    //to get the distribution channel
                 try {
                     if (req.session && req.session.package_UserName && req.session.package_StoreId) {
                         mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -36,16 +37,19 @@ exports.getDistributionChannel = function(req, res, next) {
                 }
             };
 exports.getNotificationData = function(req, res, next) {
+    // to get the notification data
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                         PackageName : function (callback){
+                            //to get the package name
                             PackageManager.getPackageByName(connection_ikon_cms,req.body.distributionChannelId,req.session.package_StoreId, function(err, packs){
                                 callback(err,packs);
                             });
                         },
                         ValuePacks : function (callback){
+                            //to get the value packs for selected package
                             if(req.body.PackageId != undefined && req.body.PackageId != 0) {
                                 Notification.getValuePacks(connection_ikon_cms, req.body.PackageId, function (err, ValuePacks) {
                                     callback(err,ValuePacks)
@@ -56,6 +60,7 @@ exports.getNotificationData = function(req, res, next) {
                             }
                         },
                         SubscriptionPacks : function (callback){
+                            // to get the subscription packs for selected package
                             if(req.body.PackageId != undefined && req.body.PackageId != 0) {
                                 Notification.getSubscriptionPacks(connection_ikon_cms, req.body.PackageId, function (err,  SubscriptionPacks) {
                                     callback(err, SubscriptionPacks)
@@ -66,6 +71,7 @@ exports.getNotificationData = function(req, res, next) {
                             }
                         },
                         NotificationData : function (callback){
+                            //to get all notification data for edit in listing of notification
                             if(req.body.pnId != undefined && req.body.pnId >= 0) {
                                 Notification.getNotificationData(connection_ikon_cms, req.body.pnId, function (err,  NotificationData ) {
                                     callback(err,NotificationData )
@@ -97,6 +103,7 @@ exports.getNotificationData = function(req, res, next) {
     }
 };
 exports.addNotificationData = function(req, res, next) {
+    //to add notification data to database
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -109,6 +116,7 @@ exports.addNotificationData = function(req, res, next) {
                         if(err){
 
                         }else {
+                            //the plan is stored as value_1, to separate as planid and planType
                             var planId = parseInt(req.body.PlanId[i].split('_')[1]);
                             var planType = req.body.PlanId[i].split('_')[0];
                             //console.log(moment(req.body.PushFrom).format('YYYY-MM-DD, HH:mm:ss'))
@@ -130,6 +138,7 @@ exports.addNotificationData = function(req, res, next) {
                             }
                             console.log(data);
                             Notification.saveNotificationData(connection_ikon_cms, data, function (err, response) {
+                                //to save notification data
                                 if (err) {
 
                                 } else {
@@ -156,6 +165,7 @@ exports.addNotificationData = function(req, res, next) {
     }
 };
 exports.listNotificationData = function(req, res, next) {
+    // for listing all notification data from database
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -196,6 +206,7 @@ exports.listNotificationData = function(req, res, next) {
     }
 };
 exports.n_delete = function (req, res, next) {
+    //to delete  notification by using field crud_is_active
     try {
         if (req.session && req.session.package_UserName) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -225,6 +236,7 @@ exports.n_delete = function (req, res, next) {
     }
 };
 exports.n_blockUnBlockContentType = function (req, res, next) {
+    //to block and unblock the notification using feild is_active
     try {
         if (req.session && req.session.package_UserName) {
 
@@ -256,6 +268,7 @@ exports.n_blockUnBlockContentType = function (req, res, next) {
 
 };
 exports.updateNotificationData  = function(req, res, next) {
+    //for updating notification
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {

@@ -163,7 +163,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
                     $scope.successvisible = true;
                 }
                 else {
-                    $scope.error = data.message;
+                    toastr.error(data.message);
                     $scope.errorvisible = true;
                 }
                 ngProgress.complete();
@@ -190,7 +190,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
                     $scope.successvisible = true;
                 }
                 else {
-                    $scope.error = data.message;
+                    toastr.error(data.message);
                     $scope.errorvisible = true;
                 }
                 ngProgress.complete();

@@ -11,7 +11,8 @@ myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngP
     $scope.selectedPush = 0;
     $scope.edit_state = false;
     $scope.addMore_flag = false;
-
+    $scope.days;
+    $scope.hours;
     if($stateParams.pn_id){
     }else{
         if($rootScope.n_selectedPlans != undefined && $rootScope.n_selectedPlans.length > 0){
@@ -89,13 +90,12 @@ $scope.counts =[
                     toastr.error('Please select both options in no of contents downloaded.');
             }else if( ($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null) ){
                      toastr.error('Please select both options in no of contents downloaded.');
-            }else if( $scope.days < 0 || $scope.days > 99){
-                     toastr.error('Days should be between 0 to 99.');
-            }else if( $scope.hours < 0 || $scope.hours > 24){
-                     toastr.error('Hours should be between 0 to 24.');
-            }
-        else if ($stateParams.pn_id) {
 
+            }else if( $scope.days < 1 || $scope.days > 99 || $scope.days == undefined){
+                    toastr.error('Days should be between 1 to 99.');
+           }else if( $scope.hours < 1 || $scope.hours > 24 || $scope.hours == undefined){
+                    toastr.error('Hours should be between 1 to 24.');
+            }else if ($stateParams.pn_id) {
             var notificationData = {
                 pnId: $stateParams.pn_id,
                 Days: $scope.days ,
