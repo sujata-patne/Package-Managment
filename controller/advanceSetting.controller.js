@@ -1,15 +1,19 @@
+/* Including libraries */
 var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
 var advanceSettingManager = require('../models/advanceSettingModel');
 var async = require("async");
 var _ = require("underscore");
+//FORMIDABLE : Used for saving files, reading and  writing them.
 var formidable = require('formidable');
 var fs = require('fs');
 var inspect = require('util-inspect');
-var shell = require('shelljs');
+//SHELL : Used for running shell commands. Used in converting images to different sizes.
+var shell = require('shelljs'); 
 
 
 // var ffmpeg = require('ffmpeg');
+//----------------------------------------------------------------------------------------
 
 exports.getData = function(req, res, next) {
     try {
@@ -21,32 +25,38 @@ exports.getData = function(req, res, next) {
                             callback(err, ContentTypeData)
                         })
                     },
-                    ContentTypeData: function (callback) {
+                    ContentTypeData: function (callback) {  
+                        /* Getting plans based on content type */
                         mainSiteManager.getContentTypeData(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
                             callback(err, ContentTypeData)
                         });
                     },
                     PackageOffer: function (callback) {
+                        /* Get selected offer plan for package */
                         mainSiteManager.getPackageOfferPlan( connection_ikon_cms,req.body.packageId, function(err,OfferData){
                             callback(err, OfferData)
                         });
                     },
                     PackageValuePacks: function (callback) {
+                        /* Get selected value packs for package */
                         mainSiteManager.getPackageValuePack(connection_ikon_cms,req.body.packageId, function (err, valuePackPlans) {
                             callback(err, valuePackPlans);
                         });
                     },
                     ValueDataForUpdate: function (callback) {
+                        /* Get Value Pack Data For Plans If Package was already created and setting available */
                         advanceSettingManager.getValuePlanSettingDataForUpdate(connection_ikon_cms,req.body.packageId, function (err, ValueDataForUpdate) {
                             callback(err, ValueDataForUpdate);
                         });
                     },
                     OfferDataForUpdate: function (callback) {
+                        /* Get Offer Pack Data For Plans If Package was already created and setting available */
                         advanceSettingManager.getOfferPlanSettingDataForUpdate(connection_ikon_cms,req.body.packageId, function (err, OfferDataForUpdate) {
                             callback(err, OfferDataForUpdate);
                         });
                     },
                     CGImageData: function (callback) {
+                        /* If CG image available fetch the data */
                         if(req.body.packageId){
                               advanceSettingManager.CGImageExists(connection_ikon_cms,req.body.packageId, function (err, CGImageData) {
                                  callback(err, CGImageData);
@@ -87,12 +97,15 @@ exports.addSetting = function(req, res, next) {
                                  loop(0);
                                  function loop( cnt ) {
                                      var i = cnt;
+                                     //pass_buy : buy numeric value
+                                     //pass_content_type : content type id
                                      var data = {
                                         pass_paos_id : req.body.offerPackageSiteId,
                                         pass_content_type : parseInt(_.keys(req.body.offerBuySetting[i])),
                                         pass_buy :  parseInt(_.values(req.body.offerBuySetting[i])),
                                         pass_get :  parseInt(_.values(req.body.offerGetSetting[i]))
                                      }
+
                                      advanceSettingManager.saveAdvanceSetting( connection_ikon_cms,data,function(err,response){
                                             if(err){ 
                                             }else{
@@ -112,6 +125,7 @@ exports.addSetting = function(req, res, next) {
                             
                     },
                   CreateValuePackRow: function (callback) {
+
                      if(Object.keys(req.body.valuePlanSetting).length > 0){
                             var count = req.body.valueLength - 1;
                             loop1(0);
@@ -159,8 +173,8 @@ exports.UploadFile =  function (req, res, next) {
             var count = 0;
           
             form.parse(req, function (err, fields, files) {
-                var newPath = __dirname + "/../public/contentFiles/"+files.file.name;
-                var absPath = "/contentFiles/"+files.file.name;
+                var newPath = __dirname + "/../public/contentFiles/"+files.file.name; //path to store in folder structure.
+                var absPath = "/contentFiles/"+files.file.name; //path that gets stored in db.
                 var tmp_path = files.file.path;
                 fs.rename(tmp_path,newPath, function (err) {
                       if (err) console.log(err);
@@ -188,7 +202,7 @@ exports.UploadFile =  function (req, res, next) {
                                 });
                                
                             },function(callback){
-
+                                //BASE FILE : 
                                 absPath = "/contentFiles/"+files.file.name;
                                 var cgdata = {
                                     pci_sp_pkg_id : fields.packageId,
@@ -201,6 +215,7 @@ exports.UploadFile =  function (req, res, next) {
                                 }); 
                             },
                             function(callback){
+                                //Other resolutions like 480 420 etc..
                                 absPath = '/contentFiles/480X480_'+files.file.name;
                                 shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=480:480 ' + __dirname + '/../public/contentFiles/480X480_'+files.file.name);
                                 var cgdata = {
@@ -287,7 +302,7 @@ exports.UploadFile =  function (req, res, next) {
         });
 
 };
-
+//Function to Edit Advance Setting..
 exports.editSetting = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
@@ -333,6 +348,7 @@ exports.editSetting = function(req, res, next) {
                                 loop1(0);
                                 function loop1( cnt ) {
                                     var i = cnt;
+                                    //function  call :
                                     saveValuePackForSetting(_.keys(req.body.valuePlanSetting)[i],req.body.valuePlanSetting,req.body.totalLength - 1,true);
                                     if(cnt == count){
                                         // connection_ikon_cms.release();
@@ -376,6 +392,7 @@ function saveValuePackForSetting(pvs_id,valueObj,contentTypeLength,toUpdate){
      loop1(0);
      function loop1( cnt ) {
             var i = cnt;
+            //PVS ID is the unique id in the icn_package_value_pack_site
             var data = {
                 pass_pvs_id : parseInt(pvs_id),
                 pass_content_type : parseInt(_.pairs(valueObj[pvs_id])[i][0]),
@@ -386,6 +403,7 @@ function saveValuePackForSetting(pvs_id,valueObj,contentTypeLength,toUpdate){
                     if(toUpdate == true){
                         advanceSettingManager.updateValueSetting(  connection_ikon_cms,data.pass_pvs_id, data.pass_content_type,  function(err,response){
                             if(err){}else{
+                                    //insert..
                                     advanceSettingManager.saveAdvanceSetting( connection_ikon_cms,data,function(err,response){
                                             if(err){ 
                                             }else{
@@ -401,6 +419,7 @@ function saveValuePackForSetting(pvs_id,valueObj,contentTypeLength,toUpdate){
                                  }
                             });
                     }else{
+                        //insert..
                           advanceSettingManager.saveAdvanceSetting( connection_ikon_cms,data,function(err,response){
                                 if(err){ 
                                 }else{

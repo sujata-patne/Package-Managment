@@ -144,7 +144,10 @@ exports.getPackageValuePack = function( dbConnection, packageId, callback ) {
         callback( err, response );
     });
 }
+
+
 exports.getContentTypeData = function(dbConnection, storeId, callback) {
+    /* Getting plans based on content type */
     var query = dbConnection.query(' SELECT cd.cd_name, plan.*, (SELECT cd_name FROM catalogue_detail WHERE cd_id = plan.ap_delivery_type) AS delivery_type_name ' +
     'FROM icn_alacart_plan AS plan ' +
     'join catalogue_detail as cd ON plan.ap_content_type = cd.cd_id ' +
