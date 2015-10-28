@@ -38,7 +38,7 @@ myApp.controller('notificationListCtrl', function ($scope,$rootScope, $state, ng
                     $scope.successvisible = true;
                 }
                 else {
-                    $scope.error = data.message;
+                    toastr.error(data.message);
                     $scope.errorvisible = true;
                 }
                 ngProgress.complete();
