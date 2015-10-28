@@ -47,6 +47,8 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
                 if($scope.nextButtonPressed){
                     toastr.success(data.message );
                     $rootScope.PackageId = data.pkgId;
+                    $rootScope.action = 'edit';
+
                     console.log('if in submit')
 
                     $rootScope.proceed();
@@ -64,12 +66,14 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
     }
 
     $scope.result = function( data ){
-
+console.log('submit valuepack')
         if(data.success){
             $scope.success = data.message;
             toastr.success( $scope.success );
             $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
+            $rootScope.action = 'edit';
+
+            $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );

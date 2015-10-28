@@ -31,7 +31,6 @@ exports.getSelectedValuePacks = function (req, res, next) {
     }
 }
 exports.saveValuePackToMainSite = function (req,res,next) {
-    console.log('add mainsite child')
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -57,7 +56,6 @@ exports.saveValuePackToMainSite = function (req,res,next) {
                     },
                     function (data, callback) {
                         if (data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId) {
-                            console.log('not unique')
                             callback(null, {'exist': data.exist, 'message': 'Package Name Must be Unique'});
                         } else {
                             callback(null, {'exist': data.exist});
@@ -136,7 +134,6 @@ exports.saveValuePackToMainSite = function (req,res,next) {
 };
 
 exports.saveValuePackToIndividual = function (req,res,next) {
-    console.log('add individual ')
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
@@ -159,7 +156,6 @@ exports.saveValuePackToIndividual = function (req,res,next) {
                     function (data, callback) {
 
                         if (data.exist == true && data.packageData[0].sp_pkg_id != req.body.packageId) {
-                            console.log('not unique')
                             callback(null, {'exist': data.exist, 'message': 'Package Name Must be Unique'});
                         } else {
                             callback(null, {'exist': data.exist});
@@ -185,8 +181,6 @@ exports.saveValuePackToIndividual = function (req,res,next) {
                                 sp_modified_on: new Date(),
                                 sp_modified_by: req.session.package_UserName
                             };
-                            console.log(storePackage);
-                            console.log(req.body);
                             if( packageData.length == 0 ) {
                                 mainSiteManager.getLastInsertedPackageId(connection_ikon_cms, function (err, lastInsertedId) {
                                     if (err) {
@@ -305,8 +299,6 @@ function saveValuePackPlan(req, res, connection_ikon_cms, packageData) {
                         var i = cnt;
                         valuePackManager.valuePackExists(connection_ikon_cms, addValuePackIds[i], packageData.sp_pkg_id, function (err, response) {
 
-                            console.log('inside insert/update value pack')
-                            console.log(response)
                             if (response != undefined && response.length > 0) {
                                 valuePackManager.updateValuePack(connection_ikon_cms, response[0].pvs_id, function (err, response) {
                                     if (err) {
@@ -383,18 +375,6 @@ function saveValuePackPlan(req, res, connection_ikon_cms, packageData) {
                 res.status(500).json(err.message);
                 console.log(err.message)
             } else {
-
-                /*valuePackManager.getSelectedValuePacks( connection_ikon_cms, packageData.sp_pkg_id, function( err, selectedValuePackPlans) {
-                 if (err) {
-                 connection_ikon_cms.release();
-                 res.status(500).json(err.message);
-                 console.log(err.message)
-                 } else {
-                 connection_ikon_cms.release();
-                 res.send( { "success" : true,"status":200, "message":"Value pack plan successfully saved for site.",selectedValuePackPlans : selectedValuePackPlans } );
-                 }
-                 });*/
-
                 res.send({
                     success: true,
                     "message": "Value pack plan successfully saved for site",

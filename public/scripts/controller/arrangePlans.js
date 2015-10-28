@@ -16,25 +16,17 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.nextButtonPressed = 0;
     $scope.sequenceData = [];
 
-   
-
-    $rootScope.$watch('distributionChannelId',function(value,old) {
-      // console.log('config value changed :)',value);
-       // $scope.init();
-    }, true);
-
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
-       console.log('package value changed :)',value);
        $scope.init();
     }, true);
+
 
 $scope.init = function(){
         var packageId = $rootScope.PackageId;
     if($rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != null) {
         Arrangeplans.getArrangePlansData({packageId: packageId}, function (data) {
-            console.log('called default')
-            console.log(data)
+
             $scope.AlacartPlans = data.arrangeSequenceData;
             var sequence = angular.copy(data.arrangeSequenceData);
 
@@ -45,8 +37,6 @@ $scope.init = function(){
                 $scope.sequenceData[plans.id] = {pas_arrange_seq: plans.pas_arrange_seq};
             })
             var isAlacartPlansExist = data.isAlacartPlansExist;
-console.log('isAlacartPlansExist');
-            console.log(isAlacartPlansExist);
 
             $scope.AlacartPlans = data.PackageAlacartPacks;
             $scope.finalarray = data.selectedPlans;
@@ -58,8 +48,6 @@ console.log('isAlacartPlansExist');
                 obj['plan_type'] = 'A-La-Cart';
                 $scope.finalarray.push(obj)
             }
-            console.log($scope.finalarray)
-            console.log($scope.sequenceData)
         });
     }
 }
@@ -87,12 +75,9 @@ console.log('isAlacartPlansExist');
 
                     toastr.success(data.message);
                     if($scope.nextButtonPressed){
-                        console.log('if in next button')
                         $rootScope.proceed();
                     }else{
-                        console.log('else in next button')
-
-                        $state.go($state.current, {}, {reload: $state.current});
+                        $state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
                     }
 
                 },function(error){

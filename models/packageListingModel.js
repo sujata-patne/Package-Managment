@@ -33,7 +33,6 @@ exports.getAllPackageForListStartsWith = function( dbConnection,data, callback )
 }
 exports.getAllPackageForList = function( dbConnection,data, callback ) {
     var moment = require("moment");
-      //  console.log(data)
 
     if(data.start_date !== undefined && data.start_date != ""){
         data.start_date = moment(data.start_date);

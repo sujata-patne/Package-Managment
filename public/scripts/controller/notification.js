@@ -8,6 +8,7 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         {title: "List Of Notifications", state: "notifications.list", active: false}
     ];
     $rootScope.n_selectedPlans = [];
+
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
@@ -15,7 +16,10 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         $state.go($scope.tabs[$scope.tabIndex]['state']);
     }
 
-
+    if($stateParams.packageId){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }
     Notification.getDistributionChannel(function (data) {
         $rootScope.distributionChannels = angular.copy(data.distributionChannels);
     });
@@ -47,7 +51,6 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         }
 
         Notification.getNotificationData(data,function (data) {
-            //console.log(data)
             $scope.packageName = angular.copy(data.PackageName);
         });
     }

@@ -51,14 +51,6 @@ exports.getMaxArrangeSequenceId = function(dbConnection, callback) {
         callback(err,pasId);
     });
 }
-//exports.existArrangeData = function(dbConnection, data, callback) {
-//    console.log(data)
-//    var query = dbConnection.query("SELECT * FROM  icn_package_arrange_sequence WHERE ISNULL(pas_crud_isactive) AND pas_id = "+data.pas_id, function( err, response ) {
-//     //   var query = dbConnection.query("SELECT * FROM  icn_package_arrange_sequence WHERE ISNULL(pas_crud_isactive) AND pas_sp_pkg_id = ? AND pas_plan_id = ? AND pas_plan_type IN ('?') ", [data.pas_sp_pkg_id,data.pas_plan_id,data.pas_plan_type], function( err, response ) {
-//        console.log(response)
-//        callback( err, response );
-//    });
-//}
 exports.getArrangeSequenceData = function(dbConnection,packageId,callback){
     var query = dbConnection.query('SElECT CASE ' +
         ' WHEN pas_plan_type like "Offer" THEN CONCAT("1", pas_plan_id) ' +

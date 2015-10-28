@@ -24,7 +24,6 @@ exports.getDistributionChannel = function(req, res, next) {
                                         console.log(err.message)
                                     } else {
                                         connection_ikon_cms.release();
-                                        //console.log(results)
                                         res.send(results);
                                     }
                                 });
@@ -91,7 +90,6 @@ exports.getNotificationData = function(req, res, next) {
                             console.log(err.message)
                         } else {
                             connection_ikon_cms.release();
-                            //console.log(results)
                             res.send(results);
                         }
                     });
@@ -172,7 +170,6 @@ exports.listNotificationData = function(req, res, next) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                         ListNotification : function (callback) {
-                            //console.log(req.body.PlanId)
                             if (req.body.PlanId) {
                                 var planId = parseInt(req.body.PlanId.split('_')[1]);
                                 var planType = req.body.PlanId.split('_')[0];
@@ -195,7 +192,6 @@ exports.listNotificationData = function(req, res, next) {
                             console.log(err.message)
                         } else {
                             connection_ikon_cms.release();
-                           // console.log(results)
                             res.send(results);
                         }
 
@@ -302,7 +298,6 @@ exports.updateNotificationData  = function(req, res, next) {
                             console.log(err.message)
                         } else {
                             connection_ikon_cms.release();
-                            //console.log(results)
                             res.send(results);
                         }
                     });

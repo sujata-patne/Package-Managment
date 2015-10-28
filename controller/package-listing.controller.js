@@ -17,7 +17,6 @@ exports.getStore = function (req, res, next) {
                     },
 
                     function (err, results) {
-                        /// console.log(results.OfferData)
                         if (err) {
                             connection_ikon_cms.release();
                             res.status(500).json(err.message);
@@ -144,7 +143,6 @@ exports.getPackageDetail  = function (req, res, next) {
                                 },
                                 function (err, results) {
                                     if (err) {
-                                        //console.log('fgcfgcfhhfchfch1111');
                                         connection_ikon_cms.release();
                                         res.status(500).json(err.message);
                                     } else {
@@ -274,7 +272,6 @@ exports.getPackageStartsWith  = function (req, res, next) {
                                     }
                                 },
                                 function (err, results) {
-                                    //console.log(results)
                                     if (err) {
                                         connection_ikon_cms.release();
                                         res.status(500).json(err.message);

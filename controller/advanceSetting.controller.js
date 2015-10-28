@@ -8,6 +8,7 @@ var fs = require('fs');
 var inspect = require('util-inspect');
 var shell = require('shelljs');
 
+
 // var ffmpeg = require('ffmpeg');
 
 exports.getData = function(req, res, next) {
@@ -57,14 +58,12 @@ exports.getData = function(req, res, next) {
                     }
                 },
                 function (err, results) {
-                    //console.log(results)
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        //console.log(results);
                         res.send(results);
                     }
                 });
@@ -139,7 +138,10 @@ exports.addSetting = function(req, res, next) {
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        res.send(results);
+                        //res.send(results);
+                        res.send({"success": true,
+                            "status": 200,
+                            message: "Successfully Added"});
                     }
                 });
             });
@@ -160,7 +162,6 @@ exports.UploadFile =  function (req, res, next) {
                 var newPath = __dirname + "/../public/contentFiles/"+files.file.name;
                 var absPath = "/contentFiles/"+files.file.name;
                 var tmp_path = files.file.path;
-                  // console.log('Package Id :'+fields.packageId);
                 fs.rename(tmp_path,newPath, function (err) {
                       if (err) console.log(err);
                        // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
@@ -279,7 +280,6 @@ exports.UploadFile =  function (req, res, next) {
 
                                 }else{
                                     connection_ikon_cms.release();
-                                    console.log('Inserted All Images ');
                                 }
                         });
                     });
@@ -333,8 +333,6 @@ exports.editSetting = function(req, res, next) {
                                 loop1(0);
                                 function loop1( cnt ) {
                                     var i = cnt;
-console.log('req.body.valuePlanSetting')
-                                    console.log(req.body.valuePlanSetting)
                                     saveValuePackForSetting(_.keys(req.body.valuePlanSetting)[i],req.body.valuePlanSetting,req.body.totalLength - 1,true);
                                     if(cnt == count){
                                         // connection_ikon_cms.release();
@@ -358,7 +356,10 @@ console.log('req.body.valuePlanSetting')
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        res.send(results);
+                        //res.send(results);
+                        res.send({"success": true,
+                            "status": 200,
+                            message: "Successfully Updated"});
                     }
                 });
             });

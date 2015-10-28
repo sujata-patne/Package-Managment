@@ -22,7 +22,7 @@ myApp.service('MainSite', ['$http', function ($http) {
         });
     }
     this.showPackSitePackageData = function(data, success){
-        $http.post(this.baseRestUrl + '/showPackSitePackageData', data).success(function (items) {
+        $http.post(this.baseRestUrl + '/showPackageData', data).success(function (items) {
             success(items);
         });
     }

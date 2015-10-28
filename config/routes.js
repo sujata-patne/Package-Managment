@@ -7,7 +7,7 @@ module.exports = function(app){
     require('../routes/alacartPack')(app);
     require('../routes/valuePack')(app);
     require('../routes/subscriptionPack')(app);
-    require('../routes/packageListing')(app);
+    require('../routes/packagelisting')(app);
     require('../routes/advanceSetting')(app);
     require('../routes/arrangePlans')(app);
     require('../routes/individualContent')(app);

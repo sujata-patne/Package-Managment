@@ -8,65 +8,64 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     $('#main-site-map').addClass('active');
     $rootScope.PackageType = 0;
 
+    if($stateParams.packageId){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }
+    $scope.setEmptyPackage = function(){
+        $rootScope.PackageId = 0;
+        $rootScope.PackageType = 0;
+        $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;
+        $scope.offerId = '';
+        $scope.paosId = '';
+        $rootScope.PackageName = '';
+        $rootScope.SelectedPack = undefined;
+    }
+    if($rootScope.previousState && new RegExp("pack-site").test($scope.previousState.name)
+        || $rootScope.previousState && new RegExp("main-site").test($scope.previousState.name) ){
+        $rootScope.distributionChannelId = undefined;
+        $scope.setEmptyPackage();
+    }
     MainSite.getMainSiteData(function (MainSiteData) {
-        console.log('new mapMainsite' + $rootScope.isChild)
-
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
 
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-            $rootScope.distributionChannelId = undefined;
-            $rootScope.PackageId = 0;
-            $rootScope.PackageType = 0;
-            $rootScope.PackageName = '';
-            $rootScope.SelectedPack = undefined;
+            $scope.setEmptyPackage();
         }
     });
     $scope.showPackageData = function(){
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-            $rootScope.PackageId = 0;
-            $rootScope.PackageType = 0;
+            $scope.setEmptyPackage();
         }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
 
         MainSite.showPackageData(params,function (MainSiteData) {
+
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
             $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
 
-            $scope.alacartPackPlans = angular.copy(MainSiteData.alacartPackPlans);
-
-            $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
-
-            $scope.subscriptionPackPlans = angular.copy(MainSiteData.subscriptionPackPlans);
-
             $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
-            console.log('mainSitePackageData')
-            console.log(MainSiteData.mainSitePackageData.packageDetails)
             if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                 console.log('if')
                 $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
                 $rootScope.PackageId = $scope.mainSitePackageData[0].sp_pkg_id;
                 $rootScope.PackageType = $scope.mainSitePackageData[0].sp_pkg_type;
                 $rootScope.PackageName = $scope.mainSitePackageData[0].sp_package_name;
+
                 $rootScope.SelectedPack = $scope.mainSitePackageData[0].sp_pk_id;
                 if($rootScope.action === 'edit') {
                     $rootScope.ParentPackageId = $scope.mainSitePackageData[0].sp_parent_pkg_id;
                 }
 
-            }else{
-                console.log('else')
-                $rootScope.PackageId = 0;
-                $rootScope.PackageType = 0;
-                $rootScope.ParentPackageId = 0;
-                $rootScope.PackageName = '';
-                $rootScope.SelectedPack = undefined;
-
+            }else {
+                $scope.setEmptyPackage();
             }
-
             $scope.setPackageData()
         })
     }
@@ -95,6 +94,12 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
 
         if (!$rootScope.distributionChannelId) {
             toastr.error('Distribution Channel is required');
+            $scope.errorvisible = true;
+        }else if (!$rootScope.SelectedPack) {
+            toastr.error('Please select Pack');
+            $scope.errorvisible = true;
+        }else if (!$rootScope.PackageName) {
+            toastr.error('Package Title is required');
             $scope.errorvisible = true;
         }else if (!$rootScope.ParentPackageId) {
             toastr.error('Please Create Mainsite Package before mapping.');
@@ -130,7 +135,8 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
+            $scope.showPackageData();
+            //$state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
         }
         else {
             toastr.error(data.message)

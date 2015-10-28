@@ -3,22 +3,19 @@
  */
 
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
-console.log('alacartCtrl')
     $rootScope.isChild = false;
-
     $scope.nextButtonPressed = 0;
 
-    if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
-console.log('alacart controller ')
+   // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
+    if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
+        console.log('in alacart details controller' + $rootScope.PackageId)
+
         var data = {
             packageId: $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            parentPackageId: $rootScope.ParentPackageId,
+            parentPackageId: $rootScope.ParentPackageId
         }
-
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
-console.log('alacartPackData')
-            console.log(alacartPackData)
             $scope.alacartNofferDetails = angular.copy(alacartPackData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
@@ -35,9 +32,7 @@ console.log('alacartPackData')
                         streaming: data.pct_stream_id
                     };
                 })
-            } /*else{
-                $scope.alacartPlanIds = undefined;
-            }*/
+            }
         });
     }
 
@@ -66,21 +61,22 @@ console.log('alacartPackData')
             }
             ngProgress.start();
             if ( $rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
-                console.log('mainsite edit')
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
+                        toastr.success(data.message)
+                        $rootScope.PackageId = data.pkgId;
+                        $rootScope.action = 'edit';
                         $rootScope.proceed();
-
                     }else{
                         $scope.showResponse(data);
                     }
                 });
             } else {
-                console.log('mainsite add')
                 alacartPack.addAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
                         toastr.success(data.message)
                         $rootScope.PackageId = data.pkgId;
+                        $rootScope.action = 'edit';
                         $rootScope.proceed();
                     }else{
                         $scope.showResponse(data);
@@ -95,7 +91,8 @@ console.log('alacartPackData')
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
-            $state.go($state.current, {}, {reload: $state.current});
+            $rootScope.action = 'edit';
+            $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
 
         }
         else {
