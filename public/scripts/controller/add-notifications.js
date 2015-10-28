@@ -90,27 +90,46 @@ $scope.counts =[
                     toastr.error('Please select both options in no of contents downloaded.');
             }else if( ($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null) ){
                      toastr.error('Please select both options in no of contents downloaded.');
-
             }else if( $scope.days < 1 || $scope.days > 99 || $scope.days == undefined){
                     toastr.error('Days should be between 1 to 99.');
-           }else if( $scope.hours < 1 || $scope.hours > 24 || $scope.hours == undefined){
+            }else if( $scope.hours < 1 || $scope.hours > 24 || $scope.hours == undefined){
                     toastr.error('Hours should be between 1 to 24.');
             }else if ($stateParams.pn_id) {
-            var notificationData = {
-                pnId: $stateParams.pn_id,
-                Days: $scope.days ,
-                Hours: $scope.hours,
-                Operator: $scope.selectedCount,
-                Percent: $scope.selectedPercent,
-                Message: $scope.messagetext,
-                PushFrom: $scope.startingTime,
-                PushTo: $scope.endingTime,
-                Push: $scope.selectedPush
-            }
-            Notification.updateNotificationData(notificationData, function (data) {
-                toastr.success("update successfully");
-                $state.go("notifications.list");
-            });
+                var notificationData = {
+                    pnId: $stateParams.pn_id,
+                    Days: $scope.days ,
+                    Hours: $scope.hours,
+                    Operator: $scope.selectedCount,
+                    Percent: $scope.selectedPercent,
+                    Message: $scope.messagetext,
+                    PushFrom: $scope.startingTime,
+                    PushTo: $scope.endingTime,
+                    Push: $scope.selectedPush
+                }
+                Notification.updateNotificationData(notificationData, function (data) {
+                    toastr.success("update successfully");
+                    $state.go("notifications.list");
+                });
+            }else if( $scope.days < 1 || $scope.days > 99 || $scope.days == undefined){
+                    toastr.error('Days should be between 1 to 99.');
+            }else if( $scope.hours < 1 || $scope.hours > 24 || $scope.hours == undefined){
+                    toastr.error('Hours should be between 1 to 24.');
+            }else if ( $stateParams.pn_id ) {
+                var notificationData = {
+                    pnId: $stateParams.pn_id,
+                    Days: $scope.days ,
+                    Hours: $scope.hours,
+                    Operator: $scope.selectedCount,
+                    Percent: $scope.selectedPercent,
+                    Message: $scope.messagetext,
+                    PushFrom: $scope.startingTime,
+                    PushTo: $scope.endingTime,
+                    Push: $scope.selectedPush
+                }
+                Notification.updateNotificationData(notificationData, function (data) {
+                    toastr.success("update successfully");
+                    $state.go("notifications.list");
+                });
         }
         else {
 

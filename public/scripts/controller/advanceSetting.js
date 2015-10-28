@@ -171,78 +171,108 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
            
     }
 
-    $scope.submitAdvanceSettingForm = function(isValid){
-        if(isValid) {
-            if (!$rootScope.distributionChannelId) {
+
+ // $scope.filesubmit = function() {
+ //      if (advanceSettingForm.form.file.$valid && $scope.file && !$scope.file.$error) {
+ //          $scope.upload($scope.file);
+ //      }else{
+ //        console.log('not valid');
+ //      }
+ //      console.log('in submit');
+ //    };
+
+  // $scope.upload = function (file) {
+  //       // Upload.upload({
+  //       //     url: 'upload/url',
+  //       //     data: {file: file, 'username': $scope.username}
+  //       // }).then(function (resp) {
+  //       //     console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+  //       // }, function (resp) {
+  //       //     console.log('Error status: ' + resp.status);
+  //       // }, function (evt) {
+  //       //     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+  //       //     console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+  //       // });
+  //     console.log('in upload');
+  //   };
+
+
+  $scope.submitAdvanceSettingForm = function(isValid){
+    if(isValid){
+          if (!$rootScope.distributionChannelId) {
                 toastr.error('Distribution Channel is required');
                 $scope.errorvisible = true;
-            } else {
-                if ($scope.offerPlan.length == 0) {
-                    isValid = true;
-                }
-                if ($scope.offerPlan.length > 0) {
-                    if ($scope.totalGet > $scope.offerPlan[0].op_free_item) {
-                        toastr.error(' In offer plan get :  computed sum greater than their total.');
-                        isValid = false;
-                    }
-                    if ($scope.totalBuy > $scope.offerPlan[0].op_buy_item) {
-                        toastr.error('In offer plan buy :  computed sum greater than their total.');
-                        isValid = false;
-                    }
-                }
+            }else{
+                      if($scope.offerPlan.length == 0){
+                        isValid = true;
+                      }
+                      if($scope.offerPlan.length > 0){
 
-                angular.forEach($scope.valuePlanSetting, function (value, key) {
-                    //Key here is the plan id
-                    // console.log('Plan id::'+key);
-                    //change to check :: vp_id ==> pvs_id
-                    var result_arr = _.findWhere($scope.valuePlans, {pvs_id: parseInt(key)});
+                          if($scope.totalGet > $scope.offerPlan[0].op_free_item){
+                              toastr.error(' In offer plan get :  computed sum greater than their total.');
+                              isValid = false;
+                          }
+                          if($scope.totalBuy > $scope.offerPlan[0].op_buy_item){
+                              toastr.error('In offer plan buy :  computed sum greater than their total.');
+                              isValid = false;
+                          }
+                      }
+                      
+                        console.log($scope.valuePlanSetting);
+                        angular.forEach($scope.valuePlanSetting,function(value,key){
+                            //Key here is the plan id 
+                            // console.log('Plan id::'+key);
+                            //change to check :: vp_id ==> pvs_id 
 
-                    if (result_arr != undefined && result_arr.length > 0) {
-                        var total_download_limit = result_arr.vp_download_limit;
-                        var vp_name = result_arr.vp_plan_name;
-                        var computed_sum = 0;
-                        angular.forEach(value, function (v, k) {
-                            if (v != 'BAL') {
-                                computed_sum += parseInt(v);
-                            }
-                        });
-                        if (computed_sum > total_download_limit) {
-                            isValid = false;
-                            toastr.error('In Plan ' + vp_name + ': Computed sum more than the total');
-                            return false;
-                        }
-                    }
-                });//forEach
+                            var result_arr = _.findWhere($scope.valuePlans, {pvs_id: parseInt(key)});
+                            
+                            if(result_arr != undefined && result_arr != null){
+                                var total_download_limit = result_arr.vp_download_limit;
+                                var  vp_name = result_arr.vp_plan_name;
+                                var computed_sum = 0;
+                                angular.forEach(value,function(v,k){
+                                  if(v != 'BAL'){
+                                      computed_sum += parseInt(v);
+                                  }
+                                });
+                                
+                                if(computed_sum > total_download_limit){
+                                    isValid = false;
+                                    toastr.error('In Plan '+vp_name+': Computed sum more than the total');
+                                    return false;
+                                }
+                              }
+                        });//forEach
 
-                if (isValid) {
-                    var final_offerBuySetting = angular.copy($scope.offerBuySetting);
-                    var final_offerGetSetting = angular.copy($scope.offerGetSetting);
-                    var final_valuePlanSetting = angular.copy($scope.valuePlanSetting);
+                        if(isValid){
+                            var final_offerBuySetting = angular.copy($scope.offerBuySetting);
+                            var final_offerGetSetting = angular.copy($scope.offerGetSetting);
+                            var final_valuePlanSetting = angular.copy($scope.valuePlanSetting);
 
-                    //Changing BAL TO -1 :
-                    angular.forEach(final_offerBuySetting, function (value, key) {
-                        angular.forEach(value, function (v, k) {
-                            if (v == 'BAL') {
-                                value[k] = -1;
-                            }
-                        });
-                    });
+                            //Changing BAL TO -1 :
+                            angular.forEach(final_offerBuySetting,function(value,key){
+                                  angular.forEach(value,function(v,k){
+                                    if(v == 'BAL'){
+                                      value[k] = -1;
+                                    }
+                                  });
+                            });
 
-                    angular.forEach(final_offerGetSetting, function (value, key) {
-                        angular.forEach(value, function (v, k) {
-                            if (v == 'BAL') {
-                                value[k] = -1;
-                            }
-                        });
-                    });
+                            angular.forEach(final_offerGetSetting,function(value,key){
+                                  angular.forEach(value,function(v,k){
+                                    if(v == 'BAL'){
+                                      value[k] = -1;
+                                    }
+                                  });
+                            });
 
-                    angular.forEach(final_valuePlanSetting, function (value, key) {
-                        angular.forEach(value, function (v, k) {
-                            if (v == 'BAL') {
-                                value[k] = -1;
-                            }
-                        });
-                    });
+                            angular.forEach(final_valuePlanSetting,function(value,key){
+                                  angular.forEach(value,function(v,k){
+                                    if(v == 'BAL'){
+                                      value[k] = -1;
+                                    }
+                                  });
+                            });                    
 
                     var newSetting = {
                         totalLength: $scope.contentTypes.length,
