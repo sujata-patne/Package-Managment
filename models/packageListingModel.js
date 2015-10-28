@@ -68,21 +68,21 @@ exports.getAllPackageForList = function( dbConnection,data, callback ) {
 }
 exports.countValuePackPlans = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('select COUNT(pvs_id) as cnt from icn_package_value_pack_site '+
-        ' where pvs_sp_pkg_id = ?  ' , [pkgId],  function (err, count) {
+        ' where pvs_sp_pkg_id = ? AND ISNULL(pvs_crud_isactive) ' , [pkgId],  function (err, count) {
         callback(err, count[0].cnt);
     });
 }
 exports.countAlacartPackPlans = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('SELECT COUNT(pct.pct_paos_id) as cnt from icn_package_alacart_offer_site AS alacart '+
     'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
-    ' WHERE paos_sp_pkg_id = ?  ' , [pkgId],  function (err, count) {
+    ' WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) ' , [pkgId],  function (err, count) {
         callback(err, count[0].cnt);
     });
 }
 
 exports.countOfferPlans = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('SELECT alacart.paos_op_id as cnt from icn_package_alacart_offer_site AS alacart ' +
-        ' WHERE paos_sp_pkg_id = ? AND alacart.paos_op_id != 0 ', [pkgId], function (err, offerCount) {
+        ' WHERE paos_sp_pkg_id = ?  AND ISNULL(alacart.paos_crud_isactive) AND alacart.paos_op_id != 0 ', [pkgId], function (err, offerCount) {
         if(offerCount.length > 0){
             callback(err, 1);
         }else{
@@ -94,7 +94,7 @@ exports.countOfferPlans = function( dbConnection,pkgId, callback) {
 exports.existAlacartPackByPkgId = function(dbConnection, pkgId, callback){
     var query = dbConnection.query('SELECT pct.pct_paos_id FROM icn_package_alacart_offer_site AS alacart '+
         'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
-        'WHERE paos_sp_pkg_id = ? ', [pkgId],
+        'WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive)', [pkgId],
         function ( err, alacrtPackPlans ) {
             callback(err, alacrtPackPlans );
         }
@@ -102,7 +102,7 @@ exports.existAlacartPackByPkgId = function(dbConnection, pkgId, callback){
 }
 exports.existValuePackByPkgId = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('select pvs_id FROM icn_package_value_pack_site '+
-        'WHERE pvs_sp_pkg_id = ? ', [pkgId],
+        'WHERE pvs_sp_pkg_id = ? AND ISNULL(pvs_crud_isactive) ', [pkgId],
         function ( err, valuePackPlans ) {
             callback(err, valuePackPlans );
         }
@@ -110,14 +110,14 @@ exports.existValuePackByPkgId = function( dbConnection,pkgId, callback) {
 }
 exports.countSubscriptionPlans = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('select count(pss_id) as cnt from icn_package_subscription_site '+
-        ' where pss_sp_pkg_id = ?  ' , [pkgId],  function (err, count) {
+        ' where pss_sp_pkg_id = ? AND ISNULL(pss_crud_isactive) ' , [pkgId],  function (err, count) {
         callback(err, count[0].cnt);
     });
 }
 
 exports.existSubscriptionByPkgId = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('select pss_id FROM icn_package_subscription_site '+
-        'WHERE pss_sp_pkg_id = ? ', [pkgId],
+        'WHERE pss_sp_pkg_id = ? AND ISNULL(pss_crud_isactive) ', [pkgId],
         function ( err, SubscriptionPlans ) {
             callback(err, SubscriptionPlans );
         }
@@ -143,7 +143,7 @@ exports.packUsedInPackage = function(dbConnection,packageId,callback){
 }
 exports.countOfferPlans = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('SELECT alacart.paos_op_id as cnt from icn_package_alacart_offer_site AS alacart ' +
-        ' WHERE paos_sp_pkg_id = ? AND alacart.paos_op_id != 0 ', [pkgId], function (err, offerCount) {
+        ' WHERE paos_sp_pkg_id = ? AND alacart.paos_op_id != 0 AND ISNULL(alacart.paos_crud_isactive)', [pkgId], function (err, offerCount) {
         if(offerCount.length > 0){
             callback(err, 1);
         }else{

@@ -164,7 +164,17 @@ exports.authenticate = function (req, res, next) {
                         }
                     } else {
                         connection_ikon_cms.release();
-                        res.render('account-login', { error: 'Invalid Username / Password.' });
+                        if( req.body.username.length == 0  &&  req.body.password.length == 0 ) {
+                            res.render('account-login', {error: 'Please enter username and password.'});
+                        }else if(req.body.username.length != 0  &&  req.body.password.length == 0 ){
+                            res.render('account-login', {error: 'Please enter password.'});
+                        }
+                        else if(req.body.username.length == 0  &&  req.body.password.length != 0){
+                            res.render('account-login', {error: 'Please enter username.'});
+                        }
+                        else {
+                            res.render('account-login', {error: 'Invalid Username / Password.'});
+                        }
                     }
                 }
             });
