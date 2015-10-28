@@ -29,12 +29,15 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $rootScope.PackageName = '';
         $rootScope.SelectedPack = undefined;
     }
+    console.log('$rootScope.previousState '+$rootScope.previousState.name +" : "+ $rootScope.PackageType )
 
-    if($rootScope.previousState && (new RegExp("main-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+    if($rootScope.previousState && ($rootScope.PackageType != 1 ||new RegExp("main-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
         $scope.setDistributionChannelId = 0;
 
         $rootScope.distributionChannelId = undefined;
         $scope.setEmptyPackage();
+        $state.go($state.current, {packageId:undefined}, {reload:$state.current});
+
     }
 
     if($rootScope.PackageType === 1 && ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined) && $rootScope.action != 'edit'){

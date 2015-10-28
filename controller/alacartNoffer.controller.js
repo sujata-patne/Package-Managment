@@ -52,18 +52,22 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                     updateAdvanceSetting:function(callback){
-                        alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,res){
-                            if(res[0].paos_op_id != req.body.paosId){
-                                advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,res){
-                                    if(err){}else{
-                                        callback(null,'');
-                                    }
-                                })
-                            }else{
-                                callback(null,'');
-                            }
-                            
-                        });
+                        if(req.body.paosId && (req.body.paosId != undefined && req.body.paosId != '' && req.body.paosId != null)){
+                            alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
+                                console.log(response)
+                                if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
+                                    advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
+                                        if(err){}else{
+                                            callback(null,'');
+                                        }
+                                    })
+                                }else{
+                                    callback(null,'');
+                                }
+                            });
+                        }else{
+                            callback(null,'');
+                        }
                     },
                     updateStorePackage:function (callback) {
                         var pkgId = req.body.packageId;
@@ -443,18 +447,22 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                         if (req.body.packageId) {
                             async.parallel({
                                 updateAdvanceSetting:function(callback){
-                                    alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,res){
-                                        if(res[0].paos_op_id != req.body.paosId){
-                                            advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,res){
-                                                if(err){}else{
-                                                    callback(null,'');
-                                                }
-                                            })
-                                        }else{
-                                            callback(null,'');
-                                        }
-                                        
-                                    });
+                                    if(req.body.paosId && (req.body.paosId != undefined && req.body.paosId != '' && req.body.paosId != null)){
+                                        alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
+                                            console.log(response)
+                                            if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
+                                                advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
+                                                    if(err){}else{
+                                                        callback(null,'');
+                                                    }
+                                                })
+                                            }else{
+                                                callback(null,'');
+                                            }
+                                        });
+                                    }else{
+                                        callback(null,'');
+                                    }
                                 },
                                 updateStorePackage:function (callback) {
                                     var pkgId = req.body.packageId;
