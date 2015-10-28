@@ -7,7 +7,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var inspect = require('util-inspect');
 var shell = require('shelljs');
-$scope.nextButtonPressed = 0;
+
 
 // var ffmpeg = require('ffmpeg');
 
