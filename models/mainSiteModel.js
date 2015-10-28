@@ -34,7 +34,7 @@ exports.getMaxAlacartOfferId = function(dbConnection, callback) {
     });
 }
 exports.getMaxStorePackageId = function(dbConnection, callback) {
-    var query = dbConnection.query('SELECT MAX(sp_pkg_id) AS pkg_id FROM icn_store_package WHERE ISNULL(sp_crud_isactive) ', function (err, pkgId) {
+    var query = dbConnection.query('SELECT MAX(sp_pkg_id) AS pkg_id FROM icn_store_package ', function (err, pkgId) {
         callback(err,pkgId);
     });
 }

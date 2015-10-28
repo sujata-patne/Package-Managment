@@ -47,7 +47,7 @@ exports.deleteArrangeData = function( dbConnection, pkgID, callback ) {
     });
 }
 exports.getMaxArrangeSequenceId = function(dbConnection, callback) {
-    var query = dbConnection.query('SELECT MAX(pas_id) AS pas_id FROM  icn_package_arrange_sequence WHERE ISNULL(pas_crud_isactive) ', function (err, pasId) {
+    var query = dbConnection.query('SELECT MAX(pas_id) AS pas_id FROM  icn_package_arrange_sequence  ', function (err, pasId) {
         callback(err,pasId);
     });
 }

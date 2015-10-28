@@ -15,7 +15,7 @@ exports.getSubscriptionPacks = function( dbConnection, packageId , callback ){
         });
 }
 exports.getLastInsertedNotificationId = function( dbConnection, callback) {
-    var query = dbConnection.query("SELECT coalesce(MAX(pn_id) + 1,1) as maxId FROM `icn_package_notification` WHERE ISNULL(pn_crud_isactive) ", function ( err, response ) {
+    var query = dbConnection.query("SELECT coalesce(MAX(pn_id) + 1,1) as maxId FROM `icn_package_notification` ", function ( err, response ) {
         callback( err, response );
     });
 }

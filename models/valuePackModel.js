@@ -16,7 +16,7 @@ exports.createMainSiteValuePackPlan = function (dbConnection, data, callback) {
 }
 
 exports.getLastInsertedValuePackId = function( dbConnection, callback ) {
-    var query = dbConnection.query('SELECT MAX( pvs_id ) as value_pack_id FROM icn_package_value_pack_site WHERE ISNULL(pvs_crud_isactive) ', function( err, response ) {
+    var query = dbConnection.query('SELECT MAX( pvs_id ) as value_pack_id FROM icn_package_value_pack_site  ', function( err, response ) {
         callback( err, response[0].value_pack_id );
     });
 }
