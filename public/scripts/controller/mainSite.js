@@ -8,7 +8,6 @@ console.log('mainSiteCtrl')
 
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
-    $rootScope.PackageType = 0;
     $scope.selectedStore = [];
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
@@ -39,12 +38,14 @@ console.log('mainSiteCtrl')
         //$scope.setDistributionChannelId = 0;
     }
 
-    console.log('$rootScope.previousState '+$rootScope.previousState.name )
-    if($rootScope.previousState && (new RegExp("pack-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+    console.log('$rootScope.previousState '+$rootScope.previousState.name +" : "+ $rootScope.PackageType )
+    if($rootScope.previousState && ($rootScope.PackageType != 0 || new RegExp("pack-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+
         $rootScope.distributionChannelId = undefined;
         $scope.setDistributionChannelId = 0;
         console.log('previousState')
         $scope.setEmptyPackage();
+        $state.go($state.current, {packageId:undefined}, {reload:$state.current});
     }
 
     if($rootScope.PackageType === 0 && ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined) && $rootScope.action != 'edit'){
@@ -193,8 +194,8 @@ console.log(params)
                 $rootScope.action = 'edit';
                 console.log('setDistributionChannel '+$rootScope.PackageId)
                 if($rootScope.PackageId != '' && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined){
-                    console.log(' $scope.setDistributionChannelId if 1')
-                    $state.go($state.current, {packageId:$rootScope.PackageId});
+                    console.log(' $scope.setDistributionChannelId if 1' + $rootScope.PackageId)
+                    $state.go($state.current, {packageId:$rootScope.PackageId}, {reload:$state.current});
                 }else{
                     console.log(' $scope.setDistributionChannelId else 1')
                     $state.go($state.current, {packageId:undefined});
@@ -203,7 +204,6 @@ console.log(params)
                 console.log(' $scope.setDistributionChannelId else')
                 $state.go($state.current, {packageId:$rootScope.PackageId});
             }
-
         })
     }
 

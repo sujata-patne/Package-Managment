@@ -6,7 +6,6 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     $rootScope.isChild = true;
     $('.removeActiveClass').removeClass('active');
     $('#map-mainsite').addClass('active');
-    $rootScope.PackageType = 0;
 
     if($stateParams.packageId){
         $rootScope.PackageId = $stateParams.packageId;
@@ -23,9 +22,14 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $rootScope.SelectedPack = undefined;
     }
 
-    if($rootScope.previousState && (new RegExp("pack-site").test($scope.previousState.name) || new RegExp("main-site").test($scope.previousState.name) )){
+    if($rootScope.previousState && ($rootScope.PackageType != 0 || new RegExp("pack-site").test($scope.previousState.name) || new RegExp("main-site").test($scope.previousState.name) )){
 
         $rootScope.distributionChannelId = undefined;
+        $scope.setEmptyPackage();
+        $state.go($state.current, {packageId:undefined}, {reload:$state.current});
+
+    }
+    if($rootScope.PackageType === 0 && ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined) && $rootScope.action != 'edit'){
         $scope.setEmptyPackage();
     }
     MainSite.getMainSiteData(function (MainSiteData) {
@@ -70,6 +74,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             $scope.setPackageData()
         })
     }
+
     if($rootScope.action === 'edit'){
         $scope.showPackageData();
     }
@@ -134,8 +139,10 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
+
             //$scope.showPackageData();
             $state.go($state.current, {packageId:$rootScope.PackageId});
+
         }
         else {
             toastr.error(data.message)
