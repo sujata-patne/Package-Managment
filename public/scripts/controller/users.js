@@ -195,8 +195,7 @@ myApp.controller('usersCtrl', function ($scope, $http, ngProgress, $timeout, Use
                 "newpassword": $scope.NewPassword
             };
             Users.changePassword(datas, function (data) {
-                console.log(data);
-                ngProgress.complete();
+                 ngProgress.complete();
                 if (data.success) {
                     $scope.OldPassword = "";
                     $scope.NewPassword = "";

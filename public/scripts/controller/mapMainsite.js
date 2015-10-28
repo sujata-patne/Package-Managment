@@ -2,10 +2,10 @@
  * Created by sujata.patne on 19-10-2015.
  */
 myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+    console.log('mapMainsiteCtrl')
     $rootScope.isChild = true;
-    console.log('mapMainsite' + $rootScope.isChild)
     $('.removeActiveClass').removeClass('active');
-    $('#main-site-map').addClass('active');
+    $('#map-mainsite').addClass('active');
     $rootScope.PackageType = 0;
 
     if($stateParams.packageId){
@@ -22,8 +22,9 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $rootScope.PackageName = '';
         $rootScope.SelectedPack = undefined;
     }
-    if($rootScope.previousState && new RegExp("pack-site").test($scope.previousState.name)
-        || $rootScope.previousState && new RegExp("main-site").test($scope.previousState.name) ){
+
+    if($rootScope.previousState && (new RegExp("pack-site").test($scope.previousState.name) || new RegExp("main-site").test($scope.previousState.name) )){
+
         $rootScope.distributionChannelId = undefined;
         $scope.setEmptyPackage();
     }
@@ -117,13 +118,11 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
 
             ngProgress.start();
             if ($rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
-                console.log('mainsite edit')
-                MainSite.editAlacartNOffer(alacartData, function (data) {
+                 MainSite.editAlacartNOffer(alacartData, function (data) {
                     $scope.showMainsiteResponse(data);
                 });
             } else {
-                console.log('mainsite add')
-                MainSite.addAlacartNOffer(alacartData, function (data) {
+                 MainSite.addAlacartNOffer(alacartData, function (data) {
                     $scope.showMainsiteResponse(data);
                 });
             }

@@ -5,7 +5,7 @@ exports.getAlacartPlansByContentType = function( dbConnection,storeId,contentTyp
 }
 
 exports.getLastInsertedIndividualContentId = function( dbConnection, callback) {
-	var query = dbConnection.query("SELECT coalesce(MAX(pic_id) + 1,0) as maxId FROM `icn_package_individual_content`", function ( err, response ) {
+	var query = dbConnection.query("SELECT coalesce(MAX(pic_id) + 1,0) as maxId FROM `icn_package_individual_content` WHERE ISNULL(pic_crud_isactive) ", function ( err, response ) {
 		callback( err, response );
 	});
 }

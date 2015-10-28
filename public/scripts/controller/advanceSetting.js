@@ -13,11 +13,10 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
 
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
-      // console.log('package value changed :)',value);
-       $scope.init();
+        $scope.init();
     }, true);
 
-  $scope.init = function(){
+    $scope.init = function(){
     var preData;
 
     preData = {
@@ -34,11 +33,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
         $scope.offerDataForUpdate = data.OfferDataForUpdate;
         if($scope.offerPlan.length > 0 && $scope.offerDataForUpdate.length > 0){
             $scope.updateFlag = true;
-            // $scope.offerBuySetting = [];
-            // $scope.offerGetSetting = [];
             _.each($scope.offerDataForUpdate, function(el,index){
-                  // $scope.offerBuySetting.push([]);
-                  // $scope.offerGetSetting.push([]);
                    index = _.findIndex($scope.contentTypes, {cd_id : el.pass_content_type});
                    if(!_.has($scope.offerBuySetting,index)){
                          $scope.offerBuySetting[index] = {};
@@ -72,9 +67,6 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
     });
 
 }
-
-$scope.init();
-
 
     $scope.offerBuy = function(contentTypeId){
         $scope.totalBuy = 0;
@@ -136,8 +128,7 @@ $scope.init();
              }
              if(valid){
                       angular.forEach($scope.files, function(file) {
-                        console.log(file);
-                        if (file && !file.$error) {
+                         if (file && !file.$error) {
                             file.upload = Upload.upload({
                               url: '/UploadFile',
                               fields: {'packageId': $rootScope.PackageId},

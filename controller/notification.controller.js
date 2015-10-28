@@ -4,6 +4,7 @@ var mainSiteManager = require('../models/mainSiteModel');
 var PackageManager = require('../models/packageListingModel');
 var async = require("async");
 var moment = require("moment");
+
 exports.getDistributionChannel = function(req, res, next) {
     //to get the distribution channel
                 try {

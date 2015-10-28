@@ -32,7 +32,7 @@ exports.editAlacartPack = function(dbConnection,data,callback){
     });
 }
 exports.getMaxAlacartOfferId = function(dbConnection, callback) {
-    var query = dbConnection.query('SELECT MAX(paos_id) AS paos_id FROM icn_package_alacart_offer_site', function (err, paosId) {
+    var query = dbConnection.query('SELECT MAX(paos_id) AS paos_id FROM icn_package_alacart_offer_site WHERE ISNULL(paos_crud_isactive) ', function (err, paosId) {
         callback(err,paosId);
     });
 }

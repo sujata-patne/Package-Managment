@@ -11,25 +11,25 @@ exports.getArrangePlansData = function (req, res, next) {
                 async.parallel({
                         arrangeSequenceData: function (callback) {
                             // getting the already existence sequence for plans
-                            Arrangeplans.getArrangeSequenceData(connection_ikon_cms, req.body.packageId, function (err, arrangeSequenceData) {
+                            Arrangeplans.getArrangeSequenceData(connection_ikon_cms, req.body.pkgId, function (err, arrangeSequenceData) {
                                 callback(err, arrangeSequenceData);
                             })
                         },
                         PackageAlacartPacks: function (callback) {
                             // to get all the alacart packs
-                            Arrangeplans.getPackageAlacartPack(connection_ikon_cms, req.body.packageId, function (err, alacartPlans) {
+                            Arrangeplans.getPackageAlacartPack(connection_ikon_cms, req.body.pkgId, function (err, alacartPlans) {
                                 callback(err, alacartPlans);
                             });
                         },
                         selectedPlans : function (callback) {
                             // to get all the offer plans , value pack plans and subscription plans
-                            Arrangeplans.getSelectedPlans(connection_ikon_cms, req.body.packageId, function (err, selectedPlans) {
+                            Arrangeplans.getSelectedPlans(connection_ikon_cms, req.body.pkgId, function (err, selectedPlans) {
                                 callback(err, selectedPlans);
                             })
                         },
                         isAlacartPlansExist : function (callback) {
                             //to check if alacart plan is there or not
-                            Arrangeplans.existAlacartPlans(connection_ikon_cms, req.body.packageId, function (err, isAlacartPlansExist) {
+                            Arrangeplans.existAlacartPlans(connection_ikon_cms, req.body.pkgId, function (err, isAlacartPlansExist) {
                                 callback(err, isAlacartPlansExist);
                             })
                         }

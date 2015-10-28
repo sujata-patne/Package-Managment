@@ -50,8 +50,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
     		packId : $rootScope.SelectedPack
     	}
     	IndividualContent.getAlacartPlansByContentType(ctdata,function(data){
-    		console.log(data);
-            if(data.AlaCartPlans.length > 0){
+             if(data.AlaCartPlans.length > 0){
                     $scope.contentTypeFlag = true;
                     $scope.alacartplans = data.AlaCartPlans;
                     $scope.contentData = data.ContentData;
@@ -102,8 +101,6 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 	 		}
 	 		IndividualContent.getIndividualContentData(data,function(data){
                     $scope.ValidDate = data.IndividualContentData[0].pic_valid_till;
-		 			console.log('For update');
-		 			console.log(data);
 		 			data.IndividualContentData.forEach(function(el){
 		                $scope.selectedContent[el.pic_cm_id] = true;
 		            });

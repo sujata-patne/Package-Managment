@@ -30,7 +30,6 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         }
 
         Notification.getNotificationData(data,function (data) {
-            //console.log(data)
             $scope.packageName = angular.copy(data.PackageName);
         });
     }
