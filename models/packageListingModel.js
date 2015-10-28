@@ -75,7 +75,7 @@ exports.countValuePackPlans = function( dbConnection,pkgId, callback) {
 exports.countAlacartPackPlans = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('SELECT COUNT(pct.pct_paos_id) as cnt from icn_package_alacart_offer_site AS alacart '+
     'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
-    ' WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) ' , [pkgId],  function (err, count) {
+    ' WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) AND ISNULL(pct.pct_crud_isactive) ' , [pkgId],  function (err, count) {
         callback(err, count[0].cnt);
     });
 }
@@ -94,7 +94,7 @@ exports.countOfferPlans = function( dbConnection,pkgId, callback) {
 exports.existAlacartPackByPkgId = function(dbConnection, pkgId, callback){
     var query = dbConnection.query('SELECT pct.pct_paos_id FROM icn_package_alacart_offer_site AS alacart '+
         'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
-        'WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive)', [pkgId],
+        'WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) AND ISNULL(pct.pct_crud_isactive) ', [pkgId],
         function ( err, alacrtPackPlans ) {
             callback(err, alacrtPackPlans );
         }

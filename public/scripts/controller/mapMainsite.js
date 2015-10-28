@@ -134,8 +134,8 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
-            $scope.showPackageData();
-            //$state.go($state.current, {packageId:$rootScope.PackageId}, {reload: $state.current});
+            //$scope.showPackageData();
+            $state.go($state.current, {packageId:$rootScope.PackageId});
         }
         else {
             toastr.error(data.message)
