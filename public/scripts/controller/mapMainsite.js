@@ -21,6 +21,10 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     if($stateParams.packageId){
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
+    }else{
+        $rootScope.distributionChannelId = undefined;
+        $scope.setDistributionChannelId = 0;
+        $scope.setEmptyPackage();
     }
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         console.log('!edit or undefined')
@@ -163,9 +167,10 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
+            $rootScope.action = 'add';
 
             //$scope.showPackageData();
-            $state.go($state.current, {packageId:$rootScope.PackageId});
+            $state.go($state.current, {packageId:undefined},{reload:true});
 
         }
         else {
