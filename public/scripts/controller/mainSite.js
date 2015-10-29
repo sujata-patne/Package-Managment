@@ -27,13 +27,10 @@ console.log('mainSiteCtrl')
         $rootScope.SelectedPack = undefined;
         //$scope.setDistributionChannelId = 0;
     }
-    if($stateParams.packageId){
-
+    if($stateParams.packageId ){
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
     }else{
-        $rootScope.distributionChannelId = undefined;
-        $scope.setDistributionChannelId = 0;
         $scope.setEmptyPackage();
     }
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
@@ -142,10 +139,8 @@ console.log('mainSiteCtrl')
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
-console.log('params')
-console.log(params)
+
         MainSite.showPackageData(params,function (MainSiteData) {
-            console.log('showPackageData MainSiteData');
 
             $scope.OfferData = angular.copy(MainSiteData.OfferData);
             $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);

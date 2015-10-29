@@ -13,6 +13,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedSubscriptionPlans = [];
     $scope.setDistributionChannelId = 0;
     $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
+
     $scope.setEmptyPackage = function(){
         console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
@@ -29,8 +30,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
     }else{
-        $rootScope.distributionChannelId = undefined;
-        $scope.setDistributionChannelId = 0;
         $scope.setEmptyPackage();
     }
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
@@ -114,8 +113,9 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         console.log('getPackageData 1');
 
         //$state.go('main-site', {packageId:$rootScope.PackageId});
-
     }
+
+
     $scope.showPackageData = function(){
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $scope.setEmptyPackage();
@@ -184,7 +184,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             }
         })
     }
-console.log($rootScope.action)
+
     if($rootScope.action === 'edit' ){
         console.log('$rootScope.action')
 
