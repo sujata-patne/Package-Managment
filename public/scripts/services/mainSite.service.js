@@ -5,39 +5,56 @@ myApp.service('MainSite', ['$http', function ($http) {
 
     this.baseRestUrl = "";
 
-    this.getMainSiteData = function(success){
+    this.getStoreDetails = function(success, error){
+        $http.get(this.baseRestUrl + '/getStoreDetails').success(function (items) {
+            success(items);
+        }).error(function (err) {
+            console.log(err)
+            error(err);
+        });
+    }
+    this.getMainSiteData = function(success, error){
         $http.get(this.baseRestUrl + '/getMainSiteData').success(function (items) {
             success(items);
+        }).error(function (err) {
+            error(err);
         });
     }
-    this.showPackageData = function(data, success){
+    this.showPackageData = function(data, success, error){
         $http.post(this.baseRestUrl + '/showPackageData', data).success(function (items) {
             success(items);
+        }).error(function (err) {
+            error(err);
         });
     }
 
-    this.getPackSiteData = function(success){
+    this.getPackSiteData = function(success, error){
         $http.get(this.baseRestUrl + '/getPackSiteData').success(function (items) {
             success(items);
+        }).error(function (err) {
+            error(err);
         });
     }
-    this.showPackSitePackageData = function(data, success){
+    this.showPackSitePackageData = function(data, success, error){
         $http.post(this.baseRestUrl + '/showPackageData', data).success(function (items) {
             success(items);
+        }).error(function (err) {
+            error(err);
         });
     }
-    this.addAlacartNOffer = function(data, success){
-        console.log(data)
+    this.addAlacartNOffer = function(data, success, error){
         $http.post(this.baseRestUrl + '/addMainsiteAlacartPlanDetails', data).success(function (items) {
-            console.log(items)
             success(items);
+        }).error(function (err) {
+            error(err);
         });
     }
 
-    this.editAlacartNOffer = function(data, success){
+    this.editAlacartNOffer = function(data, success, error){
         $http.post(this.baseRestUrl + '/editMainsiteAlacartPlanDetails', data).success(function (items) {
-            console.log(items)
             success(items);
+        }).error(function (err) {
+            error(err);
         });
     }
 

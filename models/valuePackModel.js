@@ -1,9 +1,9 @@
 
-exports.getValuePackPlansByStoreId = function(dbConnection, storeId, callback) {
+exports.getValuePackPlansByStoreId = function(dbConnection, data, callback) {
 
     var query = dbConnection.query('select vp_id, vp_plan_name ' +
         'FROM icn_valuepack_plan '+
-        'WHERE vp_st_id = ? AND vp_is_active = 1', [storeId],
+        'WHERE vp_st_id = ? AND vp_is_active = 1', [data.storeId],
         function ( err, valuePackPlans ) {
             callback(err, valuePackPlans );
         }

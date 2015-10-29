@@ -30,7 +30,7 @@ exports.getAlacartNofferDetails = function (req,res,next){
                         }
                     }/*,
                     function (alacartNOfferDetails, contentTypePlanData, callback) {
-                        alacartManager.getAlacartPackPlans(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, alacartPackPlans) {
+                        alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, alacartPackPlans) {
                             callback(null, {alacartPackPlans:alacartPackPlans,alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
                         });
                     }*/
@@ -273,7 +273,8 @@ exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
                         if(req.body.isChild !== true){
                             callback(err, {'exist': false, 'packageData': null});
                         }else {
-                            mainSiteManager.getUniquePackageName(connection_ikon_cms, req.session.package_StoreId, req.body.packageName, function (err, result) {
+                            console.log('req.body.parentPackageId : ' + req.body.parentPackageId)
+                                mainSiteManager.getUniquePackageName(connection_ikon_cms, req.session.package_StoreId, req.body.packageName, function (err, result) {
                                 if (err) {
                                     connection_ikon_cms.release();
                                     res.status(500).json(err.message);

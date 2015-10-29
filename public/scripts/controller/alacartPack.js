@@ -13,7 +13,6 @@ console.log('alacartCtrl')
             packageId: $rootScope.PackageId,
             packageType: $rootScope.PackageType,
             parentPackageId: $rootScope.ParentPackageId,
-            distributionChannelId:$rootScope.distributionChannelId
         }
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
 
@@ -71,6 +70,7 @@ console.log('alacartCtrl')
                         $rootScope.PackageId = data.pkgId;
                         $rootScope.action = 'edit';
                         $rootScope.proceed();
+                        $scope.showResponse(data);
                     }else{
                         $scope.showResponse(data);
                     }

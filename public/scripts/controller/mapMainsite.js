@@ -52,6 +52,10 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $scope.setEmptyPackage();
         }
+    },
+    function (error) {
+        $scope.error = error;
+        $scope.errorvisible = true;
     });
     $scope.getPackageData = function(){
         console.log('getPackageData');

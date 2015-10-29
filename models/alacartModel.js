@@ -1,16 +1,16 @@
-exports.getAlacartPackPlans = function(dbConnection, storeId,dcId, callback) {
+exports.getAlacartPackPlansByStoreId = function(dbConnection, data, callback) {
 
-    if(dcId != '' && dcId != undefined){
-        var str = ' AND cd1.cd_id = '+ dcId;
+    if(data.dcId != '' && data.dcId != undefined){
+        var str = ' AND cd1.cd_id = '+ data.dcId;
     }else{
         var str = '';
     }
-    var query = dbConnection.query(' SELECT cd.cd_name, plan.*, (SELECT cd_name FROM catalogue_detail WHERE cd_id = plan.ap_delivery_type) AS delivery_type_name ' +
+    var query = dbConnection.query(' SELECT plan.*, cd1.*, cd.cd_name AS content_type_name, (SELECT cd_name FROM catalogue_detail WHERE cd_id = plan.ap_delivery_type) AS delivery_type_name ' +
         'FROM icn_alacart_plan AS plan ' +
         'join catalogue_detail as cd ON plan.ap_content_type = cd.cd_id ' +
         'join multiselect_metadata_detail as mmd ON plan.ap_channel_front = mmd.cmd_group_id ' +
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
-        'WHERE plan.ap_st_id = ? AND plan.ap_is_active = 1 ' + str, [storeId], function (err, ContentTypes) {
+        'WHERE plan.ap_st_id = ? AND plan.ap_is_active = 1 ' + str, [data.storeId], function (err, ContentTypes) {
         callback(err, ContentTypes)
 
     });
