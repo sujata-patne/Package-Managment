@@ -31,8 +31,8 @@ exports.showPackageData = function(req, res, next)  {
                         });
                     },
                     alacartPackPlans: function (callback) {
-                        alacartManager.getAlacartPackPlans(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, ContentTypeData) {
-                            callback(err, ContentTypeData)
+                        alacartManager.getAlacartPackPlans(connection_ikon_cms, req.session.package_StoreId,req.body.distributionChannelId, function (err, alacartPackPlans) {
+                            callback(err, alacartPackPlans)
                         });
                     },
                     valuePackPlans: function (callback) {

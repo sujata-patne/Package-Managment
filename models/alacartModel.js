@@ -10,7 +10,7 @@ exports.getAlacartPackPlans = function(dbConnection, storeId,dcId, callback) {
         'join catalogue_detail as cd ON plan.ap_content_type = cd.cd_id ' +
         'join multiselect_metadata_detail as mmd ON plan.ap_channel_front = mmd.cmd_group_id ' +
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
-        'WHERE plan.ap_st_id = ?' + str, [storeId], function (err, ContentTypes) {
+        'WHERE plan.ap_st_id = ? AND plan.ap_is_active = 1 ' + str, [storeId], function (err, ContentTypes) {
         callback(err, ContentTypes)
 
     });

@@ -120,7 +120,7 @@ console.log('mainSiteCtrl')
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
-        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined && $scope.setDistributionChannelId  != 1){
+        if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined && $scope.setDistributionChannelId != 1){
             console.log('getMainSiteData')
 
             $scope.setEmptyPackage();
