@@ -22,8 +22,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
     }else{
-        $rootScope.distributionChannelId = undefined;
-        $scope.setDistributionChannelId = 0;
+
         $scope.setEmptyPackage();
     }
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
