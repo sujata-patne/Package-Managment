@@ -11,6 +11,8 @@ console.log('mainSiteCtrl')
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
+    $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
+
     $scope.setEmptyPackage = function(){
         console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
@@ -134,8 +136,7 @@ console.log('mainSiteCtrl')
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
-console.log('params')
-        console.log(params)
+
         MainSite.showPackageData(params,function (MainSiteData) {
 
             $scope.OfferData = angular.copy(MainSiteData.OfferData);

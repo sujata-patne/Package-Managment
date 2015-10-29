@@ -4,6 +4,8 @@
 myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     console.log('mapMainsiteCtrl')
     $rootScope.isChild = true;
+    $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
+
     $('.removeActiveClass').removeClass('active');
     $('#map-mainsite').addClass('active');
     $scope.setEmptyPackage = function(){
@@ -104,7 +106,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if($rootScope.isChild === true && $rootScope.action !== 'edit'){
             $rootScope.ParentPackageId = $rootScope.PackageId;
             if($rootScope.ParentPackageId != '' || $rootScope.ParentPackageId != 0 || $rootScope.ParentPackageId != undefined){
-                $rootScope.PackageId = undefined;
+                $rootScope.PackageId = 0;
                 $rootScope.PackageName = '';
                 $rootScope.SelectedPack = undefined;
             }

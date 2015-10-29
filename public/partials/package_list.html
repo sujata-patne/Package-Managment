@@ -59,7 +59,9 @@
                                     <tr >
                                            
                                         <td class="col-md-1 col-xs-1 text-center">{{$index+1}}</td>
-                                        <td class="col-md-3 col-xs-3">{{item.sp_package_name}}</td>
+                                        <td class="col-md-3 col-xs-3">{{item.sp_package_name}}
+                                            <span ng-show="item.sp_parent_pkg_id > 0"> -> Child</span></td>
+
                                         <td class="col-md-2 col-xs-2 text-center">
                                             <span >{{item.valuePackPlanCount + item.subscriptionPlanCount+item.alacartPackPlanCount}}</span>
 
