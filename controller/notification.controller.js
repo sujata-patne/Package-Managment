@@ -50,6 +50,7 @@ exports.getNotificationData = function(req, res, next) {
                         },
                         ValuePacks : function (callback){
                             //to get the value packs for selected package
+
                             if(req.body.PackageId != undefined && req.body.PackageId != 0) {
                                 Notification.getValuePacks(connection_ikon_cms, req.body.PackageId, function (err, ValuePacks) {
                                     callback(err,ValuePacks)

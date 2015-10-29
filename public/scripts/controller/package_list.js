@@ -39,17 +39,23 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $scope.search_title="";
         //$('#src_'+$scope.alpha).css('font-weight','normal');
         //$('#src_'+$scope.alpha).css('font-size','small');
-        var data = {
-            title_text : ($scope.alpha)? $scope.alpha:$scope.search_title,
-            st_date : $scope.StartDate,
-            end_date :$scope.EndDate,
-            distributionChannelId : $scope.distributionChannel
+        //var data = {
+        //    title_text : ($scope.alpha)? $scope.alpha:$scope.search_title,
+        //    st_date : $scope.StartDate,
+        //    end_date :$scope.EndDate,
+        //    distributionChannelId : $scope.distributionChannel
+        //}
+        //console.log(data);
+        //Package.getPackageDetail( data,function( data ){
+        //    $scope.packageList = data.packageByName;
+        //},function(error){
+        //    console.log(error);
+        //});
+        $scope.searchStartsWith($scope.alpha);
+        if( $scope.distributionChannel == null){
+            $('#src_'+$scope.alpha).css('font-weight','normal');
+            $('#src_'+$scope.alpha).css('font-size','small');
         }
-        Package.getPackageDetail( data,function( data ){
-            $scope.packageList = data.packageByName;
-        },function(error){
-            console.log(error);
-        });
 
     }
 

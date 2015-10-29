@@ -49,7 +49,7 @@ exports.getAllPackageForList = function( dbConnection,data, callback ) {
 
     var whereCond = '';
     if(data.term && data.term != ''){
-        whereCond += " AND pk.sp_package_name LIKE '%"+data.term+"%'"; 
+        whereCond += " AND pk.sp_package_name LIKE '%"+data.term+"%'";
     }
     if(data.start_date && data.end_date){
         whereCond += " AND Date(pk.sp_modified_on) BETWEEN '"+data.start_date+"' AND '"+data.end_date+"'";
