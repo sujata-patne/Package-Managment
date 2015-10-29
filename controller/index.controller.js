@@ -198,7 +198,7 @@ function getPages(role) {
             { 'pagename': 'Map Mainsite', 'href': 'map-mainsite', 'id': 'map-mainsite', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': []},
             { 'pagename': 'Packs', 'href': 'pack-site.alacart', 'id': 'pack-site', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Package Listing', 'href': 'packageListing', 'id': 'package-listing', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
-            { 'pagename': 'Notifications', 'href': 'notifications', 'id': 'notifications', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
+            { 'pagename': 'Notifications', 'href': 'notifications.add', 'id': 'notifications', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] },
             { 'pagename': 'Change Password', 'href': 'changepassword', 'id': 'changepassword', 'class': 'fa fa-align-left', 'submenuflag': '0', 'sub': [] }
         ];
         return pagesjson;

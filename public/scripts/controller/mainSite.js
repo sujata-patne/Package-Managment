@@ -15,18 +15,6 @@ console.log('mainSiteCtrl')
     $scope.setDistributionChannelId = 0;
     console.log('$stateParams')
     console.log($stateParams.packageId)
-
-    if($stateParams.packageId){
-
-        $rootScope.PackageId = $stateParams.packageId;
-        $rootScope.action = 'edit';
-    }
-    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
-        console.log('!edit or undefined')
-        $rootScope.PackageType = 0;
-        $rootScope.action = 'add';
-        $rootScope.ParentPackageId = 0;
-    }
     $scope.setEmptyPackage = function(){
         console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
@@ -39,10 +27,25 @@ console.log('mainSiteCtrl')
         $rootScope.SelectedPack = undefined;
         //$scope.setDistributionChannelId = 0;
     }
+    if($stateParams.packageId){
 
-    console.log('$rootScope.previousState '+$rootScope.previousState.name +" : "+ $rootScope.PackageType )
-    if($rootScope.previousState && ($rootScope.PackageType != 0 || new RegExp("pack-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
-    //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name) && $rootScope.action !== 'edit' )){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }else{
+        $rootScope.distributionChannelId = undefined;
+        $scope.setDistributionChannelId = 0;
+        $scope.setEmptyPackage();
+    }
+    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
+        console.log('!edit or undefined')
+        $scope.setEmptyPackage();
+
+        /*$rootScope.PackageType = 0;
+        $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;*/
+    }
+    //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name))  && ($rootScope.PackageType != 0 || new RegExp("pack-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+    if($rootScope.previousState && !new RegExp("main-site").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
 
         $rootScope.distributionChannelId = undefined;
         $scope.setDistributionChannelId = 0;
@@ -83,8 +86,6 @@ console.log('mainSiteCtrl')
     };
 
     $scope.setIndex = function($index){
-        console.log('index')
-        console.log($index)
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state,  {}, {reload:false});
         /*if($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined){
@@ -111,13 +112,12 @@ console.log('mainSiteCtrl')
     MainSite.getMainSiteData(function (MainSiteData) {
         console.log('getMainSiteData $rootScope.action '+$rootScope.action)
 
-        $scope.OfferData = angular.copy(MainSiteData.OfferData);
+        //$scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             console.log('getMainSiteData if')
-
             $scope.setEmptyPackage();
 
         }

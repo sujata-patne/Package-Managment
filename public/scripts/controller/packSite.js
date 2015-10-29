@@ -1,25 +1,20 @@
 myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+
+    $('.removeActiveClass').removeClass('active');
+    $('#pack-site').addClass('active');
+
     console.log('packSiteCtrl')
-    $rootScope.ParentPackageId = 0;
+
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
-    $rootScope.PackageType = 1;
     $scope.selectedStore = [];
     $scope.alacartPlanIds = {};
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
-    $rootScope.PackageName = '';
     $scope.setDistributionChannelId = 0;
-    $rootScope.PackageType = 1;
     $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
-    $rootScope.SelectedPack = '';
-    $('.removeActiveClass').removeClass('active');
-    $('#pack-site').addClass('active');
-    if($stateParams.packageId){
-        $rootScope.PackageId = $stateParams.packageId;
-        $rootScope.action = 'edit';
-    }
     $scope.setEmptyPackage = function(){
+        console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
         $rootScope.PackageType = 1;
         $rootScope.action = 'add';
@@ -28,20 +23,39 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.paosId = '';
         $rootScope.PackageName = '';
         $rootScope.SelectedPack = undefined;
+        //$scope.setDistributionChannelId = 0;
     }
-    console.log('$rootScope.previousState '+$rootScope.previousState.name +" : "+ $rootScope.PackageType )
-
-    if($rootScope.previousState && ($rootScope.PackageType != 1 || new RegExp("main-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
-    //if($rootScope.previousState && (!new RegExp("pack-site").test($scope.previousState.name) && $rootScope.action !== 'edit' )){
-        $scope.setDistributionChannelId = 0;
+    if($stateParams.packageId){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }else{
         $rootScope.distributionChannelId = undefined;
+        $scope.setDistributionChannelId = 0;
+        $scope.setEmptyPackage();
+    }
+    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
+        console.log('!edit or undefined')
+        $scope.setEmptyPackage();
+
+    }
+
+    //if($rootScope.previousState && ($rootScope.PackageType != 1 || new RegExp("main-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+    if($rootScope.previousState && !new RegExp("pack-site").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
+
+        $rootScope.distributionChannelId = undefined;
+        $scope.setDistributionChannelId = 0;
+        console.log('previousState')
         $scope.setEmptyPackage();
         $state.go($state.current, {packageId:undefined}, {reload:$state.current});
     }
-
     if($rootScope.PackageType === 1 && ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined) && $rootScope.action != 'edit'){
+        console.log("$rootScope.PackageType - " + $rootScope.PackageType)
+        console.log("$rootScope.PackageId = "+$rootScope.PackageId)
+        console.log("$rootScope.action - "+$rootScope.action)
+
         $scope.setEmptyPackage();
     }
+
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"pack-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"pack-site.valuepack", active: false },
@@ -80,19 +94,9 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.showDeliveryTypes = function(contents){
         return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
-    $scope.getPackageData = function(){
-        console.log('getPackageData');
-        $scope.setDistributionChannelId = 1; //when click on distribution channel
-        $rootScope.PackageId = '';
-        console.log('$scope.setDistributionChannelId' + $scope.setDistributionChannelId)
-        $scope.showPackageData();
-        console.log('getPackageData 1');
 
-        //$state.go('main-site', {packageId:$rootScope.PackageId});
-
-    }
     MainSite.getPackSiteData(function (PackSiteData) {
-        $scope.OfferData = angular.copy(PackSiteData.OfferData);
+        //$scope.OfferData = angular.copy(PackSiteData.OfferData);
         $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(PackSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(PackSiteData.packs);
@@ -101,18 +105,26 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.setEmptyPackage();
         }
     });
+    $scope.getPackageData = function(){
+        console.log('getPackageData');
+        $scope.setDistributionChannelId = 1;
+        $rootScope.PackageId = '';
+        console.log('$scope.setDistributionChannelId' + $scope.setDistributionChannelId)
+        $scope.showPackageData();
+        console.log('getPackageData 1');
 
+        //$state.go('main-site', {packageId:$rootScope.PackageId});
+
+    }
     $scope.showPackageData = function(){
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $scope.setEmptyPackage();
-
         }
         $scope.alacartPlanIds = {};
         $scope.contentTypePlanData = {};
 
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
-console.log('params')
-        console.log(params)
+
         MainSite.showPackSitePackageData(params,function (PackSiteData) {
             $scope.OfferData = angular.copy(PackSiteData.OfferData);
             $scope.ContentTypes = angular.copy(PackSiteData.ContentTypes);
@@ -156,11 +168,12 @@ console.log('params')
             console.log('setDistributionChannel '+ $scope.setDistributionChannelId != 1)
             console.log('$rootScope.PackageId '+$rootScope.PackageId )
 
-            if( $scope.setDistributionChannelId != 1 ){
+            if( $scope.setDistributionChannelId !== 1 ){
                 $rootScope.action = 'edit';
+                console.log('setDistributionChannel '+$rootScope.PackageId)
                 if($rootScope.PackageId != '' && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined){
-                    console.log(' $scope.setDistributionChannelId if 1')
-                    $state.go($state.current, {packageId:$rootScope.PackageId});
+                    console.log(' $scope.setDistributionChannelId if 1' + $rootScope.PackageId)
+                    $state.go($state.current, {packageId:$rootScope.PackageId}, {reload:$state.current});
                 }else{
                     console.log(' $scope.setDistributionChannelId else 1')
                     $state.go($state.current, {packageId:undefined});
@@ -169,11 +182,12 @@ console.log('params')
                 console.log(' $scope.setDistributionChannelId else')
                 $state.go($state.current, {packageId:$rootScope.PackageId});
             }
-
         })
     }
+console.log($rootScope.action)
+    if($rootScope.action === 'edit' ){
+        console.log('$rootScope.action')
 
-    if($rootScope.action === 'edit' && $rootScope.PackageType != 0 ){
         $scope.showPackageData();
     }
     $scope.resetForm = function () {
