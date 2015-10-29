@@ -21,15 +21,11 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     if($stateParams.packageId){
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
-    }else{
-
-        $scope.setEmptyPackage();
     }
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         console.log('!edit or undefined')
         $scope.setEmptyPackage();
     }
-
 
     if($rootScope.previousState && !new RegExp("map-mainsite").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
             //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name) && $rootScope.action !== 'edit' )){

@@ -52,22 +52,22 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                     updateAdvanceSetting:function(callback){
-                        if(req.body.paosId && (req.body.paosId != undefined && req.body.paosId != '' && req.body.paosId != null)){
-                            alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
-                                console.log(response)
-                                if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
-                                    advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
-                                        if(err){}else{
-                                            callback(null,'');
-                                        }
-                                    })
-                                }else{
-                                    callback(null,'');
-                                }
-                            });
-                        }else{
-                            callback(null,'');
+                        if(req.body.paosId && (req.body.paosId != undefined && req.body.paosId != '')){
+
                         }
+                        alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
+                            console.log(response)
+                            if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
+                                advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
+                                    if(err){}else{
+                                        callback(null,'');
+                                    }
+                                })
+                            }else{
+                                callback(null,'');
+                            }
+
+                        });
                     },
                     updateStorePackage:function (callback) {
                         var pkgId = req.body.packageId;
@@ -186,9 +186,12 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
 
                                 for (var i = 0; i < existingContentTypes.length; i++) {
                                     var ContentTypeId = existingContentTypes[i];
+                                    var downloadId = (req.body.alacartPlansList[ContentTypeId].download) ? req.body.alacartPlansList[ContentTypeId].download : '';
+                                    var streamingId = (req.body.alacartPlansList[ContentTypeId].streaming) ? req.body.alacartPlansList[ContentTypeId].streaming : '';
 
-                                    if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0)
-                                        || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
+                                    if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
+                                        //if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0)
+                                        //|| (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
                                         editContentTypes.push(ContentTypeId);
                                     } else {
                                         deleteContentTypes.push(ContentTypeId);
@@ -447,22 +450,19 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                         if (req.body.packageId) {
                             async.parallel({
                                 updateAdvanceSetting:function(callback){
-                                    if(req.body.paosId && (req.body.paosId != undefined && req.body.paosId != '' && req.body.paosId != null)){
-                                        alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
-                                            console.log(response)
-                                            if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
-                                                advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
-                                                    if(err){}else{
-                                                        callback(null,'');
-                                                    }
-                                                })
-                                            }else{
-                                                callback(null,'');
-                                            }
-                                        });
-                                    }else{
-                                        callback(null,'');
-                                    }
+                                    alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
+                                        console.log(response)
+                                        if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
+                                            advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
+                                                if(err){}else{
+                                                    callback(null,'');
+                                                }
+                                            })
+                                        }else{
+                                            callback(null,'');
+                                        }
+
+                                    });
                                 },
                                 updateStorePackage:function (callback) {
                                     var pkgId = req.body.packageId;
@@ -580,7 +580,11 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                             }
                                             for (var i = 0; i < existingContentTypes.length; i++) {
                                                 var ContentTypeId = existingContentTypes[i];
-                                                if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0) || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
+                                                var downloadId = (req.body.alacartPlansList[ContentTypeId].download) ? req.body.alacartPlansList[ContentTypeId].download : '';
+                                                var streamingId = (req.body.alacartPlansList[ContentTypeId].streaming) ? req.body.alacartPlansList[ContentTypeId].streaming : '';
+
+                                                if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
+                                                    //if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0) || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
                                                     editContentTypes.push(ContentTypeId);
                                                 } else {
                                                     deleteContentTypes.push(ContentTypeId);
