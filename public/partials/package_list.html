@@ -61,8 +61,8 @@
                                         <td class="col-md-1 col-xs-1 text-center">{{$index+1}}</td>
                                         <td class="col-md-3 col-xs-3">{{item.sp_package_name}}</td>
                                         <td class="col-md-2 col-xs-2 text-center">
-                                            <span ng-show="item.sp_parent_pkg_id == 0">{{item.valuePackPlanCount + item.subscriptionPlanCount+item.alacartPackPlanCount}}</span>
-                                            <span ng-show="item.sp_parent_pkg_id > 0">Child</span>
+                                            <span >{{item.valuePackPlanCount + item.subscriptionPlanCount+item.alacartPackPlanCount}}</span>
+
                                         </td>
                                         <td class="col-md-3 col-xs-3">{{item.packName}}</td>
                                         <td><div class="row">

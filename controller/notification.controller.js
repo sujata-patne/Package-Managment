@@ -81,7 +81,7 @@ exports.getNotificationData = function(req, res, next) {
                                  Notification.isChildPackage(connection_ikon_cms,req.body.PackageId, function(err,response){
                                         if(err){
 
-                                        }else{
+                                        }else if(response.length > 0 ){
                                             if(response[0].sp_parent_pkg_id > 0 ){
                                                 Notification.getSubscriptionPacks(connection_ikon_cms, response[0].sp_parent_pkg_id, function (err,  SubscriptionPacks) {
                                                      callback(err, SubscriptionPacks)
@@ -91,6 +91,9 @@ exports.getNotificationData = function(req, res, next) {
                                                      callback(err, SubscriptionPacks)
                                                 });
                                             }
+                                        }
+                                     else{
+                                            callback(err,null)
                                         }
                                  });
 
