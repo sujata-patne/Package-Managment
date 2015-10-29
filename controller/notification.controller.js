@@ -50,10 +50,26 @@ exports.getNotificationData = function(req, res, next) {
                         },
                         ValuePacks : function (callback){
                             //to get the value packs for selected package
+
                             if(req.body.PackageId != undefined && req.body.PackageId != 0) {
-                                Notification.getValuePacks(connection_ikon_cms, req.body.PackageId, function (err, ValuePacks) {
-                                    callback(err,ValuePacks)
+                                Notification.isChildPackage(connection_ikon_cms,req.body.PackageId, function(err,response){
+                                    if(err){
+
+                                    }else{
+                                        if(response[0].sp_parent_pkg_id > 0 ){
+                                            Notification.getValuePacks(connection_ikon_cms, response[0].sp_parent_pkg_id, function (err, ValuePacks) {
+                                             callback(err,ValuePacks)
+                                            });
+                                        }else{
+                                            Notification.getValuePacks(connection_ikon_cms, req.body.PackageId, function (err, ValuePacks) {
+                                             callback(err,ValuePacks)
+                                            });
+                                        }
+                                        
+                                    }
+
                                 });
+                                
                             }
                             else{
                                 callback(null,'');
@@ -62,9 +78,24 @@ exports.getNotificationData = function(req, res, next) {
                         SubscriptionPacks : function (callback){
                             // to get the subscription packs for selected package
                             if(req.body.PackageId != undefined && req.body.PackageId != 0) {
-                                Notification.getSubscriptionPacks(connection_ikon_cms, req.body.PackageId, function (err,  SubscriptionPacks) {
-                                    callback(err, SubscriptionPacks)
-                                });
+                                 Notification.isChildPackage(connection_ikon_cms,req.body.PackageId, function(err,response){
+                                        if(err){
+
+                                        }else{
+                                            if(response[0].sp_parent_pkg_id > 0 ){
+                                                Notification.getSubscriptionPacks(connection_ikon_cms, response[0].sp_parent_pkg_id, function (err,  SubscriptionPacks) {
+                                                     callback(err, SubscriptionPacks)
+                                                });
+                                            }else{
+                                                 Notification.getSubscriptionPacks(connection_ikon_cms, req.body.PackageId, function (err,  SubscriptionPacks) {
+                                                     callback(err, SubscriptionPacks)
+                                                });
+                                            }
+                                        }
+                                 });
+
+                                    
+
                             }
                             else{
                                 callback(null,'');
