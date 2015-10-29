@@ -83,8 +83,6 @@ console.log('mainSiteCtrl')
     };
 
     $scope.setIndex = function($index){
-        console.log('index')
-        console.log($index)
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state,  {}, {reload:false});
         /*if($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined){
@@ -111,13 +109,12 @@ console.log('mainSiteCtrl')
     MainSite.getMainSiteData(function (MainSiteData) {
         console.log('getMainSiteData $rootScope.action '+$rootScope.action)
 
-        $scope.OfferData = angular.copy(MainSiteData.OfferData);
+        //$scope.OfferData = angular.copy(MainSiteData.OfferData);
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             console.log('getMainSiteData if')
-
             $scope.setEmptyPackage();
 
         }

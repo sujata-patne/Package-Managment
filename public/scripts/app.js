@@ -30,7 +30,7 @@ myApp.config(function ($stateProvider) {
             controller: 'packSiteCtrl',
             url: '/pack-site/:packageId'
         })
-        .state('map-mainsite', {
+        .state('main-site-map', {
             templateUrl: 'partials/map-mainsite.html',
             controller: 'mapMainsiteCtrl',
             url: '/maping/:packageId'
@@ -90,7 +90,7 @@ myApp.config(function ($stateProvider) {
             controller: 'usersCtrl',
             url: '/changepassword'
         })
-         .state('packageListing', {
+        .state('packageListing', {
             templateUrl: 'partials/package_list.html',
             controller: 'PackageListCtrl',
             url: '/packageListing'
