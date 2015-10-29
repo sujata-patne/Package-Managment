@@ -135,7 +135,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
 
                 }
                 Package.getPackageDetail(criteria,function( data ){
-                    $scope.packageList = data.packageByName;
+                    $scope.packageList = data.Package;
                 },function(error){
                     console.log(error);
                 });
