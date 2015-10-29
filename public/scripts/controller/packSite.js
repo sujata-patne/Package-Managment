@@ -13,17 +13,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedSubscriptionPlans = [];
     $scope.setDistributionChannelId = 0;
     $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
-
-    if($stateParams.packageId){
-        $rootScope.PackageId = $stateParams.packageId;
-        $rootScope.action = 'edit';
-    }
-    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
-        console.log('!edit or undefined')
-        $rootScope.PackageType = 1;
-        $rootScope.action = 'add';
-        $rootScope.ParentPackageId = 0;
-    }
     $scope.setEmptyPackage = function(){
         console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
@@ -36,9 +25,22 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $rootScope.SelectedPack = undefined;
         //$scope.setDistributionChannelId = 0;
     }
-    console.log('$rootScope.previousState '+$rootScope.previousState.name +" : "+ $rootScope.PackageId )
-    if($rootScope.previousState && ($rootScope.PackageType != 1 || new RegExp("main-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
-        //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name) && $rootScope.action !== 'edit' )){
+    if($stateParams.packageId){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }else{
+        $rootScope.distributionChannelId = undefined;
+        $scope.setDistributionChannelId = 0;
+        $scope.setEmptyPackage();
+    }
+    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
+        console.log('!edit or undefined')
+        $scope.setEmptyPackage();
+
+    }
+
+    //if($rootScope.previousState && ($rootScope.PackageType != 1 || new RegExp("main-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+    if($rootScope.previousState && !new RegExp("pack-site").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
 
         $rootScope.distributionChannelId = undefined;
         $scope.setDistributionChannelId = 0;
@@ -185,6 +187,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 console.log($rootScope.action)
     if($rootScope.action === 'edit' ){
         console.log('$rootScope.action')
+
         $scope.showPackageData();
     }
     $scope.resetForm = function () {

@@ -15,18 +15,6 @@ console.log('mainSiteCtrl')
     $scope.setDistributionChannelId = 0;
     console.log('$stateParams')
     console.log($stateParams.packageId)
-
-    if($stateParams.packageId){
-
-        $rootScope.PackageId = $stateParams.packageId;
-        $rootScope.action = 'edit';
-    }
-    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
-        console.log('!edit or undefined')
-        $rootScope.PackageType = 0;
-        $rootScope.action = 'add';
-        $rootScope.ParentPackageId = 0;
-    }
     $scope.setEmptyPackage = function(){
         console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
@@ -39,10 +27,25 @@ console.log('mainSiteCtrl')
         $rootScope.SelectedPack = undefined;
         //$scope.setDistributionChannelId = 0;
     }
+    if($stateParams.packageId){
 
-    console.log('$rootScope.previousState '+$rootScope.previousState.name +" : "+ $rootScope.PackageType )
-    if($rootScope.previousState && ($rootScope.PackageType != 0 || new RegExp("pack-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
-    //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name) && $rootScope.action !== 'edit' )){
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+    }else{
+        $rootScope.distributionChannelId = undefined;
+        $scope.setDistributionChannelId = 0;
+        $scope.setEmptyPackage();
+    }
+    if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
+        console.log('!edit or undefined')
+        $scope.setEmptyPackage();
+
+        /*$rootScope.PackageType = 0;
+        $rootScope.action = 'add';
+        $rootScope.ParentPackageId = 0;*/
+    }
+    //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name))  && ($rootScope.PackageType != 0 || new RegExp("pack-site").test($scope.previousState.name) || new RegExp("map-mainsite").test($scope.previousState.name) )){
+    if($rootScope.previousState && !new RegExp("main-site").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
 
         $rootScope.distributionChannelId = undefined;
         $scope.setDistributionChannelId = 0;
