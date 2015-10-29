@@ -23,6 +23,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     }
 
     if($rootScope.previousState && ($rootScope.PackageType != 0 || new RegExp("pack-site").test($scope.previousState.name) || new RegExp("main-site").test($scope.previousState.name) )){
+    //if($rootScope.previousState && (!new RegExp("map-mainsite").test($scope.previousState.name) && $rootScope.action !== 'edit' )){
 
         $rootScope.distributionChannelId = undefined;
         $scope.setEmptyPackage();

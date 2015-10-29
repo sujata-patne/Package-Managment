@@ -54,3 +54,9 @@ exports.updateNotificationData= function( dbConnection,data,pnId, callback) {
         callback( err, response );
     });
 }
+
+exports.isChildPackage= function( dbConnection,packageId, callback) {
+    var query = dbConnection.query("SELECT sp_parent_pkg_id FROM  icn_store_package  WHERE sp_pkg_id= ? ",[packageId], function ( err, response ) {
+        callback( err, response );
+    });
+}
