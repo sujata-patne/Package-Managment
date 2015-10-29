@@ -23,3 +23,12 @@ exports.updateUser = function( dbConnection, newPassword, updatedOn, userId, cal
 		callback( err, response );                    
     });
 }
+
+exports.updateLastLoggedIn = function( dbConnection,  userId, callback ) {
+	var query = dbConnection.query('UPDATE icn_login_detail '+
+							'				SET ld_last_login=NOW() WHERE ld_id=?', 
+					[userId], function ( err, response ) {
+		callback( err, response );                    
+    });
+}
+

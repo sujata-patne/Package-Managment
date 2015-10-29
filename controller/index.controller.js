@@ -151,8 +151,16 @@ exports.authenticate = function (req, res, next) {
                                 session.package_lastlogin = userDetails[0].ld_last_login;
                                 session.package_UserType = userDetails[0].ld_user_type;
                                 session.package_StoreId = userDetails[0].su_st_id;//coming from new store's user table.
-                                connection_ikon_cms.release();
-                                res.redirect('/');
+                                
+                                userManager.updateLastLoggedIn( connection_ikon_cms, userDetails[0].ld_id ,function(err,response){
+                                    if(err){
+
+                                    }else{
+                                          connection_ikon_cms.release();
+                                          res.redirect('/');
+                                    }
+                                })
+                              
                             } else {
                                 connection_ikon_cms.release();
                                 res.render('account-login', { error: 'Only Store Admin/Manager are allowed to login.' });
