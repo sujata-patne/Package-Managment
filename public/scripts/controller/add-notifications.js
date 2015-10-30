@@ -19,7 +19,10 @@ myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngP
             $rootScope.n_selectedPlans = undefined
         }
     }
-
+    //for refresh in update page redirect to main notification page
+    if($stateParams.pn_id && $rootScope.n_selectedPlans == undefined) {
+        $state.go("notifications.list");
+    }
 $scope.counts =[
     {id:0,option_name:'LessThan'},
     {id:1,option_name:'MoreThan'},

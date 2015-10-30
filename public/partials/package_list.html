@@ -14,7 +14,7 @@
                             <div class="col-md-7">                  
                                          
                                 <select name="distributionChannel" data-ng-options="item.cd_id as item.cd_name for item in distributionChannelList" data-ng-change="distributionChannelChange()" data-ng-model="distributionChannel" >
-                                    <option value="">SELECT THE VALUE</option>
+                                    <option value="">Select Store </option>
                                 </select>
                             </div>
                             <span ng-show="distributionChannel == undefined || distributionChannel == null" style="color: red">Please select the Distribution channel</span>
@@ -26,7 +26,7 @@
            
                     </div><br><br> <br>   
              <div class="row" >
-            	<h5 class="text-center"><u>Package Name Starts with :</u>
+            	<h5 class="text-center"><u>Package Name Start with :</u>
                         <a style="padding-left:7px;cursor:pointer" id="src_{{alpha}}" ng-click="searchStartsWith(alpha)" ng-repeat="alpha in alphabets track by $index">
                             {{alpha}}
                         </a>
@@ -104,7 +104,7 @@
             <br/><br/>
                    <div class="portlet">
                         <div class="portlet-header">
-                            <h3><i class="fa fa-search"></i>Search a Pack</h3>
+                            <h3><i class="fa fa-search"></i>Search a Package</h3>
                         </div>
                         <div class="portlet-content">
                                 <div class="form-group">
@@ -117,21 +117,22 @@
                                     <br/><br/>
                                     <div class="row">
                                         <label for="caption" class="col-md-3 control-label">
-                                            Created/Updated between:
+                                            Created/Last Updated between:
                                         </label>
                                             <div class="col-sm-3">
                                                 <div class="input-group date">
-                                                    <input type="text" name="start_date" class="form-control" bk-auto-focus datepicker-popup="yyyy-MM-dd" data-ng-model="StartDate" placeholder="Start date" data-ng-disabled="IsDisable" data-ng-click="openDatepicker($event)" data-is-open="open1" required />
+                                                    <input type="text" name="start_date" class="form-control" bk-auto-focus datepicker-popup="dd-MM-yyyy" data-ng-model="StartDate" placeholder="DD/MM/YYYY" data-ng-disabled="IsDisable" data-ng-click="openDatepicker($event)" data-is-open="open1"   required  readonly/>
                                                     <span class="input-group-btn">
                                                         <button type="button" class="btn btn-default" data-ng-click="openDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
                                                 </div>
-                                        </div>
+                                            </div>
+
                                         <div class="col-sm-3">
                                                 <div class="input-group date">
-                                                    <input type="text" class="form-control" bk-auto-focus datepicker-popup="yyyy-MM-dd" data-ng-model="EndDate" placeholder="End date" data-ng-click="openEndDatepicker($event)" data-ng-disabled="IsDisable" data-is-open="open2" required />
+                                                    <input type="text" class="form-control" bk-auto-focus datepicker-popup="dd-MM-yyyy" data-ng-model="EndDate" placeholder="DD/MM/YYYY" data-ng-click="openEndDatepicker($event)" data-ng-disabled="IsDisable" data-is-open="open2" required  readonly/>
                                                     <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-default" data-ng-click="openEndDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        <button type="button" class="btn btn-default" data-ng-click="openEndDatepicker($event)" ><i class="glyphicon glyphicon-calendar"></i></button>
                                                     </span>
                                                 </div>
                                         </div>
