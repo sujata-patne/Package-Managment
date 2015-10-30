@@ -10,6 +10,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
     $scope.valuePlanSetting = {};
     $scope.updateFlag = false;
     $scope.nextButtonPressed = 0;
+    $scope.resetSetting = {};
 
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
@@ -283,7 +284,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                         valuePlanSetting: final_valuePlanSetting,
                         updateFlag: $scope.updateFlag
                     }
-
+                    $scope.resetSetting = newSetting;
                     if ($scope.updateFlag) {
                         advanceSetting.editSetting(newSetting, function (data) {
                             toastr.success('Successfully Updated!');
@@ -302,6 +303,14 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
             }
         }
     }
+
+$scope.resetForm = function(){
+  $scope.offerBuySetting = {};
+  $scope.offerGetSetting = {};
+  $scope.valuePlanSetting = {};
+  $scope.advanceSettingForm.$setPristine();
+}
+
 $(document).ready(function() {
 
         // $("a.grouped_elements").fancybox();
