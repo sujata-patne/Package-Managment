@@ -83,7 +83,8 @@ exports.getPackageStartsWith  = function (req, res, next) {
                                     async.parallel({
                                             packName: function (callback) {
                                                 // to get packname
-                                                PackageManager.packUsedInPackage( connection_ikon_cms,sp_pkg_id, function(err,packname){
+                                                var sp_pkg_id1 = pkg.sp_pkg_id;
+                                                PackageManager.packUsedInPackage( connection_ikon_cms,sp_pkg_id1, function(err,packname){
                                                     callback(err,packname)
                                                 });
                                             },
@@ -309,7 +310,8 @@ exports.getPackageDetail  = function (req, res, next) {
                                 async.parallel({
                                         packName: function (callback) {
                                             // to get packname
-                                            PackageManager.packUsedInPackage( connection_ikon_cms,sp_pkg_id, function(err,packname){
+                                            var sp_pkg_id1 = pkg.sp_pkg_id;
+                                            PackageManager.packUsedInPackage( connection_ikon_cms,sp_pkg_id1, function(err,packname){
                                                 callback(err,packname)
                                             });
                                         },
