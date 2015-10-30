@@ -129,8 +129,25 @@ exports.showPackageData = function(req, res, next)  {
                         });
                     },
                     alacartPackPlans: function (callback) {
-                        alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function (err, alacartPackPlans) {
-                            callback(err, alacartPackPlans)
+                        userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {
+                            if(err){
+                                connection_ikon_cms.release();
+                                res.status(500).json(err.message);
+                            }else{
+                                if(response != undefined && response.length > 0 && response.length < 2){
+                                    if(response[0].cmd_entity_detail == 1){
+                                        alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function (err, alacartPackPlans) {
+                                            callback(err, alacartPackPlans)
+                                        });
+                                    }else{
+                                        callback(err,'NoAlaCart');
+                                    }
+                                }else if(response != undefined && response.length > 0 && response.length == 2){
+                                    alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function (err, alacartPackPlans) {
+                                        callback(err, alacartPackPlans)
+                                    });
+                                }
+                            }
                         });
                     },
                     valuePackPlans: function (callback) {
@@ -139,8 +156,26 @@ exports.showPackageData = function(req, res, next)  {
                         });
                     },
                     subscriptionPackPlans: function (callback) {
-                        subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId},function (err, subscriptionPackPlans) {
-                            callback(err, subscriptionPackPlans);
+
+                        userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {
+                            if(err){
+                                connection_ikon_cms.release();
+                                res.status(500).json(err.message);
+                            }else{
+                                if(response != undefined && response.length > 0 && response.length < 2){
+                                    if(response[0].cmd_entity_detail == 2){
+                                        subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId},function (err, subscriptionPackPlans) {
+                                            callback(err, subscriptionPackPlans);
+                                        });
+                                    }else{
+                                        callback(err,'NoSub');
+                                    }
+                                }else if(response != undefined && response.length > 0 && response.length == 2){
+                                    subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId},function (err, subscriptionPackPlans) {
+                                        callback(err, subscriptionPackPlans);
+                                    });
+                                }
+                            }
                         });
                     },
                     mainSitePackageData : function (callback){
@@ -222,6 +257,8 @@ exports.showPackageData = function(req, res, next)  {
                         res.status(500).json(err.message);
                     } else {
                         connection_ikon_cms.release();
+                        console.log(" ====================== inside results ==============================");
+                        console.log( results) ;
                         res.send(results);
                     }
                 })

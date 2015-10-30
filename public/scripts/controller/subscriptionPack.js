@@ -40,7 +40,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             packageName : $rootScope.PackageName,
             existingSubscriptionPackIds: $scope.existingSubscriptionPackIds
         };
-
+        
         if (!$rootScope.distributionChannelId){
             toastr.error('Distribution Channel Required');
             $scope.errorvisible = true;
