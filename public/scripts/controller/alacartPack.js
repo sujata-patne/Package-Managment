@@ -12,7 +12,7 @@ console.log('alacartCtrl')
         var data = {
             packageId: $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            parentPackageId: $rootScope.ParentPackageId,
+            parentPackageId: $rootScope.ParentPackageId
         }
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
 

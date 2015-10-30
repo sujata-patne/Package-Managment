@@ -33,6 +33,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     $scope.setIndex = function($index){
+
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
     }
@@ -64,7 +65,16 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
         MainSite.showPackageData(params, function (MainSiteData) {
                 $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
-                console.log($scope.mainSitePackageData)
+
+                console.log( "++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                console.log( MainSiteData );
+                if( MainSiteData.subscriptionPackPlans == 'NoSub' ) {
+                    $scope.subscriptionPackPlans = MainSiteData.subscriptionPackPlans ;
+                }
+
+                if( MainSiteData.alacartPackPlans == 'NoAlaCart') {
+                    $scope.alacartPackPlans = MainSiteData.alacartPackPlans;
+                }
 
                 if ($scope.mainSitePackageData != null && $scope.mainSitePackageData.length > 0) {
                     $rootScope.distributionChannelId = $scope.mainSitePackageData[0].sp_dc_id;
@@ -156,7 +166,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
         $scope.OfferData = _.filter($scope.OfferStoreData,function (plans){
             return plans.cd_id == $rootScope.distributionChannelId;
-        })
+        });
         if($scope.subscriptionStorePlans != 'NoSub'){
              $scope.subscriptionPackPlans =  _.filter($scope.subscriptionStorePlans,function (plans){
                  return plans.cd_id == $rootScope.distributionChannelId;

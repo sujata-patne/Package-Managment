@@ -4,7 +4,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $('#pack-site').addClass('active');
 
     console.log('packSiteCtrl')
-
+    $rootScope.mainNext=false;
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
     $scope.selectedStore = [];
@@ -38,6 +38,9 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
+        /*if($scope.tabIndex == 0){
+            $state.go($scope.tabs[$scope.tabIndex]['state']);
+        }*/
     }
     $scope.setEmptyPackage = function(){
         console.log('setEmptyPackage')
@@ -94,7 +97,9 @@ console.log($scope.packSitePackageData )
                     console.log('$scope.packSitePackageData if ')
 
                     $rootScope.action = 'edit';
-                    $state.go($state.current, {packageId:$rootScope.PackageId})
+
+                  //  $state.go($state.current, {packageId:$rootScope.PackageId})
+                    $state.go($state.current, {packageId:$rootScope.PackageId}, {reload:$state.current}); //
 
                 }
                 else{
@@ -230,7 +235,6 @@ console.log($scope.packSitePackageData )
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
         $scope.showPackageData();
-
 
     }else if(($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')
         && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
