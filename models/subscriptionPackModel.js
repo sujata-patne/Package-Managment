@@ -1,4 +1,3 @@
-
 exports.getSubscriptionDetailsByStoreId = function(dbConnection, data, callback) {
     if(data.dcId != '' && data.dcId != undefined){
         var str = ' AND cd1.cd_id = '+ data.dcId;
@@ -81,3 +80,4 @@ exports.updateSubscriptionPack = function( dbConnection, pssId,  callback ) {
         }
     );
 }
+

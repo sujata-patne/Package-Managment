@@ -77,12 +77,17 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             toastr.success(data.message );
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
-            $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
+            //reload is not used then records get inserted when submitted on the same tab without refreshing or changing tabs.
+            $state.go($state.current, {packageId:$rootScope.PackageId},{reload: $state.current}); //{reload: $state.current}
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );
             //$scope.errorvisible = true;
         }
+    }
+
+     $scope.resetForm = function(){
+        $scope.selectedSubscriptionPlans = [];
     }
 
 });
