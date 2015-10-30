@@ -4,6 +4,8 @@
 myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     console.log('mapMainsiteCtrl')
     $rootScope.isChild = true;
+    $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
+
     $('.removeActiveClass').removeClass('active');
     $('#map-mainsite').addClass('active');
     $scope.setEmptyPackage = function(){
@@ -21,15 +23,11 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     if($stateParams.packageId){
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
-    }else{
-
-        $scope.setEmptyPackage();
     }
     if($rootScope.action !== 'edit' && $rootScope.action === undefined) {
         console.log('!edit or undefined')
         $scope.setEmptyPackage();
     }
-
 
     if($rootScope.previousState && !new RegExp("map-mainsite").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
             //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name) && $rootScope.action !== 'edit' )){
@@ -54,6 +52,10 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $scope.setEmptyPackage();
         }
+    },
+    function (error) {
+        $scope.error = error;
+        $scope.errorvisible = true;
     });
     $scope.getPackageData = function(){
         console.log('getPackageData');
@@ -108,7 +110,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if($rootScope.isChild === true && $rootScope.action !== 'edit'){
             $rootScope.ParentPackageId = $rootScope.PackageId;
             if($rootScope.ParentPackageId != '' || $rootScope.ParentPackageId != 0 || $rootScope.ParentPackageId != undefined){
-                $rootScope.PackageId = undefined;
+                $rootScope.PackageId = 0;
                 $rootScope.PackageName = '';
                 $rootScope.SelectedPack = undefined;
             }

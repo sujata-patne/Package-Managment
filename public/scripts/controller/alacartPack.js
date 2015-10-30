@@ -12,9 +12,13 @@ console.log('alacartCtrl')
         var data = {
             packageId: $rootScope.PackageId,
             packageType: $rootScope.PackageType,
-            parentPackageId: $rootScope.ParentPackageId
+            parentPackageId: $rootScope.ParentPackageId,
         }
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
+
+            //$scope.alacartPackPlans = angular.copy(alacartPackData.alacartPackPlans);
+            console.log('alacartPackPlans')
+            console.log($scope.alacartPackPlans)
             $scope.alacartNofferDetails = angular.copy(alacartPackData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;
@@ -66,6 +70,7 @@ console.log('alacartCtrl')
                         $rootScope.PackageId = data.pkgId;
                         $rootScope.action = 'edit';
                         $rootScope.proceed();
+                        $scope.showResponse(data);
                     }else{
                         $scope.showResponse(data);
                     }

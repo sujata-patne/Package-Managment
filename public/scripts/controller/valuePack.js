@@ -33,6 +33,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             packageName : $rootScope.PackageName,
             existingValuePackIds: $scope.existingValuePackIds
         };
+
         if (!$rootScope.distributionChannelId){
             toastr.error('Distribution Channel Required');
             $scope.errorvisible = true;
@@ -67,12 +68,17 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             toastr.success( $scope.success );
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
+            //reload is not used then records get inserted when submitted on the same tab without refreshing or changing tabs.
+            $state.go($state.current, {packageId:$rootScope.PackageId},{reload: $state.current}); //{reload: $state.current}
 
-            $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );
         }
+    }
+
+    $scope.resetForm = function(){
+        $scope.selectedValuePacks = [];
     }
 
 });

@@ -13,17 +13,18 @@ exports.getContentTypes = function(dbConnection, storeId, callback) {
     })
 }
 
-exports.getOfferData = function(dbConnection, storeId,dcId, callback) {
-    if(dcId != '' && dcId != undefined){
-        var str = ' AND cd1.cd_id = '+ dcId;
+exports.getOfferDataByStoreId = function(dbConnection, data, callback) {
+    if(data.dcId != '' && data.dcId != undefined){
+        var str = ' AND cd1.cd_id = '+ data.dcId;
     }else{
         var str = '';
     }
-    var query = dbConnection.query(' SELECT plan.* ' +
+
+    var query = dbConnection.query(' SELECT plan.*, cd1.* ' +
         'FROM icn_offer_plan AS plan ' +
         'join multiselect_metadata_detail as mmd ON plan.op_channel_front = mmd.cmd_group_id ' +
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
-        'WHERE plan.op_st_id = ? ' + str, [storeId], function (err, ContentTypes) {
+        'WHERE plan.op_st_id = ? ' + str, [data.storeId], function (err, ContentTypes) {
         callback(err, ContentTypes);
 
     });
@@ -157,8 +158,8 @@ exports.getContentTypeData = function(dbConnection, storeId, callback) {
 }
 
 
-exports.getAllPacks = function(dbConnection,storeId,callback){
-    var query = dbConnection.query("SELECT * FROM `icn_packs` WHERE pk_st_id = ? ", storeId, function (err, response) {
+exports.getAllPacksByStoreId = function(dbConnection,data,callback){
+    var query = dbConnection.query("SELECT * FROM `icn_packs` WHERE pk_st_id = ? ", data.storeId, function (err, response) {
         callback(err,response);
     });
 }
