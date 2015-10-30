@@ -1,4 +1,4 @@
-
+var config = require('../config')();
 exports.getSubscriptionDetailsByStoreId = function(dbConnection, storeId, dcId, callback) {
     if(dcId != '' && dcId != undefined){
         var str = ' AND cd1.cd_id = '+ dcId;
@@ -9,7 +9,7 @@ exports.getSubscriptionDetailsByStoreId = function(dbConnection, storeId, dcId, 
         'FROM icn_sub_plan as plan '+
         'join multiselect_metadata_detail as mmd ON plan.sp_channel_front = mmd.cmd_group_id ' +
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
-        'WHERE sp_st_id = ? ' + str, [storeId],
+        'WHERE sp_st_id = ? AND sp_is_active = 1' + str, [storeId],
         function ( err, subscriptionPackPlans ) {
             callback(err, subscriptionPackPlans );
         }
@@ -81,3 +81,4 @@ exports.updateSubscriptionPack = function( dbConnection, pssId,  callback ) {
         }
     );
 }
+
