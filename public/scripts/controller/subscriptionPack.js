@@ -1,31 +1,42 @@
 myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, subscriptionPack ) {
 
-    $scope.existingSubscriptionPackIds = [];
-    $scope.selectedSubscriptionPlans = [];
-    $scope.nextButtonPressed = 0;
    /* subscriptionPack.getSubscriptionDetails({distributionChannelId:$scope.distributionChannelId},function (subscriptionPlanData) {
         $scope.subscriptionPackPlans = angular.copy( subscriptionPlanData.subscriptionPlans );
 
     });*/
 
-    var data = {
-        packageId : $rootScope.PackageId,
-        packageType: $rootScope.PackageType,
-        parentPackageId: $rootScope.ParentPackageId
-    }
 
+ //Watching changes in Package Id
+    $rootScope.$watch('PackageId',function(value,old) {
+        $scope.init();
+    }, true);
 
-    subscriptionPack.getSelectedSubscriptionPacks(data, function (selectedSubscriptionPackData) {
+    $scope.init = function(){
 
-        $scope.selectedSubscriptionPackPlans = selectedSubscriptionPackData.selectedSubscriptionPlans;
-        if( $scope.selectedSubscriptionPackPlans.length > 0 ) {
-            for( i = 0; i < $scope.selectedSubscriptionPackPlans.length ; i++ ){
-                $scope.selectedSubscriptionPlans.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
-                $scope.existingSubscriptionPackIds.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
-            }
+        $scope.existingSubscriptionPackIds = [];
+        $scope.selectedSubscriptionPlans = [];
+        $scope.nextButtonPressed = 0;
+
+        var data = {
+            packageId : $rootScope.PackageId,
+            packageType: $rootScope.PackageType,
+            parentPackageId: $rootScope.ParentPackageId
         }
-    });
 
+
+        subscriptionPack.getSelectedSubscriptionPacks(data, function (selectedSubscriptionPackData) {
+
+            $scope.selectedSubscriptionPackPlans = selectedSubscriptionPackData.selectedSubscriptionPlans;
+            if( $scope.selectedSubscriptionPackPlans.length > 0 ) {
+                for( i = 0; i < $scope.selectedSubscriptionPackPlans.length ; i++ ){
+                    $scope.selectedSubscriptionPlans.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
+                    $scope.existingSubscriptionPackIds.push($scope.selectedSubscriptionPackPlans[i].pss_sp_id );
+                }
+            }
+        });
+
+    }
+    
 
     $scope.submitSubsPackForm = function( isValid ) {
         $scope.successvisible = false;

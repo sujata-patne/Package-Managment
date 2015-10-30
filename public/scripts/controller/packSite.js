@@ -57,17 +57,47 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.getPackageData = function(){
         $rootScope.PackageId = '';
         $scope.showPackageData();
-        //$state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId});
     }
+    $scope.setPackageDetails = function(){
+        if($scope.alacartStorePlans != 'NoAlaCart'){
+            $scope.alacartPackPlans = _.filter($scope.alacartStorePlans,function (plans){
+                return plans.cd_id == $rootScope.distributionChannelId;
+            })
+        }else{
+            $scope.alacartPackPlans = $scope.alacartStorePlans ;
+        }
 
+        $scope.OfferData = _.filter($scope.OfferStoreData,function (plans){
+            return plans.cd_id == $rootScope.distributionChannelId;
+        })
+        if($scope.subscriptionStorePlans != 'NoSub'){
+            $scope.subscriptionPackPlans =  _.filter($scope.subscriptionStorePlans,function (plans){
+                return plans.cd_id == $rootScope.distributionChannelId;
+            })
+        }else{
+            $scope.subscriptionPackPlans = $scope.subscriptionStorePlans ;
+        }
+
+    }
+    MainSite.getStoreDetails(function (MainSiteData) {
+
+        $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
+        $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
+        $scope.OfferStoreData = angular.copy(MainSiteData.OfferData);
+        $scope.alacartStorePlans = angular.copy(MainSiteData.alacartPackPlans);
+        $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
+
+        $scope.StorePacks = angular.copy(MainSiteData.packs);
+
+        $scope.subscriptionStorePlans = angular.copy(MainSiteData.subscriptionPackPlans);
+        $scope.setPackageDetails();
+    },
+    function (error) {
+        $scope.error = error;
+        $scope.errorvisible = true;
+    });
 
     $scope.showPackageData = function(){
-        /*if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
-         $scope.setEmptyPackage();
-         }*/
-        //$scope.alacartPlanIds = {};
-        //$scope.contentTypePlanData = {};
-
         var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
         console.log('params')
         console.log(params)
@@ -108,25 +138,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         return contents.parent_name === 'Audio' || contents.parent_name === 'Video';
     };
 
-    MainSite.getStoreDetails(function (MainSiteData) {
-
-            $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
-            $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
-            $scope.OfferStoreData = angular.copy(MainSiteData.OfferData);
-            $scope.alacartStorePlans = angular.copy(MainSiteData.alacartPackPlans);
-            $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
-
-            $scope.StorePacks = angular.copy(MainSiteData.packs);
-
-            $scope.subscriptionStorePlans = angular.copy(MainSiteData.subscriptionPackPlans);
-
-        },
-        function (error) {
-            $scope.error = error;
-            $scope.errorvisible = true;
-        });
-
-
     if($scope.previousState.name && !new RegExp("pack-site").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
         console.log(' $rootScope.previousState 1')
 
@@ -165,62 +176,10 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
         $rootScope.distributionChannelId = undefined;
         $scope.setEmptyPackage();
-    }/*else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
-        && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
-        console.log(' $rootScope.previousState 3')
-
-        $rootScope.PackageId = $stateParams.packageId;
-        $rootScope.action = 'edit';
-        $scope.showPackageData();
-
-    }*/
-
-
-    /*if($rootScope.action === 'edit' ){
-        console.log('$rootScope.action')
-
-        $scope.showPackageData();
-    }
-    $scope.resetForm = function () {
-        $scope.selectedValuePacks = [];
-        $scope.selectedSubscriptionPlans = [];
-    }*/
-    $scope.setPackageDetails = function(){
-        if($scope.alacartStorePlans != 'NoAlaCart'){
-            $scope.alacartPackPlans = _.filter($scope.alacartStorePlans,function (plans){
-                return plans.cd_id == $rootScope.distributionChannelId;
-            })
-        }else{
-            $scope.alacartPackPlans = $scope.alacartStorePlans ;
-        }
-
-        $scope.OfferData = _.filter($scope.OfferStoreData,function (plans){
-            return plans.cd_id == $rootScope.distributionChannelId;
-        })
-        if($scope.subscriptionStorePlans != 'NoSub'){
-            $scope.subscriptionPackPlans =  _.filter($scope.subscriptionStorePlans,function (plans){
-                return plans.cd_id == $rootScope.distributionChannelId;
-            })
-        }else{
-            $scope.subscriptionPackPlans = $scope.subscriptionStorePlans ;
-        }
-        console.log('$scope.alacartPackPlans')
-        console.log($scope.alacartPackPlans)
-        /*$scope.alacartPackPlans = _.filter($scope.alacartStorePlans,function (plans){
-            return plans.cd_id == $rootScope.distributionChannelId;
-        })
-        $scope.OfferData = _.filter($scope.OfferStoreData,function (plans){
-            return plans.cd_id == $rootScope.distributionChannelId;
-        })
-        $scope.subscriptionPackPlans =  _.filter($scope.subscriptionStorePlans,function (plans){
-            return plans.cd_id == $rootScope.distributionChannelId;
-        })*/
-
-        console.log('$scope.alacartPackPlans')
-        console.log($scope.alacartPackPlans)
     }
 
-    /*$scope.$watch('distributionChannelId',function(){
+
+    $scope.$watch('distributionChannelId',function(){
 
         $scope.setPackageDetails();
 
@@ -233,6 +192,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.showPackageData();
 
         }
-    }, {},true);*/
+    }, {},true);
 
 });

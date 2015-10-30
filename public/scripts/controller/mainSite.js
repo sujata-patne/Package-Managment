@@ -1,6 +1,8 @@
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+    
     $('.removeActiveClass').removeClass('active');
     $('#main-site').addClass('active');
+    
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
     $scope.selectedStore = [];
@@ -25,6 +27,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $state.go($scope.tabs[$scope.tabIndex].state);//,{}, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
+
     $rootScope.mainNext=true;
     $rootScope.dis = function() {
         if($scope.tabIndex === $scope.tabs.length -1){
@@ -33,7 +36,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     $scope.setIndex = function($index){
-
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
     }
@@ -50,6 +52,9 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         //$scope.setDistributionChannelId = 0;
     }
     $scope.setPackageDetails = function(){
+        console.log('$rootScope.distributionChannelId')
+        console.log($rootScope.distributionChannelId)
+
         if($scope.alacartStorePlans != 'NoAlaCart'){
             $scope.alacartPackPlans = _.filter($scope.alacartStorePlans,function (plans){
                 return plans.cd_id == $rootScope.distributionChannelId;
@@ -68,25 +73,30 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }else{
             $scope.subscriptionPackPlans = $scope.subscriptionStorePlans ;
         }
-
-        /*$scope.alacartPackPlans = _.filter($scope.alacartStorePlans,function (plans){
-         return plans.cd_id == $rootScope.distributionChannelId;
-         })
-         $scope.OfferData = _.filter($scope.OfferStoreData,function (plans){
-         return plans.cd_id == $rootScope.distributionChannelId;
-         })
-         $scope.subscriptionPackPlans =  _.filter($scope.subscriptionStorePlans,function (plans){
-         return plans.cd_id == $rootScope.distributionChannelId;
-         });*/
-
-        console.log('$scope.alacartPackPlans')
-        console.log($scope.alacartPackPlans)
+        console.log('$scope.alacartStorePlans')
+        console.log($scope.alacartStorePlans)
     }
     $scope.getPackageData = function(){
         $rootScope.PackageId = '';
         $scope.showPackageData();
-        //$state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId});
     }
+    MainSite.getStoreDetails(function (MainSiteData) {
+
+        $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
+        $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
+        $scope.OfferStoreData = angular.copy(MainSiteData.OfferData);
+        $scope.alacartStorePlans = angular.copy(MainSiteData.alacartPackPlans);
+        $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
+
+        $scope.subscriptionStorePlans = angular.copy(MainSiteData.subscriptionPackPlans);
+
+        $scope.setPackageDetails();
+    },
+    function (error) {
+        $scope.error = error;
+        $scope.errorvisible = true;
+    });
+
     $scope.$watch('distributionChannelId',function(){
 
         $scope.setPackageDetails();
@@ -100,14 +110,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.showPackageData();
         }
     }, {},true);
+
     $scope.showPackageData = function() {
+
         if($stateParams.packageId){
             var params = {pkgId:$rootScope.PackageId}
         }else {
             var params = {distributionChannelId: $rootScope.distributionChannelId, packageType: $rootScope.PackageType}
         }
-        console.log('params')
-        console.log(params)
 
         MainSite.showPackageData(params, function (MainSiteData) {
                 $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
@@ -131,8 +141,10 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                     }
 
                     $rootScope.action = 'edit';
-                    $state.go($state.current, {packageId:$rootScope.PackageId})
 
+                    //if( $scope.tabIndex == 0 ) {
+                        $state.go($state.current, {packageId:$rootScope.PackageId});
+                    //}
                 }else{
                     console.log('$scope.mainSitePackageData else ')
 
@@ -172,8 +184,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }else if(new RegExp("main-site").test($scope.previousState.name) || ($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0) || ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')){
 
         console.log(' $rootScope.previousState 7')
-        $scope.setPackageDetails();
-        //$state.go($state.current, {packageId:$stateParams.packageId})
+        //$scope.setPackageDetails();
+        $state.go($state.current, {packageId:$stateParams.packageId})
 
     }else if($scope.previousState.name && !($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
         || !($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')) {
@@ -183,21 +195,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.setEmptyPackage();
     }
 
-    MainSite.getStoreDetails(function (MainSiteData) {
 
-            $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
-            $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
-            $scope.OfferStoreData = angular.copy(MainSiteData.OfferData);
-            $scope.alacartStorePlans = angular.copy(MainSiteData.alacartPackPlans);
-            $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
-
-            $scope.subscriptionStorePlans = angular.copy(MainSiteData.subscriptionPackPlans);
-
-        },
-        function (error) {
-            $scope.error = error;
-            $scope.errorvisible = true;
-        });
 
 
 
