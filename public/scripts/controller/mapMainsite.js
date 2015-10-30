@@ -75,8 +75,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
 
         $scope.setEmptyPackage();
     }
-
-    MainSite.getMainSiteData(function (MainSiteData) {
+    MainSite.getStoreDetails(function (MainSiteData) {
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);
 
@@ -88,6 +87,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $scope.error = error;
         $scope.errorvisible = true;
     });
+
     $scope.getPackageData = function(){
         console.log('getPackageData');
         $scope.setDistributionChannelId = 1;

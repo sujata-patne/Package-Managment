@@ -28,13 +28,7 @@ myApp.service('MainSite', ['$http', function ($http) {
         });
     }
 
-    this.getPackSiteData = function(success, error){
-        $http.get(this.baseRestUrl + '/getPackSiteData').success(function (items) {
-            success(items);
-        }).error(function (err) {
-            error(err);
-        });
-    }
+
     this.showPackSitePackageData = function(data, success, error){
         $http.post(this.baseRestUrl + '/showPackageData', data).success(function (items) {
             success(items);
