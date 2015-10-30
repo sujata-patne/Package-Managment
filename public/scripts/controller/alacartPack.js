@@ -70,7 +70,6 @@ console.log('alacartCtrl')
                         $rootScope.PackageId = data.pkgId;
                         $rootScope.action = 'edit';
                         $rootScope.proceed();
-                        $scope.showResponse(data);
                     }else{
                         $scope.showResponse(data);
                     }
@@ -78,10 +77,9 @@ console.log('alacartCtrl')
             } else {
                 alacartPack.addAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
-                        toastr.success(data.message)
-                        $rootScope.PackageId = data.pkgId;
-                        $rootScope.action = 'edit';
                         $rootScope.proceed();
+
+                        $scope.showResponse(data);
                     }else{
                         $scope.showResponse(data);
                     }
