@@ -113,21 +113,26 @@ exports.showPackageData = function(req, res, next)  {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                    ContentTypes: function (callback) {
-                        mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
-                            callback(err, ContentTypeData)
-                        })
-                    },
-                    distributionChannels: function (callback) {
-                        mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
-                            callback(err, distributionChannels);
-                        });
-                    },
-                    OfferData: function (callback) {
-                        mainSiteManager.getOfferDataByStoreId( connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function(err,OfferData){
-                            callback(err, OfferData)
-                        });
-                    },
+                    // ContentTypes: function (callback) {
+                    //     mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
+                    //         callback(err, ContentTypeData)
+                    //     })
+                    // },
+                    // distributionChannels: function (callback) {
+                    //     mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
+                    //         callback(err, distributionChannels);
+                    //     });
+                    // },
+                    // OfferData: function (callback) {
+                    //     mainSiteManager.getOfferDataByStoreId( connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function(err,OfferData){
+                    //         callback(err, OfferData)
+                    //     });
+                    // },
+                    // valuePackPlans: function (callback) {
+                    //     valuePackManager.getValuePackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId}, function (err, valuePackPlans) {
+                    //         callback(err, valuePackPlans);
+                    //     });
+                    // },
                     alacartPackPlans: function (callback) {
                         userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {
                             if(err){
@@ -149,12 +154,7 @@ exports.showPackageData = function(req, res, next)  {
                                 }
                             }
                         });
-                    },
-                    valuePackPlans: function (callback) {
-                        valuePackManager.getValuePackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId}, function (err, valuePackPlans) {
-                            callback(err, valuePackPlans);
-                        });
-                    },
+                    },                    
                     subscriptionPackPlans: function (callback) {
 
                         userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {

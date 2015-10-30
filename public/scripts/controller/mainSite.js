@@ -1,6 +1,8 @@
 myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
+    
     $('.removeActiveClass').removeClass('active');
     $('#main-site').addClass('active');
+    
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
     $scope.selectedStore = [];
@@ -25,6 +27,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $state.go($scope.tabs[$scope.tabIndex].state);//,{}, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
+
     $rootScope.mainNext=true;
     $rootScope.dis = function() {
         if($scope.tabIndex === $scope.tabs.length -1){
@@ -33,7 +36,6 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     $scope.setIndex = function($index){
-
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
     }
@@ -60,14 +62,12 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.setEmptyPackage();
         }*/
         var params = { distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
-        console.log('params')
-        console.log(params)
+        
 
         MainSite.showPackageData(params, function (MainSiteData) {
                 $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
-                console.log( "++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                console.log( MainSiteData );
+                
                 if( MainSiteData.subscriptionPackPlans == 'NoSub' ) {
                     $scope.subscriptionPackPlans = MainSiteData.subscriptionPackPlans ;
                 }
@@ -88,9 +88,12 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                     console.log('$scope.mainSitePackageData if ')
 
                     $rootScope.action = 'edit';
-                    $state.go($state.current, {packageId:$rootScope.PackageId})
+                    if( $scope.tabIndex == 0 ) {
+                        $state.go($state.current, {packageId:$rootScope.PackageId});
+                    }
+                    //$state.go($state.current, {packageId:$rootScope.PackageId})
 
-                    //$state.go($scope.tabs[$scope.tabIndex].state)
+                    // $state.go($scope.tabs[$scope.tabIndex].state,{packageId:$rootScope.PackageId})
 
                 }else{
                     console.log('$scope.mainSitePackageData else ')
