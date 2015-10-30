@@ -1,24 +1,32 @@
 myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, valuePack ) {
-    $scope.nextButtonPressed = 0;
+    
+  
+ //Watching changes in Package Id
+    $rootScope.$watch('PackageId',function(value,old) {
+        $scope.init();
+    }, true);
+    
+    $scope.init = function(){
+        $scope.nextButtonPressed = 0;
+          var data = {
+            packageId : $rootScope.PackageId,
+            packageType: $rootScope.PackageType,
+            parentPackageId: $rootScope.ParentPackageId,
+         }
 
-    var data = {
-        packageId : $rootScope.PackageId,
-        packageType: $rootScope.PackageType,
-        parentPackageId: $rootScope.ParentPackageId,
-    }
-
-    $scope.existingValuePackIds = [];
-    $scope.selectedValuePacks = [];
-
-    valuePack.getSelectedValuePacks(data, function (selectedValuePackData) {
+        $scope.existingValuePackIds = [];
+         $scope.selectedValuePacks = [];
+        valuePack.getSelectedValuePacks(data, function (selectedValuePackData) {
         $scope.selectedValuePackPlans = selectedValuePackData.selectedValuePackPlans;
         if( $scope.selectedValuePackPlans.length > 0 ) {
             for( i = 0; i < $scope.selectedValuePackPlans.length ; i++ ){
                 $scope.selectedValuePacks.push($scope.selectedValuePackPlans[i].pvs_vp_id );
                 $scope.existingValuePackIds.push($scope.selectedValuePackPlans[i].pvs_vp_id );
+                }
             }
-        }
-    });
+        });
+    }
+    
 
     $scope.submitValuePackForm = function( isValid ) {
         $scope.successvisible = false;
