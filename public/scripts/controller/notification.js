@@ -55,6 +55,7 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
     }
 
     $scope.OnPackageChange = function(){
+        $rootScope.n_selectedPlans = undefined;
         var data= {
             PackageId: $rootScope.n_selectedPackage
         }

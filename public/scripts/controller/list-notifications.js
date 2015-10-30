@@ -9,7 +9,6 @@ myApp.controller('notificationListCtrl', function ($scope,$rootScope, $state, ng
 
     $rootScope.listnotification_onPlanChange = function(){
         if ($rootScope.n_selectedPackage && $rootScope.n_selectedPackage != null && $rootScope.n_selectedPackage != undefined && $rootScope.n_selectedPackage != ''){
-
             var Data = {
                 PackageId: $rootScope.n_selectedPackage,
                 PlanId: $rootScope.n_selectedPlans

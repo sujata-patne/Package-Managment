@@ -74,7 +74,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }
     };
 
-    $scope.dis = function() {
+    $scope.dis1 = function() {
         if($scope.tabIndex === $scope.tabs.length -1){
             return true;
         }

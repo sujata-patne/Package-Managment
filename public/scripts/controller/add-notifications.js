@@ -11,7 +11,7 @@ myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngP
     $scope.selectedPush = 0;
     $scope.edit_state = false;
     $scope.addMore_flag = false;
-    $scope.days;
+    $scope.days ;
     $scope.hours;
     if($stateParams.pn_id){
     }else{
@@ -79,65 +79,31 @@ $scope.counts =[
         })
     }
     $scope.submitNotificationForm = function (valid) {
+        if(!valid) {
             if ($scope.startingTime >= $scope.endingTime) {
-                 toastr.error('Start time  should be smaller than End time.');
-            }else if($scope.messagetext == undefined || $scope.messagetext == null){
+                toastr.error('Start time  should be smaller than End time.');
+            } else if ($scope.messagetext == undefined || $scope.messagetext == null) {
                 toastr.error('Please enter a message');
             }
-            else if ($rootScope.n_selectedPlans == undefined || $rootScope.n_selectedPlans.length == 0) {
-                    toastr.error('Please Select Plan');
-            }else if( ($scope.selectedCount == undefined || $scope.selectedCount == null) && ($scope.selectedPercent != undefined && $scope.selectedPercent != null) ){
-                    toastr.error('Please select both options in no of contents downloaded.');
-            }else if( ($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null) ){
-                     toastr.error('Please select both options in no of contents downloaded.');
-            }else if( $scope.days < 1 || $scope.days > 99 || $scope.days == undefined){
-                    toastr.error('Days should be between 1 to 99.');
-            }else if( $scope.hours < 1 || $scope.hours > 24 || $scope.hours == undefined){
-                    toastr.error('Hours should be between 1 to 24.');
-            }else if ($stateParams.pn_id) {
-                var notificationData = {
-                    pnId: $stateParams.pn_id,
-                    Days: $scope.days ,
-                    Hours: $scope.hours,
-                    Operator: $scope.selectedCount,
-                    Percent: $scope.selectedPercent,
-                    Message: $scope.messagetext,
-                    PushFrom: $scope.startingTime,
-                    PushTo: $scope.endingTime,
-                    Push: $scope.selectedPush
-                }
-                Notification.updateNotificationData(notificationData, function (data) {
-                    toastr.success("update successfully");
-                    $state.go("notifications.list");
-                });
-            }else if( $scope.days < 1 || $scope.days > 99 || $scope.days == undefined){
-                    toastr.error('Days should be between 1 to 99.');
-            }else if( $scope.hours < 1 || $scope.hours > 24 || $scope.hours == undefined){
-                    toastr.error('Hours should be between 1 to 24.');
-            }else if ( $stateParams.pn_id ) {
-                var notificationData = {
-                    pnId: $stateParams.pn_id,
-                    Days: $scope.days ,
-                    Hours: $scope.hours,
-                    Operator: $scope.selectedCount,
-                    Percent: $scope.selectedPercent,
-                    Message: $scope.messagetext,
-                    PushFrom: $scope.startingTime,
-                    PushTo: $scope.endingTime,
-                    Push: $scope.selectedPush
-                }
-                Notification.updateNotificationData(notificationData, function (data) {
-                    toastr.success("update successfully");
-                    $state.go("notifications.list");
-                });
         }
-        else {
-
-            if ($rootScope.n_selectedPackage && $rootScope.n_selectedPackage != null && $rootScope.n_selectedPackage != undefined && $rootScope.n_selectedPackage != '') {
-
+           else {
+            if ($rootScope.n_selectedPlans == undefined || $rootScope.n_selectedPlans.length == 0) {
+                toastr.error('Please Select Plan');
+            } else if (($scope.selectedCount == undefined || $scope.selectedCount == null) && ($scope.selectedPercent != undefined && $scope.selectedPercent != null)) {
+                toastr.error('Please select both options in no of contents downloaded.');
+            } else if (($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null)) {
+                toastr.error('Please select both options in no of contents downloaded.');
+            } else if ($scope.days != null && $scope.days == undefined) {
+                if ($scope.days < 1 || $scope.days > 99 || $scope.days == undefined) {
+                    toastr.error('Days should be between 1 to 99.');
+                }
+            } else if ($scope.hours != null && $scope.hours == undefined) {
+                if ($scope.hours < 1 || $scope.hours > 24 || $scope.days == undefined) {
+                    toastr.error('Hours should be between 1 to 24.');
+                }
+            } else if ($stateParams.pn_id) {
                 var notificationData = {
-                    PackageId: $rootScope.n_selectedPackage,
-                    PlanId: $rootScope.n_selectedPlans,
+                    pnId: $stateParams.pn_id,
                     Days: $scope.days,
                     Hours: $scope.hours,
                     Operator: $scope.selectedCount,
@@ -147,32 +113,55 @@ $scope.counts =[
                     PushTo: $scope.endingTime,
                     Push: $scope.selectedPush
                 }
+                Notification.updateNotificationData(notificationData, function (data) {
+                    toastr.success("update successfully");
+                    $state.go("notifications.list");
+                });
+            }
+            else {
+
+                if ($rootScope.n_selectedPackage && $rootScope.n_selectedPackage != null && $rootScope.n_selectedPackage != undefined && $rootScope.n_selectedPackage != '') {
+
+                    var notificationData = {
+                        PackageId: $rootScope.n_selectedPackage,
+                        PlanId: $rootScope.n_selectedPlans,
+                        Days: $scope.days,
+                        Hours: $scope.hours,
+                        Operator: $scope.selectedCount,
+                        Percent: $scope.selectedPercent,
+                        Message: $scope.messagetext,
+                        PushFrom: $scope.startingTime,
+                        PushTo: $scope.endingTime,
+                        Push: $scope.selectedPush
+                    }
 
 
-                Notification.addNotificationData(notificationData, function (data) {
+                    Notification.addNotificationData(notificationData, function (data) {
 
-                    toastr.success("save successfully");
+                        toastr.success("save successfully");
 
-            
+
                         //$timeout(function() {
                         //    angular.element('#reset_btn').triggerHandler('click');
                         //});
-                        $timeout(function() {
+                        $timeout(function () {
                             $('#reset_btn').trigger('click');
                             $scope.resetForm();
                             $scope.startingTime = new Date(1970, 0, 1, 00, 00, 0);
                             $scope.endingTime = new Date(1970, 0, 1, 00, 00, 0);
                         });
-                    
-                });
 
-            }
-            else {
-                toastr.error('Please Select Package');
+                    });
+
+                }
+                else {
+                    toastr.error('Please Select Package');
+                }
             }
         }
-
     }
+
+
 $scope.addMore= function(){
     $scope.addMore_flag = true;
 }

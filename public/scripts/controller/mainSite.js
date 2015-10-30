@@ -75,8 +75,8 @@ console.log('mainSiteCtrl')
             $state.go($scope.tabs[$scope.tabIndex].state,{});//, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
-
-    $scope.dis = function() {
+    $rootScope.mainNext=true;
+    $rootScope.dis = function() {
         if($scope.tabIndex === $scope.tabs.length -1){
             return true;
         }

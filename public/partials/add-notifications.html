@@ -1,4 +1,4 @@
-<form method="post" class="form-horizontal" role="form" name="notificationForm" data-ng-submit="submitNotificationForm(notificationForm.$valid)" novalidate>
+<form method="post" class="form-horizontal" role="form" name="notificationForm" data-ng-submit="submitNotificationForm(notificationForm.$valid)" ng-init="daysmin=1;daysmax=99 " novalidate>
     <div class="row">
         <div class="col-md-1 col-xs-1"></div>
         <div class="col-md-10 col-xs-10">
@@ -10,10 +10,19 @@
                         <label for="after" class="col-sm-5 control-label">After:</label>
                         <div class="col-md-5">
                          <!--    <input type="text" ng-model="pnId"  /> -->
-                            <input type="number" name="input" ng-model="days" data-ng-change="getPushData()" placeholder="Day" min="1" max="99" required>
-                            <input type="number" name="input" ng-model="hours"  data-ng-change="getPushData()" placeholder="Hours" min="1" max="24" required>
+
+                            <input type="number" name="daysInput" ng-model="days" data-ng-change="getPushData()" placeholder="Day" min="1" max="99" >
+                            <input type="number" name="hoursInput" ng-model="hours"  data-ng-change="getPushData()" placeholder="Hours" min="1" max="24" >
                             <label>of Plan start </label>
                         </div>
+                    </div>
+                    <div class="col-sm-offset-5 col-sm-9">
+                         <span style="color: red" ng-show="notificationForm.$submitted || notificationForm.daysInput.$dirty">
+                            <span ng-hide="notificationForm.daysInput.$valid">The days should be in range from 1 to 99</span>
+                            </span><br>
+                          <span style="color: red" ng-show="notificationForm.$submitted || notificationForm.hoursInput.$dirty">
+                            <span ng-hide="notificationForm.hoursInput.$valid">The hours should be in range from 1 to 24</span>
+                          </span>
                     </div>
                     <div class="col-md-12">
                         <br>

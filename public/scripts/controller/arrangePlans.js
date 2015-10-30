@@ -16,6 +16,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.nextButtonPressed = 0;
     $scope.sequenceData = [];
 
+
     //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
        $scope.init();

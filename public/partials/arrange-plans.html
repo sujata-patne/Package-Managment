@@ -40,7 +40,7 @@
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="disable" title="Save"data-ng-click="submitForm()">Submit</button>
-                <button type="button" class="btn btn-small" ng-click="nextButtonPressed = 1;submitArrangePlansForm(arrangePlansForm.$valid);" >Next</button> <!--ng-disable="dis()"-->
+                <button type="button" class="btn btn-small" ng-click="nextButtonPressed = 1;submitArrangePlansForm(arrangePlansForm.$valid);" ng-hide="$root.mainNext && $root.dis()">Next</button> <!--ng-disable="dis()"-->
                 <button type="reset" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>
