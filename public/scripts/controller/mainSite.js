@@ -87,8 +87,28 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.OfferStoreData = angular.copy(MainSiteData.OfferData);
         $scope.alacartStorePlans = angular.copy(MainSiteData.alacartPackPlans);
         $scope.valuePackPlans = angular.copy(MainSiteData.valuePackPlans);
+
         $scope.subscriptionStorePlans = angular.copy(MainSiteData.subscriptionPackPlans);
 
+        if($scope.alacartStorePlans != 'NoAlaCart'){
+            $scope.alacartPackPlans = _.filter($scope.alacartStorePlans,function (plans){
+                return plans.cd_id == $rootScope.distributionChannelId;
+            })
+        }else{
+            $scope.alacartPackPlans = $scope.alacartStorePlans ;
+        }
+
+        $scope.OfferData = _.filter($scope.OfferStoreData,function (plans){
+            return plans.cd_id == $rootScope.distributionChannelId;
+        })
+        if($scope.subscriptionStorePlans != 'NoSub'){
+             $scope.subscriptionPackPlans =  _.filter($scope.subscriptionStorePlans,function (plans){
+                 return plans.cd_id == $rootScope.distributionChannelId;
+            })
+        }else{
+            $scope.subscriptionPackPlans = $scope.subscriptionStorePlans ;
+        }
+       
     },
     function (error) {
         $scope.error = error;

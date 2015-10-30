@@ -4,12 +4,12 @@
         <div class="col-md-8 col-xs-8">
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}} </span>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}} </span>
-            <div class="portlet">
+            <div ng-if="subscriptionPackPlans != 'NoSub'"  class="portlet">
                 <div class="portlet-content">
-                    <div class="col-md-12">
+                    <div  class="col-md-12">
                         <label for="valuePackPlan" class="col-sm-3 control-label"><span class="asterisk">*</span>Select Subscription  pack</label>
                         <div class="col-md-5">
-                                <select data-ng-options="item.sp_id as item.sp_plan_name for item in subscriptionPackPlans"
+                                <select  data-ng-options="item.sp_id as item.sp_plan_name for item in subscriptionPackPlans"
                                         multiple class="form-control"  name="subscriptionPackPlan" id="subscriptionPackPlan" data-ng-model="selectedSubscriptionPlans"  >
                                 </select>
                                 <span style="color: red" data-ng-show="subPackOfferForm.$submitted || subPackOfferForm.subscriptionPackPlan.$dirty">
@@ -19,11 +19,20 @@
                         </div>
                     </div> <!-- /.row -->
                 </div>
+                <div ng-if="subscriptionPackPlans == 'NoSub'"  class="portlet">
+                <div class="portlet-content">
+                        <div  class="col-md-12">
+                            <div style="color:red;text-align:center">
+                                <strong>Subscription Plan Rights not assigned to the store.</strong>
+                            </div>    
+                        </div>
+                    </div> <!-- /.row -->
+                </div>
         </div>
         <div class="col-md-2 col-xs-2"></div>
     </div>
     </div>
-    <div class="row">
+    <div ng-if="subscriptionPackPlans != 'NoSub'"  class="row">
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
                 <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>

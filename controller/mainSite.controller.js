@@ -7,6 +7,7 @@ var valuePackManager = require('../models/valuePackModel');
 var subscriptionPackManager = require('../models/subscriptionPackModel');
 var alacartManager = require('../models/alacartModel');
 var ArrangeManager = require('../models/ArrangePlansModel');
+var userManager = require('../models/userModel');
 
 var async = require("async");
 
@@ -36,8 +37,25 @@ exports.getStoreDetails = function(req, res){
                         });
                     },
                     alacartPackPlans: function (callback) {
-                        alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId}, function (err, alacartPackPlans) {
-                            callback(err, alacartPackPlans)
+                          userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {
+                            if(err){
+                                 connection_ikon_cms.release();
+                                 res.status(500).json(err.message);
+                            }else{
+                                if(response != undefined && response.length > 0 && response.length < 2){
+                                    if(response[0].cmd_entity_detail == 1){
+                                         alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId}, function (err, alacartPackPlans) {
+                                            callback(err, alacartPackPlans)
+                                         });
+                                    }else{
+                                        callback(err,'NoAlaCart');
+                                    }
+                                }else if(response != undefined && response.length > 0 && response.length == 2){
+                                     alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId}, function (err, alacartPackPlans) {
+                                        callback(err, alacartPackPlans)
+                                     });
+                                }
+                            }
                         });
                     },
                     valuePackPlans: function (callback) {
@@ -46,9 +64,27 @@ exports.getStoreDetails = function(req, res){
                         });
                     },
                     subscriptionPackPlans: function (callback) {
-                        subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId},function (err, subscriptionPackPlans) {
-                            callback(err, subscriptionPackPlans);
+                        userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {
+                            if(err){
+                                 connection_ikon_cms.release();
+                                 res.status(500).json(err.message);
+                            }else{
+                                if(response != undefined && response.length > 0 && response.length < 2){
+                                    if(response[0].cmd_entity_detail == 2){
+                                         subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId},function (err, subscriptionPackPlans) {
+                                            callback(err, subscriptionPackPlans);
+                                         });
+                                    }else{
+                                        callback(err,'NoSub');
+                                    }
+                                }else if(response != undefined && response.length > 0 && response.length == 2){
+                                    subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId},function (err, subscriptionPackPlans) {
+                                        callback(err, subscriptionPackPlans);
+                                     });
+                                }
+                            }
                         });
+                       
                     }
                 },
                 function (err, results) {
@@ -57,6 +93,7 @@ exports.getStoreDetails = function(req, res){
                         res.status(500).json(err.message);
                     } else {
                         connection_ikon_cms.release();
+                        console.log(results);
                         res.send(results);
                     }
                 })
