@@ -34,8 +34,8 @@ exports.updateLastLoggedIn = function( dbConnection,  userId, callback ) {
 
 exports.getSelectedPaymentTypesByStoreId = function( dbConnection, storeId,  callback ) {
 	//current - 1 -> one time , 2 -> subscription
-    dbConnection.query('select mlm.cmd_entity_detail from icon_cms.icn_store as st '+
-                            'inner join icon_cms.multiselect_metadata_detail as mlm on (mlm.cmd_group_id = st.st_payment_type) '+
+    dbConnection.query('select mlm.cmd_entity_detail from icn_store as st '+
+                            'inner join multiselect_metadata_detail as mlm on (mlm.cmd_group_id = st.st_payment_type) '+
                              'WHERE st.st_id =? and mlm.cmd_entity_detail in (1,2) ', [storeId], 
         function (err, selectedPaymentType) {
             callback(err,selectedPaymentType);
