@@ -1,5 +1,5 @@
 
-var PORT = process.env.PORT || '3000';
+var PORT = process.env.PORT || '3002';
 var db = require('./config/db');
 var app = require('./config/express')(db);
 
