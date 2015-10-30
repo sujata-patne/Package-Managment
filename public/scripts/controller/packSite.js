@@ -4,7 +4,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $('#pack-site').addClass('active');
 
     console.log('packSiteCtrl')
-
+    $rootScope.mainNext=false;
     $scope.tabIndex = 0;
     $scope.buttonLabel = "Next";
     $scope.selectedStore = [];
