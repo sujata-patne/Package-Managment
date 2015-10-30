@@ -33,6 +33,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     $scope.setIndex = function($index){
+
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
     }

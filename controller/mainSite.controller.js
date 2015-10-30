@@ -93,7 +93,7 @@ exports.getStoreDetails = function(req, res){
                         res.status(500).json(err.message);
                     } else {
                         connection_ikon_cms.release();
-                        console.log(results);
+                        //console.log(results);
                         res.send(results);
                     }
                 })

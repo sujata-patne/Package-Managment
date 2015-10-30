@@ -10,85 +10,92 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.error = "";
     $scope.errorvisible = false;
     $scope.finalarray = [];
-    $scope.alacartarray=[];
+    $scope.alacartarray = [];
     //$scope.array=[];
-    $scope.arrangedContentList ={};
+    $scope.arrangedContentList = {};
     $scope.nextButtonPressed = 0;
     $scope.sequenceData = [];
 
 
     //Watching changes in Package Id
-    $rootScope.$watch('PackageId',function(value,old) {
-       $scope.init();
+    $rootScope.$watch('PackageId', function (value, old) {
+        $scope.init();
     }, true);
 
 
-$scope.init = function(){
+    $scope.init = function () {
         var packageId = $rootScope.PackageId;
-    if($rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != null) {
-        Arrangeplans.getArrangePlansData({pkgId: packageId}, function (data) {
+        if ($rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.PackageId != null) {
+            Arrangeplans.getArrangePlansData({pkgId: packageId}, function (data) {
 
-            $scope.AlacartPlans = data.arrangeSequenceData;
-            var sequence = angular.copy(data.arrangeSequenceData);
+                $scope.AlacartPlans = data.arrangeSequenceData;
+                var sequence = angular.copy(data.arrangeSequenceData);
 
-            sequence.forEach(function (plans) {
-                if (!_.has($scope.sequenceData, plans.id)) {
-                    $scope.sequenceData[plans.id] = {};
-                }
-                $scope.sequenceData[plans.id] = {pas_arrange_seq: plans.pas_arrange_seq};
-            })
-            var isAlacartPlansExist = data.isAlacartPlansExist;
-
-            $scope.AlacartPlans = data.PackageAlacartPacks;
-            $scope.finalarray = data.selectedPlans;
-            if (isAlacartPlansExist > 0) {
-                var obj = {};
-                obj['id'] = "4" + $scope.AlacartPlans[0].paos_id;
-                obj['plan_id'] = $scope.AlacartPlans[0].paos_id;
-                obj['plan_name'] = 'All Plans';
-                obj['plan_type'] = 'A-La-Cart';
-                $scope.finalarray.push(obj)
-            }
-        });
-    }
-}
-
-
-    $scope.submitArrangePlansForm = function(){
-        console.log('submitArrangePlansForm')
-    //Get the length of filled values.
-        var arrlength = $scope.sequenceData.filter(function(e){return e;});
-        arrlength = arrlength.filter(function(e){return e.pas_arrange_seq != null; });
-        
-        if(arrlength.length == $scope.finalarray.length){
-                if($scope.arrangedContentList==0)
-                {
-                    $scope.disable="true";
-                    toastr.error("enter the arrange sequence");
-                }
-
-                var data ={
-                    packageId : $rootScope.PackageId,
-                    finalarray:$scope.finalarray,
-                    sequenceData: $scope.sequenceData
-                }
-
-                Arrangeplans.AddArrangedContents( data , function (data) {
-
-                    toastr.success(data.message);
-                    if($scope.nextButtonPressed){
-                        $rootScope.proceed();
-                    }else{
-                        $state.go($state.current, {packageId:$rootScope.PackageId}); //{reload: $state.current}
+                sequence.forEach(function (plans) {
+                    if (!_.has($scope.sequenceData, plans.id)) {
+                        $scope.sequenceData[plans.id] = {};
                     }
-
-                },function(error){
-                    toastr.error(error)
+                    $scope.sequenceData[plans.id] = {pas_arrange_seq: plans.pas_arrange_seq};
                 })
-        }else{
-            toastr.error('Please fill all the values');
+                var isAlacartPlansExist = data.isAlacartPlansExist;
+
+                $scope.AlacartPlans = data.PackageAlacartPacks;
+                $scope.finalarray = data.selectedPlans;
+                if (isAlacartPlansExist > 0) {
+                    var obj = {};
+                    obj['id'] = "4" + $scope.AlacartPlans[0].paos_id;
+                    obj['plan_id'] = $scope.AlacartPlans[0].paos_id;
+                    obj['plan_name'] = 'All Plans';
+                    obj['plan_type'] = 'A-La-Cart';
+                    $scope.finalarray.push(obj)
+                }
+            });
         }
     }
+
+
+    $scope.submitArrangePlansForm = function (valid) {
+
+
+        //Get the length of filled values.
+        var arrlength = $scope.sequenceData.filter(function (e) {
+            return e;
+        });
+        arrlength = arrlength.filter(function (e) {
+            return e.pas_arrange_seq != null;
+        });
+        angular.forEach(arrlength, function (v, i) {
+            if (v.pas_arrange_seq > 9999) {
+                valid = false;
+            }
+        })
+
+        if (!valid) {
+            toastr.error("Maxlength is 4")
+        }else if(arrlength.length == 0) {
+            toastr.error('Please fill the  values in range');
+        }else {
+            var data = {
+                packageId: $rootScope.PackageId,
+                finalarray: $scope.finalarray,
+                sequenceData: $scope.sequenceData
+            }
+
+            Arrangeplans.AddArrangedContents(data, function (data) {
+
+                toastr.success(data.message);
+                if ($scope.nextButtonPressed) {
+                    $rootScope.proceed();
+                } else {
+                    $state.go($state.current, {packageId: $rootScope.PackageId}); //{reload: $state.current}
+                }
+
+            }, function (error) {
+                toastr.error(error)
+            })
+        }
+    }
+
 
     $scope.checkForDuplicates = function(id) {
         var unique = [];

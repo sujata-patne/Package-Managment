@@ -41,7 +41,7 @@ exports.getAlacartNofferDetails = function (req,res,next){
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
-                        console.log(results)
+                        //console.log(results)
                         connection_ikon_cms.release();
                         res.send(results);
                     }
