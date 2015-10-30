@@ -1,6 +1,8 @@
 var mainSite = require('../controller/mainSite.controller');
 
 module.exports = function (app) {
+    app.route('/getStoreDetails')
+        .get(mainSite.getStoreDetails);
     app.route('/getMainSiteData')
         .get(mainSite.getMainSiteData);
     app.route('/showPackageData')

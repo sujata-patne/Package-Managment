@@ -1,5 +1,5 @@
 var mysql = require('../config/db').pool;
-var Notification = require('../models/NotificationModel');
+var Notification = require('../models/notificationModel');
 var mainSiteManager = require('../models/mainSiteModel');
 var PackageManager = require('../models/packageListingModel');
 var async = require("async");

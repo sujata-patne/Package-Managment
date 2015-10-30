@@ -13,7 +13,7 @@ exports.getSubscriptionDetails = function(req, res, next) {
     try {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                subscriptionPackManager.getSubscriptionDetailsByStoreId(  connection_ikon_cms, req.session.package_StoreId, req.body.distributionChannelId, function (err, subscriptionData ) {
+                subscriptionPackManager.getSubscriptionDetailsByStoreId(  connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function (err, subscriptionData ) {
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);

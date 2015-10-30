@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12">
-                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
+                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans | filter:{content_type_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
                                         <option value="">--Select Download Plan for {{ContentType.cd_name}} or it's Free--</option>
                                     </select>
                                 </div></div>
@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class="col-md-12" ><fieldset style="font-size: 12px; font-weight: bold">Streaming Content Type</fieldset></div>
                         </div>
-                        <div class="row" ng-repeat="ContentType in ContentTypes | filter:showDeliveryTypes">
+                        <div class="row" ng-repeat="ContentType in ContentTypes | filterWithOr:{parent_name:['Audio','Video'] }"> <!--| filter:showDeliveryTypes-->
                             <div class="col-md-2">
                                 <div class="row"><div class="form-group col-md-12">
                                     <label class="col-md-12 control-label" style="margin: 1px;">{{ContentType.cd_name}}</label>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12" >
-                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans  | filter:{cd_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Streaming'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].streaming" >
+                                    <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans  | filter:{content_type_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Streaming'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].streaming" >
                                         <option value="">--Select Streaming Plan for {{ContentType.cd_name}} or it's Free--</option>
                                     </select>
                                 </div></div>
