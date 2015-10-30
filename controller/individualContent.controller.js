@@ -220,7 +220,7 @@ exports.editIndividualContent = function(req, res, next) {
                                         pic_cm_id :  req.body.selectedContents[i],
                                         pic_valid_till : validDate
                                     }
-                                    console.log(data);
+                                    //console.log(data);
                                     individualContentManager.saveIndividualContent( connection_ikon_cms,data, function(err,response){
                                         if(err){
 

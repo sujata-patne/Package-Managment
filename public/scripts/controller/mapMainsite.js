@@ -29,13 +29,44 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $scope.setEmptyPackage();
     }
 
-    if($rootScope.previousState && !new RegExp("map-mainsite").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
-            //if($rootScope.previousState && (!new RegExp("main-site").test($scope.previousState.name) && $rootScope.action !== 'edit' )){
+
+    if($scope.previousState.name && !new RegExp("map-mainsite").test($scope.previousState.name) && !new RegExp("packageListing").test($scope.previousState.name)){
+        console.log(' $rootScope.previousState 1')
+
         $rootScope.distributionChannelId = undefined;
         $scope.setDistributionChannelId = 0;
-        console.log('previousState')
         $scope.setEmptyPackage();
         $state.go($state.current, {packageId:undefined}, {reload:$state.current});
+    }else if(new RegExp("packageListing").test($scope.previousState.name)
+        && ($stateParams.packageId != 0 && $stateParams.packageId != undefined && $stateParams.packageId != '')){
+        console.log(' $rootScope.previousState 2')
+
+        $rootScope.PackageId = $stateParams.packageId;
+        $rootScope.action = 'edit';
+
+    }else if(($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')
+        && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
+        console.log(' $rootScope.previousState 4')
+        $rootScope.distributionChannelId = undefined;
+        $scope.setEmptyPackage();
+
+    }else if(new RegExp("packageListing").test($scope.previousState.name) && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
+        || !($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))){
+
+        console.log(' $rootScope.previousState 5')
+        $rootScope.distributionChannelId = undefined;
+        $scope.setEmptyPackage();
+    }else if(new RegExp("map-mainsite").test($scope.previousState.name) || ($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0) || ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')){
+
+        console.log(' $rootScope.previousState 7')
+        $state.go($state.current, {packageId:$stateParams.packageId})
+
+    }else if($scope.previousState.name && !($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
+        || !($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')) {
+        console.log(' $rootScope.previousState 6')
+
+        $rootScope.distributionChannelId = undefined;
+        $scope.setEmptyPackage();
     }
     if($rootScope.PackageType === 0 && ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined) && $rootScope.action != 'edit'){
         console.log("$rootScope.PackageType - " + $rootScope.PackageType)
@@ -125,6 +156,16 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         }
 
     }
+    $scope.$watch('distributionChannelId',function(){
+        if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
+            && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
+            console.log(' $rootScope.previousState 3')
+
+            $rootScope.PackageId = $stateParams.packageId;
+            $rootScope.action = 'edit';
+            $scope.showPackageData();
+        }
+    }, {},true);
     $scope.submitMainsiteForm = function (isValid) {
 
         if (!$rootScope.distributionChannelId) {

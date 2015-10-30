@@ -41,7 +41,7 @@ exports.getAlacartNofferDetails = function (req,res,next){
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
-                        console.log(results)
+                        //console.log(results)
                         connection_ikon_cms.release();
                         res.send(results);
                     }
@@ -64,7 +64,7 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
 
                         }
                         alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
-                            console.log(response)
+                            //console.log(response)
                             if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
                                 advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
                                     if(err){}else{
