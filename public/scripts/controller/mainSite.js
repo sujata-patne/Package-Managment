@@ -180,7 +180,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         })
         $scope.subscriptionPackPlans =  _.filter($scope.subscriptionStorePlans,function (plans){
             return plans.cd_id == $rootScope.distributionChannelId;
-        })
+        });
 
         console.log('$scope.alacartPackPlans')
         console.log($scope.alacartPackPlans)
