@@ -5,12 +5,12 @@
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
     $rootScope.isChild = false;
     $scope.nextButtonPressed = 0;
-    $scope.tabIndex = 0;    
+    $scope.tabIndex = 0;
     $scope.tabs[$scope.tabIndex].active = true;
   
    // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
-    if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
 
+    $scope.init = function(){
         var data = {
             packageId: $rootScope.PackageId,
             packageType: $rootScope.PackageType,
@@ -39,6 +39,19 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                 })
             }
         });
+    }
+
+    if($rootScope.action === 'edit' && ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' )){
+        $scope.init();
+
+    }
+
+    $scope.resetForm = function(){
+        $rootScope.distributionChannelId = '';
+        $rootScope.SelectedPack = '';
+        $rootScope.PackageName = '';
+        $scope.alacartPlanIds = [];
+        $scope.offerId = '';
     }
 
     $scope.submitAlacartForm = function (isValid) {
@@ -80,7 +93,6 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                 alacartPack.addAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
                         $rootScope.proceed();
-
                         $scope.showResponse(data);
                     }else{
                         $scope.showResponse(data);
@@ -96,14 +108,13 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
-            $state.go($state.current, {packageId:$rootScope.PackageId},{reload: $state.current}); //
+            $state.go($state.current, {packageId:$rootScope.PackageId}); //,{reload: $state.current}
 
         }
         else {
             toastr.error(data.message)
             $scope.errorvisible = true;
         }
-
         ngProgress.complete();
     }
 });
