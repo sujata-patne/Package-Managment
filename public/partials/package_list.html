@@ -57,7 +57,7 @@
                                 </thead> 
                                   <tbody ng-show="distributionChannel != undefined && distributionChannel != null" dir-paginate="item in packageList | itemsPerPage: 10" current-page="currentPage">
                                     <tr >
-                                        <td class="col-md-1 col-xs-1 text-center">{{($index+1+(currentPage * pageLimit))-10}}</td>
+                                        <td class="col-md-1 col-xs-1 text-center">{{($index+1+(currentPage * pageLimit))-10}} {{item.sp_pkg_id}}</td>
                                         <td class="col-md-3 col-xs-3">{{item.sp_package_name}}
                                             <span ng-show="item.sp_parent_pkg_id > 0"> -> Child</span></td>
 

@@ -10,7 +10,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
     $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
-$rootScope.PackageType = 0;
+    $rootScope.PackageType = 0;
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"main-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"main-site.valuepack", active: false },
@@ -196,7 +196,7 @@ console.log("$scope.$watch('distributionChannelId',function(){")
             $rootScope.action = 'edit';
             $scope.showPackageData();
 
-        }else if ((new RegExp("main-site").test($scope.previousState.name) || new RegExp("main-site").test($state.current.name))
+        }else if ( (new RegExp("main-site").test($scope.previousState.name) || new RegExp("main-site").test($state.current.name))
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
             console.log(' $rootScope.previousState 5')

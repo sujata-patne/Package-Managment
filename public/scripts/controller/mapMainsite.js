@@ -37,9 +37,9 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $scope.setEmptyPackage();
     }*/
 
-    $scope.checkState = function () {
-        if($scope.previousState.name && !new RegExp("map-mainsite").test($scope.previousState.name)
-            && !new RegExp("packageListing").test($scope.previousState.name)){
+  $scope.checkState = function () {
+        if ($scope.previousState.name && !new RegExp("map-mainsite").test($scope.previousState.name)
+            && !new RegExp("packageListing").test($scope.previousState.name)) {
             console.log(' $rootScope.previousState 1')
 
             $rootScope.distributionChannelId = undefined;
@@ -70,28 +70,31 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             $rootScope.action = 'edit';
             $scope.showPackageData();
 
-        }else if ((new RegExp("map-mainsite").test($scope.previousState.name) || new RegExp("map-mainsite").test($state.current.name))
+        }else if ( (new RegExp("map-mainsite").test($scope.previousState.name) || new RegExp("map-mainsite").test($state.current.name))
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
             console.log(' $rootScope.previousState 5')
+                        // $state.go($scope.tabs[$scope.tabIndex].state, {packageId: undefined}); //, {reload:$state.current}
+
+            
             $scope.setEmptyPackage();
 
         }else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
-            && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
-            console.log(' $rootScope.previousState 6')
+         && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
+         console.log(' $rootScope.previousState 6')
 
-            $rootScope.PackageId = $stateParams.packageId;
-            $rootScope.action = 'edit';
-            $scope.showPackageData();
-        }else if (($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')
+         $rootScope.PackageId = $stateParams.packageId;
+         $rootScope.action = 'edit';
+         $scope.showPackageData();
+         }else if (($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')
             && ($rootScope.action !== '' && $rootScope.action !== 'edit' )) {
             console.log(' $rootScope.previousState 7'  )
             $scope.setEmptyPackage();
         } /*else{
-         console.log(' $rootScope.previousState 8')
+            console.log(' $rootScope.previousState 8')
 
-         $scope.setEmptyPackage();
-         }*/
+            $scope.setEmptyPackage();
+        }*/
     }
 
     MainSite.getStoreDetails(function (MainSiteData) {
@@ -234,11 +237,11 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if (data.success) {
             toastr.success(data.message)
             $scope.successvisible = true;
-            // $rootScope.PackageId = data.pkgId;
-            // $rootScope.action = 'add';
-
-            //$scope.showPackageData();
-            // $state.go($state.current, {packageId:undefined},{reload:true});
+            //On submit form should get cleared.
+             $rootScope.distributionChannelId = undefined;
+            $scope.setEmptyPackage();
+            
+             $state.go($state.current, {packageId:undefined},{reload:true});
 
         }
         else {

@@ -81,10 +81,9 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             if ( $rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
-                        toastr.success(data.message)
-                        $rootScope.PackageId = data.pkgId;
-                        $rootScope.action = 'edit';
                         $rootScope.proceed();
+                        $scope.showResponse(data);
+
                     }else{
                         $scope.showResponse(data);
                     }

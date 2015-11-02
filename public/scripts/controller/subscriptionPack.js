@@ -65,14 +65,12 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
             subscriptionPack.addSubscriptionPackToMainSite( subscriptionPackData , function(data){
                 if($scope.nextButtonPressed){
-                    toastr.success(data.message );
-                    $rootScope.PackageId = data.pkgId;
-                    $rootScope.action = 'edit';
-
                     $rootScope.proceed();
+                    $scope.showResponse(data);
 
                 }else{
-                    $scope.result(data);
+                    console.log('else in submit')
+                    $scope.showResponse(data);
                 }
                 ngProgress.complete();
             },function(error){
@@ -81,7 +79,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
         }
     }
 
-    $scope.result = function( data ){
+    /*$scope.result = function( data ){
 
         if(data.success){
 
@@ -89,14 +87,31 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
             //reload is not used then records get inserted when submitted on the same tab without refreshing or changing tabs.
-            $state.go($state.current, {packageId:$rootScope.PackageId},{reload: $state.current}); //{reload: $state.current}
+            // $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId},{reload: $state.current}); //{reload: $state.current}
+                        $state.go($state.current, {packageId:$rootScope.PackageId}); //,{reload: $state.current}
+
         }else{
             $scope.error = data.message;
             toastr.error( $scope.error );
             //$scope.errorvisible = true;
         }
     }
+*/
+ $scope.showResponse = function(data){
+        if (data.success) {
+            toastr.success(data.message)
+            $scope.successvisible = true;
+            $rootScope.PackageId = data.pkgId;
+            $rootScope.action = 'edit';
+            $state.go($state.current, {packageId:$rootScope.PackageId},{reload: $state.current}); //,{reload: $state.current}
 
+        }
+        else {
+            toastr.error(data.message)
+            $scope.errorvisible = true;
+        }
+        ngProgress.complete();
+    }
      $scope.resetForm = function(){
         $scope.selectedSubscriptionPlans = [];
     }

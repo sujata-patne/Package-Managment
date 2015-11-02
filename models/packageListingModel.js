@@ -11,7 +11,7 @@ exports.getStore = function(dbConnection, storeId, callback) {
 exports.getPackageByName = function(dbConnection,dc_id, storeId, callback) {
 
     var query = dbConnection.query('select sp_pkg_id, sp_package_name,sp_pkg_type from icn_store_package as st '+
-        ' where st.sp_dc_id = ? AND st.sp_st_id = ? AND ISNULL(st.sp_crud_isactive ) ' , [dc_id , storeId],  function (err, packageByName) {
+        ' where st.sp_dc_id = ? AND st.sp_st_id = ? AND ISNULL(st.sp_crud_isactive ) ORDER BY st.sp_pkg_id desc' , [dc_id , storeId],  function (err, packageByName) {
         callback(err, packageByName);
     });
 } 
@@ -25,15 +25,16 @@ exports.getAllPackageForListStartsWith = function( dbConnection,data, callback )
     if(data.distributionChannelId && data.distributionChannelId != undefined){
         whereCond += " AND pk.sp_dc_id = " + data.distributionChannelId;
     }
-
+    console.log("Select * from icn_store_package as pk " +
+           "WHERE pk.sp_st_id = "+data.storeId+" AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  ORDER BY pk.sp_pkg_id desc");
     var query = dbConnection.query("Select * from icn_store_package as pk " +
-           "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
+           "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
            callback( err,response );
        });
 }
 exports.getAllPackageForList = function( dbConnection,data, callback ) {
     var moment = require("moment");
-
+    // console.log(obj);
     if(data.start_date !== undefined && data.start_date != ""){
         data.start_date = moment(data.start_date);
         data.start_date = data.start_date.format('YYYY-MM-DD');
@@ -59,10 +60,13 @@ exports.getAllPackageForList = function( dbConnection,data, callback ) {
     }
 
 
+    console.log("SELECT * from icn_store_package as pk " +
+        "WHERE pk.sp_st_id = "+data.storeId+" AND ISNULL(pk.sp_crud_isactive)    " + whereCond +
+        "  ORDER BY pk.sp_pkg_id desc");
 
     var query = dbConnection.query("SELECT * from icn_store_package as pk " +
         "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)    " + whereCond +
-        " group by pk.sp_pkg_id ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
+        "  ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
         callback( err,response );
     });
 }
