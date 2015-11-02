@@ -65,7 +65,7 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                         }
                         alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
                             //console.log(response)
-                            if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
+                            if(response && response.length > 0 && response[0].paos_op_id != req.body.paosId){
                                 advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
                                     if(err){}else{
                                         callback(null,'');

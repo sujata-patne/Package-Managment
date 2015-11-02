@@ -234,11 +234,11 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if (data.success) {
             toastr.success(data.message)
             $scope.successvisible = true;
-            $rootScope.PackageId = data.pkgId;
-            $rootScope.action = 'add';
+            // $rootScope.PackageId = data.pkgId;
+            // $rootScope.action = 'add';
 
             //$scope.showPackageData();
-            $state.go($state.current, {packageId:undefined},{reload:true});
+            // $state.go($state.current, {packageId:undefined},{reload:true});
 
         }
         else {

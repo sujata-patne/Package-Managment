@@ -10,7 +10,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedValuePacks = [];
     $scope.selectedSubscriptionPlans = [];
     $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
-
+$rootScope.PackageType = 0;
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"main-site.alacart", active: true },
         { title:"Value Pack Plans",  state:"main-site.valuepack", active: false },
@@ -103,22 +103,23 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $scope.$watch('distributionChannelId',function(){
 console.log("$scope.$watch('distributionChannelId',function(){")
-        console.log('$rootScope.distributionChannelId')
-        console.log($rootScope.distributionChannelId)
+        
         if($rootScope.distributionChannelId != undefined && $rootScope.distributionChannelId != ''){
             console.log('$rootScope.distributionChannelId')
-            $scope.setPackageDetails();
+            console.log($rootScope.distributionChannelId)
+                    $scope.setPackageDetails();
         }
 
     }, {},true);
 
     $scope.showPackageData = function() {
-        if($stateParams.packageId){
+        if($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''){
             var params = {pkgId:$rootScope.PackageId}
         }else {
             var params = {distributionChannelId: $rootScope.distributionChannelId, packageType: $rootScope.PackageType}
         }
-
+        console.log('params')
+        console.log(params)
         MainSite.showPackageData(params, function (MainSiteData) {
                 $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
@@ -143,10 +144,10 @@ console.log("$scope.$watch('distributionChannelId',function(){")
                     $rootScope.action = 'edit';
 
                    // if( new RegExp("main-site").test($scope.previousState.name)) {
-                    if( $scope.tabIndex == 0 ) {
+                     if( $scope.tabIndex == 0 ) {
                         console.log('$scope.mainSitePackageData if ' + $scope.tabs[$scope.tabIndex].state)
                         $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId});
-                    }
+                     }
                 }else{
                     console.log('$scope.mainSitePackageData else ')
 
@@ -199,6 +200,9 @@ console.log("$scope.$watch('distributionChannelId',function(){")
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
             console.log(' $rootScope.previousState 5')
+                        // $state.go($scope.tabs[$scope.tabIndex].state, {packageId: undefined}); //, {reload:$state.current}
+
+            
             $scope.setEmptyPackage();
 
         }else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
