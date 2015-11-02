@@ -65,14 +65,14 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             return e.pas_arrange_seq != null;
         });
         angular.forEach(arrlength, function (v, i) {
-            if (v.pas_arrange_seq > 9999) {
+            if (v.pas_arrange_seq > 9999 ) {
                 valid = false;
             }
         })
 
         if (!valid) {
             toastr.error("Maxlength is 4")
-        }else if(arrlength.length == 0) {
+        } else if(arrlength.length == 0 || arrlength.length < $scope.finalarray.length ) {
             toastr.error('Please fill the  values in range');
         }else {
             var data = {
@@ -126,7 +126,11 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     $scope.resetForm = function(id) {
         $scope.sequenceData = [];
     }
-
+// validate space in arrange sequence
+   $scope.AvoidSpace = function(event) {
+        var k = event ? event.which : window.event.keyCode;
+        if (k == 32) return false;
+    }
 
 
 });

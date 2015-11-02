@@ -20,7 +20,7 @@
                                     <tr data-ng-repeat="fp in finalarray | orderBy:'fp.plan_type':reverse">
                                         <td class="col-md-1 col-xs-1 text-center">{{fp.plan_name}}</td>
                                         <td class="col-md-2 col-xs-2 text-center">{{fp.plan_type}}</td>
-                                        <td class="col-md-1 col-xs-1"> <input type="number" min="0" ngMinlength="0"  ngMaxlength="4"  class="form-control" name="sequenceData" ng-model="sequenceData[fp.id].pas_arrange_seq"  ng-change="checkForDuplicates(fp.id);"  >
+                                        <td class="col-md-1 col-xs-1"> <input type="number" min="0" max="9999" ngMinlength="0"  ngMaxlength="4"  class="form-control" name="sequenceData" ng-model="sequenceData[fp.id].pas_arrange_seq"  ng-change="checkForDuplicates(fp.id);" ngkeypress="AvoidSpace(event)">
                                              <span style="color: red " ng-show="arrangePlansForm.$submitted || arrangePlansForm.sequenceData.$dirty">
                                                  <span ng-show="arrangePlansForm.sequenceData.$error"></span>
                                                  <span ng-show="arrangePlansForm.sequenceData.$error.number">Not valid number </span>
