@@ -43,9 +43,9 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
-        /*if($scope.tabIndex == 0){
+        if($scope.tabIndex == 0){
             $state.go($scope.tabs[$scope.tabIndex]['state']);
-        }*/
+        }
     }
 
     $scope.setEmptyPackage = function(){
@@ -287,4 +287,9 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }*/
     }
 
+    if($stateParams.packageId > 0 && ($rootScope.action = 'edit')){
+        $scope.disableDeliveryChannel= true
+    }else{
+        $scope.disableDeliveryChannel= false
+    }
 });

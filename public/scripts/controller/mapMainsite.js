@@ -251,4 +251,10 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
 
         ngProgress.complete();
     }
+
+    if($stateParams.packageId > 0 && ($rootScope.action = 'edit')){
+        $scope.disableDeliveryChannel= true
+    }else{
+        $scope.disableDeliveryChannel= false
+    }
 });

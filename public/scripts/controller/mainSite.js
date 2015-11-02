@@ -37,10 +37,11 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     $scope.setIndex = function($index){
-        console.log('index')
-        console.log($index)
         $scope.tabIndex = $index;
         $state.go($scope.tabs[$scope.tabIndex].state);
+        if($scope.tabIndex == 0){
+            $state.go($scope.tabs[$scope.tabIndex]['state']);
+        }
     }
 
     $scope.setEmptyPackage = function(){
@@ -118,8 +119,6 @@ console.log("$scope.$watch('distributionChannelId',function(){")
         }else {
             var params = {distributionChannelId: $rootScope.distributionChannelId, packageType: $rootScope.PackageType}
         }
-        console.log('params')
-        console.log(params)
         MainSite.showPackageData(params, function (MainSiteData) {
                 $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
 
@@ -222,4 +221,10 @@ console.log("$scope.$watch('distributionChannelId',function(){")
             $scope.setEmptyPackage();
         }*/
     }
+
+    //if($stateParams.packageId > 0 && ($rootScope.action = 'edit')){
+    //    $scope.disableDeliveryChannel= true
+    //}else{
+    //    $scope.disableDeliveryChannel= false
+    //}
 })
