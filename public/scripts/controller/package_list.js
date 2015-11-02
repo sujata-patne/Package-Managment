@@ -20,7 +20,8 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
     $scope.open1 = false;
     $scope.open2 = false;
     $scope.alphabets = "1ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
+  $scope.currentPage= 1;
+    $scope.pageLimit = 10;
     $scope.openDatepicker = function (evt) {
         $scope.open2 = false;
         evt.preventDefault();
