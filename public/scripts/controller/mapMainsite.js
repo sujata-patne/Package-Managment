@@ -20,7 +20,15 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         $rootScope.SelectedPack = undefined;
         //$scope.setDistributionChannelId = 0;
     }
+    if($stateParams.packageId){
+            $scope.isEdit = true;
+    }
+
     /*if($stateParams.packageId){
+
+    if($stateParams.packageId){
+        $scope.isEdit = true;
+
         $rootScope.PackageId = $stateParams.packageId;
         $rootScope.action = 'edit';
     }
@@ -107,10 +115,9 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         console.log('$scope.setDistributionChannelId' + $scope.setDistributionChannelId)
         $scope.showPackageData();
         console.log('getPackageData 1');
-
         //$state.go('main-site', {packageId:$rootScope.PackageId});
-
     }
+
     $scope.showPackageData = function(){
         if($rootScope.action !== 'edit' &&  $rootScope.action !== undefined){
             $scope.setEmptyPackage();
@@ -141,7 +148,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
             }else {
                 $scope.setEmptyPackage();
             }
-
+            console.log("ROOT::"+$rootScope.PackageId);
             $scope.setPackageData()
         })
     }
@@ -153,6 +160,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         if($rootScope.isChild === true && $rootScope.action !== 'edit'){
             $rootScope.ParentPackageId = $rootScope.PackageId;
             if($rootScope.ParentPackageId != '' || $rootScope.ParentPackageId != 0 || $rootScope.ParentPackageId != undefined){
+                
                 $rootScope.PackageId = 0;
                 $rootScope.PackageName = '';
                 $rootScope.SelectedPack = undefined;
@@ -163,6 +171,7 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
                 $rootScope.PackageId = $rootScope.ParentPackageId;
             }
             if($rootScope.PackageId != '' || $rootScope.PackageId != 0 || $rootScope.PackageId != undefined) {
+                
                 $rootScope.ParentPackageId = 0;
             }
         }

@@ -132,9 +132,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-offset-5 col-md-7" >
-                <button type="submit" class="btn btn-primary btn-w-md" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" title="Save">Submit</button>
-                <button type="submit" class="btn btn-small" ng-click="nextButtonPressed = 1;">{{buttonLabel}}</button>
-                <button type="button" ng-disabled="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+                <button type="submit" class="btn btn-primary btn-w-md" ng-hide="offerPlan.length == 0 && valuePlans.length == 0" title="Save">Submit</button>
+                <button type="submit" ng-hide="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-small" ng-click="nextButtonPressed = 1;">{{buttonLabel}}</button>
+                <button type="reset" ng-hide="offerPlan.length == 0 && valuePlans.length == 0" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
             </div>
         </div>
     </div>
