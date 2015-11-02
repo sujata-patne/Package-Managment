@@ -38,6 +38,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
 
     $scope.distributionChannelChange = function(){
         $scope.search_title="";
+        $scope.currentPage= 1;
         //$('#src_'+$scope.alpha).css('font-weight','normal');
         //$('#src_'+$scope.alpha).css('font-size','small');
         //var data = {
@@ -106,6 +107,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         }
         Package.getPackageStartsWith(criteria,function( data ){
             $scope.packageList = data.Package;
+            $scope.packageList  = _.sortBy( $scope.packageList, 'sp_pkg_id' ).reverse();
         },function(error){
             console.log(error);
         });
@@ -137,6 +139,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
                 }
                 Package.getPackageDetail(criteria,function( data ){
                     $scope.packageList = data.Package;
+                    $scope.packageList  = _.sortBy( $scope.packageList, 'sp_pkg_id' ).reverse();
                 },function(error){
                     console.log(error);
                 });
