@@ -162,6 +162,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                                      setTimeout(function(){
                                         // window.location.reload();
                                          // $("#progress_id").html('');
+                                         $scope.fileUploads  = [];
                                          $scope.getCGImage();
                                     },2000);
                                 }
@@ -308,6 +309,8 @@ $scope.resetForm = function(){
   $scope.offerBuySetting = {};
   $scope.offerGetSetting = {};
   $scope.valuePlanSetting = {};
+  $scope.fileUploads  = [];
+  $scope.cgimage = '';
   $scope.advanceSettingForm.$setPristine();
 }
 

@@ -89,9 +89,12 @@ exports.addIndividualContent = function(req, res, next) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                  var cnt = 0;
                  var count = req.body.selectedContents.length - 1;
+                 console.log("individual..");
+                 console.log(count);
                  loop(0);
                  function loop( cnt ) {
                     var i = cnt;
+                    console.log(cnt);
                     individualContentManager.getLastInsertedIndividualContentId( connection_ikon_cms,function(err,response){
                         if(err){
 
@@ -117,6 +120,8 @@ exports.addIndividualContent = function(req, res, next) {
                                 if(err){
 
                                 }else{
+                                    console.log('count '+count+'=== cnt '+cnt);
+
                                     if( count == cnt ){  
                                         connection_ikon_cms.release();
                                         res.send({status:200,message:''})
@@ -195,8 +200,11 @@ exports.editIndividualContent = function(req, res, next) {
                         connection_ikon_cms.release();
                         res.send({status:200,message:''})
                      }else{
+                          count = count - 1;
                           loop(0);
                           function loop( cnt ) {
+                            console.log('cnt '+cnt);
+                            console.log('count '+count);
                             var i = cnt;
                             individualContentManager.getLastInsertedIndividualContentId( connection_ikon_cms,function(err,response){
                                 if(err){
@@ -221,14 +229,18 @@ exports.editIndividualContent = function(req, res, next) {
                                         pic_valid_till : validDate
                                     }
                                     //console.log(data);
+
                                     individualContentManager.saveIndividualContent( connection_ikon_cms,data, function(err,response){
                                         if(err){
 
                                         }else{
+                                            console.log('else cnt '+cnt);
+                                            console.log('else count '+count);
                                             if( count == cnt ){  
                                                 connection_ikon_cms.release();
                                                 res.send({status:200,message:''})
                                             }else{
+                                                console.log('inside else '+cnt);
                                                  cnt = cnt + 1;
                                                  loop(cnt);
                                             }                           

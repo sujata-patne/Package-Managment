@@ -98,7 +98,7 @@
                          Image thumbnail: <img ngf-thumbnail="file || '/thumb.jpg'"> -->
                         <!-- <form name="form"> -->
                         <button  ngf-select ng-model="fileUploads[0]"
-                                 accept="image/*" ngf-pattern="'.jpg,.png,.gif,.jpeg'" ngf-max-height="1000" ngf-max-size="1MB" ngf-max-width="640" ngf-min-width="640" ngf-max-height="640" ngf-min-height="640">
+                                 accept="image/*" ngf-pattern="'.jpg,.png,.gif,.jpeg'" ngf-max-height="1000" ngf-max-size="30KB" ngf-max-width="640" ngf-min-width="640" ngf-max-height="640" ngf-min-height="640">
                             <i class="fa fa-upload" style="color:green" title="Select Files"></i>
                         </button>
                         <input type="button" value="Upload" ng-click="uploadSubmit(0)" />
