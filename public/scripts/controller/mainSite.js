@@ -81,7 +81,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
 
     $scope.getPackageData = function(){
-        $rootScope.PackageId = '';
+        // $rootScope.PackageId = '';
+        $scope.setEmptyPackage();
         $scope.showPackageData();
     }
 
@@ -104,7 +105,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     });
 
     $scope.$watch('distributionChannelId',function(){
-//console.log("$scope.$watch('distributionChannelId',function(){")
+
         
         if($rootScope.distributionChannelId != undefined && $rootScope.distributionChannelId != ''){
            // console.log('$rootScope.distributionChannelId')
@@ -171,7 +172,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $rootScope.distributionChannelId = undefined;
             $scope.setDistributionChannelId = 0;
             $scope.setEmptyPackage();
-            $state.go($state.current, {packageId: undefined}); //, {reload:$state.current}
+            $state.go($state.current, {packageId: undefined},{reload:true}); //
 
         } else if (new RegExp("packageListing").test($scope.previousState.name)
             && ($stateParams.packageId != 0 && $stateParams.packageId != undefined && $stateParams.packageId != '')) {

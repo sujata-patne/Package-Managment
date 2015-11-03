@@ -3,6 +3,8 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $('.removeActiveClass').removeClass('active');
     $('#pack-site').addClass('active');
 
+
+
     $rootScope.mainNext=false;
     if($rootScope.PackageId == undefined){
         $scope.tabIndex = 0;
@@ -99,7 +101,8 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
 
     $scope.getPackageData = function(){
-        $rootScope.PackageId = '';
+        // $rootScope.PackageId = '';
+        $scope.setEmptyPackage();
         $scope.showPackageData();
     }
 
@@ -151,8 +154,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             var params = {distributionChannelId: $rootScope.distributionChannelId, packageType: $rootScope.PackageType}
         }
         // var params = {pkgId:$rootScope.PackageId, distributionChannelId:$rootScope.distributionChannelId,packageType:$rootScope.PackageType}
-        //console.log('params')
-        //console.log(params)
+
         MainSite.showPackageData(params, function (PackSiteData) {
 
             $scope.packSitePackageData = angular.copy(PackSiteData.mainSitePackageData.packageDetails);
@@ -254,7 +256,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $rootScope.distributionChannelId = undefined;
             $scope.setDistributionChannelId = 0;
             $scope.setEmptyPackage();
-            $state.go($state.current, {packageId: undefined}); //, {reload:$state.current}
+            $state.go($state.current, {packageId: undefined},{reload:true}); //, {reload:$state.current}
 
         } else if (new RegExp("packageListing").test($scope.previousState.name)
             && ($stateParams.packageId != 0 && $stateParams.packageId != undefined && $stateParams.packageId != '')) {
