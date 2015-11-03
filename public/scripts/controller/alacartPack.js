@@ -5,9 +5,11 @@
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
     $rootScope.isChild = false;
     $scope.nextButtonPressed = 0;
+   
+    // console.log($rootScope.tabIndex);
     $scope.tabIndex = 0;
     $scope.tabs[$scope.tabIndex].active = true;
-  
+    // debugger;
    // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
 
     $scope.init = function(){
@@ -81,8 +83,15 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             if ( $rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
+                       toastr.success(data.message)
+                        $scope.successvisible = true;
+                        $rootScope.PackageId = data.pkgId;
+                        $rootScope.action = 'edit';
+                        
+                         ngProgress.complete();
                         $rootScope.proceed();
-                        $scope.showResponse(data);
+
+                        // $scope.showResponse(data);
 
                     }else{
                         $scope.showResponse(data);
@@ -91,8 +100,15 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             } else {
                 alacartPack.addAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
+                        toastr.success(data.message)
+                        //made changes for issue alacart redirection issue..
+                        $scope.successvisible = true;
+                        $rootScope.PackageId = data.pkgId;
+                        $rootScope.action = 'edit';
+
+                        ngProgress.complete();
                         $rootScope.proceed();
-                        $scope.showResponse(data);
+                      //  $scope.showResponse(data);
                     }else{
                         $scope.showResponse(data);
                     }

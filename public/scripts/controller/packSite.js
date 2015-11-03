@@ -7,7 +7,11 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     if($rootScope.PackageId == undefined){
         $scope.tabIndex = 0;
     }
-        
+    // debugger;
+    // if($rootScope.nextOrigin == 0){
+    //     $scope.tabIndex = 1;
+    // }
+
     $scope.buttonLabel = "Next";
     $scope.selectedStore = [];
     $scope.alacartPlanIds = {};
@@ -29,10 +33,17 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $rootScope.proceed = function() {
         if($scope.tabIndex !== ( $scope.tabs.length - 1 ) ){
+            // if($scope.tabIndex == 0){
+            //     $rootScope.nextOrigin = $scope.tabIndex;
+            // }else{
+            //     $rootScope.nextOrigin = '';
+            // }
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
             $state.current = $scope.tabs[$scope.tabIndex].state;
+            
+            // debugger;
             $state.go($scope.tabs[$scope.tabIndex].state);//, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
@@ -44,7 +55,6 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     $scope.setIndex = function($index){
-        
         $scope.tabIndex = $index;
         //$state.go($scope.tabs[$scope.tabIndex].state);
         if($scope.tabIndex == 0){
@@ -235,6 +245,8 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     // }
 
     $scope.checkState = function () {
+        console.log('$scope.previousState');
+        console.log($scope.previousState);
         if ($scope.previousState.name && !new RegExp("pack-site").test($scope.previousState.name)
             && !new RegExp("packageListing").test($scope.previousState.name)) {
             console.log(' $rootScope.previousState 1')
@@ -249,12 +261,14 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             console.log(' $rootScope.previousState 2')
             $rootScope.PackageId = $stateParams.packageId;
             $rootScope.action = 'edit';
+            $scope.showPackageData();
 
         }else if (new RegExp("pack-site").test($scope.previousState.name)
             && ($stateParams.packageId != 0 && $stateParams.packageId != undefined && $stateParams.packageId != '')) {
             console.log(' $rootScope.previousState 2new')
             $rootScope.PackageId = $stateParams.packageId;
             $rootScope.action = 'edit';
+            $scope.showPackageData();
 
         }else if (new RegExp("packageListing").test($scope.previousState.name)
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
@@ -285,12 +299,12 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.setEmptyPackage();
 
         }else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
-         && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
-         console.log(' $rootScope.previousState 6')
+             && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
+             console.log(' $rootScope.previousState 6')
 
-         $rootScope.PackageId = $stateParams.packageId;
-         $rootScope.action = 'edit';
-         $scope.showPackageData();
+             $rootScope.PackageId = $stateParams.packageId;
+             $rootScope.action = 'edit';
+             $scope.showPackageData();
          }else if (($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')
             && ($rootScope.action !== '' && $rootScope.action !== 'edit' )) {
             console.log(' $rootScope.previousState 7'  )
