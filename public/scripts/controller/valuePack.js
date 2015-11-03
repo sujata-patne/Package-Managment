@@ -1,7 +1,6 @@
 myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, valuePack ) {
     
     // console.log($rootScope.tabIndex);
-  debugger;
  //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
         $scope.init();
