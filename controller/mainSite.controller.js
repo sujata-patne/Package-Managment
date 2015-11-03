@@ -257,8 +257,8 @@ exports.showPackageData = function(req, res, next)  {
                         res.status(500).json(err.message);
                     } else {
                         connection_ikon_cms.release();
-                        console.log(" ====================== inside results ==============================");
-                        console.log( results) ;
+                        //console.log(" ====================== inside results ==============================");
+                        //console.log( results) ;
                         res.send(results);
                     }
                 })

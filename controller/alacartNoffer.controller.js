@@ -159,10 +159,10 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                             var newContentTypes = [];
                             for (var i = 0; i < Object.keys(req.body.alacartPlansList).length; i++) {
                                 var newContentTypeId = Object.keys(req.body.alacartPlansList)[i];
-                                console.log('newContentTypeId')
-                                console.log(newContentTypeId)
-                                console.log('req.body.alacartPlansList[newContentTypeId]')
-                                console.log(req.body.alacartPlansList[newContentTypeId])
+                                //console.log('newContentTypeId')
+                                //console.log(newContentTypeId)
+                                //console.log('req.body.alacartPlansList[newContentTypeId]')
+                                //console.log(req.body.alacartPlansList[newContentTypeId])
                                 var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : '';
                                 var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : '';
 
@@ -173,8 +173,8 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                                         });
                                 }
                             }
-                            console.log('newContentTypes')
-                            console.log( newContentTypes )
+                            //console.log('newContentTypes')
+                            //console.log( newContentTypes )
 
                             var deleteContentTypes = [];
                             var editContentTypes = [];
@@ -273,7 +273,7 @@ exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
                         if(req.body.isChild !== true){
                             callback(err, {'exist': false, 'packageData': null});
                         }else {
-                            console.log('req.body.parentPackageId : ' + req.body.parentPackageId)
+                            //console.log('req.body.parentPackageId : ' + req.body.parentPackageId)
                                 mainSiteManager.getUniquePackageName(connection_ikon_cms, req.session.package_StoreId, req.body.packageName, function (err, result) {
                                 if (err) {
                                     connection_ikon_cms.release();
@@ -316,7 +316,7 @@ exports.addMainsiteAlacartPlanDetails = function (req,res,next) {
                                         } else {
                                             mainSiteManager.getMaxStorePackageId(connection_ikon_cms, function (err, MaxPkgId) {
                                                 var pkgId = MaxPkgId[0].pkg_id != null ? parseInt(MaxPkgId[0].pkg_id + 1) : 1;
-                                                console.log('pkgId' + pkgId)
+                                                //console.log('pkgId' + pkgId)
                                                 //Main site
                                                 var storePackage = {
                                                     sp_pkg_id: pkgId,
@@ -460,7 +460,7 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                             async.parallel({
                                 updateAdvanceSetting:function(callback){
                                     alacartManager.selectOfferIdByPAOSID(connection_ikon_cms,req.body.paosId,function(err,response){
-                                        console.log(response)
+                                        //console.log(response)
                                         if(response.length > 0 && response[0].paos_op_id != req.body.paosId){
                                             advanceSettingManager.deleteOfferSetting(connection_ikon_cms, req.body.paosId,function(err,result){
                                                 if(err){}else{

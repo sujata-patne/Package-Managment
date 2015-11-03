@@ -69,7 +69,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
                     $scope.showResponse(data);
 
                 }else{
-                    console.log('else in submit')
+                    //console.log('else in submit')
                     $scope.showResponse(data);
                 }
                 ngProgress.complete();

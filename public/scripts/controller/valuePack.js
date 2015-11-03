@@ -57,7 +57,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
                     $rootScope.proceed();
                     $scope.showResponse(data);
                 }else{
-                    console.log('else in submit')
+                   // console.log('else in submit')
                     $scope.showResponse(data);
                 }
                 ngProgress.complete();

@@ -17,7 +17,7 @@
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12">
                                     <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans | filter:{content_type_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
-                                        <option value="">--Select Download Plan for {{ContentType.cd_name}} or it's Free--</option>
+                                        <option value="">--Select One Plan--</option>
                                     </select>
                                 </div></div>
                             </div>
@@ -40,7 +40,7 @@
                             <div class="col-md-5">
                                 <div class="row"><div class="form-group col-md-12" >
                                     <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans  | filter:{content_type_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Streaming'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].streaming" >
-                                        <option value="">--Select Streaming Plan for {{ContentType.cd_name}} or it's Free--</option>
+                                        <option value="">--Select One Plan--</option>
                                     </select>
                                 </div></div>
                             </div>

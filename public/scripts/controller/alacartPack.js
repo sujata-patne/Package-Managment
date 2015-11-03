@@ -21,8 +21,8 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
         alacartPack.getAlacartNofferDetails(data, function (alacartPackData) {
 
             //$scope.alacartPackPlans = angular.copy(alacartPackData.alacartPackPlans);
-            console.log('alacartPackPlans')
-            console.log($scope.alacartPackPlans)
+            //console.log('alacartPackPlans')
+            //console.log($scope.alacartPackPlans)
             $scope.alacartNofferDetails = angular.copy(alacartPackData.alacartNOfferDetails);
             if ($scope.alacartNofferDetails != null && $scope.alacartNofferDetails.length > 0) {
                 $scope.offerId = $scope.alacartNofferDetails[0].paos_op_id;

@@ -220,7 +220,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                           }
                       }
                       
-                        console.log($scope.valuePlanSetting);
+                        //console.log($scope.valuePlanSetting);
                         angular.forEach($scope.valuePlanSetting,function(value,key){
                             //Key here is the plan id 
                             // console.log('Plan id::'+key);

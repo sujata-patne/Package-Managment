@@ -46,7 +46,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
 
     $scope.setEmptyPackage = function(){
-        console.log('setEmptyPackage')
+        //console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
         $rootScope.PackageType = 0;
         $rootScope.action = 'add';
@@ -59,7 +59,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
 
     $scope.setPackageDetails = function(){
-       console.log('setPackageDetais')
+       //console.log('setPackageDetais')
         if($scope.alacartStorePlans != 'NoAlaCart'){
             $scope.alacartPackPlans = _.filter($scope.alacartStorePlans,function (plans){
                 return plans.cd_id == $rootScope.distributionChannelId;
@@ -104,11 +104,11 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     });
 
     $scope.$watch('distributionChannelId',function(){
-console.log("$scope.$watch('distributionChannelId',function(){")
+//console.log("$scope.$watch('distributionChannelId',function(){")
         
         if($rootScope.distributionChannelId != undefined && $rootScope.distributionChannelId != ''){
-            console.log('$rootScope.distributionChannelId')
-            console.log($rootScope.distributionChannelId)
+           // console.log('$rootScope.distributionChannelId')
+            //console.log($rootScope.distributionChannelId)
                     $scope.setPackageDetails();
         }
 
@@ -145,11 +145,11 @@ console.log("$scope.$watch('distributionChannelId',function(){")
 
                    // if( new RegExp("main-site").test($scope.previousState.name)) {
                      if( $scope.tabIndex == 0 ) {
-                        console.log('$scope.mainSitePackageData if ' + $scope.tabs[$scope.tabIndex].state)
+                        //console.log('$scope.mainSitePackageData if ' + $scope.tabs[$scope.tabIndex].state)
                         $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId});
                      }
                 }else{
-                    console.log('$scope.mainSitePackageData else ')
+                    //console.log('$scope.mainSitePackageData else ')
 
                     $scope.setEmptyPackage();
                     $state.go($state.current, {packageId:undefined})

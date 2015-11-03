@@ -63,7 +63,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
 
     $scope.setEmptyPackage = function(){
-        console.log('setEmptyPackage')
+       // console.log('setEmptyPackage')
         $rootScope.PackageId = 0;
         $rootScope.PackageType = 1;
         $rootScope.action = 'add';
@@ -183,7 +183,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                 // $state.go($state.current, {packageId:$rootScope.PackageId}, {reload:$state.current}); //
                      if( $scope.tabIndex == 0 ) {
                         
-                        console.log('$scope.mainSitePackageData if ' + $scope.tabs[$scope.tabIndex].state)
+                        //console.log('$scope.mainSitePackageData if ' + $scope.tabs[$scope.tabIndex].state)
                         $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId});
                      }
             }

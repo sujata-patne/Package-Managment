@@ -69,9 +69,8 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
                 valid = false;
             }
         })
-
-        if (!valid) {
-            toastr.error("Maxlength is 4")
+        if (!valid ) {
+            toastr.error("Maxlength is 4 and value should not be zero")
         } else if(arrlength.length == 0 || arrlength.length < $scope.finalarray.length ) {
             toastr.error('Please fill the  values in range');
         }else {
@@ -116,7 +115,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         if( $scope.duplicate.length > 0 ) {
             toastr.error("Duplicate values not allowed!");
             angular.forEach($scope.duplicate,function(value,key) {
-                console.log($scope.sequenceData[value])
+               // console.log($scope.sequenceData[value])
 
                 $scope.sequenceData[value].pas_arrange_seq = '';
 
