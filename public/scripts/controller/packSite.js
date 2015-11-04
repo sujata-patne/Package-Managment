@@ -21,7 +21,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     $scope.selectedSubscriptionPlans = [];
     // $scope.setDistributionChannelId = 0; // not in mainsite
     $rootScope.PackageType = 1;
-
+debugger;
     $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
 
     $scope.tabs = [

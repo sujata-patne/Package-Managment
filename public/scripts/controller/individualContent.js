@@ -112,13 +112,17 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
     $scope.submitIndividualContentForm = function(){
         var d = $scope.ValidDate;
-        var n = d.getFullYear();
+        if(d == undefined) {
+
+        }else{
+            var n = d.getFullYear();
+        }
 
     if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
             if($rootScope.SelectedPack == undefined){
                 toastr.error('Please select a valid pack');
             }else {
-                if( n > 2050){
+                if(d != '' && n > 2050){
               toastr.error('Please select a date valid till 2050');
                 }
                 else{
