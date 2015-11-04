@@ -54,8 +54,9 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
         }else if (isValid) {
             valuePack.saveValuePackToMainSite(valuePackData,function(data){
                 if($scope.nextButtonPressed){
-                    $rootScope.proceed();
                     $scope.showResponse(data);
+                    $rootScope.proceed();
+                    
                 }else{
                    // console.log('else in submit')
                     $scope.showResponse(data);
@@ -87,10 +88,16 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
         if (data.success) {
             toastr.success(data.message)
             $scope.successvisible = true;
+            
             $rootScope.PackageId = data.pkgId;
+
             $rootScope.action = 'edit';
+            // alert($scope.tabIndex);
             $rootScope.disableDeliveryChannel = true; // used for disabling delivery channel and select pack dropdown.
-            $state.go($state.current, {packageId:$rootScope.PackageId},{reload: $state.current});
+            $stateParams.packageId = $rootScope.PackageId;
+            if(!$scope.nextButtonPressed){
+                $state.go($state.current, {packageId:$rootScope.PackageId,  location: true, inherit:false});
+            }
              //,{reload: $state.current}
         }
         else {

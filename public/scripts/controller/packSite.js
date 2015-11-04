@@ -35,18 +35,14 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
     $rootScope.proceed = function() {
         if($scope.tabIndex !== ( $scope.tabs.length - 1 ) ){
-            // if($scope.tabIndex == 0){
-            //     $rootScope.nextOrigin = $scope.tabIndex;
-            // }else{
-            //     $rootScope.nextOrigin = '';
-            // }
+           
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
             $state.current = $scope.tabs[$scope.tabIndex].state;
-            
-            // debugger;
-            $state.go($scope.tabs[$scope.tabIndex].state);//, {reload: $scope.tabs[$scope.tabIndex].state}
+            $stateParams.packageId = $rootScope.PackageId;
+            $state.go($state.current, {packageId:$rootScope.PackageId, location: true, inherit : false});
+           //$state.go($scope.tabs[$scope.tabIndex].state);//, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
 

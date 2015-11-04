@@ -3,7 +3,7 @@
  */
 myApp.service('Users', ['$http', function ($http) {
     //var service = {};
-    this.baseRestUrl = 'http://localhost:3000';
+    this.baseRestUrl = '';
     this.getUsers = function(success){
         $http.get(this.baseRestUrl + '/users').success(function (items) {
             success(items);

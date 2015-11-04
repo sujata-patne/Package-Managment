@@ -25,7 +25,10 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
             $state.current = $scope.tabs[$scope.tabIndex].state;
-            $state.go($scope.tabs[$scope.tabIndex].state);//,{}, {reload: $scope.tabs[$scope.tabIndex].state}
+            // alert($scope.tabIndex);
+            $stateParams.packageId = $rootScope.PackageId;
+            $state.go($state.current, {packageId:$rootScope.PackageId, location: true, inherit : false});
+            // $state.go($scope.tabs[$scope.tabIndex].state);//,{}, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
 
