@@ -24,10 +24,10 @@ myApp.controller('notificationAddCtrl', function ($scope,$rootScope, $state, ngP
         $state.go("notifications.list");
     }
 $scope.counts =[
-    {id:0,option_name:'LessThan'},
-    {id:1,option_name:'MoreThan'},
-    {id:2,option_name:'EqualTo'},
-    {id:3,option_name: 'N.A'}
+    {id:0,option_name:'Less Than'},
+    {id:1,option_name:'More Than'},
+    {id:2,option_name:'Equal To'},
+    {id:3,option_name: 'N.A.'}
 ];
     $scope.percent =[
         {id:10,option_name:'10%'},
@@ -42,17 +42,17 @@ $scope.counts =[
         {id:100,option_name:'100%'}
     ];
    $scope.push = [
-        {id: 0, option_name: 'Once a day'},
+        {id:0, option_name: 'Once a day'},
     ];
     $scope.getPushData = function() {
         if (($scope.days != undefined && $scope.days != null || $scope.hours != undefined && $scope.hours != null) || ($scope.selectedCount != undefined && $scope.selectedCount != null && $scope.selectedPercent != undefined && $scope.selectedPercent != null)) {
             $scope.push = [
-                {id: 0, option_name: 'Once a day'},
-                {id: 1, option_name: 'Twice a day'}
+                {id:0, option_name: 'Once a day'},
+                {id:1, option_name: 'Twice a day'}
             ];
         } else {
             $scope.push = [
-                {id: 0, option_name: 'Once a day'},
+                {id:0, option_name: 'Once a day'},
             ];
         }
     }

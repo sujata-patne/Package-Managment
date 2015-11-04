@@ -34,7 +34,7 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select id="percent" type="percent" name="percent" class="form-control input-sm" data-ng-change="getPushData()"  ng-hide="selectedCount == 3" ng-model="selectedPercent"   data-ng-options="item.id as item.option_name for item in percent">
+                            <select id="percent" type="percent" name="percent" class="form-control input-sm" data-ng-change="getPushData()"  ng-hide=" selectedCount == 3 "  ng-model="selectedPercent"   data-ng-options="item.id as item.option_name for item in percent">
                             <option value=""> --Select-- </option>
                             </select>
                         </div>
@@ -54,7 +54,7 @@
                         <br>
                         <label for="count words"class="col-sm-5 control-label">No. of text:</label>
                         <div class="col-md-5">
-                            <input type="number" value="{{152 - messagetext.length}}" readonly/>
+                            <input type="number" style="width:40px" value="{{152 - messagetext.length}}" readonly/>
                         </div>
                     </div>
                     <div class="col-md-12">

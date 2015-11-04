@@ -28,11 +28,11 @@
                     <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 0"> < {{item.pn_cnt_conditional_usage}}% </td>
                     <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 1"> > {{item.pn_cnt_conditional_usage}}% </td>
                     <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 2"> equal to {{item.pn_cnt_conditional_usage}}% </td>
-                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 3"> N.A </td>
+                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 3"> N.A. </td>
                     <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == null"> - </td>
-                    <td class="col-md-3 col-xs-3 ">{{item.pn_message}}</td>
+                    <td class="col-md-3 col-xs-3 " style=" max-width: 43px;word-wrap: break-word;">{{item.pn_message}}</td>
                     <td class="col-md-2 col-xs-2 text-center" >{{item.pn_pf }} to {{item.pn_pt}}</td>
-                    <td class="col-md-3 col-xs-3 text-center">{{item.pn_push_type}}</td>
+                    <td class="col-md-3 col-xs-3 text-center">{{item.pn_push_type+1}}</td>
                     <td>
                         <div class="row">
                             <div  class="col-md-3 col-xs-3  text-center" ng-hide="item.pn_is_active == 0"><a href="" data-ng-click="EditNotification(item.pn_id,item.pn_sp_pkg_id,item.pn_plan_id,item.pn_plan_type)" title="Edit"><i class="fa fa-edit" title="Edit"></i></a></div>
