@@ -106,7 +106,9 @@ debugger;
         $scope.showPackageData();
     }
 
-    MainSite.getStoreDetails(function (MainSiteData) {
+//Changing content types  based on packId : 
+    $rootScope.SelectedPack = undefined;
+    MainSite.getStoreDetails($rootScope.SelectedPack,function (MainSiteData) {
         $scope.checkState();
 
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
@@ -145,6 +147,21 @@ debugger;
         //     $scope.showPackageData();
 
         // }
+    }, {},true);
+
+
+
+     //Watching  pack id change to change content types based on Selected Pack
+     $rootScope.$watch('SelectedPack',function(){
+             if($rootScope.SelectedPack != undefined && $rootScope.SelectedPack != ''){
+                MainSite.getStoreDetails($rootScope.SelectedPack,function (MainSiteData) {
+                $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
+            },
+            function (error) {
+                $scope.error = error;
+                $scope.errorvisible = true;
+            });
+        }
     }, {},true);
 
     $scope.showPackageData = function(){

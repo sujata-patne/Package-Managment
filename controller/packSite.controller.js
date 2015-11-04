@@ -124,6 +124,7 @@ exports.getPackSiteData = function(req, res, next) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                     ContentTypes: function (callback) {
+                        console.log("inside package data");
                         mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
                             callback(err, ContentTypeData)
                         })

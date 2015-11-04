@@ -17,9 +17,18 @@ exports.getStoreDetails = function(req, res){
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                     ContentTypes: function (callback) {
-                        mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
-                            callback(err, ContentTypeData)
-                        })
+                        /**/
+                        if( req.query.packId != 'undefined' ) {
+                            mainSiteManager.getContentTypesByPackId(connection_ikon_cms, req.session.package_StoreId, req.query.packId, function (err, ContentTypeData) {
+                                    callback(err, ContentTypeData)
+                            })
+                            
+                        } else  {
+                            console.log("in else..");
+                            mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
+                                callback(err, ContentTypeData)
+                            })
+                        }
                     },
                     distributionChannels: function (callback) {
                         mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
@@ -277,6 +286,7 @@ exports.getMainSiteData = function(req, res, next) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                         ContentTypes: function (callback) {
+                           console.log("package data main site");
                             mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
                                 callback(err, ContentTypeData)
                             })

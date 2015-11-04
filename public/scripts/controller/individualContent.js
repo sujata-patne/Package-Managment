@@ -15,13 +15,25 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
     var date = new Date();
     $scope.minDate = date.setDate((new Date()).getDate() - 0);
 
-    var predata = {};
+    var predata = {
+        packId : $rootScope.SelectedPack
+    };
 
-
+    console.log(predata);
     IndividualContent.getIndividualContentData(predata,function(data){
     	$scope.contentTypes = data.ContentTypes;
     });
 
+     $rootScope.$watch('SelectedPack',function(){
+         if($rootScope.SelectedPack != undefined && $rootScope.SelectedPack != ''){
+            var predata = {
+                packId : $rootScope.SelectedPack
+            };
+            IndividualContent.getIndividualContentData(predata,function(data){
+                $scope.contentTypes = data.ContentTypes;
+            });
+        }
+    }, {},true);
 
     $scope.openDatepicker = function (evt) {
         $scope.open2 = false;
@@ -100,10 +112,12 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 	 			getDataForUpdate : true
 	 		}
 	 		IndividualContent.getIndividualContentData(data,function(data){
+                if(data.IndividualContentData.length > 0 ){
                     $scope.ValidDate = data.IndividualContentData[0].pic_valid_till;
-		 			data.IndividualContentData.forEach(function(el){
-		                $scope.selectedContent[el.pic_cm_id] = true;
-		            });
+                    data.IndividualContentData.forEach(function(el){
+                        $scope.selectedContent[el.pic_cm_id] = true;
+                    });
+                }
 	 		});
    		 }
     }

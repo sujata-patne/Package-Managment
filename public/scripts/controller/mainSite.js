@@ -86,7 +86,9 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.showPackageData();
     }
 
-    MainSite.getStoreDetails(function (MainSiteData) {
+    //Changing content types  based on packId : 
+    $rootScope.SelectedPack = undefined;
+    MainSite.getStoreDetails($rootScope.SelectedPack,function (MainSiteData) {
         $scope.checkState();
 
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);

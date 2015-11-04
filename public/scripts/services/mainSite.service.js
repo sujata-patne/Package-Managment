@@ -5,8 +5,9 @@ myApp.service('MainSite', ['$http', function ($http) {
 
     this.baseRestUrl = "";
 
-    this.getStoreDetails = function(success, error){
-        $http.get(this.baseRestUrl + '/getStoreDetails').success(function (items) {
+    this.getStoreDetails = function(packId,success, error){
+        // packId = 1;
+        $http.get(this.baseRestUrl + '/getStoreDetails?packId='+packId ).success(function (items) {
             success(items);
         }).error(function (err) {
             console.log(err)

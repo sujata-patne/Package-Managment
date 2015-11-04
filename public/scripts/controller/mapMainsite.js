@@ -97,7 +97,9 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
         }*/
     }
 
-    MainSite.getStoreDetails(function (MainSiteData) {
+    //Changing content types  based on packId : 
+    $rootScope.SelectedPack = undefined;
+    MainSite.getStoreDetails($rootScope.SelectedPack,function (MainSiteData) {
             $scope.checkState();
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.StorePacks = angular.copy(MainSiteData.packs);

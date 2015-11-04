@@ -13,6 +13,19 @@ exports.getContentTypes = function(dbConnection, storeId, callback) {
     })
 }
 
+exports.getContentTypesByPackId = function(dbConnection, storeId, packId, callback) {
+    var query = dbConnection.query('select cd.*, ct.mct_parent_cnt_type_id, ' +
+        '(SELECT cd_name FROM catalogue_detail as cd1 join catalogue_master as cm1 ON  cm1.cm_id = cd1.cd_cm_id WHERE ct.mct_parent_cnt_type_id = cd1.cd_id) AS parent_name ' +
+        'FROM icn_store As st ' +
+        'INNER JOIN multiselect_metadata_detail as mlm on (mlm.cmd_group_id = st.st_content_type) ' +
+        'INNER JOIN catalogue_detail As cd on mlm.cmd_entity_detail = cd.cd_id ' +
+        'JOIN icn_manage_content_type as ct ON ct.mct_cnt_type_id = cd.cd_id ' +
+        'JOIN icn_pack_content_type as ipct ON ipct.pct_cnt_type = ct.mct_cnt_type_id ' +
+        'WHERE st.st_id = ? AND ipct.pct_pk_id = ? AND ipct.pct_is_active = 1', [storeId, packId],  function (err, ContentTypes) {
+        callback(err, ContentTypes);
+    })
+}
+
 exports.getOfferDataByStoreId = function(dbConnection, data, callback) {
     if(data.dcId != '' && data.dcId != undefined){
         var str = ' AND cd1.cd_id = '+ data.dcId;

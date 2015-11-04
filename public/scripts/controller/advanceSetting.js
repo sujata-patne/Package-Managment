@@ -123,7 +123,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                 valid = false;
                 toastr.error("Please select images to upload.");
              }
-             if($scope.files[index].length > 1){
+             if($scope.files[index] != undefined &&  $scope.files[index].length > 1){
                 valid = false;
                 toastr.error("Max 1 files allowed per content type");
              }
