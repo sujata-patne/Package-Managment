@@ -126,20 +126,19 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
     $scope.submitIndividualContentForm = function(){
         var d = $scope.ValidDate;
-        if(d == undefined) {
-
-        }else{
-            var n = d.getFullYear();
+        var new_date = undefined;
+        if(  d != undefined ) {
+            new_date = new Date(d);
+            var n = new_date.getFullYear();
         }
 
-    if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
+        if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
             if($rootScope.SelectedPack == undefined){
                 toastr.error('Please select a valid pack');
             }else {
-                if(d != '' && n > 2050){
-              toastr.error('Please select a date valid till 2050');
-                }
-                else{
+                if(new_date != '' && n > 2050){
+                    toastr.error('Please select a date valid till 2050');
+                }else { 
                     var data = {
                         packId : $rootScope.SelectedPack,
                         alacartPlanId : $scope.selectedPlanId,
