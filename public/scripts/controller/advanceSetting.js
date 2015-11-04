@@ -17,57 +17,67 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
         $scope.init();
     }, true);
 
+
     $scope.init = function(){
-    var preData;
+        var preData;
 
-    preData = {
-      packageId : $rootScope.PackageId
-    }
-
-    advanceSetting.getData(preData,function(data){
-        $scope.contentTypes = data.ContentTypes;
-        $scope.offerPlan = data.PackageOffer;
-        $scope.valuePlans = data.PackageValuePacks;
-        //Getting the base CG image to show in thumbnail :
-        $scope.cgimage = _.findWhere(data.CGImageData, {pci_is_default: 1});
-        $scope.valueDataForUpdate = data.ValueDataForUpdate;
-        $scope.offerDataForUpdate = data.OfferDataForUpdate;
-        if($scope.offerPlan.length > 0 && $scope.offerDataForUpdate.length > 0){
-            $scope.updateFlag = true;
-            _.each($scope.offerDataForUpdate, function(el,index){
-                   index = _.findIndex($scope.contentTypes, {cd_id : el.pass_content_type});
-                   if(!_.has($scope.offerBuySetting,index)){
-                         $scope.offerBuySetting[index] = {};
-                  }
-                   if(!_.has($scope.offerGetSetting,index)){
-                         $scope.offerGetSetting[index] = {};
-                  }
-                  $scope.offerBuySetting[index][el.pass_content_type] = el.pass_buy == -1 ? 'BAL' : el.pass_buy;
-                  $scope.offerGetSetting[index][el.pass_content_type] = el.pass_get == -1 ? 'BAL' : el.pass_get;
-            })
+        preData = {
+          packageId : $rootScope.PackageId,
+          packId : $rootScope.SelectedPack
         }
 
+        advanceSetting.getData(preData,function(data){
+            $scope.contentTypes = data.ContentTypes;
+            $scope.offerPlan = data.PackageOffer;
+            $scope.valuePlans = data.PackageValuePacks;
+            //Getting the base CG image to show in thumbnail :
+            $scope.cgimage = _.findWhere(data.CGImageData, {pci_is_default: 1});
+            $scope.valueDataForUpdate = data.ValueDataForUpdate;
+            $scope.offerDataForUpdate = data.OfferDataForUpdate;
+            if($scope.offerPlan.length > 0 && $scope.offerDataForUpdate.length > 0){
+                $scope.updateFlag = true;
+                _.each($scope.offerDataForUpdate, function(el,index){
+                       index = _.findIndex($scope.contentTypes, {cd_id : el.pass_content_type});
+                       if(!_.has($scope.offerBuySetting,index)){
+                             $scope.offerBuySetting[index] = {};
+                      }
+                       if(!_.has($scope.offerGetSetting,index)){
+                             $scope.offerGetSetting[index] = {};
+                      }
+                      $scope.offerBuySetting[index][el.pass_content_type] = el.pass_buy == -1 ? 'BAL' : el.pass_buy;
+                      $scope.offerGetSetting[index][el.pass_content_type] = el.pass_get == -1 ? 'BAL' : el.pass_get;
+                })
+            }
 
 
-        if($scope.valuePlans.length > 0 && $scope.valueDataForUpdate.length > 0 ){
-             $scope.updateFlag = true;
-            _.each($scope.valueDataForUpdate, function(el,index){
-                  var pvs_id = el.pvs_id;
-                  var pass_content_type = el.pass_content_type;
-                  var pass_value = el.pass_value;
 
-                  if(!_.has($scope.valuePlanSetting,pvs_id)){
-                         $scope.valuePlanSetting[pvs_id] = {};
-                  }
+            if($scope.valuePlans.length > 0 && $scope.valueDataForUpdate.length > 0 ){
+                 $scope.updateFlag = true;
+                _.each($scope.valueDataForUpdate, function(el,index){
+                      var pvs_id = el.pvs_id;
+                      var pass_content_type = el.pass_content_type;
+                      var pass_value = el.pass_value;
 
-                  $scope.valuePlanSetting[pvs_id][pass_content_type]  = pass_value == -1 ? 'BAL' : pass_value;
-            });
-        }else if( $scope.valuePlans.length == 0 && $scope.valueDataForUpdate.length > 0 ) {
+                      if(!_.has($scope.valuePlanSetting,pvs_id)){
+                             $scope.valuePlanSetting[pvs_id] = {};
+                      }
 
+                      $scope.valuePlanSetting[pvs_id][pass_content_type]  = pass_value == -1 ? 'BAL' : pass_value;
+                });
+            }else if( $scope.valuePlans.length == 0 && $scope.valueDataForUpdate.length > 0 ) {
+
+            }
+        });
+    } 
+
+     //Watching  pack id change to change content types based on Selected Pack
+     $rootScope.$watch('SelectedPack',function(){
+             if($rootScope.SelectedPack != undefined && $rootScope.SelectedPack != ''){
+                $scope.init();
         }
-    });
+    }, {},true);
 
-}
+
 
     $scope.offerBuy = function(contentTypeId){
         $scope.totalBuy = 0;

@@ -103,6 +103,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
             $rootScope.action = 'edit';
+            $rootScope.disableDeliveryChannel = true; // used for disabling delivery channel and select pack dropdown.
             $state.go($state.current, {packageId:$rootScope.PackageId},{reload: $state.current}); //,{reload: $state.current}
 
         }

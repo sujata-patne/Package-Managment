@@ -21,9 +21,15 @@ exports.getData = function(req, res, next) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                     ContentTypes: function (callback) {
-                        mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
-                            callback(err, ContentTypeData)
-                        })
+                        if(req.body.packId != undefined){
+                            mainSiteManager.getContentTypesByPackId(connection_ikon_cms, req.session.package_StoreId,req.body.packId, function (err, ContentTypeData) {
+                                callback(err, ContentTypeData)
+                            });    
+                        }else{
+                            mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
+                                callback(err, ContentTypeData)
+                            });
+                        }
                     },
                     ContentTypeData: function (callback) {  
                         /* Getting plans based on content type */

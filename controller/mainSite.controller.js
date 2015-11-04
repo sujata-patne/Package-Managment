@@ -190,6 +190,9 @@ exports.showPackageData = function(req, res, next)  {
                     mainSitePackageData : function (callback){
                         async.waterfall([
                                 function (callback) {
+                                    console.log('req.body');
+                                    console.log(req.body);
+ 
                                     if (req.body.packageType === 1 ){
 
                                         mainSiteManager.getIndividualPackageData(connection_ikon_cms, req.session.package_StoreId,req.body.pkgId, function (err, packageDetails) {
@@ -228,6 +231,8 @@ exports.showPackageData = function(req, res, next)  {
                                                 function (arrangeSequenceData,alacartNOfferDetails,callback) {
                                                     if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
                                                         alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
+                                                            console.log("in contentTypePlanData");
+                                                            console.log(contentTypePlanData);
                                                             callback(null, {arrangeSequenceData:arrangeSequenceData,packageDetails:packageDetails, alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
                                                         })
                                                     } else {

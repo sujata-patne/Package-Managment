@@ -107,25 +107,23 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     });
 
     $scope.$watch('distributionChannelId',function(){
-
         
         if($rootScope.distributionChannelId != undefined && $rootScope.distributionChannelId != ''){
-           // console.log('$rootScope.distributionChannelId')
-            //console.log($rootScope.distributionChannelId)
-                    $scope.setPackageDetails();
+            $scope.setPackageDetails();
         }
 
     }, {},true);
 
     $scope.showPackageData = function() {
+        // alert($rootScope.PackageId);
         if($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''){
             var params = {pkgId:$rootScope.PackageId}
         }else {
             var params = {distributionChannelId: $rootScope.distributionChannelId, packageType: $rootScope.PackageType}
         }
+        
         MainSite.showPackageData(params, function (MainSiteData) {
                 $scope.mainSitePackageData = angular.copy(MainSiteData.mainSitePackageData.packageDetails);
-
                 if( MainSiteData.subscriptionPackPlans == 'NoSub' ) {
                     $scope.subscriptionPackPlans = MainSiteData.subscriptionPackPlans ;
                 }
@@ -145,7 +143,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                     }
 
                     $rootScope.action = 'edit';
-
+                    // alert($scope.tabIndex);
                    // if( new RegExp("main-site").test($scope.previousState.name)) {
                      if( $scope.tabIndex == 0 ) {
                         //console.log('$scope.mainSitePackageData if ' + $scope.tabs[$scope.tabIndex].state)
@@ -167,6 +165,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
 
     $scope.checkState = function () {
+        // alert($scope.previousState.name);
+
         if ($scope.previousState.name && !new RegExp("main-site").test($scope.previousState.name)
             && !new RegExp("packageListing").test($scope.previousState.name)) {
             console.log(' $rootScope.previousState 1')
@@ -197,24 +197,24 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             console.log(' $rootScope.previousState 4')
             $rootScope.PackageId = $stateParams.packageId;
             $rootScope.action = 'edit';
+            
             $scope.showPackageData();
+             //window.location.reload();
 
         }else if ( (new RegExp("main-site").test($scope.previousState.name) || new RegExp("main-site").test($state.current.name))
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
             console.log(' $rootScope.previousState 5')
-                        // $state.go($scope.tabs[$scope.tabIndex].state, {packageId: undefined}); //, {reload:$state.current}
-
-            
-            $scope.setEmptyPackage();
+         
+             $scope.setEmptyPackage();
 
         }else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
-         && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
-         console.log(' $rootScope.previousState 6')
+             && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
+             console.log(' $rootScope.previousState 6')
 
-         $rootScope.PackageId = $stateParams.packageId;
-         $rootScope.action = 'edit';
-         $scope.showPackageData();
+             $rootScope.PackageId = $stateParams.packageId;
+             $rootScope.action = 'edit';
+             $scope.showPackageData();
          }else if (($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')
             && ($rootScope.action !== '' && $rootScope.action !== 'edit' )) {
             console.log(' $rootScope.previousState 7'  )

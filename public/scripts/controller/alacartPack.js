@@ -5,10 +5,10 @@
 myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, alacartPack) {
     $rootScope.isChild = false;
     $scope.nextButtonPressed = 0;
-   
     // console.log($rootScope.tabIndex);
     $scope.tabIndex = 0;
     $scope.tabs[$scope.tabIndex].active = true;
+
     // debugger;
    // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
 
@@ -80,6 +80,7 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                 distributionChannelId: $rootScope.distributionChannelId
             }
             ngProgress.start();
+            
             if ( $rootScope.PackageId != undefined && $rootScope.PackageId != null && $rootScope.PackageId != '' && $rootScope.PackageId != 0) {
                 alacartPack.editAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
@@ -88,29 +89,30 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
                         $rootScope.PackageId = data.pkgId;
                         $rootScope.action = 'edit';
                         
-                         ngProgress.complete();
+                        ngProgress.complete();
                         $rootScope.proceed();
-
-                        // $scope.showResponse(data);
-
                     }else{
-                        $scope.showResponse(data);
+                        setTimeout(function(){
+                            $scope.showResponse(data);
+                            ngProgress.complete();
+                        },1000);
                     }
                 });
             } else {
                 alacartPack.addAlacartNOffer(alacartData, function (data) {
                     if($scope.nextButtonPressed){
                         toastr.success(data.message)
-                        //made changes for issue alacart redirection issue..
                         $scope.successvisible = true;
                         $rootScope.PackageId = data.pkgId;
                         $rootScope.action = 'edit';
 
                         ngProgress.complete();
                         $rootScope.proceed();
-                      //  $scope.showResponse(data);
                     }else{
-                        $scope.showResponse(data);
+                        setTimeout(function(){
+                            $scope.showResponse(data);
+                            ngProgress.complete();
+                        },1000);
                     }
                 });
             }
@@ -122,11 +124,9 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             toastr.success(data.message)
             $scope.successvisible = true;
             $rootScope.PackageId = data.pkgId;
-            $rootScope.action = 'edit';
+            $rootScope.action = 'edit'
             $state.go($state.current, {packageId:$rootScope.PackageId}); //,{reload: $state.current}
-
-        }
-        else {
+        }else {
             toastr.error(data.message)
             $scope.errorvisible = true;
         }
