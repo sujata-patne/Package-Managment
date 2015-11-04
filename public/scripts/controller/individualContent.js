@@ -8,6 +8,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
     $scope.contentTypeFlag = false;
     $scope.selectedPlanFlag = false;
+    $scope.onReset = false;
 
     $scope.selectedContent = [];
     $scope.final_selectedContent = [];
@@ -53,10 +54,12 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
     //To get Alacart plans based on content type : 
     $scope.changeContentType = function(){
+        $scope.ValidDate = '';
         $scope.selectedPlanId = '';
     	$scope.final_selectedContent = [];
     	$scope.selectedContent = [];
         $scope.selectedPlanFlag = false;
+        $scope.onReset = false;
     	var ctdata = {
     		contentTypeId : $scope.selectedContentType,
     		packId : $rootScope.SelectedPack
@@ -89,6 +92,8 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
             $scope.final_selectedContent = [];
             $scope.selectedContent = [];
         }
+
+
     }
 
     //Change in Plan dropdown :
@@ -117,6 +122,8 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
                     data.IndividualContentData.forEach(function(el){
                         $scope.selectedContent[el.pic_cm_id] = true;
                     });
+                }else{
+                    $scope.ValidDate = '';
                 }
 	 		});
    		 }
@@ -165,7 +172,13 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
     }
 
-
+$scope.resetForm = function(){
+    $scope.contentData = [];
+    $scope.onReset = true;
+    $scope.selectedContentType = undefined;
+    $scope.selectedPlanId = undefined;
+    $scope.ValidDate = '';
+}
 
 $(document).ready(function() {
 
