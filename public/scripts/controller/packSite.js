@@ -22,7 +22,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     // $scope.setDistributionChannelId = 0; // not in mainsite
     $rootScope.PackageType = 1;
 
-    $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
+    $scope.actionName = ($stateParams.packageId != 0 && $stateParams.packageId != '' && $stateParams.packageId != undefined)? 'Edit':'Add';
 
     $scope.tabs = [
         { title:"A-La-Cart & Offer Plans", state:"pack-site.alacart", active: true },

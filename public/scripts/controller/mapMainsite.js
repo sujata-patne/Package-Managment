@@ -4,7 +4,7 @@
 myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
     //console.log('mapMainsiteCtrl')
     $rootScope.isChild = true;
-    $scope.actionName = ($rootScope.PackageId != 0 && $rootScope.PackageId != '' && $rootScope.PackageId != undefined)? 'Edit':'Add';
+    $scope.actionName = ($stateParams.packageId != 0 && $stateParams.packageId != '' && $stateParams.packageId != undefined)? 'Edit':'Add';
 
     $('.removeActiveClass').removeClass('active');
     $('#map-mainsite').addClass('active');
