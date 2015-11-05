@@ -159,7 +159,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         if (isActive == 1) {
             active = 0;
         }
-        if (confirm("Are you want to sure " + (active == 0 ? 'block' : 'unblock') + ' this plan ?')) {
+        if (confirm("Are you sure, you want to " + (active == 0 ? 'block' : 'unblock') + ' package ?')) {
             var data = {
                 active: active,
                 packageId: packageId,
@@ -186,7 +186,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
     }
     $scope.Delete = function( packageId )
     {
-        if (confirm("Are you want to sure " + 'delete' + ' this plan ?')) {
+        if (confirm("Are you sure, you want to " + 'delete' + ' package ?')) {
             var data = {
                 packageId: packageId,
                 Status: 'delete'
