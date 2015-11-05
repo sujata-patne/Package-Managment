@@ -166,7 +166,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                      }
                 }else{
                     //console.log('$scope.mainSitePackageData else ')
-                    alert('hihihi')
+                    // alert('hihihi')
                     $scope.setEmptyPackage();
                     $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
                 }
