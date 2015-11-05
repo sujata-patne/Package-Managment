@@ -150,8 +150,8 @@ $scope.counts =[
                         //    angular.element('#reset_btn').triggerHandler('click');
                         //});
                         $timeout(function () {
-                            $('#reset_btn').trigger('click');
-                            $scope.resetForm();
+                            $('#reset_btn_after_add').trigger('click');
+                            $scope.resetFormAfterAdd();
                             $scope.startingTime = new Date(1970, 0, 1, 00, 00, 0);
                             $scope.endingTime = new Date(1970, 0, 1, 00, 00, 0);
                         });
@@ -177,6 +177,12 @@ $scope.resetForm = function(){
     Notification.getDistributionChannel(function (data) {
         $rootScope.distributionChannels = angular.copy(data.distributionChannels);
     });
+}
+
+$scope.resetFormAfterAdd = function(){
+    // $scope.n_selectedPlans = ''
+    $scope.messagetext = undefined;
+   
 }
 
 });

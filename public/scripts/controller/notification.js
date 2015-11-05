@@ -1,7 +1,6 @@
 myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams , Notification) {
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
-
     $('#notifications').addClass('active');
     $scope.tabs = [
         {title: "Add New Notifications", state: "notifications.add", active: true},
@@ -52,7 +51,6 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         });
     }
     $scope.OnDistributionChange = function(){
-
         var data= {
             distributionChannelId: $rootScope.n_distributionChannelId
         }
@@ -60,6 +58,8 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         Notification.getNotificationData(data,function (data) {
             $scope.packageName = angular.copy(data.PackageName);
         });
+
+
     }
 
     $scope.OnPackageChange = function(){

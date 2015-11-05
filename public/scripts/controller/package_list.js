@@ -2,6 +2,7 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
     $('.removeActiveClass').removeClass('active');
     $('.removeSubactiveClass').removeClass('active');
     $('#package-listing').addClass('active');
+    $rootScope.PackageId = undefined; // Added to solve issue of going back to pack list  without edit.  : BUG FIX
     $scope.PageTitle = $state.current.name == "edit-store" ? "Edit " : "Add ";
     // $scope.PageTitle = "Add";
     $scope.success = "";
