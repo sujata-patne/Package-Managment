@@ -7,7 +7,7 @@ myApp.controller('subscriptionPackCtrl', function ($scope,$rootScope, $state, ng
 
 
  //Watching changes in Package Id
- debugger;
+ 
     $rootScope.$watch('PackageId',function(value,old) {
         $scope.init();
     }, true);
