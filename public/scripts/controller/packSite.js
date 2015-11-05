@@ -1,15 +1,16 @@
 myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgress, $stateParams, MainSite) {
-
+    
     $('.removeActiveClass').removeClass('active');
     $('#pack-site').addClass('active');
 
 
 
     $rootScope.mainNext=false;
+    
     if($rootScope.PackageId == undefined){
         $scope.tabIndex = 0;
     }
-    // debugger;
+    // 
     // if($rootScope.nextOrigin == 0){
     //     $scope.tabIndex = 1;
     // }
@@ -39,10 +40,11 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             $scope.tabs[$scope.tabIndex].active = false;
             $scope.tabIndex++;
             $scope.tabs[$scope.tabIndex].active = true;
-            $state.current = $scope.tabs[$scope.tabIndex].state;
+            $scope.current = $scope.tabs[$scope.tabIndex].state;
             $stateParams.packageId = $rootScope.PackageId;
-            $state.go($state.current, {packageId:$rootScope.PackageId, location: true, inherit : false});
-           //$state.go($scope.tabs[$scope.tabIndex].state);//, {reload: $scope.tabs[$scope.tabIndex].state}
+            //
+            $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
+            //$state.go($scope.tabs[$scope.tabIndex].state);//, {reload: $scope.tabs[$scope.tabIndex].state}
         }
     };
 
@@ -53,10 +55,21 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     };
 
     $scope.setIndex = function($index){
+
         $scope.tabIndex = $index;
+
+        $stateParams.packageId = $rootScope.PackageId;
         //$state.go($scope.tabs[$scope.tabIndex].state);
-        if($scope.tabIndex == 0){
-            $state.go($scope.tabs[$scope.tabIndex]['state']);
+        console.log("insaaijisajoilasl");
+        console.log($scope.tabIndex);
+        console.log('$stateParams.packageId');
+        console.log($stateParams.packageId);
+        if($scope.tabIndex == 0 || $stateParams.packageId == undefined ){
+            if( $scope.previousState.name ==  $scope.tabs[$scope.tabIndex].state ) {
+                $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
+            }else {
+                $state.go($scope.tabs[$scope.tabIndex].state, {packageId:undefined, location: true, inherit : false});
+            }
         }
     }
 
@@ -124,27 +137,10 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     });
 
     $scope.$watch('distributionChannelId',function(){
-
-        // $scope.setPackageDetails();
-         if($rootScope.distributionChannelId != undefined && $rootScope.distributionChannelId != ''){
-            //console.log('$rootScope.distributionChannelId')
-            //console.log($rootScope.distributionChannelId)
-                    $scope.setPackageDetails();
+         if($rootScope.distributionChannelId != undefined && $rootScope.distributionChannelId != '') {
+            $scope.setPackageDetails();
         }
-
-  
-
-        // if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
-        //     && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
-        //     console.log(' $rootScope.previousState 3')
-
-        //     $rootScope.PackageId = $stateParams.packageId;
-        //     $rootScope.action = 'edit';
-        //     $scope.showPackageData();
-
-        // }
     }, {},true);
-
 
 
      //Watching  pack id change to change content types based on Selected Pack
@@ -193,20 +189,20 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
               //  console.log('$scope.packSitePackageData if ')
 
                 $rootScope.action = 'edit';
-
-              //  $state.go($state.current, {packageId:$rootScope.PackageId})
-                // $state.go($state.current, {packageId:$rootScope.PackageId}, {reload:$state.current}); //
                      if( $scope.tabIndex == 0 ) {
-                        
-                        //console.log('$scope.mainSitePackageData if ' + $scope.tabs[$scope.tabIndex].state)
-                        $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId});
+                         
+                        console.log("in showpackage data tab index 0");
+                        $stateParams.packageId = $rootScope.PackageId;
+                        $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
                      }
             }
             else{
-                
+                console.log("in undefined package..");
+                // alert('msg');
                 $scope.setEmptyPackage();
-                
-                $state.go($state.current, {packageId:undefined})
+
+                $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
+                //$state.go($state.current, {packageId:undefined})
 
             }
         },
@@ -217,12 +213,11 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     }
 
     $scope.checkState = function () {
-        //console.log('$scope.previousState');
-        //console.log($scope.previousState);
+
         if ($scope.previousState.name && !new RegExp("pack-site").test($scope.previousState.name)
             && !new RegExp("packageListing").test($scope.previousState.name)) {
-            //console.log(' $rootScope.previousState 1')
-
+            console.log(' $rootScope.previousState 1')
+        
             $rootScope.distributionChannelId = undefined;
             $scope.setDistributionChannelId = 0;
             $scope.setEmptyPackage();
@@ -230,14 +225,14 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
         } else if (new RegExp("packageListing").test($scope.previousState.name)
             && ($stateParams.packageId != 0 && $stateParams.packageId != undefined && $stateParams.packageId != '')) {
-            //console.log(' $rootScope.previousState 2')
+            console.log(' $rootScope.previousState 2')
             $rootScope.PackageId = $stateParams.packageId;
             $rootScope.action = 'edit';
             $scope.showPackageData();
 
         }else if (new RegExp("pack-site").test($scope.previousState.name)
             && ($stateParams.packageId != 0 && $stateParams.packageId != undefined && $stateParams.packageId != '')) {
-            //console.log(' $rootScope.previousState 2new')
+            console.log(' $rootScope.previousState 2new')
             $rootScope.PackageId = $stateParams.packageId;
             $rootScope.action = 'edit';
             $scope.showPackageData();
@@ -246,7 +241,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
 
-            //console.log(' $rootScope.previousState 3')
+            console.log(' $rootScope.previousState 3')
             $rootScope.distributionChannelId = undefined;
             $scope.setEmptyPackage();
 
@@ -254,7 +249,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             && (($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
             
-            //console.log(' $rootScope.previousState 4')
+            console.log(' $rootScope.previousState 4')
             if($stateParams.packageId != ''){
                 $rootScope.PackageId = $stateParams.packageId;
             }
@@ -264,13 +259,13 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }else if ( (new RegExp("pack-site").test($scope.previousState.name) || new RegExp("pack-site").test($state.current.name))
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
-            //console.log(' $rootScope.previousState 5')
+            console.log(' $rootScope.previousState 5')
                         // $state.go($scope.tabs[$scope.tabIndex].state, {packageId: undefined}); //, {reload:$state.current}
             $scope.setEmptyPackage();
 
         }else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
              && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
-             //console.log(' $rootScope.previousState 6')
+             console.log(' $rootScope.previousState 6')
 
              $rootScope.PackageId = $stateParams.packageId;
              $rootScope.action = 'edit';
@@ -279,11 +274,7 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             && ($rootScope.action !== '' && $rootScope.action !== 'edit' )) {
            // console.log(' $rootScope.previousState 7'  )
             $scope.setEmptyPackage();
-        } /*else{
-            console.log(' $rootScope.previousState 8')
-
-            $scope.setEmptyPackage();
-        }*/
+        } 
     }
 
     if($stateParams.packageId > 0 && ($rootScope.action = 'edit')){

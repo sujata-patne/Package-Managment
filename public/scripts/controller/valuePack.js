@@ -1,5 +1,5 @@
 myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgress, $stateParams, valuePack ) {
-    
+    debugger;
     // console.log($rootScope.tabIndex);
  //Watching changes in Package Id
     $rootScope.$watch('PackageId',function(value,old) {
@@ -7,6 +7,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
     }, true);
     
     $scope.init = function(){
+        
         $scope.nextButtonPressed = 0;
           var data = {
             packageId : $rootScope.PackageId,
@@ -29,6 +30,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
     
 
     $scope.submitValuePackForm = function( isValid ) {
+        
         $scope.successvisible = false;
         $scope.errorvisible = false;
         var valuePackData = {
@@ -85,6 +87,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
     }*/
 
  $scope.showResponse = function(data){
+    
         if (data.success) {
             toastr.success(data.message)
             $scope.successvisible = true;
@@ -96,6 +99,7 @@ myApp.controller('valuePackCtrl', function ($scope, $rootScope, $state, ngProgre
             $rootScope.disableDeliveryChannel = true; // used for disabling delivery channel and select pack dropdown.
             $stateParams.packageId = $rootScope.PackageId;
             if(!$scope.nextButtonPressed){
+                
                 $state.go($state.current, {packageId:$rootScope.PackageId,  location: true, inherit:false});
             }
              //,{reload: $state.current}
