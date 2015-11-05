@@ -22,7 +22,7 @@ myApp.controller('notificationListCtrl', function ($scope,$rootScope, $state, ng
     }
     $scope.Delete = function( pnId )
     {
-        if (confirm("Are you want to " + 'delete' + ' this plan ?')) {
+        if (confirm("Are you sure, you want to " + 'delete' + ' notification ?')) {
             var data = {
                 pnId:pnId,
                 Status: 'delete'
@@ -51,7 +51,7 @@ myApp.controller('notificationListCtrl', function ($scope,$rootScope, $state, ng
         if (isActive == 1) {
             active = 0;
         }
-        if (confirm("Are you want to  " + (active == 0 ? 'block' : 'unblock') + ' this plan ?')) {
+        if (confirm("Are you sure, you want to " +(active == 0 ? 'block' : 'unblock') + ' notification ?')) {
             var data = {
                 active: active,
                 pnId: pnId,
