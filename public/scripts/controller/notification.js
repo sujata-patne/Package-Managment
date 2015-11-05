@@ -52,6 +52,7 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
         });
     }
     $scope.OnDistributionChange = function(){
+
         var data= {
             distributionChannelId: $rootScope.n_distributionChannelId
         }

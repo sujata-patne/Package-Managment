@@ -18,7 +18,7 @@
                     <th class="text-center">Action</th>
                 </tr>
                 </thead>
-                <tbody dir-paginate="item in NotificationResult | itemsPerPage: 10">
+                <tbody ng dir-paginate="item in NotificationResult | itemsPerPage: 10">
                 <tr >
 
                      <td class="col-md-1 col-xs-1 text-center"ng-if="item.pn_after_day != null || item.pn_after_day != undefined && item.pn_after_hour != null || item.pn_after_hour != undefined "> 
