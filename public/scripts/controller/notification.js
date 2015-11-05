@@ -11,8 +11,15 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
 
     $scope.setIndex = function($index){
         $scope.tabIndex = $index;
-        $state.go($scope.tabs[$scope.tabIndex].state);
+        // alert('msg');
+        //$state.go($scope.tabs[$scope.tabIndex].state);
         //default form display for a-la-cart and offer plan
+        if($scope.tabIndex == 0){
+
+            if( $scope.previousState.name != $scope.tabs[$scope.tabIndex].state ) {
+                $rootScope.distributionChannels = [];
+            }
+        }
         $state.go($scope.tabs[$scope.tabIndex]['state']);
     }
 

@@ -92,9 +92,9 @@ $scope.counts =[
            else {
             if ($rootScope.n_selectedPlans == undefined || $rootScope.n_selectedPlans.length == 0) {
                 toastr.error('Please Select Plan');
-            } else if (($scope.selectedCount == undefined || $scope.selectedCount == null) && ($scope.selectedPercent != undefined && $scope.selectedPercent != null)) {
+            } else if (($scope.selectedCount == undefined || $scope.selectedCount == null) && ($scope.selectedPercent != undefined && $scope.selectedPercent != null && $scope.selectedCount != 3)) {
                 toastr.error('Please select both options in no of contents downloaded.');
-            } else if (($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null)) {
+            } else if (($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null && $scope.selectedCount != 3)) {
                 toastr.error('Please select both options in no of contents downloaded.');
             } else if ($scope.days != null && $scope.days == undefined) {
                 if ($scope.days < 1 || $scope.days > 99 || $scope.days == undefined) {
@@ -171,6 +171,10 @@ $scope.addMore= function(){
 $scope.resetForm = function(){
     // $scope.n_selectedPlans = ''
     $scope.messagetext = undefined;
+    $rootScope.distributionChannels= undefined;
+    Notification.getDistributionChannel(function (data) {
+        $rootScope.distributionChannels = angular.copy(data.distributionChannels);
+    });
 }
 
 });

@@ -37,7 +37,7 @@ exports.getOfferDataByStoreId = function(dbConnection, data, callback) {
         'FROM icn_offer_plan AS plan ' +
         'join multiselect_metadata_detail as mmd ON plan.op_channel_front = mmd.cmd_group_id ' +
         'join catalogue_detail as cd1 ON mmd.cmd_entity_detail = cd1.cd_id ' +
-        'WHERE plan.op_st_id = ? ' + str, [data.storeId], function (err, ContentTypes) {
+        'WHERE plan.op_st_id = ? AND plan.op_is_active = 1' + str, [data.storeId], function (err, ContentTypes) {
         callback(err, ContentTypes);
 
     });
