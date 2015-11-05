@@ -104,6 +104,8 @@ $scope.counts =[
                 if ($scope.hours < 1 || $scope.hours > 24 || $scope.days == undefined) {
                     toastr.error('Hours should be between 1 to 24.');
                 }
+            } else if( $scope.selectedPush == null){
+                toastr.error('Please select push type .')
             } else if ($stateParams.pn_id) {
                 var notificationData = {
                     pnId: $stateParams.pn_id,
