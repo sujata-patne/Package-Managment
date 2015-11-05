@@ -77,12 +77,26 @@ exports.countValuePackPlans = function( dbConnection,pkgId, callback) {
     });
 }
 exports.countAlacartPackPlans = function( dbConnection,pkgId, callback) {
-    var query = dbConnection.query('SELECT COUNT(pct.pct_paos_id) as cnt from icn_package_alacart_offer_site AS alacart '+
-    'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
-    ' WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) AND ISNULL(pct.pct_crud_isactive) ' , [pkgId],  function (err, count) {
-        callback(err, count[0].cnt);
+    var query = dbConnection.query(' SELECT '+
+    '(SELECT COUNT(pct.pct_paos_id)  from icn_package_alacart_offer_site AS alacart '+
+    'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id '+
+    'WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) AND ISNULL(pct.pct_crud_isactive) '+
+    'AND  (pct_stream_id IS NOT NULL AND pct_stream_id != 0 ) ) as stream, '+
+    '(SELECT COUNT(pct.pct_paos_id)  from icn_package_alacart_offer_site AS alacart '+
+    'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id '+
+    'WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) AND ISNULL(pct.pct_crud_isactive) '+ 
+    'AND  (pct_download_id IS NOT NULL AND pct_download_id != 0 ) ) as download' , [pkgId,pkgId],  function (err, result) {
+        callback(err, result[0].stream + result[0].download);
     });
 }
+
+// exports.countAlacartPackPlans = function( dbConnection,pkgId, callback) {
+//     var query = dbConnection.query('SELECT pct_download_id, pct_stream_id FROM icn_package_content_typeicn_package_alacart_offer_site AS alacart '+
+//     'JOIN icn_package_content_type AS pct ON pct.pct_paos_id = alacart.paos_id ' +
+//     ' WHERE paos_sp_pkg_id = ? AND ISNULL(alacart.paos_crud_isactive) AND ISNULL(pct.pct_crud_isactive) ' , [pkgId],  function (err, count) {
+//         callback(err, count[0].cnt);
+//     });
+// }
 
 exports.countOfferPlans = function( dbConnection,pkgId, callback) {
     var query = dbConnection.query('SELECT alacart.paos_op_id as cnt from icn_package_alacart_offer_site AS alacart ' +
