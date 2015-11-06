@@ -10,6 +10,7 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
     $scope.tabIndex = 0;
     $scope.tabs[$scope.tabIndex].active = true;
 
+
     // 
    // if( $rootScope.PackageId && $rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '' && $rootScope.action === 'edit') {
 
@@ -113,6 +114,8 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
             }
         }
     }
+
+    
 
     $scope.showResponse = function(data){
         if (data.success) {
