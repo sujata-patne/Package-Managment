@@ -135,7 +135,7 @@ exports.authenticate = function (req, res, next) {
         mysql.getConnection('CMS', function (err, connection_ikon_cms) {
             userManager.getUserDetails( connection_ikon_cms, req.body.username, req.body.password, function( err, userDetails ){
                 if (err) {
-                    res.render('account-login', { error: 'Error in database connection.' });
+                    res.render('account-login', { error: 'Error in database connection' });
                 } else {
                     if (userDetails.length > 0) {
                         //console.log('Got user Detail'+userDetails);
@@ -163,25 +163,25 @@ exports.authenticate = function (req, res, next) {
                               
                             } else {
                                 connection_ikon_cms.release();
-                                res.render('account-login', { error: 'Only Store Admin/Manager are allowed to login.' });
+                                res.render('account-login', { error: 'Only Store Admin/Manager are allowed to login' });
                             }
                         }
                         else {
                             connection_ikon_cms.release();
-                            res.render('account-login', { error: 'Your account has been disable.' });
+                            res.render('account-login', { error: 'Your account has been disable' });
                         }
                     } else {
                         connection_ikon_cms.release();
                         if( req.body.username.length == 0  &&  req.body.password.length == 0 ) {
-                            res.render('account-login', {error: 'Please enter username and password.'});
+                            res.render('account-login', {error: 'Please enter username and password'});
                         }else if(req.body.username.length != 0  &&  req.body.password.length == 0 ){
-                            res.render('account-login', {error: 'Please enter password.'});
+                            res.render('account-login', {error: 'Please enter password'});
                         }
                         else if(req.body.username.length == 0  &&  req.body.password.length != 0){
-                            res.render('account-login', {error: 'Please enter username.'});
+                            res.render('account-login', {error: 'Please enter username'});
                         }
                         else {
-                            res.render('account-login', {error: 'Invalid Username / Password.'});
+                            res.render('account-login', {error: 'Invalid Username / Password'});
                         }
                     }
                 }
@@ -189,7 +189,7 @@ exports.authenticate = function (req, res, next) {
         });
     }
     catch (error) {
-        res.render('account-login', { error: 'Error in database connection.' });
+        res.render('account-login', { error: 'Error in database connection' });
     }
 }
 /**
@@ -237,7 +237,7 @@ exports.forgotPassword = function (req, res, next) {
             userManager.getUserByUserIdByEmail( connection_ikon_cms, req.body.userid, req.body.emailid, function( err, userDetails ){
                 //console.log( userDetails[0] );
                 if (err) {
-                    res.render('account-login', { error: 'Error in database connection.' });
+                    res.render('account-login', { error: 'Error in database connection' });
                 } else {
                     if (userDetails.length > 0) {
 
@@ -259,7 +259,7 @@ exports.forgotPassword = function (req, res, next) {
                                 res.end("error");
                             } else {
                                 connection_ikon_cms.release();
-                                res.render('account-forgot', { error: '', msg: 'Please check your mail. Password successfully sent to your email' });
+                                res.render('account-forgot', { error: '', msg: 'Password successfully sent to your email, Please Check' });
                                 res.end("sent");
                             }
                         });
@@ -274,7 +274,7 @@ exports.forgotPassword = function (req, res, next) {
     }
     catch (err) {
         connection_ikon_cms.end();
-        res.render('account-forgot', { error: 'Error in database connection.' });
+        res.render('account-forgot', { error: 'Error in database connection' });
     }
 }
 /**
@@ -325,14 +325,14 @@ exports.changePassword = function (req, res) {
                                         res.end("error");
                                     } else {
                                         connection_ikon_cms.release();
-                                        res.send({ success: true, message: 'Password updated successfully. Please check your mail.' });
+                                        res.send({ success: true, message: 'Password updated successfully. Please check your mail' });
                                     }
                                 });
                             }
                         }); 
                     }else {
                         connection_ikon_cms.release();
-                        res.send({ success: false, message: 'Old Password does not match.' });
+                        res.send({ success: false, message: 'Old Password does not match' });
                     }
                 })
             }

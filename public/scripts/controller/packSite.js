@@ -60,10 +60,10 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
         $stateParams.packageId = $rootScope.PackageId;
         //$state.go($scope.tabs[$scope.tabIndex].state);
-        console.log("insaaijisajoilasl");
-        console.log($scope.tabIndex);
-        console.log('$stateParams.packageId');
-        console.log($stateParams.packageId);
+        //console.log("insaaijisajoilasl");
+        //console.log($scope.tabIndex);
+        //console.log('$stateParams.packageId');
+        //console.log($stateParams.packageId);
         if($scope.tabIndex == 0 || $stateParams.packageId == undefined ){
             if( $scope.previousState.name ==  $scope.tabs[$scope.tabIndex].state ) {
                 $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
@@ -191,13 +191,13 @@ myApp.controller('packSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
                 $rootScope.action = 'edit';
                      if( $scope.tabIndex == 0 ) {
                          
-                        console.log("in showpackage data tab index 0");
+                        //console.log("in showpackage data tab index 0");
                         $stateParams.packageId = $rootScope.PackageId;
                         $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
                      }
             }
             else{
-                console.log("in undefined package..");
+                //console.log("in undefined package..");
                 // alert('msg');
                 $scope.setEmptyPackage();
 

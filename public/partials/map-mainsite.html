@@ -26,7 +26,8 @@
                                                 <option value=""> --Select Store-- </option>
                                             </select>
                                             <span style="color: red" ng-show="mainsiteMapForm.$submitted || mainsiteMapForm.distributionChannels.$dirty">
-                                                <span ng-show="mainsiteMapForm.distributionChannels.$error.required">Delivery Channel is required.</span>
+                                                <!--<span ng-show="mainsiteMapForm.distributionChannels.$error.required">Delivery Channel is required</span>-->
+                                                 <span ng-show="mainsiteMapForm.distributionChannels.$error.required"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -39,7 +40,8 @@
                                                 <option value="">-- Select Pack  --</option>
                                             </select>
                                             <span style="color: red" ng-show="mainsiteMapForm.$submitted || mainsiteMapForm.pack.$dirty">
-                                                <span ng-show="mainsiteMapForm.pack.$error.required">Please Select Pack.</span>
+                                                <!--<span ng-show="mainsiteMapForm.pack.$error.required">Please Select Pack.</span>-->
+                                                <span ng-show="mainsiteMapForm.pack.$error.required"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -50,7 +52,8 @@
                                         <div class="col-md-6">
                                             <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" required="true">
                                             <span style="color: red" ng-show="mainsiteMapForm.$submitted || mainsiteMapForm.packagename.$dirty">
-                                                <span ng-show="mainsiteMapForm.packagename.$error.required">Package Name is required.</span>
+                                                <!--<span ng-show="mainsiteMapForm.packagename.$error.required">Package Name is required.</span>-->
+                                                 <span ng-show="mainsiteMapForm.packagename.$error.required"></span>
                                             </span>
                                         </div>
                                     </div>

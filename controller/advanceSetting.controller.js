@@ -161,7 +161,7 @@ exports.addSetting = function(req, res, next) {
                         //res.send(results);
                         res.send({"success": true,
                             "status": 200,
-                            message: "Successfully Added"});
+                            message: "Settings Saved Successfully"});
                     }
                 });
             });
@@ -381,7 +381,7 @@ exports.editSetting = function(req, res, next) {
                         //res.send(results);
                         res.send({"success": true,
                             "status": 200,
-                            message: "Successfully Updated"});
+                            message: "Settings Updated Successfully"});
                     }
                 });
             });

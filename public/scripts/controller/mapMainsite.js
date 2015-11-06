@@ -200,16 +200,16 @@ myApp.controller('mapMainsiteCtrl', function ($scope, $rootScope, $state, ngProg
     $scope.submitMainsiteForm = function (isValid) {
 
         if (!$rootScope.distributionChannelId) {
-            toastr.error('Distribution Channel is required');
+            toastr.error('Please select Deliver channel');
             $scope.errorvisible = true;
         }else if (!$rootScope.SelectedPack) {
             toastr.error('Please select Pack');
             $scope.errorvisible = true;
         }else if (!$rootScope.PackageName) {
-            toastr.error('Package Title is required');
+            toastr.error('Please enter package name');
             $scope.errorvisible = true;
         }else if (!$rootScope.ParentPackageId) {
-            toastr.error('Please Create Mainsite Package before mapping.');
+            toastr.error('Please Create Mainsite Package before mapping');
             $scope.errorvisible = true;
         }  else {
             var alacartData = {

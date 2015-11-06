@@ -81,7 +81,7 @@ exports.AddArrangedContents = function (req, res, next) {
                         console.log(err.message)
                     } else {
                         connection_ikon_cms.release();
-                        res.send({success: true, message: 'Save Successfully .'});
+                        res.send({success: true, message: 'Saved Successfully'});
                     }
                 })
 
@@ -125,7 +125,7 @@ exports.AddArrangedContents = function (req, res, next) {
                                     }
                                     else {
                                         connection_ikon_cms.release();
-                                        res.send({success: true, message: 'Save Successfully .'});
+                                        res.send({success: true, message: 'Saved Successfully'});
                                     }
                                 }
                             });

@@ -104,19 +104,19 @@ myApp.controller('usersCtrl', function ($scope, $http, ngProgress, $timeout, Use
                                         $scope.SelectedVendorList = [];
                                         $scope.SelectedUserRole = 0;
                                         $scope.successvisible = true;
-                                        toastr.success("Record inserted successfully. Temprory Password sent to register email.");
+                                        toastr.success("Record inserted successfully. Temporary Password sent to register email");
                                     }
                                     if (data.Result == "EmailIdError") {
                                         $scope.errorvisible = true;
-                                        toastr.error("Email Already Available.");
+                                        toastr.error("Email Already Available");
                                     }
                                     if (data.Result == "UserNameError") {
                                         $scope.errorvisible = true;
-                                        toastr.error("UserName  Already Available.");
+                                        toastr.error("UserName  Already Available");
                                     }
                                     if (data.Result == "MobileNoError") {
                                         $scope.errorvisible = true;
-                                        toastr.error("MobileNo Already Available.");
+                                        toastr.error("MobileNo. Already Available");
                                     }
                                     ngProgress.complete();
                                 })
@@ -139,19 +139,19 @@ myApp.controller('usersCtrl', function ($scope, $http, ngProgress, $timeout, Use
                                         });
                                         $state.go('users');
                                         //$window.location.href = "#add-edit";
-                                        toastr.success("Record Updated successfully.");
+                                        toastr.success("Record Updated successfully");
                                     }
                                     if (data.Result == "EmailIdError") {
                                         $scope.errorvisible = true;
-                                        toastr.error("Email Already Available.");
+                                        toastr.error("Email Already Available");
                                     }
                                     if (data.Result == "UserNameError") {
                                         $scope.errorvisible = true;
-                                        toastr.error("UserName  Already Available.");
+                                        toastr.error("UserName  Already Available");
                                     }
                                     if (data.Result == "MobileNoError") {
                                         $scope.errorvisible = true;
-                                        toastr.error("MobileNo Already Available.");
+                                        toastr.error("MobileNo Already Available");
                                     }
                                     ngProgress.complete();
                                 });
@@ -212,7 +212,7 @@ myApp.controller('usersCtrl', function ($scope, $http, ngProgress, $timeout, Use
             });
         }
         else {
-            toastr.error("Confirm Password does not match.");
+            toastr.error("Confirm Password does not match");
             $scope.errorvisible = true;
         }
     };

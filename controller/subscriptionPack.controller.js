@@ -442,7 +442,7 @@ function addSubscriptionPackagePlan123( req, res, connection_ikon_cms, packageDa
                                 connection_ikon_cms.release();
                                 res.send({
                                     success: true,
-                                    "message": "Value pack plan successfully saved for site",
+                                    "message": "Package Saved Successfully",
                                     "status": 200
                                 });
                             } else {
@@ -481,7 +481,7 @@ function addSubscriptionPackagePlan123( req, res, connection_ikon_cms, packageDa
                                                 console.log(err.message)
                                             } else {
                                                 connection_ikon_cms.release();
-                                                res.send( { "success" : true,"status":200, "message":"Subscription pack plan successfully saved for site.",selectedSubscriptionPackPlans : selectedSubscriptionPlans } );
+                                                res.send( { "success" : true,"status":200, "message":"Package Saved Successfully",selectedSubscriptionPackPlans : selectedSubscriptionPlans } );
                                             }
                                         });
                                         /*connection_ikon_cms.release();

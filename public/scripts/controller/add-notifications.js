@@ -84,7 +84,7 @@ $scope.counts =[
     $scope.submitNotificationForm = function (valid) {
         if(!valid) {
             if ($scope.startingTime >= $scope.endingTime) {
-                toastr.error('Start time  should be smaller than End time.');
+                toastr.error('Start time should be smaller than End time');
             } else if ($scope.messagetext == undefined || $scope.messagetext == null) {
                 toastr.error('Please enter a message');
             }
@@ -93,19 +93,19 @@ $scope.counts =[
             if ($rootScope.n_selectedPlans == undefined || $rootScope.n_selectedPlans.length == 0) {
                 toastr.error('Please Select Plan');
             } else if (($scope.selectedCount == undefined || $scope.selectedCount == null) && ($scope.selectedPercent != undefined && $scope.selectedPercent != null && $scope.selectedCount != 3)) {
-                toastr.error('Please select both options in no of contents downloaded.');
+                toastr.error('Please select both options in no. of contents downloaded');
             } else if (($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null && $scope.selectedCount != 3)) {
-                toastr.error('Please select both options in no of contents downloaded.');
+                toastr.error('Please select both options in no. of contents downloaded');
             } else if ($scope.days != null && $scope.days == undefined) {
                 if ($scope.days < 1 || $scope.days > 99 || $scope.days == undefined) {
-                    toastr.error('Days should be between 1 to 99.');
+                    toastr.error('Days should be between 1 to 99');
                 }
             } else if ($scope.hours != null && $scope.hours == undefined) {
                 if ($scope.hours < 1 || $scope.hours > 24 || $scope.days == undefined) {
-                    toastr.error('Hours should be between 1 to 24.');
+                    toastr.error('Hours should be between 1 to 24');
                 }
             } else if( $scope.selectedPush == null){
-                toastr.error('Please select push type .')
+                toastr.error('Please select push type')
             } else if ($stateParams.pn_id) {
                 var notificationData = {
                     pnId: $stateParams.pn_id,
@@ -119,7 +119,7 @@ $scope.counts =[
                     Push: $scope.selectedPush
                 }
                 Notification.updateNotificationData(notificationData, function (data) {
-                    toastr.success("update successfully");
+                    toastr.success("Notification Updated Successfully");
                     $state.go("notifications.list");
                 });
             }
@@ -143,7 +143,7 @@ $scope.counts =[
 
                     Notification.addNotificationData(notificationData, function (data) {
 
-                        toastr.success("save successfully");
+                        toastr.success("Notification Saved Successfully");
 
 
                         //$timeout(function() {

@@ -123,10 +123,10 @@ myApp.controller('PackageListCtrl', function ($scope, $rootScope, $stateParams,$
         $('#src_'+$scope.alpha).css('font-weight','normal');
         $('#src_'+$scope.alpha).css('font-size','small');
         if($scope.search_title == "" && $scope.StartDate == "" && $scope.EndDate == ""){
-            toastr.error('Please fill atleast one field to search.');
+            toastr.error('Please fill atleast one field to search');
         }else{
             if($scope.StartDate > $scope.EndDate){
-                toastr.error('Start Date should be smaller than End date.');
+                toastr.error('Start Date should be smaller than End date');
             }else{
                 $scope.tag_search_title = $scope.search_title;
                 $scope.tag_StartDate = $scope.StartDate;

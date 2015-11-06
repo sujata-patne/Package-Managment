@@ -131,11 +131,11 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
              var valid = true;
              if($scope.files.length == 0){
                 valid = false;
-                toastr.error("Please select images to upload.");
+                toastr.error("Please select image to upload");
              }
              if($scope.files[index] != undefined &&  $scope.files[index].length > 1){
                 valid = false;
-                toastr.error("Max 1 files allowed per content type");
+                toastr.error("Max 1 file allowed per content type");
              }
              if(valid){
                       angular.forEach($scope.files, function(file) {
@@ -157,7 +157,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
 
                             file.upload.progress(function (evt) {
                                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                $("#progress_id").html("Uploaded: "+progressPercentage+"%");
+                                $("#progress_id").html("Image Uploaded: "+progressPercentage+"%");
                                 $scope.fileUploads[index].progress = Math.min(100, parseInt(100.0 * 
                                                        evt.loaded / evt.total));
 
@@ -212,7 +212,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
   $scope.submitAdvanceSettingForm = function(isValid){
     if(isValid){
           if (!$rootScope.distributionChannelId) {
-                toastr.error('Distribution Channel is required');
+                toastr.error('Please Select Deliver Channel');
                 $scope.errorvisible = true;
             }else{
                       if($scope.offerPlan.length == 0){
@@ -221,11 +221,11 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                       if($scope.offerPlan.length > 0){
 
                           if($scope.totalGet > $scope.offerPlan[0].op_free_item){
-                              toastr.error(' In offer plan get :  computed sum greater than their total.');
+                              toastr.error(' In offer plan get : Computed sum more than the total');
                               isValid = false;
                           }
                           if($scope.totalBuy > $scope.offerPlan[0].op_buy_item){
-                              toastr.error('In offer plan buy :  computed sum greater than their total.');
+                              toastr.error('In offer plan buy : Computed sum more than the total');
                               isValid = false;
                           }
                       }
@@ -250,7 +250,7 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                                 
                                 if(computed_sum > total_download_limit){
                                     isValid = false;
-                                    toastr.error('In Plan '+vp_name+': Computed sum more than the total');
+                                    toastr.error('In Value Pack Plan '+vp_name+' : Computed sum more than the total');
                                     return false;
                                 }
                               }
@@ -298,13 +298,13 @@ myApp.controller('advanceSettingCtrl', function ($scope,$rootScope,$timeout, $st
                     $scope.resetSetting = newSetting;
                     if ($scope.updateFlag) {
                         advanceSetting.editSetting(newSetting, function (data) {
-                            toastr.success('Successfully Updated!');
+                            toastr.success('Settings Updated Successfully');
                         });
                     }
                     else {
                         $scope.updateFlag = true;
                         advanceSetting.addSetting(newSetting, function (data) {
-                            toastr.success('Successfully Added!');
+                            toastr.success('Settings Saved Successfully');
                         });
                     }
                     if($scope.nextButtonPressed) {

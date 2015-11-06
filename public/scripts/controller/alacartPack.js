@@ -59,13 +59,13 @@ myApp.controller('alacartCtrl', function ($scope, $rootScope, $state, ngProgress
 
     $scope.submitAlacartForm = function (isValid) {
         if (!$rootScope.distributionChannelId){
-            toastr.error('Distribution Channel Required');
+            toastr.error('Please select Deliver channel');
             $scope.errorvisible = true;
         }else if ($rootScope.PackageType == 1 && !$rootScope.SelectedPack){
-            toastr.error('Please Select Pack.');
+            toastr.error('Please Select Pack');
             $scope.errorvisible = true;
         }else if ($rootScope.PackageType == 1 && !$rootScope.PackageName){
-            toastr.error('Package Name Required.');
+            toastr.error('Please enter package name');
             $scope.errorvisible = true;
         }else if(isValid) {
             var alacartData = {

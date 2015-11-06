@@ -141,7 +141,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
         if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
             if($rootScope.SelectedPack == undefined){
-                toastr.error('Please select a valid pack');
+                toastr.error('Please select pack');
             }else {
                 if(new_date != '' && n > 2050){
                     toastr.error('Please select a date valid till 2050');
@@ -156,18 +156,18 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
                     if($rootScope.PackageId && $rootScope.PackageId != null && $rootScope.PackageId != undefined && $rootScope.PackageId != '') {
                         IndividualContent.editIndividualContent(data,function(data){
-                            toastr.success('Successful!');
+                            toastr.success('Content Saved Successfully');
                         });
                     }else{
                         IndividualContent.addIndividualContent(data,function(data){
-                            toastr.success('Successful!');
+                            toastr.success('Content Saved Successfully');
                         });
                     }
                 }
             }
 
         }else{
-            toastr.error('Please select a package. To create a package select the appropriate plans.');
+            toastr.error('Please create a package. To create a package select the appropriate plans.');
         }
 
     }

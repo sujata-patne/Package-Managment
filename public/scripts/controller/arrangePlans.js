@@ -70,9 +70,9 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             }
         })
         if (!valid ) {
-            toastr.error("Maxlength is 4 and value should not be zero")
+            toastr.error("Maxlength is 4 or value should not be zero")
         } else if(arrlength.length == 0 || arrlength.length < $scope.finalarray.length ) {
-            toastr.error('Please fill the  values in range');
+            toastr.error('Please fill all the values');
         }else {
             var data = {
                 packageId: $rootScope.PackageId,
@@ -113,7 +113,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
 
         });
         if( $scope.duplicate.length > 0 ) {
-            toastr.error("Duplicate values not allowed!");
+            toastr.error("Please Enter Unique Values");
             angular.forEach($scope.duplicate,function(value,key) {
                // console.log($scope.sequenceData[value])
 

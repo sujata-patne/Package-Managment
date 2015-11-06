@@ -377,7 +377,7 @@ function saveValuePackPlan(req, res, connection_ikon_cms, packageData) {
             } else {
                 res.send({
                     success: true,
-                    "message": "Value pack plan successfully saved for site",
+                    "message": "Package Saved Successfully",
                     "status": 200,
                     "pkgId": packageData.sp_pkg_id
                 });
@@ -462,7 +462,7 @@ function addValuePackPlan123(req, res, connection_ikon_cms, packageData) {
                                 connection_ikon_cms.release();
                                 res.send({
                                     success: true,
-                                    "message": "Value pack plan successfully saved for site",
+                                    "message": "Package Saved Successfully",
                                     "status": 200
                                 });
                             } else {
@@ -497,7 +497,7 @@ function addValuePackPlan123(req, res, connection_ikon_cms, packageData) {
                                         connection_ikon_cms.release();
                                         res.send({
                                             success: true,
-                                            "message": "Value pack plan successfully saved for site.",
+                                            "message": "Package Saved Successfully",
                                             "status": 200
                                         });
                                     } else {
@@ -522,7 +522,7 @@ function addValuePackPlan123(req, res, connection_ikon_cms, packageData) {
                 res.send({
                     "success": true,
                     "status": 200,
-                    "message": "Package Saved Successfully..",
+                    "message": "Package Saved Successfully",
                     selectedValuePackPlans: selectedValuePackPlans
                 });
             }
