@@ -6,6 +6,15 @@ exports.getValuePacks = function( dbConnection,packageId, callback ){
             callback( err, response );
         });
 }
+
+exports.getPackageByNameForNotification = function(dbConnection,dc_id, storeId, callback) {
+
+    var query = dbConnection.query('select sp_pkg_id, sp_package_name,sp_pkg_type from icn_store_package as st '+
+        ' where st.sp_dc_id = ? AND st.sp_st_id = ? AND st.sp_is_active = 1 AND ISNULL(st.sp_crud_isactive ) ORDER BY st.sp_pkg_id desc' , [dc_id , storeId],  function (err, packageByName) {
+        callback(err, packageByName);
+    });
+} 
+
 exports.getSubscriptionPacks = function( dbConnection, packageId , callback ){
 
     var query = dbConnection.query('SELECT concat("SubscriptionPack_",pss_sp_id) as plan_id,sp_plan_name as plan_name FROM  icn_package_subscription_site, icn_sub_plan '+

@@ -120,7 +120,8 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
     });
 
     $scope.$watch('distributionChannelId',function(){
-        
+        // console.log($rootScope.distributionChannelId);
+        // alert("main")
         if($rootScope.distributionChannelId != undefined && $rootScope.distributionChannelId != ''){
             $scope.setPackageDetails();
         }

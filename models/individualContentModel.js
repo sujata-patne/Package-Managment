@@ -1,5 +1,5 @@
 exports.getAlacartPlansByContentType = function( dbConnection,storeId,contentTypeId, callback) {
-	var query = dbConnection.query("SELECT * FROM `icn_alacart_plan` WHERE ap_content_type = ? AND ap_st_id = ? ",[contentTypeId,storeId], function ( err, response ) {
+	var query = dbConnection.query("SELECT * FROM `icn_alacart_plan` WHERE ap_content_type = ? AND ap_st_id = ? AND ap_is_active = 1",[contentTypeId,storeId], function ( err, response ) {
 		callback( err, response );
 	});
 }
@@ -18,13 +18,15 @@ exports.getContentData = function( dbConnection,contentTypeId,packId, callback) 
 }
 
 exports.checkRecordExists = function( dbConnection,storeId,packId,alacartPlanId,packageId, callback) {
-	var query = dbConnection.query("SELECT * FROM icn_package_individual_content WHERE pic_st_id = ? AND pic_pk_id = ? AND pic_ap_id = ? AND pic_pkg_id = ? AND ISNULL(pic_crud_isactive) ",[storeId,packId,alacartPlanId,packageId], function ( err, response ) {
+	console.log('in record exists');
+	var query = dbConnection.query("SELECT * FROM icn_package_individual_content WHERE pic_st_id = ? AND pic_pk_id = ?  AND pic_pkg_id = ? AND ISNULL(pic_crud_isactive) ",[storeId,packId,packageId], function ( err, response ) {
 		callback( err, response );
 	});
 }
 
 exports.updateIndividualContentRecord = function( dbConnection,storeId,packId,alacartPlanId,packageId, callback) {
-	var query = dbConnection.query("UPDATE icn_package_individual_content SET pic_crud_isactive = 1 WHERE pic_st_id = ? AND pic_pk_id = ? AND pic_ap_id = ? AND pic_pkg_id = ? ",[storeId,packId,alacartPlanId,packageId], function ( err, response ) {
+	console.log('in  updateIndividualContentRecord');
+	var query = dbConnection.query("UPDATE icn_package_individual_content SET pic_crud_isactive = 1 WHERE pic_st_id = ? AND pic_pk_id = ?  AND pic_pkg_id = ? ",[storeId,packId,packageId], function ( err, response ) {
 		callback( err, response );
 	});
 }
@@ -43,6 +45,7 @@ exports.saveIndividualContent = function( dbConnection,data, callback) {
 }
 
 exports.updateIndividualContentDate = function( dbConnection,data, callback) {
+
 	var query = dbConnection.query("UPDATE icn_package_individual_content SET pic_valid_till = ? WHERE pic_st_id = ? AND pic_pk_id = ? AND pic_ap_id = ? AND pic_pkg_id = ?",[data.pic_valid_till,data.pic_st_id,data.pic_pk_id,data.pic_ap_id,data.pic_pkg_id], function ( err, response ) {
 		callback( err, response );
 	});

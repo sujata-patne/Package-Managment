@@ -44,7 +44,7 @@ exports.getNotificationData = function(req, res, next) {
                 async.parallel({
                         PackageName : function (callback){
                             //to get the package name
-                            PackageManager.getPackageByName(connection_ikon_cms,req.body.distributionChannelId,req.session.package_StoreId, function(err, packs){
+                            Notification.getPackageByNameForNotification(connection_ikon_cms,req.body.distributionChannelId,req.session.package_StoreId, function(err, packs){
                                 callback(err,packs);
                             });
                         },
