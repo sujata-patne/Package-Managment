@@ -124,7 +124,10 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     }
     $scope.resetForm = function(id) {
         $scope.sequenceData = [];
+        $('.txt_arrange').val('');
     }
+
+
 // validate space in arrange sequence
    $scope.AvoidSpace = function(event) {
         var k = event ? event.which : window.event.keyCode;

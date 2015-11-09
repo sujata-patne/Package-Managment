@@ -30,6 +30,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
 
             // $state.go($scope.tabs[$scope.tabIndex].state);
             $stateParams.packageId = $rootScope.PackageId;
+            
             //
             $state.go($scope.tabs[$scope.tabIndex].state, {packageId:$rootScope.PackageId, location: true, inherit : false});
             //$state.go($state.current, { packageId: $rootScope.PackageId, location: true, inherit : false});
@@ -221,7 +222,7 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
             console.log(' $rootScope.previousState 5')
-         
+             
              $scope.setEmptyPackage();
 
         }else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
