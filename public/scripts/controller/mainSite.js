@@ -106,6 +106,10 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         $scope.checkState();
 
         $scope.ContentTypes = angular.copy(MainSiteData.ContentTypes);
+        $scope.streamingContentTypes = _.filter($scope.ContentTypes, function(el){ return el.parent_name == 'Audio' || el.parent_name == 'Video'; });
+        $scope.downloadContentTypes = _.filter($scope.ContentTypes, function(el){ return el.parent_name == 'Wallpaper'; });
+       
+
         $scope.distributionChannels = angular.copy(MainSiteData.distributionChannels);
         $scope.OfferStoreData = angular.copy(MainSiteData.OfferData);
         $scope.alacartStorePlans = angular.copy(MainSiteData.alacartPackPlans);
