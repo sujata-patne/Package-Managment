@@ -10,9 +10,7 @@
                         <div class="row">
                             <div class="col-md-12" ><fieldset style="font-size: 12px; font-weight: bold">Downloadable Content Type</fieldset></div>
                         </div>
-                        <div class="row" ng-show="downloadContentTypes.length == 0">
-                            <center>No Download Content Types selected for the store.</center>
-                        </div>
+                     
                         <div class="row" ng-repeat="ContentType in ContentTypes">
                             <div class="col-md-2">
                                 <div class="row"><div class="form-group col-md-12">
@@ -37,7 +35,7 @@
                             <div class="col-md-12" ><fieldset style="font-size: 12px; font-weight: bold">Streaming Content Type</fieldset></div>
                         </div>
                         <div class="row" ng-show="streamingContentTypes.length == 0">
-                            <center>No Streaming Content Types selected for the store.</center>
+                            <center>No Streaming Content Type available for the store.</center>
                         </div>
                         <div class="row" ng-repeat="ContentType in ContentTypes | filterWithOr:{parent_name:['Audio','Video'] }"> <!--| filter:showDeliveryTypes-->
                             
