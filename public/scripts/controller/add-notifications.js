@@ -82,9 +82,10 @@ $scope.counts =[
         })
     }
     $scope.submitNotificationForm = function (valid) {
+        console.log(valid)
         if(!valid) {
             if($rootScope.n_distributionChannelId == undefined && $rootScope.n_distributionChannelId == null) {
-                toastr.error('Please Select Distribution Channel');
+                toastr.error('Please Select Deliver Channel');
             }
             else if ($rootScope.n_selectedPackage == undefined && $rootScope.n_selectedPackage == null){
                 toastr.error('Please Select Package');
@@ -92,19 +93,21 @@ $scope.counts =[
             else if ($rootScope.n_selectedPlans == undefined || $rootScope.n_selectedPlans.length == 0) {
                 toastr.error('Please Select Plan');
             }
-           else if ($scope.messagetext == undefined || $scope.messagetext == null) {
+            else if ($scope.messagetext == undefined || $scope.messagetext == null) {
                 toastr.error('Please enter a message');
             }
-            else if ($scope.startingTime >= $scope.endingTime) {
+             else if ($scope.startingTime >= $scope.endingTime) {
                 toastr.error('Start time should be smaller than End time');
             }
-
         }
-           else {
+        else {
             //if ($rootScope.n_selectedPlans == undefined || $rootScope.n_selectedPlans.length == 0) {
             //    toastr.error('Please Select Plan');
             //} else
-            if (($scope.selectedCount == undefined || $scope.selectedCount == null) && ($scope.selectedPercent != undefined && $scope.selectedPercent != null && $scope.selectedCount != 3)) {
+            if ($scope.startingTime >= $scope.endingTime) {
+                toastr.error('Start time should be smaller than End time');
+            }
+             else if (($scope.selectedCount == undefined || $scope.selectedCount == null) && ($scope.selectedPercent != undefined && $scope.selectedPercent != null && $scope.selectedCount != 3)) {
                 toastr.error('Please select both options in no. of contents downloaded');
             } else if (($scope.selectedPercent == undefined || $scope.selectedPercent == null) && ($scope.selectedCount != undefined && $scope.selectedCount != null && $scope.selectedCount != 3)) {
                 toastr.error('Please select both options in no. of contents downloaded');

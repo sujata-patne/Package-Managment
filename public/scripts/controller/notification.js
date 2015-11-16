@@ -3,7 +3,7 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
     $('.removeSubactiveClass').removeClass('active');
     $('#notifications').addClass('active');
     $scope.tabs = [
-        {title: "Add New Notifications", state: "notifications.add", active: true},
+        {title: "Add New Notification", state: "notifications.add", active: true},
         {title: "List Of Notifications", state: "notifications.list", active: false}
     ];
     $rootScope.n_selectedPlans = [];

@@ -4,21 +4,21 @@
             <!-- <input type="text" name="paosId" class="form-control" data-ng-model="paosId"> -->
         </div>
         <div class="col-md-8 col-xs-12">
-            <div ng-show="alacartPackPlans != 'NoAlaCart'" class="portlet">
+            <div ng-show="alacartPackPlans != 'NoAlaCart'" class="portlet" >
                 <div class="portlet-content">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-left: 30px">
                         <div class="row">
                             <div class="col-md-12" ><fieldset style="font-size: 12px; font-weight: bold">Downloadable Content Type</fieldset></div>
                         </div>
                      
                         <div class="row" ng-repeat="ContentType in ContentTypes">
                             <div class="col-md-2">
-                                <div class="row"><div class="form-group col-md-12">
-                                    <label class="col-md-12 control-label" style="margin: 1px;">{{ContentType.cd_name}}</label>
+                                <div class="row"><div class="form-group col-md-12" style="margin-left: 20px;">
+                                    <label class="col-md-12 control-label" style="margin: 1px;text-align: right">{{ContentType.cd_name}}:</label>
                                 </div></div>
                             </div>
                             <div class="col-md-5">
-                                <div class="row"><div class="form-group col-md-12">
+                                <div class="row"><div class="form-group col-md-12" style="margin-left: 20px;">
                                     <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans | filter:{content_type_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Download'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].download"  >
                                         <option value="">--Select One Plan--</option>
                                     </select>
@@ -30,7 +30,7 @@
             </div>
             <div ng-show="alacartPackPlans != 'NoAlaCart'" class="portlet" >
                 <div class="portlet-content">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-left: 30px">
                         <div class="row">
                             <div class="col-md-12" ><fieldset style="font-size: 12px; font-weight: bold">Streaming Content Type</fieldset></div>
                         </div>
@@ -40,12 +40,12 @@
                         <div class="row" ng-repeat="ContentType in ContentTypes | filterWithOr:{parent_name:['Audio','Video'] }"> <!--| filter:showDeliveryTypes-->
                             
                             <div class="col-md-2">
-                                <div class="row"><div class="form-group col-md-12">
-                                    <label class="col-md-12 control-label" style="margin: 1px;">{{ContentType.cd_name}}</label>
+                                <div class="row"><div class="form-group col-md-12" style="margin-left: 20px">
+                                    <label class="col-md-12 control-label" style="margin: 1px;text-align: right">{{ContentType.cd_name}}:</label>
                                 </div></div>
                             </div>
                             <div class="col-md-5">
-                                <div class="row"><div class="form-group col-md-12" >
+                                <div class="row"><div class="form-group col-md-12" style="margin-left: 20px;" >
                                     <select style="width:120%" data-ng-options="item.ap_id as item.ap_plan_name for item in alacartPackPlans  | filter:{content_type_name:'{{ContentType.cd_name}}'} | filter:{delivery_type_name:'Streaming'}" class="form-control" data-ng-model="alacartPlanIds[ContentType.cd_id].streaming" >
                                         <option value="">--Select One Plan--</option>
                                     </select>
@@ -57,7 +57,7 @@
             </div>
              <div ng-if="alacartPackPlans == 'NoAlaCart'" class="portlet">
                 <div class="portlet-content">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-left: 30px">
                         <div style="color:red;text-align:center">
                                 <strong>AlaCart Plan Rights not assigned to the store.</strong>
                             </div> 
@@ -66,7 +66,7 @@
             </div>
             <div class="portlet">
                 <div class="portlet-content">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-left: 30px">
                         <div class="form-group">
                             <div class="col-md-2">
                                 <div class="row"><div class="form-group col-md-12">
@@ -74,7 +74,7 @@
                                 </div></div>
                             </div>
                             <div class="col-md-5">
-                                <div class="row"><div class="form-group col-md-12" >
+                                <div class="row"><div class="form-group col-md-12" style="margin-left: 20px;" >
                                     <select style="width:120%" data-ng-options="item.op_id as item.op_plan_name for item in OfferData" class="form-control" data-ng-model="offerId" >
                                         <option value="">--Select Offer Plan--</option>
                                     </select>
