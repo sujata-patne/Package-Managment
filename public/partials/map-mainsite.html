@@ -9,11 +9,11 @@
             <form method="post" class="form-horizontal" role="form" name="mainsiteMapForm" data-ng-submit="submitMainsiteForm(mainsiteMapForm.$valid)" novalidate>
                 <div class="row">
                     <div class="col-md-2" >
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <input type="text" name="pkg_id" style="width: 50px" data-ng-model="$root.PackageId" >
                             <input type="text" name="parent_pkg_id" style="width: 50px"  data-ng-model="$root.ParentPackageId">
                             <input type="text" name="pkg_type" style="width: 50px" data-ng-model="$root.PackageType">
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-8 col-xs-12">
                         <div class="portlet">
@@ -50,7 +50,7 @@
                                     <div class="form-group">
                                         <label for="packagename" class="col-md-3 control-label"><span class="asterisk padding-right-5">*</span>Package Title </label>
                                         <div class="col-md-6">
-                                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" required="true">
+                                            <input type="text" name="packagename" class="form-control" data-ng-model="$root.PackageName" placeholder="Enter Package name" maxlength="40" required="true">
                                             <span style="color: red" ng-show="mainsiteMapForm.$submitted || mainsiteMapForm.packagename.$dirty">
                                                 <!--<span ng-show="mainsiteMapForm.packagename.$error.required">Package Name is required.</span>-->
                                                  <span ng-show="mainsiteMapForm.packagename.$error.required"></span>
