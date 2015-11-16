@@ -4,10 +4,10 @@
         <div class="col-md-10 col-xs-10">
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}} </span>
             <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}} </span>
-            <div class="portlet">
+            <div class="portlet" style="padding-top: 15px">
                 <div class="portlet-content">
                     <div class="col-md-12">
-                        <label for="after" class="col-sm-5 control-label">After:</label>
+                        <label for="after" class="col-sm-5 control-label" >After:</label>
                         <div class="col-md-5">
                          <!--    <input type="text" ng-model="pnId"  /> -->
 
@@ -97,7 +97,7 @@
             <div class="col-md-offset-5 col-md-7" >
                 <button ng-show="edit_state == true"  type="submit" class="btn btn-primary btn-w-md" title="update">Update</button>
                 <button ng-hide="edit_state == true" type="submit" class="btn btn-primary btn-w-md" title="add">Add</button>
-                <input type="submit" value="AddMore" ng-hide="edit_state == true"  class="btn btn-default btn-w-md" data-ng-click="addMore()" />
+                <input type="submit" value="Add More" ng-hide="edit_state == true"  class="btn btn-default btn-w-md" data-ng-click="addMore()" />
                 <button ng-hide="edit_state == true" type="reset" id="reset_btn" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
                 <button ng-hide="1==1" type="reset" id="reset_btn_after_add" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetFormAfterAdd()">Reset After Add</button>
             </div>

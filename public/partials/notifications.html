@@ -11,9 +11,9 @@
                 <div class="col-md-10 col-xs-10">
                     <div class="portlet">
                         <div class="portlet-content">
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="text-align: right;">
                                 <div class="form-group">
-                                    <label for="distributionChannels" class="col-md-5 control-label">Deliver Channel:</label>
+                                    <label for="distributionChannels" class="col-md-5 control-label"><span  class="asterisk padding-right-5">*</span>Deliver Channel:</label>
                                     <div class="col-md-6">
                                         <select name="distributionChannels" data-ng-options="item.cd_id as item.cd_name for item in distributionChannels" data-ng-change="OnDistributionChange()" class="form-control" data-ng-model="$root.n_distributionChannelId"  >
                                             <option value=""> --Select Store-- </option>
@@ -21,9 +21,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="text-align: right;">
                                 <div class="form-group">
-                                    <label for="site" class="col-md-5 control-label">Select Site : </label>
+                                    <label for="site" class="col-md-5 control-label"><span class="asterisk padding-right-5">*</span>Select Site : </label>
                                     <div class="col-md-6">
                                         <select name="pack" class="form-control" data-ng-model="$root.n_selectedPackage"  data-ng-change="OnPackageChange()" data-ng-options="item.sp_pkg_id as item.sp_package_name for item in packageName"  required>
                                             <option value="">-- Select Site  --</option>
@@ -31,9 +31,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="text-align: right;">
                                 <div class="form-group">
-                                    <label for="plan" class="col-md-5 control-label">Select Subscription/Value Pack Plan : </label>
+                                    <label for="plan" class="col-md-5 control-label"><span class="asterisk padding-right-5">*</span>Select Subscription/Value Pack Plan : </label>
                                     <div class="col-md-6">
 
                                         <select ng-show="$root.n_addNotification == true" name="plan" class="form-control" data-ng-model="$root.n_selectedPlans" multiple data-ng-options="item.plan_id as item.plan_name for item in plans"  required>
