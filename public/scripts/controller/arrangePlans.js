@@ -112,7 +112,10 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
             $scope.duplicate = duplicate;
 
         });
-        if( $scope.duplicate.length > 0 ) {
+        //console.log( $scope.unique)
+        //console.log($scope.duplicate)
+        //console.log($scope.duplicate.length)
+       if( $scope.duplicate > 0 ) {
             toastr.error("Please Enter Unique Values");
             angular.forEach($scope.duplicate,function(value,key) {
                // console.log($scope.sequenceData[value])
@@ -121,6 +124,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
 
             })
         }
+
     }
     $scope.resetForm = function(id) {
         $scope.sequenceData = [];
