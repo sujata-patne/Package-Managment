@@ -83,7 +83,7 @@
                         <br/>
                         If no distribution channel selected, please select one.
                     </div>
-                    <div class="row col-md-12" ng-hide="offerPlan.length == 0 && valuePlans.length == 0">
+                    <div class="row col-md-12" style="margin-top:2%" ng-hide="offerPlan.length == 0 && valuePlans.length == 0">
                         Manage CG Images :
                         <!--  <form name="form">
                                Single Image with validations
@@ -101,7 +101,7 @@
                                  accept="image/*" ngf-pattern="'.jpg,.png,.gif,.jpeg'" ngf-max-height="1000" ngf-max-size="30KB" ngf-max-width="640" ngf-min-width="640" ngf-max-height="640" ngf-min-height="640">
                             <i class="fa fa-upload" style="color:green" title="Select Files"></i>
                         </button>
-                        <input type="button" value="Upload" ng-click="uploadSubmit(0)" />
+                        <input type="button"  value="Upload" ng-click="uploadSubmit(0)" />
                                           <span ng-if="cgimage != ''">
                                               <a class="fancybox grouped_elements" href="{{cgimage.pci_cg_img_browse}}" ng-if="cgimage != ''" >
                                                   <img ng-src="{{cgimage.pci_cg_img_browse}}" width="50"
