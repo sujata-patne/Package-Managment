@@ -115,7 +115,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
         //console.log( $scope.unique)
         //console.log($scope.duplicate)
         //console.log($scope.duplicate.length)
-       if( $scope.duplicate > 0 ) {
+       if( $scope.duplicate.length > 0 ) {
             toastr.error("Please Enter Unique Values");
             angular.forEach($scope.duplicate,function(value,key) {
                // console.log($scope.sequenceData[value])
