@@ -144,3 +144,15 @@ display:none;
     /* visibility: hidden; */
     z-index: 999;
 }
+
+.table-fluid-big {
+    overflow-x:scroll;
+    display:table-cell;
+    max-width:575px;
+}
+.table-fluid-small {
+    overflow-x:scroll;max-width:575px;
+}
+.advancetable td{
+    min-width: 75px;
+}

@@ -51,7 +51,7 @@
                     <!-- Value Pack Plans -->
                     <div class="col-md-12" ng-if="valuePlans.length > 0">
                         <label for="valuePlans" class="col-sm-3 control-label">Value Pack Plans :  </label>
-                        <table class="table table-striped table-bordered">
+                        <table  ng-class="valuePlans.length <= 6 ? 'table table-striped table-bordered table-fluid-small advancetable' : ( valuePlans.length > 6 ? 'table table-striped table-bordered table-fluid-big advancetable' : '') " class="" >
                             <thead>
                             <tr>
                                 <th style="width:30px;" class="text-center">Content Type</th>
