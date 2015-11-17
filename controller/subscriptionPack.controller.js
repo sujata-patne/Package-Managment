@@ -282,7 +282,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                                 } else if( deleteStatus != false ){
                                     cnt = cnt + 1;
                                     if(cnt == count) {
-                                        connection_ikon_cms.release();
+                                        
                                         is_deleted = true;
                                         callback(null, true);
                                     } else {
@@ -316,7 +316,7 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                                 } else {
                                     cnt = cnt + 1;
                                     if( cnt == count ) {
-                                        connection_ikon_cms.release();
+                                        
                                         callback(null, true);
                                     } else {
                                         loop(cnt);
@@ -347,7 +347,6 @@ function addSubscriptionPackagePlan( req, res, connection_ikon_cms, packageData 
                                         } else {
                                             cnt = cnt + 1;
                                             if( cnt == count ) {
-                                                connection_ikon_cms.release();
                                                 callback(null, true);
                                             } else {
                                                 loop(cnt);
