@@ -113,7 +113,10 @@ exports.addSetting = function(req, res, next) {
                                      }
 
                                      advanceSettingManager.saveAdvanceSetting( connection_ikon_cms,data,function(err,response){
-                                            if(err){ 
+                                            if(err){
+                                                connection_ikon_cms.release();
+                                                res.status(500).json(err.message);
+                                                console.log(err.message);
                                             }else{
                                                 if(cnt == count){
                                                     callback(err,null);
@@ -137,7 +140,7 @@ exports.addSetting = function(req, res, next) {
                             loop1(0);
                             function loop1( cnt ) {
                                 var i = cnt;
-                                saveValuePackForSetting(_.keys(req.body.valuePlanSetting)[i],req.body.valuePlanSetting,req.body.totalLength - 1,false);
+                                saveValuePackForSetting(_.keys(req.body.valuePlanSetting)[i],req.body.valuePlanSetting,req.body.totalLength - 1, false );
                                 if(cnt == count){
                                     callback(null);
                                 }else{
@@ -197,7 +200,9 @@ exports.UploadFile =  function (req, res, next) {
                                     if(response.length > 0){
                                         advanceSettingManager.DeleteCGImage( connection_ikon_cms,fields.packageId, function( err,response) {
                                             if(err){
-
+                                                connection_ikon_cms.release();
+                                                res.status(500).json(err.message);
+                                                console.log(err.message);
                                             }else{
                                                 callback(err,'Updated Previous CG image to delete status');
                                             }
@@ -298,7 +303,9 @@ exports.UploadFile =  function (req, res, next) {
                             }
                         ],function(err,results){
                                 if(err){
-
+                                    connection_ikon_cms.release();
+                                    res.status(500).json(err.message);
+                                    console.log(err.message);
                                 }else{
                                     connection_ikon_cms.release();
                                 }
@@ -328,10 +335,15 @@ exports.editSetting = function(req, res, next) {
                                      }
                                      advanceSettingManager.updateOfferSetting(  connection_ikon_cms, data.pass_paos_id,data.pass_content_type, function(err,response){
                                         if(err){
-
+                                            connection_ikon_cms.release();
+                                            res.status(500).json(err.message);
+                                            console.log(err.message);
                                         }else{
                                              advanceSettingManager.saveAdvanceSetting( connection_ikon_cms,data,function(err,response){
-                                                    if(err){ 
+                                                    if(err){
+                                                        connection_ikon_cms.release();
+                                                        res.status(500).json(err.message);
+                                                        console.log(err.message);
                                                     }else{
                                                         if(cnt == count){
                                                             callback(err,null);
@@ -355,7 +367,7 @@ exports.editSetting = function(req, res, next) {
                                 function loop1( cnt ) {
                                     var i = cnt;
                                     //function  call :
-                                    saveValuePackForSetting(_.keys(req.body.valuePlanSetting)[i],req.body.valuePlanSetting,req.body.totalLength - 1,true);
+                                    saveValuePackForSetting( ( _.keys(req.body.valuePlanSetting)[i] ), req.body.valuePlanSetting, (req.body.totalLength - 1), true );
                                     if(cnt == count){
                                         // connection_ikon_cms.release();
                                         callback(null,'1');
@@ -375,7 +387,7 @@ exports.editSetting = function(req, res, next) {
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
-                        console.log(err.message)
+                        console.log(err.message);
                     } else {
                         connection_ikon_cms.release();
                         //res.send(results);
@@ -408,13 +420,20 @@ function saveValuePackForSetting(pvs_id,valueObj,contentTypeLength,toUpdate){
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                     if(toUpdate == true){
                         advanceSettingManager.updateValueSetting(  connection_ikon_cms,data.pass_pvs_id, data.pass_content_type,  function(err,response){
-                            if(err){}else{
+                            if(err){
+                                connection_ikon_cms.release();
+                                res.status(500).json(err.message);
+                                console.log(err.message);
+                            }else{
                                     //insert..
                                     advanceSettingManager.saveAdvanceSetting( connection_ikon_cms,data,function(err,response){
-                                            if(err){ 
+                                            if(err){
+                                                connection_ikon_cms.release();
+                                                res.status(500).json(err.message);
+                                                console.log(err.message);
                                             }else{
                                                 if(cnt == count){
-                                                    // callback(err,null);
+                                                    connection_ikon_cms.release();
                                                 }else{
                                                      connection_ikon_cms.release();
                                                      cnt = cnt + 1;
@@ -427,14 +446,18 @@ function saveValuePackForSetting(pvs_id,valueObj,contentTypeLength,toUpdate){
                     }else{
                         //insert..
                           advanceSettingManager.saveAdvanceSetting( connection_ikon_cms,data,function(err,response){
-                                if(err){ 
+                                if(err){
+                                    connection_ikon_cms.release();
+                                    res.status(500).json(err.message);
+                                    console.log(err.message);
                                 }else{
                                     if(cnt == count){
                                         // callback(err,null);
+                                        connection_ikon_cms.release();
                                     }else{
-                                            connection_ikon_cms.release();
-                                            cnt = cnt + 1;
-                                            loop1(cnt);
+                                        connection_ikon_cms.release();
+                                        cnt = cnt + 1;
+                                        loop1(cnt);
                                     }
                                 }
                             });
