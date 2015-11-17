@@ -11,8 +11,8 @@
                         <div class="col-md-5">
                          <!--    <input type="text" ng-model="pnId"  /> -->
 
-                            <input type="number" name="daysInput" ng-model="days" data-ng-change="getPushData()" placeholder="Day" min="1" max="99" >
-                            <input type="number" name="hoursInput" ng-model="hours"  data-ng-change="getPushData()" placeholder="Hours" min="1" max="24" >
+                            <input type="number" name="daysInput" ng-model="days" data-ng-change="getPushData()" placeholder="Day" min="1" max="99" ng-keypress="isNumber($event)" >
+                            <input type="number" name="hoursInput" ng-model="hours"  data-ng-change="getPushData()" placeholder="Hours" min="1" max="24" ng-keypress="isNumber($event)" >
                             <label>of Plan start </label>
                         </div>
                     </div>

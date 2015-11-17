@@ -199,5 +199,9 @@ $scope.resetFormAfterAdd = function(){
     $scope.messagetext = undefined;
    
 }
+    $scope.isNumber = function(e) {
+        var key = e.keyCode ? e.keyCode : e.which;
+        if( (isNaN(String.fromCharCode(key)) && key !=8 )||key == 32) e.preventDefault();
+    }
 
 });

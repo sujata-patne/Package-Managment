@@ -35,7 +35,7 @@ exports.saveNotificationData= function( dbConnection,data, callback) {
 }
 exports.listNotifications= function( dbConnection,pkgId,planIds,planType, callback) {
 
-    var query = dbConnection.query("SELECT *,DATE_FORMAT(pn_push_from, '%l %p') as pn_pf,DATE_FORMAT(pn_push_to, '%l %p') as pn_pt  FROM  icn_package_notification WHERE pn_sp_pkg_id = ? AND pn_plan_id = ? AND pn_plan_type = ? AND ISNULl(pn_crud_isactive)",[pkgId,planIds,planType], function ( err, response ) {
+    var query = dbConnection.query("SELECT *,DATE_FORMAT(pn_push_from, '%l:%i %p') as pn_pf,DATE_FORMAT(pn_push_to, '%l:%i %p') as pn_pt  FROM  icn_package_notification WHERE pn_sp_pkg_id = ? AND pn_plan_id = ? AND pn_plan_type = ? AND ISNULl(pn_crud_isactive)",[pkgId,planIds,planType], function ( err, response ) {
         callback( err, response );
     });
 }

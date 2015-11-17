@@ -133,9 +133,9 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
 
 
 // validate space in arrange sequence
-   $scope.AvoidSpace = function(event) {
-        var k = event ? event.which : window.event.keyCode;
-        if (k == 32) return false;
+   $scope.isNumber = function(e) {
+        var key = e.keyCode ? e.keyCode : e.which;
+       if( (isNaN(String.fromCharCode(key)) && key !=8 )||key == 32) e.preventDefault();
     }
 
 

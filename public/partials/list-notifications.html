@@ -21,16 +21,16 @@
                 <tbody ng-hide="$root.n_selectedPlans == undefined || $root.n_selectedPlans == null || $root.n_selectedPlans == '' " dir-paginate="item in NotificationResult | itemsPerPage: 10">
                 <tr >
 
-                     <td class="col-md-1 col-xs-1 text-center"ng-if="item.pn_after_day != null || item.pn_after_day != undefined && item.pn_after_hour != null || item.pn_after_hour != undefined "> 
+                     <td class="col-md-2 col-xs-2 text-center"ng-if="item.pn_after_day != null || item.pn_after_day != undefined && item.pn_after_hour != null || item.pn_after_hour != undefined ">
                          <span ng-show="item.pn_after_day > 0" >{{item.pn_after_day}}  day </span>
                         <span ng-show="item.pn_after_hour > 0" >{{item.pn_after_hour}} hr </span> </td>
-                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_after_day == null && item.pn_after_day == undefined && item.pn_after_hour == null && item.pn_after_hour == undefined "> - </td>
-                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 0"> < {{item.pn_cnt_conditional_usage}}% </td>
-                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 1"> > {{item.pn_cnt_conditional_usage}}% </td>
-                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 2"> equal to {{item.pn_cnt_conditional_usage}}% </td>
-                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == 3"> N.A. </td>
-                    <td class="col-md-1 col-xs-1 text-center" ng-if="item.pn_cnt_logical_operator == null"> - </td>
-                    <td class="col-md-4 col-xs-4 " style=" max-width: 43px ;word-wrap: break-word;">{{item.pn_message}}</td>
+                    <td class="col-md-2 col-xs-2 text-center" ng-if="item.pn_after_day == null && item.pn_after_day == undefined && item.pn_after_hour == null && item.pn_after_hour == undefined "> - </td>
+                    <td class="col-md-2 col-xs-2 text-center" ng-if="item.pn_cnt_logical_operator == 0"> < {{item.pn_cnt_conditional_usage}}% </td>
+                    <td class="col-md-2 col-xs-2 text-center" ng-if="item.pn_cnt_logical_operator == 1"> > {{item.pn_cnt_conditional_usage}}% </td>
+                    <td class="col-md-2 col-xs-2 text-center" ng-if="item.pn_cnt_logical_operator == 2"> equal to {{item.pn_cnt_conditional_usage}}% </td>
+                    <td class="col-md-2 col-xs-2 text-center" ng-if="item.pn_cnt_logical_operator == 3"> N.A. </td>
+                    <td class="col-md-2 col-xs-2 text-center" ng-if="item.pn_cnt_logical_operator == null"> - </td>
+                    <td class="col-md-3 col-xs-3 " style=" max-width: 43px ;word-wrap: break-word;">{{item.pn_message}}</td>
                     <td class="col-md-2 col-xs-2 text-center" >{{item.pn_pf }} to {{item.pn_pt}}</td>
                     <td class="col-md-1 col-xs-1 text-center">{{item.pn_push_type+1}}</td>
                     <td>

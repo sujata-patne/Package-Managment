@@ -57,9 +57,12 @@ myApp.controller('notificationCtrl', function ( $scope, $rootScope, $state, ngPr
 
         Notification.getNotificationData(data,function (data) {
             $scope.packageName = angular.copy(data.PackageName);
+            $.each($scope.packageName, function(key,value){
+                if($scope.packageName[key].sp_package_name.indexOf("MainSite") != -1){
+                    $scope.packageName[key].sp_package_name = "Mainsite";
+                }
+            });
         });
-
-
     }
 
     $scope.OnPackageChange = function(){
