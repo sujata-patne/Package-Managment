@@ -105,7 +105,16 @@ exports.logout = function (req, res, next) {
         if (req.session) {
             if (req.session.package_UserName) {
                 if (req.session.package_StoreId) {
-                    req.session = null;
+                    //req.session = null;
+                    req.session.package_UserId = null;
+                    req.session.package_UserRole = null;
+                    req.session.package_UserName = null;
+                    req.session.package_Password = null;
+                    req.session.package_Email = null;
+                    req.session.package_FullName = null;
+                    req.session.package_lastlogin = null;
+                    req.session.package_UserType = null;
+                    req.session.package_StoreId = null;
                     res.redirect('/accountlogin');
                 }
                 else {
@@ -220,7 +229,16 @@ function getPages(role) {
  * @description display forgot password page
  */
 exports.viewForgotPassword = function (req, res, next) {
-    req.session = null;
+    //req.session = null;
+    req.session.package_UserId = null;
+    req.session.package_UserRole = null;
+    req.session.package_UserName = null;
+    req.session.package_Password = null;
+    req.session.package_Email = null;
+    req.session.package_FullName = null;
+    req.session.package_lastlogin = null;
+    req.session.package_UserType = null;
+    req.session.package_StoreId = null;
     res.render('account-forgot', { error: '', msg: '' });
 }
 /**
@@ -285,7 +303,16 @@ exports.forgotPassword = function (req, res, next) {
  * @description displays change password page
  */
 exports.viewChangePassword = function (req, res, next) {
-    req.session = null;
+    //req.session = null;
+    req.session.package_UserId = null;
+    req.session.package_UserRole = null;
+    req.session.package_UserName = null;
+    req.session.package_Password = null;
+    req.session.package_Email = null;
+    req.session.package_FullName = null;
+    req.session.package_lastlogin = null;
+    req.session.package_UserType = null;
+    req.session.package_StoreId = null;
     res.render('account-changepassword', { error: '' });
 }
 /**
