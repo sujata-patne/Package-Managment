@@ -55,15 +55,15 @@
                                                 </td>
                                                 <td class="col-md-2 col-xs-2 text-center">
                                                     <a class="fancybox grouped_elements" href="http://dailymagic.in{{item.contentUrl}}" ng-if="item.parent_type_name == 'Wallpaper'">
-                                                        <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                        <img width="50" height="50" src="http://dailymagic.in{{item.new_thumb_url}}" />
                                                     </a>
                                                     <a  class="fancybox-video fancybox.iframe" ng-if="item.parent_type_name == 'Video' && item.contentUrl != null" href="http://dailymagic.in{{ item.contentUrl }}" title="">
                                                             <!-- <i class="fa fa-play" style="color:green" title="View"></i> -->
-                                                            <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                            <img width="50" height="50" src="http://dailymagic.in{{item.new_thumb_url}}" />
                                                     </a>
-                                                    <a class="fancybox-audio fancybox.iframe" ng-if="item.parent_type_name == 'Audio' && item.contentUrl != null" href="{{ item.contentUrl }}" title="">
+                                                    <a class="fancybox-audio fancybox.iframe" ng-if="item.parent_type_name == 'Audio' && item.contentUrl != null" href="http://dailymagic.in{{ item.contentUrl }}" title="">
                                                         <!-- <i class="fa fa-play" style="color:green" title="View"></i> -->
-                                                          <img width="50" height="50" src="http://dailymagic.in{{item.cm_thumb_url}}" />
+                                                          <img width="50" height="50" src="http://dailymagic.in{{item.new_thumb_url}}" />
                                                     </a>
                                                     <i ng-show="item.contentUrl == null && item.parent_type_name == 'Audio'" class="fa fa-play" style="color:red" title="Content not found"></i>
                                                     <i ng-show="item.contentUrl == null && item.parent_type_name == 'Video'" class="fa fa-play" style="color:red" title="Content not found"></i>
