@@ -1,4 +1,4 @@
-myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, ngProgress, $stateParams, Upload, IndividualContent) {
+myApp.controller('individualContentCtrl', function ($scope,$rootScope,thumb_path, $state, ngProgress, $stateParams, Upload, IndividualContent) {
 	ngProgress.color('yellowgreen');
 	ngProgress.height('3px');
     $scope.success = "";
@@ -12,6 +12,7 @@ myApp.controller('individualContentCtrl', function ($scope,$rootScope, $state, n
 
     $scope.selectedContent = [];
     $scope.final_selectedContent = [];
+    $scope.thumb_path = thumb_path;
 
     var date = new Date();
     $scope.minDate = date.setDate((new Date()).getDate() - 0);

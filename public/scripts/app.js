@@ -1,5 +1,8 @@
 var myApp = angular.module('myApp', ['ui.bootstrap','angularUtils.directives.dirPagination', 'ui.router', 'ngProgress','ngFileUpload']);
 
+myApp.constant('thumb_path', 'http://dailymagic.in');
+
+
 toastr.options = {
     "closeButton": false,
     "debug": false,
