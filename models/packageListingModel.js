@@ -169,3 +169,24 @@ exports.countOfferPlans = function( dbConnection,pkgId, callback) {
         }
     });
 }
+
+exports.getBlockedPackages = function( dbConnection,callback){
+     var query = dbConnection.query("SELECT sp_package_name FROM icn_store_package " +
+                             " WHERE sp_is_active = 0 AND sp_crud_isactive IS NULL", function (err, response) {
+        callback(err,response);
+    });
+}
+
+exports.getActivePackages = function( dbConnection,callback){
+     var query = dbConnection.query("SELECT sp_created_by,sp_package_name FROM icn_store_package " +
+                             " WHERE sp_is_active = 1 AND sp_crud_isactive IS NULL ", function (err, response) {
+        callback(err,response);
+    });
+}
+
+exports.getDeletedPackages = function( dbConnection,callback){
+     var query = dbConnection.query("SELECT sp_package_name FROM icn_store_package " +
+                             " WHERE sp_crud_isactive IS NOT NULL ", function (err, response) {
+        callback(err,response);
+    });
+}
