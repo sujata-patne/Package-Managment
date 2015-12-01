@@ -132,7 +132,7 @@ myApp.controller('arrangePlanCtrl', function ($scope,$rootScope, $state, ngProgr
     }
 
 
-// validate space in arrange sequence
+// validate space and decimal in arrange sequence
    $scope.isNumber = function(e) {
         var key = e.keyCode ? e.keyCode : e.which;
        if( (isNaN(String.fromCharCode(key)) && key !=8 )||key == 32) e.preventDefault();
