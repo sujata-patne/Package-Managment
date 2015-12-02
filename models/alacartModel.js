@@ -37,7 +37,6 @@ exports.getMaxAlacartOfferId = function(dbConnection, callback) {
     });
 }
 exports.addAlacartPack = function(dbConnection,data,callback){
-   // console.log(data)
     var query = dbConnection.query("INSERT INTO `icn_package_content_type` SET ? ", data, function (err, response) {
         callback(err,response);
     });

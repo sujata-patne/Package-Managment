@@ -163,8 +163,8 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
                                 //console.log(newContentTypeId)
                                 //console.log('req.body.alacartPlansList[newContentTypeId]')
                                 //console.log(req.body.alacartPlansList[newContentTypeId])
-                                var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : '';
-                                var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : '';
+                                var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : null;
+                                var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : null;
 
                                 if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
                                     newContentTypes = Object.keys(req.body.alacartPlansList)
@@ -194,8 +194,8 @@ exports.editMainsiteAlacartPlanDetails = function (req,res,next){
 
                                 for (var i = 0; i < existingContentTypes.length; i++) {
                                     var ContentTypeId = existingContentTypes[i];
-                                    var downloadId = (req.body.alacartPlansList[ContentTypeId].download) ? req.body.alacartPlansList[ContentTypeId].download : '';
-                                    var streamingId = (req.body.alacartPlansList[ContentTypeId].streaming) ? req.body.alacartPlansList[ContentTypeId].streaming : '';
+                                    var downloadId = (req.body.alacartPlansList[ContentTypeId].download) ? req.body.alacartPlansList[ContentTypeId].download : null;
+                                    var streamingId = (req.body.alacartPlansList[ContentTypeId].streaming) ? req.body.alacartPlansList[ContentTypeId].streaming : null;
 
                                     if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
                                         //if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0)
@@ -557,8 +557,8 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                     for (var i = 0; i < Object.keys(req.body.alacartPlansList).length; i++) {
                                         var newContentTypeId = Object.keys(req.body.alacartPlansList)[i];
 
-                                        var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : '';
-                                        var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : '';
+                                        var downloadId = (req.body.alacartPlansList[newContentTypeId].download) ? req.body.alacartPlansList[newContentTypeId].download : null;
+                                        var streamingId = (req.body.alacartPlansList[newContentTypeId].streaming) ? req.body.alacartPlansList[newContentTypeId].streaming : null;
 
                                         if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
                                             newContentTypes = Object.keys(req.body.alacartPlansList)
@@ -589,8 +589,8 @@ exports.editIndividualAlacartPlanDetails = function (req,res,next) {
                                             }
                                             for (var i = 0; i < existingContentTypes.length; i++) {
                                                 var ContentTypeId = existingContentTypes[i];
-                                                var downloadId = (req.body.alacartPlansList[ContentTypeId].download) ? req.body.alacartPlansList[ContentTypeId].download : '';
-                                                var streamingId = (req.body.alacartPlansList[ContentTypeId].streaming) ? req.body.alacartPlansList[ContentTypeId].streaming : '';
+                                                var downloadId = (req.body.alacartPlansList[ContentTypeId].download) ? req.body.alacartPlansList[ContentTypeId].download : null;
+                                                var streamingId = (req.body.alacartPlansList[ContentTypeId].streaming) ? req.body.alacartPlansList[ContentTypeId].streaming : null;
 
                                                 if ((downloadId !== '' && downloadId !== null && downloadId !== 0) || (streamingId !== '' && streamingId !== null && streamingId !== 0)) {
                                                     //if ((req.body.alacartPlansList[ContentTypeId].download && req.body.alacartPlansList[ContentTypeId].download != null && req.body.alacartPlansList[ContentTypeId].download != 0) || (req.body.alacartPlansList[ContentTypeId].streaming && req.body.alacartPlansList[ContentTypeId].streaming != null && req.body.alacartPlansList[ContentTypeId].streaming != 0)) {
@@ -951,8 +951,8 @@ function addContentTypePlans(connection_ikon_cms,cnt,data) {
 
     var ContentTypeId = data.ContentTypes[j];
     var plans = data.ContentTypes.length;
-    var downloadId = ('download' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].download : '';
-    var streamingId = ('streaming' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].streaming : '';
+    var downloadId = ('download' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].download : null;
+    var streamingId = ('streaming' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].streaming : null;
 
     var ContentTypePlanData = {
         pct_paos_id: data.paosId,
@@ -983,8 +983,8 @@ function editContentTypePlans(connection_ikon_cms,cnt,data) {
     var plans = data.ContentTypes.length;
     var ContentTypeId = data.ContentTypes[j];
 
-    var downloadId = ('download' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].download : '';
-    var streamingId = ('streaming' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].streaming : '';
+    var downloadId = ('download' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].download : null;
+    var streamingId = ('streaming' in data.alacartPlansList[ContentTypeId]) ? data.alacartPlansList[ContentTypeId].streaming : null;
 
     var ContentTypePlanData = {
         pct_paos_id: data.paosId,
