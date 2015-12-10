@@ -55,15 +55,22 @@
                                                 </td>
                                                 <td class="col-md-2 col-xs-2 text-center">
                                                     <a class="fancybox grouped_elements" href="{{thumb_path}}{{item.contentUrl}}" ng-if="item.parent_type_name == 'Wallpaper'">
-                                                        <img width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />
+                                                        <!--<img width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />-->
+                                                        <img ng-show="content.new_thumb_url != null" width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />
+                                                        <img ng-hide="content.new_thumb_url != null" width="50" height="50" src="contentFiles/no_image.gif" />
                                                     </a>
                                                     <a  class="fancybox-video fancybox.iframe" ng-if="item.parent_type_name == 'Video' && item.contentUrl != null" href="{{thumb_path}}{{ item.contentUrl }}" title="">
                                                             <!-- <i class="fa fa-play" style="color:green" title="View"></i> -->
-                                                            <img width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />
+                                                            <!--<img width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />-->
+                                                        <img ng-show="content.new_thumb_url != null" width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />
+                                                        <img ng-hide="content.new_thumb_url != null" width="50" height="50" src="contentFiles/no_image.gif" />
                                                     </a>
                                                     <a class="fancybox-audio fancybox.iframe" ng-if="item.parent_type_name == 'Audio' && item.contentUrl != null" href="{{thumb_path}}{{ item.contentUrl }}" title="">
                                                         <!-- <i class="fa fa-play" style="color:green" title="View"></i> -->
-                                                          <img width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />
+                                                        <!--  <img width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />-->
+                                                        <img ng-show="content.new_thumb_url != null" width="50" height="50" src="{{thumb_path}}{{item.new_thumb_url}}" />
+                                                        <img ng-hide="content.new_thumb_url != null" width="50" height="50" src="contentFiles/no_image.gif" />
+
                                                     </a>
                                                     <i ng-show="item.contentUrl == null && item.parent_type_name == 'Audio'" class="fa fa-play" style="color:red" title="Content not found"></i>
                                                     <i ng-show="item.contentUrl == null && item.parent_type_name == 'Video'" class="fa fa-play" style="color:red" title="Content not found"></i>
