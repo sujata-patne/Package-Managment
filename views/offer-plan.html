@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="content">
+        <div class="content-container">
+            <div class="content-header">
+                <h2 class="content-header-title">Offers Plans</h2>
+            </div>
+            <!-- /.content-header -->
+            <form class="form-horizontal" role="form" name="offerplanForm" data-ng-submit="submitForm(offerplanForm.$valid)" novalidate>
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="col-sm-offset-3 col-sm-9" data-ng-show="errorvisible" style="color: red;">{{error}}
+                        </span>
+                        <span class="col-sm-offset-3 col-sm-9" data-ng-show="successvisible" style="color: green;">{{success}}
+                        </span>
+                        <div class="form-group">
+                            <label for="planname" class="col-sm-3 control-label">  <span class="asterisk padding-right-5">*</span>Plan Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="planname" data-ng-maxlength="40"  class="form-control" id="" placeholder="Plan Name" data-ng-model="PlanName" maxlength="40" required>
+                                <input type="hidden" name="ld_Id" class="form-control" data-ng-model="PlanId">
+                                <input type="hidden" name="contentType" class="form-control" data-ng-model="contentType">
+                                <span style="color: red" data-ng-show="offerplanForm.$submitted || offerplanForm.planname.$touched">
+                                    <span data-ng-show="offerplanForm.planname.$error.required">Plan Name is required.</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="caption" class="col-sm-3 control-label">Caption</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="u_caption" data-ng-maxlength="40" class="form-control" id="" placeholder="Caption" data-ng-model="Caption">
+                                <span style="color: red" ng-show="offerplanForm.$submitted || offerplanForm.u_caption.$touched">
+                                    <span data-ng-show="offerplanForm.u_caption.$error.maxlength">Maximum 40 characters allowed.</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-9">
+                                <textarea name="u_description"  data-ng-maxlength="200" class="form-control" id="" placeholder="Description" data-ng-model="Description" rows="3"></textarea>
+                                <span style="color: red" ng-show="offerplanForm.$submitted || offerplanForm.u_description.$touched">
+                                    <span data-ng-show="offerplanForm.u_description.$error.maxlength">Maximum 200 characters allowed.</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="buyitems" class="col-sm-3 control-label"><span class="asterisk padding-right-5">*</span>Buy items</label>
+                            <div class="col-sm-9">
+                                <input min="0" max="10000" type="number" name="buyitems" class="form-control" id="" placeholder="Buy items" data-ng-model="Buyitems"  ng-keypress="isNumber($event)"  required>
+                                <input type="hidden" name="ld_Id" class="form-control" data-ng-model="PlanId">
+                                <input type="hidden" name="contentType" class="form-control" data-ng-model="contentType">
+                                <span style="color: red" ng-show="offerplanForm.$submitted || offerplanForm.buyitems.$touched">
+                                    <span ng-show="offerplanForm.buyitems.$error.required">Buy items is required.</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="getfreeitems" class="col-sm-3 control-label"><span class="asterisk padding-right-5">*</span>Get free items</label>
+                            <div class="col-sm-9">
+                                <input min="0"  type="number" name="getfreeitems" class="form-control" placeholder="Get free items"  data-ng-model="Getfreeitems"  ng-keypress="isNumber($event)" required>
+                                <input type="hidden" name="ld_Id" class="form-control" data-ng-model="PlanId">
+                                <input type="hidden" name="contentType" class="form-control" data-ng-model="contentType">
+                                <span style="color: red" data-ng-show="offerplanForm.$submitted || offerplanForm.getfreeitems.$touched">
+                                    <span data-ng-show="offerplanForm.getfreeitems.$error.required">Get free items is required.</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="caption" class="col-sm-3 control-label"><span class="asterisk padding-right-5">*</span>Distribution Channels</label>
+                            <div class="col-sm-9">
+                                <span data-ng-repeat="i in DistributionChannels ">
+                                    <input type="checkbox" name="dc" ng-model="selectedDistributionChannel[i.cd_id]" ng-change="changeChannels()">
+                                    {{i.cd_name}}
+                                </span>
+                                <br />
+                                <span style="color: red" ng-hide="!offerplanForm.$submitted || selectedDistributionChannel.length > 0">
+                                    Distribution Channel is required.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-sm-offset-5 col-sm-7">
+                            <button type="submit" class="btn btn-primary btn-w-md" title="Save">Submit</button>
+                            <button type="reset" ng-hide="isEdit" class="btn btn-default btn-w-md" title="Reset" data-ng-click="resetForm()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
