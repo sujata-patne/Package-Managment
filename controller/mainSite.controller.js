@@ -52,7 +52,7 @@ exports.getStoreDetails = function(req, res){
                                  res.status(500).json(err.message);
                             }else{
                                 if(response != undefined && response.length > 0 && response.length < 2){
-                                    if(response[0].cmd_entity_detail == 1){
+                                    if(response[0].cmd_entity_detail == 2){
                                          alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId}, function (err, alacartPackPlans) {
                                             callback(err, alacartPackPlans)
                                          });
@@ -79,7 +79,7 @@ exports.getStoreDetails = function(req, res){
                                  res.status(500).json(err.message);
                             }else{
                                 if(response != undefined && response.length > 0 && response.length < 2){
-                                    if(response[0].cmd_entity_detail == 2){
+                                    if(response[0].cmd_entity_detail == 1){
                                          subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId},function (err, subscriptionPackPlans) {
                                             callback(err, subscriptionPackPlans);
                                          });
@@ -149,7 +149,7 @@ exports.showPackageData = function(req, res, next)  {
                                 res.status(500).json(err.message);
                             }else{
                                 if(response != undefined && response.length > 0 && response.length < 2){
-                                    if(response[0].cmd_entity_detail == 1){
+                                    if(response[0].cmd_entity_detail == 2){
                                         alacartManager.getAlacartPackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function (err, alacartPackPlans) {
                                             callback(err, alacartPackPlans)
                                         });
@@ -172,7 +172,7 @@ exports.showPackageData = function(req, res, next)  {
                                 res.status(500).json(err.message);
                             }else{
                                 if(response != undefined && response.length > 0 && response.length < 2){
-                                    if(response[0].cmd_entity_detail == 2){
+                                    if(response[0].cmd_entity_detail == 1){
                                         subscriptionPackManager.getSubscriptionDetailsByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId},function (err, subscriptionPackPlans) {
                                             callback(err, subscriptionPackPlans);
                                         });
@@ -231,9 +231,7 @@ exports.showPackageData = function(req, res, next)  {
                                                 function (arrangeSequenceData,alacartNOfferDetails,callback) {
                                                     if (alacartNOfferDetails != null && alacartNOfferDetails.length > 0) {
                                                         alacartManager.getContentTypeAlacartPlan(connection_ikon_cms, alacartNOfferDetails[0].paos_id, function (err, contentTypePlanData) {
-                                                            console.log("in contentTypePlanData");
-                                                            console.log(contentTypePlanData);
-                                                            callback(null, {arrangeSequenceData:arrangeSequenceData,packageDetails:packageDetails, alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
+                                                           callback(null, {arrangeSequenceData:arrangeSequenceData,packageDetails:packageDetails, alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:contentTypePlanData });
                                                         })
                                                     } else {
                                                         callback(null, {arrangeSequenceData:arrangeSequenceData,packageDetails:packageDetails,alacartNOfferDetails:alacartNOfferDetails,contentTypePlanData:null });

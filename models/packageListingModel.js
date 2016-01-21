@@ -25,8 +25,9 @@ exports.getAllPackageForListStartsWith = function( dbConnection,data, callback )
     if(data.distributionChannelId && data.distributionChannelId != undefined){
         whereCond += " AND pk.sp_dc_id = " + data.distributionChannelId;
     }
-    console.log("Select * from icn_store_package as pk " +
+    /*console.log("Select * from icn_store_package as pk " +
            "WHERE pk.sp_st_id = "+data.storeId+" AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  ORDER BY pk.sp_pkg_id desc");
+    */
     var query = dbConnection.query("Select * from icn_store_package as pk " +
            "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)  " +whereCond+ "  ORDER BY pk.sp_pkg_id desc",[data.storeId], function ( err, response ) {
            callback( err,response );
@@ -60,9 +61,9 @@ exports.getAllPackageForList = function( dbConnection,data, callback ) {
     }
 
 
-    console.log("SELECT * from icn_store_package as pk " +
+   /* console.log("SELECT * from icn_store_package as pk " +
         "WHERE pk.sp_st_id = "+data.storeId+" AND ISNULL(pk.sp_crud_isactive)    " + whereCond +
-        "  ORDER BY pk.sp_pkg_id desc");
+        "  ORDER BY pk.sp_pkg_id desc");*/
 
     var query = dbConnection.query("SELECT * from icn_store_package as pk " +
         "WHERE pk.sp_st_id = ? AND ISNULL(pk.sp_crud_isactive)    " + whereCond +
