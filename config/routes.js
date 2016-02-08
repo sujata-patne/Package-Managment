@@ -9,7 +9,7 @@ module.exports = function(app){
     require('../routes/arrangePlans')(app);
     require('../routes/individualContent')(app);
     require('../routes/notification')(app);
-    // require('../cron/dailyEmail'); ## Remove comment to make cron active .
+    // require('../cron/dailyEmail'); // Remove comment to make cron active .
 
 
     app.use('/*', function(req,res,next){
