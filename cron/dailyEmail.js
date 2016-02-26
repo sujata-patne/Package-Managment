@@ -3,7 +3,7 @@ var CronJob = require('cron').CronJob;
 var packageListManager = require('../models/packageListingModel');
 var nodemailer = require('nodemailer');
 
-new CronJob('00 00 09 0-6', function () {
+new CronJob('60 * * * * 1-5', function () {
      autoEmail();
 }, null, true, 'Asia/Kolkata');
 

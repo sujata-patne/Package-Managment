@@ -179,195 +179,203 @@ exports.addSetting = function(req, res, next) {
 };
 
 exports.UploadFile =  function (req, res, next) {
-    var form = new formidable.IncomingForm();
-    var template_id;
-    var count = 0;
+            var form = new formidable.IncomingForm();
+            var template_id;
+            var count = 0;
 
-    form.parse(req, function (err, fields, files) {
-        // console.log(fields);                 process.exit(0);
+            form.parse(req, function (err, fields, files) {
+                var fileName = fields.packageId+"_"+files.file.name;
+                var cgImagePath =  config.site_base_path + config.cg_img_path;
+                var newPath =  cgImagePath+fileName; //path to store in folder structure.
+                var absPath = config.cg_img_path+fileName; //path that gets stored in db.
+                var copy_banner_path = config.cgbanner_copy_path;
 
-        var fileName = fields.packageId+"_"+files.file.name;
-        var newPath = __dirname + "/../public/contentFiles/"+fileName; //path to store in folder structure.
-        var absPath = "/contentFiles/"+fileName; //path that gets stored in db.
-        var copy_banner_path = config.cgbanner_copy_path;
+                var tmp_path = files.file.path;
+                fs.readFile(tmp_path, function (err, data) {
+                    if (err) {
+                        res.status(500).json(err.message);
+                    } else {
+                        fs.writeFile(newPath, data, function (err) {
+                            shell.exec('cp "' + newPath + '" "' + copy_banner_path + fileName + '"');
 
-        var tmp_path = files.file.path;
-        fs.rename(tmp_path,newPath, function (err) {
-            if (err) console.log(err);
-            // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
-            fs.unlink(tmp_path, function() {
-                if (err) console.log(err);
-            });
-            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                async.series([
-                    function(callback){
-                        //Check whether CG image  exists :
-                        advanceSettingManager.CGImageExists( connection_ikon_cms,fields.packageId,  function(err,response) {
-                            if(response.length > 0){
-                                advanceSettingManager.DeleteCGImage( connection_ikon_cms,fields.packageId, function( err,response) {
-                                    if(err){
+                            //fs.rename(tmp_path, newPath, function (err) {
+                            if (err) console.log(err);
+                            // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+                            fs.unlink(tmp_path, function () {
+                                if (err) console.log(err);
+                            });
+                            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                                async.series([
+                                    function (callback) {
+                                        //Check whether CG image  exists :
+                                        advanceSettingManager.CGImageExists(connection_ikon_cms, fields.packageId, function (err, response) {
+                                            if (response.length > 0) {
+                                                advanceSettingManager.DeleteCGImage(connection_ikon_cms, fields.packageId, function (err, response) {
+                                                    if (err) {
+                                                        connection_ikon_cms.release();
+                                                        res.status(500).json(err.message);
+                                                        console.log(err.message);
+                                                    } else {
+                                                        callback(err, 'Updated Previous CG image to delete status');
+                                                    }
+                                                });
+                                            } else {
+                                                callback(err, 'Previous record not found');
+                                            }
+                                        });
+
+                                    }, function (callback) {
+                                        //BASE FILE :
+                                        absPath = config.cg_img_path + fileName;
+                                        var cgdata = {
+                                            pci_sp_pkg_id: fields.packageId,
+                                            pci_image_size: '640X640',
+                                            pci_cg_img_browse: absPath,
+                                            pci_is_default: 1,
+                                            pci_is_active: 1,
+                                            pci_created_on: new Date(),
+                                            pci_created_by: req.session.package_UserName,
+                                            pci_modified_on: new Date(),
+                                            pci_modified_by: req.session.package_UserName,
+                                            pci_crud_isactive: null
+                                        }
+                                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms, cgdata, function (err, InsertBaseCGImage) {
+                                            callback(err, 'InsertBaseCGImage');
+                                        });
+                                    },
+                                    function (callback) {
+                                        //Other resolutions like 480 420 etc..
+                                        absPath = config.cg_img_path+'480X480_' + fileName;
+                                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=480:480 ' + cgImagePath+'480X480_' + fileName);
+                                        shell.exec('cp "' + cgImagePath+'480X480_' + fileName + '" "' + copy_banner_path + "480X480_" + fileName + '"');
+                                        shell.exec('chmod 777 ' + copy_banner_path);
+                                        var cgdata = {
+                                            pci_sp_pkg_id: fields.packageId,
+                                            pci_image_size: '480X480',
+                                            pci_cg_img_browse: absPath,
+                                            pci_is_default: 0,
+                                            pci_created_on: new Date(),
+                                            pci_created_by: req.session.package_UserName,
+                                            pci_modified_on: new Date(),
+                                            pci_modified_by: req.session.package_UserName,
+                                            pci_crud_isactive: null
+                                        }
+                                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms, cgdata, function (err, InsertBaseCGImage) {
+                                            callback(err, 'InsertBaseCGImage');
+                                        });
+                                    },
+                                    function (callback) {
+                                        absPath = config.cg_img_path+'420X420_' + fileName;
+                                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=420:420 ' + cgImagePath+'420X420_' + fileName);
+                                        shell.exec('cp "' + cgImagePath+'420X420_' + fileName + '" "' + copy_banner_path + "420X420_" + fileName + '"');
+                                        shell.exec('chmod 777 ' + copy_banner_path);
+                                        var cgdata = {
+                                            pci_sp_pkg_id: fields.packageId,
+                                            pci_image_size: '420X420',
+                                            pci_cg_img_browse: absPath,
+                                            pci_is_default: 0,
+                                            pci_created_on: new Date(),
+                                            pci_created_by: req.session.package_UserName,
+                                            pci_modified_on: new Date(),
+                                            pci_modified_by: req.session.package_UserName,
+                                            pci_crud_isactive: null
+                                        }
+                                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms, cgdata, function (err, InsertBaseCGImage) {
+                                            callback(err, 'InsertBaseCGImage');
+                                        });
+                                    },
+                                    function (callback) {
+                                        absPath = config.cg_img_path+'360X360_' + fileName;
+                                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=360:360 ' + cgImagePath+'360X360_' + fileName);
+                                        shell.exec('cp "' + cgImagePath+'360X360_' + fileName + '" "' + copy_banner_path + "360X360_" + fileName + '"');
+                                        shell.exec('chmod 777 ' + copy_banner_path);
+                                        var cgdata = {
+                                            pci_sp_pkg_id: fields.packageId,
+                                            pci_image_size: '360X360',
+                                            pci_cg_img_browse: absPath,
+                                            pci_is_default: 0,
+                                            pci_created_on: new Date(),
+                                            pci_created_by: req.session.package_UserName,
+                                            pci_modified_on: new Date(),
+                                            pci_modified_by: req.session.package_UserName,
+                                            pci_crud_isactive: null
+                                        }
+                                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms, cgdata, function (err, InsertBaseCGImage) {
+                                            callback(err, 'InsertBaseCGImage');
+                                        });
+                                    }, function (callback) {
+                                        absPath = config.cg_img_path+'320X320_' + fileName;
+                                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=320:320 ' + cgImagePath+'320X320_' + fileName);
+                                        shell.exec('cp "' + cgImagePath+'320X320_' + fileName + '" "' + copy_banner_path + "320X320_" + fileName + '"');
+                                        shell.exec('chmod 777 ' + copy_banner_path);
+                                        var cgdata = {
+                                            pci_sp_pkg_id: fields.packageId,
+                                            pci_image_size: '320X320',
+                                            pci_cg_img_browse: absPath,
+                                            pci_is_default: 0,
+                                            pci_created_on: new Date(),
+                                            pci_created_by: req.session.package_UserName,
+                                            pci_modified_on: new Date(),
+                                            pci_modified_by: req.session.package_UserName,
+                                            pci_crud_isactive: null
+                                        }
+                                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms, cgdata, function (err, InsertBaseCGImage) {
+                                            callback(err, 'InsertBaseCGImage');
+                                        });
+                                    }, function (callback) {
+                                        absPath = config.cg_img_path+'240X240_' + fileName;
+                                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=240:240 ' + cgImagePath+'240X240_' + fileName);
+                                        shell.exec('cp "' + cgImagePath+'240X240_' + fileName + '" "' + copy_banner_path + "240X240_" + fileName + '"');
+                                        shell.exec('chmod 777 ' + copy_banner_path);
+                                        var cgdata = {
+                                            pci_sp_pkg_id: fields.packageId,
+                                            pci_image_size: '240X240',
+                                            pci_cg_img_browse: absPath,
+                                            pci_is_default: 0,
+                                            pci_created_on: new Date(),
+                                            pci_created_by: req.session.package_UserName,
+                                            pci_modified_on: new Date(),
+                                            pci_modified_by: req.session.package_UserName,
+                                            pci_crud_isactive: null
+                                        }
+                                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms, cgdata, function (err, InsertBaseCGImage) {
+                                            callback(err, 'InsertBaseCGImage');
+                                        });
+                                    }, function (callback) {
+                                        absPath = config.cg_img_path+'176X176_' + fileName;
+                                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=176:176 ' + cgImagePath+'176X176_' + fileName);
+                                        shell.exec('cp "' + cgImagePath+'176X176_' + fileName + '" "' + copy_banner_path + "176X176_" + fileName + '"');
+                                        shell.exec('chmod 777 ' + copy_banner_path);
+                                        var cgdata = {
+                                            pci_sp_pkg_id: fields.packageId,
+                                            pci_image_size: '176X176',
+                                            pci_cg_img_browse: absPath,
+                                            pci_is_default: 0,
+                                            pci_created_on: new Date(),
+                                            pci_created_by: req.session.package_UserName,
+                                            pci_modified_on: new Date(),
+                                            pci_modified_by: req.session.package_UserName,
+                                            pci_crud_isactive: null
+                                        }
+                                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms, cgdata, function (err, InsertBaseCGImage) {
+                                            callback(err, 'InsertBaseCGImage');
+                                        });
+                                    }
+                                ], function (err, results) {
+                                    if (err) {
                                         connection_ikon_cms.release();
                                         res.status(500).json(err.message);
                                         console.log(err.message);
-                                    }else{
-                                        callback(err,'Updated Previous CG image to delete status');
+                                    } else {
+                                        connection_ikon_cms.release();
                                     }
                                 });
-                            }else{
-                                callback(err,'Previous record not found');
-                            }
+                            });
                         });
 
-                    },function(callback){
-                        //BASE FILE :
-                        absPath = "/contentFiles/"+fileName;
-
-                        var cgdata = {
-                            pci_sp_pkg_id : fields.packageId,
-                            pci_image_size : '640X640',
-                            pci_cg_img_browse : absPath,
-                            pci_is_default : 1,
-                            pci_created_on:  new Date(),
-                            pci_created_by: req.session.package_UserName,
-                            pci_modified_on:  new Date(),
-                            pci_modified_by: req.session.package_UserName,
-                            pci_crud_isactive: null
-                        }
-                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms,cgdata,function(err,InsertBaseCGImage){
-                            callback(err,'InsertBaseCGImage');
-                        });
-                    },
-                    function(callback){
-                        //Other resolutions like 480 420 etc..
-                        absPath = '/contentFiles/480X480_'+fileName;
-                        
-                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=480:480 ' + __dirname + '/../public/contentFiles/480X480_'+fileName);
-                        shell.exec('cp "' + __dirname + '/../public/contentFiles/480X480_'+fileName + '" "' + copy_banner_path + "480X480_"+fileName +'"');
-                        shell.exec('chmod 777 ' + copy_banner_path);
-                        var cgdata = {
-                            pci_sp_pkg_id : fields.packageId,
-                            pci_image_size : '480X480',
-                            pci_cg_img_browse : absPath,
-                            pci_is_default : 0,
-                            pci_created_on:  new Date(),
-                            pci_created_by: req.session.package_UserName,
-                            pci_modified_on:  new Date(),
-                            pci_modified_by: req.session.package_UserName,
-                            pci_crud_isactive: null
-                        }
-                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms,cgdata,function(err,InsertBaseCGImage){
-                            callback(err,'InsertBaseCGImage');
-                        });
-                    },
-                    function(callback){
-                        absPath = '/contentFiles/420X420_'+fileName;
-                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=420:420 ' + __dirname + '/../public/contentFiles/420X420_'+fileName);
-                        shell.exec('cp "' + __dirname + '/../public/contentFiles/420X420_'+fileName + '" "' + copy_banner_path + "420X420_"+fileName +'"');
-                        shell.exec('chmod 777 ' + copy_banner_path);
-                        var cgdata = {
-                            pci_sp_pkg_id : fields.packageId,
-                            pci_image_size : '420X420',
-                            pci_cg_img_browse : absPath,
-                            pci_is_default : 0,
-                            pci_created_on:  new Date(),
-                            pci_created_by: req.session.package_UserName,
-                            pci_modified_on:  new Date(),
-                            pci_modified_by: req.session.package_UserName,
-                            pci_crud_isactive: null
-                        }
-                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms,cgdata,function(err,InsertBaseCGImage){
-                            callback(err,'InsertBaseCGImage');
-                        });
-                    },
-                    function(callback){
-                        absPath = '/contentFiles/360X360_'+fileName;
-                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=360:360 ' + __dirname + '/../public/contentFiles/360X360_'+fileName);
-                        shell.exec('cp "' + __dirname + '/../public/contentFiles/360X360_'+fileName + '" "' + copy_banner_path + "360X360_"+fileName +'"');
-                        shell.exec('chmod 777 ' + copy_banner_path);
-                        var cgdata = {
-                            pci_sp_pkg_id : fields.packageId,
-                            pci_image_size : '360X360',
-                            pci_cg_img_browse : absPath,
-                            pci_is_default : 0,
-                            pci_created_on:  new Date(),
-                            pci_created_by: req.session.package_UserName,
-                            pci_modified_on:  new Date(),
-                            pci_modified_by: req.session.package_UserName,
-                            pci_crud_isactive: null
-                        }
-                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms,cgdata,function(err,InsertBaseCGImage){
-                            callback(err,'InsertBaseCGImage');
-                        });
-                    }, function(callback){
-                        absPath = '/contentFiles/320X320_'+fileName;
-                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=320:320 ' + __dirname + '/../public/contentFiles/320X320_'+fileName);
-                        shell.exec('cp "' + __dirname + '/../public/contentFiles/320X320_'+fileName + '" "' + copy_banner_path + "320X320_"+fileName +'"');
-                        shell.exec('chmod 777 ' + copy_banner_path);
-                        var cgdata = {
-                            pci_sp_pkg_id : fields.packageId,
-                            pci_image_size : '320X320',
-                            pci_cg_img_browse : absPath,
-                            pci_is_default : 0,
-                            pci_created_on:  new Date(),
-                            pci_created_by: req.session.package_UserName,
-                            pci_modified_on:  new Date(),
-                            pci_modified_by: req.session.package_UserName,
-                            pci_crud_isactive: null
-                        }
-                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms,cgdata,function(err,InsertBaseCGImage){
-                            callback(err,'InsertBaseCGImage');
-                        });
-                    }, function(callback){
-                        absPath = '/contentFiles/240X240_'+fileName;
-                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=240:240 ' + __dirname + '/../public/contentFiles/240X240_'+fileName);
-                        shell.exec('cp "' + __dirname + '/../public/contentFiles/240X240_'+fileName + '" "' + copy_banner_path + "240X240_"+fileName +'"');
-                        shell.exec('chmod 777 ' + copy_banner_path);
-                        var cgdata = {
-                            pci_sp_pkg_id : fields.packageId,
-                            pci_image_size : '240X240',
-                            pci_cg_img_browse : absPath,
-                            pci_is_default : 0,
-                            pci_created_on:  new Date(),
-                            pci_created_by: req.session.package_UserName,
-                            pci_modified_on:  new Date(),
-                            pci_modified_by: req.session.package_UserName,
-                            pci_crud_isactive: null
-                        }
-                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms,cgdata,function(err,InsertBaseCGImage){
-                            callback(err,'InsertBaseCGImage');
-                        });
-                    }, function(callback){
-                        absPath = '/contentFiles/176X176_'+fileName;
-                        shell.exec('ffmpeg -y  -i ' + newPath + ' -vf scale=176:176 ' + __dirname + '/../public/contentFiles/176X176_'+fileName);
-                        shell.exec('cp "' + __dirname + '/../public/contentFiles/176X176_'+fileName + '" "' + copy_banner_path + "176X176_"+fileName +'"');
-                        shell.exec('chmod 777 ' + copy_banner_path);
-                        var cgdata = {
-                            pci_sp_pkg_id : fields.packageId,
-                            pci_image_size : '176X176',
-                            pci_cg_img_browse : absPath,
-                            pci_is_default : 0,
-                            pci_created_on:  new Date(),
-                            pci_created_by: req.session.package_UserName,
-                            pci_modified_on:  new Date(),
-                            pci_modified_by: req.session.package_UserName,
-                            pci_crud_isactive: null
-                        }
-                        advanceSettingManager.saveCGImageSetting(connection_ikon_cms,cgdata,function(err,InsertBaseCGImage){
-                            callback(err,'InsertBaseCGImage');
-                        });
                     }
-                ],function(err,results){
-                    if(err){
-                        connection_ikon_cms.release();
-                        res.status(500).json(err.message);
-                        console.log(err.message);
-                    }else{
-                        connection_ikon_cms.release();
-                    }
-                });
-            });
+                })
         });
-    });
 
 };
 //Function to Edit Advance Setting..
