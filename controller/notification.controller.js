@@ -4,38 +4,67 @@ var mainSiteManager = require('../models/mainSiteModel');
 var PackageManager = require('../models/packageListingModel');
 var async = require("async");
 var moment = require("moment");
+var wlogger = require("../config/logger");
 
 exports.getDistributionChannel = function(req, res, next) {
     //to get the distribution channel
-                try {
-                    if (req.session && req.session.package_UserName && req.session.package_StoreId) {
-                        mysql.getConnection('CMS', function (err, connection_ikon_cms) {
-                            async.parallel({
-                                    distributionChannels: function (callback) {
-                                        mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
-                                            callback(err, distributionChannels);
-                                        });
-                                    }
-                                },
-                                function (err, results) {
-
-                                    if (err) {
-                                        connection_ikon_cms.release();
-                                        res.status(500).json(err.message);
-                                        console.log(err.message)
-                                    } else {
-                                        connection_ikon_cms.release();
-                                        res.send(results);
-                                    }
-                                });
-                        });
-                    }else{
-                        res.redirect('/accountlogin');
-                    }
-                }catch(err){
-                    res.status(500).json(err.message);
-                }
-            };
+    try {
+        if (req.session && req.session.package_UserName && req.session.package_StoreId) {
+            mysql.getConnection('CMS', function (err, connection_ikon_cms) {
+                async.parallel({
+                        distributionChannels: function (callback) {
+                            mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
+                                callback(err, distributionChannels);
+                            });
+                        }
+                    },
+                    function (err, results) {
+                        if (err) {
+                            var error = {
+                                userName: req.session.package_UserName,
+                                action : 'getDistributionChannel',
+                                responseCode: 500,
+                                message: JSON.stringify(err.message)
+                            }
+                            wlogger.error(error); // for error
+                            connection_ikon_cms.release();
+                            res.status(500).json(err.message);
+                            console.log(err.message)
+                        } else {
+                            var info = {
+                                userName: req.session.package_UserName,
+                                action : 'getDistributionChannel',
+                                responseCode: 200,
+                                message: 'Retrieved Store Distribution Channels Successfully.'
+                            }
+                            wlogger.info(info); // for information
+                            connection_ikon_cms.release();
+                            res.send(results);
+                        }
+                    });
+            });
+        }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'getDistributionChannel',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
+            res.redirect('/accountlogin');
+        }
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'getDistributionChannel',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
+        res.status(500).json(err.message);
+    }
+};
 exports.getNotificationData = function(req, res, next) {
     // to get the notification data
     try {
@@ -50,11 +79,9 @@ exports.getNotificationData = function(req, res, next) {
                         },
                         ValuePacks : function (callback){
                             //to get the value packs for selected package
-
                             if(req.body.PackageId != undefined && req.body.PackageId != 0) {
                                 Notification.isChildPackage(connection_ikon_cms,req.body.PackageId, function(err,response){
                                     if(err){
-
                                     }else{
                                         if(response[0].sp_parent_pkg_id > 0 ){
                                             Notification.getValuePacks(connection_ikon_cms, response[0].sp_parent_pkg_id, function (err, ValuePacks) {
@@ -65,11 +92,8 @@ exports.getNotificationData = function(req, res, next) {
                                              callback(err,ValuePacks)
                                             });
                                         }
-                                        
                                     }
-
                                 });
-                                
                             }
                             else{
                                 callback(null,'');
@@ -96,9 +120,6 @@ exports.getNotificationData = function(req, res, next) {
                                             callback(err,null)
                                         }
                                  });
-
-                                    
-
                             }
                             else{
                                 callback(null,'');
@@ -116,23 +137,50 @@ exports.getNotificationData = function(req, res, next) {
                             }
                         }
                     },
-
                     function (err, results) {
-
                         if (err) {
+                            var error = {
+                                userName: req.session.package_UserName,
+                                action : 'getNotificationData',
+                                responseCode: 500,
+                                message: JSON.stringify(err.message)
+                            }
+                            wlogger.error(error); // for error
                             connection_ikon_cms.release();
                             res.status(500).json(err.message);
                             console.log(err.message)
                         } else {
+                            var info = {
+                                userName: req.session.package_UserName,
+                                action : 'getNotificationData',
+                                responseCode: 200,
+                                message: 'Retrieved Store Notification Data Successfully.'
+                            }
+                            wlogger.info(info); // for information
                             connection_ikon_cms.release();
                             res.send(results);
                         }
                     });
             });
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'getNotificationData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'getNotificationData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
@@ -148,7 +196,13 @@ exports.addNotificationData = function(req, res, next) {
                     var i = cnt;
                     Notification.getLastInsertedNotificationId( connection_ikon_cms,function(err,response){
                         if(err){
-
+                            var error = {
+                                userName: req.session.package_UserName,
+                                action : 'addNotificationData',
+                                responseCode: 500,
+                                message: JSON.stringify(err.message)
+                            }
+                            wlogger.error(error); // for error
                         }else {
                             //the plan is stored as value_1, to separate as planid and planType
                             var planId = parseInt(req.body.PlanId[i].split('_')[1]);
@@ -174,10 +228,23 @@ exports.addNotificationData = function(req, res, next) {
                             Notification.saveNotificationData(connection_ikon_cms, data, function (err, response) {
                                 //to save notification data
                                 if (err) {
-
+                                    var error = {
+                                        userName: req.session.package_UserName,
+                                        action : 'addNotificationData',
+                                        responseCode: 500,
+                                        message: JSON.stringify(err.message)
+                                    }
+                                    wlogger.error(error); // for error
                                 } else {
                                    // console.log('in save ..');
                                     if (count == cnt) {
+                                        var info = {
+                                            userName: req.session.package_UserName,
+                                            action : 'addNotificationData',
+                                            responseCode: 200,
+                                            message: 'Notifications Saved successfully.'
+                                        }
+                                        wlogger.info(info); // for information
                                         connection_ikon_cms.release();
                                         res.send({status: 200, message: ''})
                                     } else {
@@ -187,14 +254,28 @@ exports.addNotificationData = function(req, res, next) {
                                 }
                             });
                         }
-
                     });
                 }
             });
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'addNotificationData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'addNotificationData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
@@ -204,38 +285,63 @@ exports.listNotificationData = function(req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                        ListNotification : function (callback) {
-                            if (req.body.PlanId) {
-                                var planId = parseInt(req.body.PlanId.split('_')[1]);
-                                var planType = req.body.PlanId.split('_')[0];
-                                Notification.listNotifications(connection_ikon_cms, req.body.PackageId, planId, planType, function (err, ListNotification) {
-                                    callback(err, ListNotification);
-                                });
-                            }
-                            else
-                            {
-                                callback(null,'');
-                            }
+                    ListNotification : function (callback) {
+                        if (req.body.PlanId) {
+                            var planId = parseInt(req.body.PlanId.split('_')[1]);
+                            var planType = req.body.PlanId.split('_')[0];
+                            Notification.listNotifications(connection_ikon_cms, req.body.PackageId, planId, planType, function (err, ListNotification) {
+                                callback(err, ListNotification);
+                            });
                         }
-
-                    },
-                    function (err, results) {
-
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
-                        } else {
-                            connection_ikon_cms.release();
-                            res.send(results);
+                        else
+                        {
+                            callback(null,'');
                         }
-
-                    });
+                    }
+                },
+                function (err, results) {
+                    if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'listNotificationData',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                    } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'listNotificationData',
+                            responseCode: 200,
+                            message: 'Retrieved Notification Data successfully.'
+                        }
+                        wlogger.info(info); // for information
+                        connection_ikon_cms.release();
+                        res.send(results);
+                    }
+                });
             });
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'listNotificationData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'listNotificationData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
@@ -253,19 +359,47 @@ exports.n_delete = function (req, res, next) {
 
                 }, function (err, results) {
                     if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'deleteNotification',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
-                        console.log(err.message);
                     } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'deleteNotification',
+                            responseCode: 200,
+                            message: 'Notification ' + req.body.Status + ' successfully.'
+                        }
+                        wlogger.info(info); // for information
                         connection_ikon_cms.release();
                         res.send({success: true, message: ' Notification ' + req.body.Status + ' successfully.'});
                     }
                 });
             });
         } else {
+            var error = {
+                userName: "Unknown User",
+                action : 'deleteNotification',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    } catch (err) {
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'deleteNotification',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
@@ -284,19 +418,47 @@ exports.n_blockUnBlockContentType = function (req, res, next) {
 
                 },function(err,results){
                     if(err){
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'n_blockUnBlockContentType',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
-                        console.log(err.message);
-                    }else{
+                    } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'n_blockUnBlockContentType',
+                            responseCode: 200,
+                            message: 'Notification ' + req.body.Status + ' successfully.'
+                        }
+                        wlogger.info(info); // for information
                         connection_ikon_cms.release();
                         res.send({ success: true, message: ' Notification '  +  req.body.Status + ' successfully.' });
                     }
                 });
             });
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'n_blockUnBlockContentType',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'n_blockUnBlockContentType',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 
@@ -307,40 +469,67 @@ exports.updateNotificationData  = function(req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                        NotificationData: function (callback) {
-                            var data = {
-                                pn_plan_start: moment(new Date()).add(req.body.Days, 'days').add(req.body.Hours, 'h').format('YYYY-MM-DD'),
-                                pn_after_day: req.body.Days,
-                                pn_after_hour: req.body.Hours,
-                                pn_cnt_logical_operator: req.body.Operator,
-                                pn_cnt_conditional_usage: req.body.Percent,
-                                pn_message: req.body.Message,
-                                pn_push_from: moment(req.body.PushFrom).format('YYYY-MM-DD HH:mm:ss'),
-                                pn_push_to: moment(req.body.PushTo).format('YYYY-MM-DD HH:mm:ss'),
-                                pn_push_type: req.body.Push
-                            }
-
-                            Notification.updateNotificationData(connection_ikon_cms, data,req.body.pnId, function (err, response) {
-                                callback(err, response);
-                            });
+                    NotificationData: function (callback) {
+                        var data = {
+                            pn_plan_start: moment(new Date()).add(req.body.Days, 'days').add(req.body.Hours, 'h').format('YYYY-MM-DD'),
+                            pn_after_day: req.body.Days,
+                            pn_after_hour: req.body.Hours,
+                            pn_cnt_logical_operator: req.body.Operator,
+                            pn_cnt_conditional_usage: req.body.Percent,
+                            pn_message: req.body.Message,
+                            pn_push_from: moment(req.body.PushFrom).format('YYYY-MM-DD HH:mm:ss'),
+                            pn_push_to: moment(req.body.PushTo).format('YYYY-MM-DD HH:mm:ss'),
+                            pn_push_type: req.body.Push
                         }
-                    },
-                    function (err, results) {
+                        Notification.updateNotificationData(connection_ikon_cms, data,req.body.pnId, function (err, response) {
+                            callback(err, response);
+                        });
+                    }
+                },
+                function (err, results) {
 
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
-                        } else {
-                            connection_ikon_cms.release();
-                            res.send(results);
+                    if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'updateNotificationData',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
                         }
-                    });
+                        wlogger.error(error); // for error
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                    } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'updateNotificationData',
+                            responseCode: 200,
+                            message: 'Notification Updated successfully.'
+                        }
+                        wlogger.info(info); // for information
+                        connection_ikon_cms.release();
+                        res.send(results);
+                    }
+                });
             });
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'updateNotificationData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'updateNotificationData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };

@@ -2,6 +2,7 @@ var mysql = require('../config/db').pool;
 var Arrangeplans = require('../models/ArrangePlansModel');
 var mainSiteManager = require('../models/mainSiteModel');
 var async = require("async");
+var wlogger = require("../config/logger");
 
 exports.getArrangePlansData = function (req, res, next) {
     //getting the data for arrange plans tab
@@ -9,46 +10,74 @@ exports.getArrangePlansData = function (req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                        arrangeSequenceData: function (callback) {
-                            // getting the already existence sequence for plans
-                            Arrangeplans.getArrangeSequenceData(connection_ikon_cms, req.body.pkgId, function (err, arrangeSequenceData) {
-                                callback(err, arrangeSequenceData);
-                            })
-                        },
-                        PackageAlacartPacks: function (callback) {
-                            // to get all the alacart packs
-                            Arrangeplans.getPackageAlacartPack(connection_ikon_cms, req.body.pkgId, function (err, alacartPlans) {
-                                callback(err, alacartPlans);
-                            });
-                        },
-                        selectedPlans : function (callback) {
-                            // to get all the offer plans , value pack plans and subscription plans
-                            Arrangeplans.getSelectedPlans(connection_ikon_cms, req.body.pkgId, function (err, selectedPlans) {
-                                callback(err, selectedPlans);
-                            })
-                        },
-                        isAlacartPlansExist : function (callback) {
-                            //to check if alacart plan is there or not
-                            Arrangeplans.existAlacartPlans(connection_ikon_cms, req.body.pkgId, function (err, isAlacartPlansExist) {
-                                callback(err, isAlacartPlansExist);
-                            })
-                        }
+                    arrangeSequenceData: function (callback) {
+                        // getting the already existence sequence for plans
+                        Arrangeplans.getArrangeSequenceData(connection_ikon_cms, req.body.pkgId, function (err, arrangeSequenceData) {
+                            callback(err, arrangeSequenceData);
+                        })
                     },
-                    function (err, results) {
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
-                        } else {
-                            connection_ikon_cms.release();
-                            res.send(results);
+                    PackageAlacartPacks: function (callback) {
+                        // to get all the alacart packs
+                        Arrangeplans.getPackageAlacartPack(connection_ikon_cms, req.body.pkgId, function (err, alacartPlans) {
+                            callback(err, alacartPlans);
+                        });
+                    },
+                    selectedPlans : function (callback) {
+                        // to get all the offer plans , value pack plans and subscription plans
+                        Arrangeplans.getSelectedPlans(connection_ikon_cms, req.body.pkgId, function (err, selectedPlans) {
+                            callback(err, selectedPlans);
+                        })
+                    },
+                    isAlacartPlansExist : function (callback) {
+                        //to check if alacart plan is there or not
+                        Arrangeplans.existAlacartPlans(connection_ikon_cms, req.body.pkgId, function (err, isAlacartPlansExist) {
+                            callback(err, isAlacartPlansExist);
+                        })
+                    }
+                },
+                function (err, results) {
+                    if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'getArrangePlansData',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
                         }
-                    });
+                        wlogger.error(error); // for error
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                        console.log(err.message);
+                    } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'getArrangePlansData',
+                            responseCode: 200,
+                            message: 'Retrieved Arrange Plans data for Package Id '+req.body.pkgId+' successfully.'
+                        }
+                        wlogger.info(info); // for information
+                        connection_ikon_cms.release();
+                        res.send(results);
+                    }
+                });
             });
         } else {
+            var error = {
+                userName: "Unknown User",
+                action : 'getArrangePlansData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    } catch (err) {
+    }catch(err){
+        var error = {
+            userName: "Unknown User",
+            action : 'getArrangePlansData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
@@ -78,13 +107,28 @@ exports.AddArrangedContents = function (req, res, next) {
                     if (err) {
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
-                        console.log(err.message)
-                    } else {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'AddArrangedContents',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
                         connection_ikon_cms.release();
-                        res.send({success: true, message: 'Saved Successfully'});
+                        res.status(500).json(err.message);
+                        console.log(err.message);
+                    } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'AddArrangedContents',
+                            responseCode: 200,
+                            message: 'Arrange Plans data saved successfully.'
+                        }
+                        wlogger.info(info); // for information
+                        connection_ikon_cms.release();
+                        res.send({success: true, message: 'Arrange Plans data added Successfully'});
                     }
                 })
-
                 function savedata(cnt) {
                     // function for saving data
                     var j = cnt;
@@ -114,8 +158,15 @@ exports.AddArrangedContents = function (req, res, next) {
                             Arrangeplans.addArrangeData(connection_ikon_cms, arrangeSequenceData, function (err, response) {
                                 // to add the data to database on submit button
                                 if (err) {
+                                    var error = {
+                                        userName: req.session.package_UserName,
+                                        action : 'AddArrangedContents',
+                                        responseCode: 500,
+                                        message: JSON.stringify(err.message)
+                                    }
+                                    wlogger.error(error); // for error
                                     connection_ikon_cms.release();
-                                    console.log(err.message);
+                                    callback(err,false);
                                 } else {
                                     cnt++;
                                     if (cnt < len) {
@@ -124,8 +175,8 @@ exports.AddArrangedContents = function (req, res, next) {
                                         savedata(cnt);
                                     }
                                     else {
-                                        connection_ikon_cms.release();
-                                        res.send({success: true, message: 'Saved Successfully'});
+                                        callback(err,true);
+                                        //res.send({success: true, message: 'Arrange Plans data Saved Successfully'});
                                     }
                                 }
                             });
@@ -133,19 +184,40 @@ exports.AddArrangedContents = function (req, res, next) {
                     ],
                     function (err, results) {
                         if (err) {
+                            var error = {
+                                userName: req.session.package_UserName,
+                                action : 'AddArrangedContents',
+                                responseCode: 500,
+                                message: JSON.stringify(err.message)
+                            }
+                            wlogger.error(error); // for error
                             connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
+
                         } else {
-                            callback(err,true);
+                            res.send({success: true, message: 'Arrange Plans data Saved Successfully'});
+
                         }
                     })
                 }
             });
         } else {
+            var error = {
+                userName: "Unknown User",
+                action : 'AddArrangedContents',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    } catch (err) {
+    }catch(err){
+        var error = {
+            userName: "Unknown User",
+            action : 'AddArrangedContents',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };

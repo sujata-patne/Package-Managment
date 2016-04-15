@@ -23,7 +23,6 @@ function autoEmail() {
 						if(err){
 							connection_ikon_cms.release();
 						}else{
-
 							var str_html_head = "<table border='1' style='border-collapse:collapse'><th> Active Package Name </th>";
 							var str_html_body = '';
 							for(i = 0;i<PackActive.length;i++){

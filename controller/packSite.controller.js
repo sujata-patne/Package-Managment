@@ -6,6 +6,7 @@ var mainSiteManager = require('../models/mainSiteModel');
 var valuePackManager = require('../models/valuePackModel');
 var subscriptionPackManager = require('../models/subscriptionPackModel');
 var alacartManager = require('../models/alacartModel');
+var wlogger = require("../config/logger");
 
 var async = require("async");
 
@@ -101,19 +102,48 @@ exports.showPackSitePackageData = function(req, res, next)  {
                 },
                 function (err, results) {
                     if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'showPackSitePackageData',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
+                        console.log(err.message)
                     } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'showPackSitePackageData',
+                            responseCode: 200,
+                            message: 'Pack Site Package Data retrieved successfully.'
+                        }
+                        wlogger.info(info); // for information
                         res.send(results);
                        // callback(err, results);
                     }
                 })
-
             })
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'showPackSitePackageData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'showPackSitePackageData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
@@ -147,19 +177,48 @@ exports.getPackSiteData = function(req, res, next) {
                 },
                 function (err, results) {
                     if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'getPackSiteData',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
                         console.log(err.message)
                     } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'getPackSiteData',
+                            responseCode: 200,
+                            message: 'Pack Site Data retrieved successfully.'
+                        }
+                        wlogger.info(info); // for information
                         connection_ikon_cms.release();
                         res.send(results);
                     }
                 });
             });
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'getPackSiteData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'getPackSiteData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };

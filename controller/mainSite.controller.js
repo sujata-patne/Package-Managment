@@ -8,6 +8,7 @@ var subscriptionPackManager = require('../models/subscriptionPackModel');
 var alacartManager = require('../models/alacartModel');
 var ArrangeManager = require('../models/ArrangePlansModel');
 var userManager = require('../models/userModel');
+var wlogger = require("../config/logger");
 
 var async = require("async");
 
@@ -17,14 +18,12 @@ exports.getStoreDetails = function(req, res){
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
                     ContentTypes: function (callback) {
-                        /**/
                         if( req.query.packId != 'undefined' ) {
                             mainSiteManager.getContentTypesByPackId(connection_ikon_cms, req.session.package_StoreId, req.query.packId, function (err, ContentTypeData) {
                                     callback(err, ContentTypeData)
                             })
                             
                         } else  {
-                            console.log("in else..");
                             mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
                                 callback(err, ContentTypeData)
                             })
@@ -93,14 +92,28 @@ exports.getStoreDetails = function(req, res){
                                 }
                             }
                         });
-                       
                     }
                 },
                 function (err, results) {
                     if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'getStoreDetails',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
+                        console.log(err.message)
                     } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'getStoreDetails',
+                            responseCode: 200,
+                            message: 'Retrieved Store Details Successfully.'
+                        }
+                        wlogger.info(info); // for information
                         connection_ikon_cms.release();
                         //console.log(results);
                         res.send(results);
@@ -108,13 +121,27 @@ exports.getStoreDetails = function(req, res){
                 })
             })
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'getStoreDetails',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'getStoreDetails',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
-
 
 
 exports.showPackageData = function(req, res, next)  {
@@ -122,26 +149,6 @@ exports.showPackageData = function(req, res, next)  {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                    // ContentTypes: function (callback) {
-                    //     mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
-                    //         callback(err, ContentTypeData)
-                    //     })
-                    // },
-                    // distributionChannels: function (callback) {
-                    //     mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
-                    //         callback(err, distributionChannels);
-                    //     });
-                    // },
-                    // OfferData: function (callback) {
-                    //     mainSiteManager.getOfferDataByStoreId( connection_ikon_cms, {storeId:req.session.package_StoreId, dcId:req.body.distributionChannelId}, function(err,OfferData){
-                    //         callback(err, OfferData)
-                    //     });
-                    // },
-                    // valuePackPlans: function (callback) {
-                    //     valuePackManager.getValuePackPlansByStoreId(connection_ikon_cms, {storeId:req.session.package_StoreId}, function (err, valuePackPlans) {
-                    //         callback(err, valuePackPlans);
-                    //     });
-                    // },
                     alacartPackPlans: function (callback) {
                         userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {
                             if(err){
@@ -165,7 +172,6 @@ exports.showPackageData = function(req, res, next)  {
                         });
                     },                    
                     subscriptionPackPlans: function (callback) {
-
                         userManager.getSelectedPaymentTypesByStoreId( connection_ikon_cms,req.session.package_StoreId,function(err,response) {
                             if(err){
                                 connection_ikon_cms.release();
@@ -253,10 +259,16 @@ exports.showPackageData = function(req, res, next)  {
                             ],
                             function (err, results) {
                                 if (err) {
+                                    var error = {
+                                        userName: req.session.package_UserName,
+                                        action : 'showPackageData',
+                                        responseCode: 500,
+                                        message: JSON.stringify(err.message)
+                                    }
+                                    wlogger.error(error); // for error
                                     connection_ikon_cms.release();
                                     res.status(500).json(err.message);
                                 } else {
-
                                     callback(err, results);
                                     //res.send(results);
                                 }
@@ -265,20 +277,47 @@ exports.showPackageData = function(req, res, next)  {
                 },
                 function (err, results) {
                     if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'showPackageData',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
+                        }
+                        wlogger.error(error); // for error
                         connection_ikon_cms.release();
                         res.status(500).json(err.message);
                     } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'showPackageData',
+                            responseCode: 200,
+                            message: 'Retrieved Package Data successfully.'
+                        }
+                        wlogger.info(info); // for information
                         connection_ikon_cms.release();
-                        //console.log(" ====================== inside results ==============================");
-                        //console.log( results) ;
                         res.send(results);
                     }
                 })
             })
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'showPackageData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'showPackageData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
@@ -288,44 +327,72 @@ exports.getMainSiteData = function(req, res, next) {
         if (req.session && req.session.package_UserName && req.session.package_StoreId) {
             mysql.getConnection('CMS', function (err, connection_ikon_cms) {
                 async.parallel({
-                        ContentTypes: function (callback) {
-                           console.log("package data main site");
-                            mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
-                                callback(err, ContentTypeData)
-                            })
-                        },
-                        OfferData: function (callback) {
-                            mainSiteManager.getOfferDataByStoreId( connection_ikon_cms,  {storeId:req.session.package_StoreId}, function(err,OfferData){
-                                callback(err, OfferData)
-                            });
-                        },
-                        distributionChannels: function (callback) {
-                            mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
-                                callback(err, distributionChannels);
-                            });
-                        },
-                        packs : function (callback){
-                            mainSiteManager.getAllPacksByStoreId(connection_ikon_cms,{storeId:req.session.package_StoreId}, function(err, packs){
-                                callback(err,packs);
-                            });
-                        }
+                    ContentTypes: function (callback) {
+                       console.log("package data main site");
+                        mainSiteManager.getContentTypes(connection_ikon_cms, req.session.package_StoreId, function (err, ContentTypeData) {
+                            callback(err, ContentTypeData)
+                        })
                     },
-                    function (err, results) {
+                    OfferData: function (callback) {
+                        mainSiteManager.getOfferDataByStoreId( connection_ikon_cms,  {storeId:req.session.package_StoreId}, function(err,OfferData){
+                            callback(err, OfferData)
+                        });
+                    },
+                    distributionChannels: function (callback) {
+                        mainSiteManager.getAllDistributionChannelsByStoreId(connection_ikon_cms, req.session.package_StoreId, function (err, distributionChannels) {
+                            callback(err, distributionChannels);
+                        });
+                    },
+                    packs : function (callback){
+                        mainSiteManager.getAllPacksByStoreId(connection_ikon_cms,{storeId:req.session.package_StoreId}, function(err, packs){
+                            callback(err,packs);
+                        });
+                    }
+                },
+                function (err, results) {
 
-                        if (err) {
-                            connection_ikon_cms.release();
-                            res.status(500).json(err.message);
-                            console.log(err.message)
-                        } else {
-                            connection_ikon_cms.release();
-                            res.send(results);
+                    if (err) {
+                        var error = {
+                            userName: req.session.package_UserName,
+                            action : 'getMainSiteData',
+                            responseCode: 500,
+                            message: JSON.stringify(err.message)
                         }
-                    });
+                        wlogger.error(error); // for error
+                        connection_ikon_cms.release();
+                        res.status(500).json(err.message);
+                    } else {
+                        var info = {
+                            userName: req.session.package_UserName,
+                            action : 'getMainSiteData',
+                            responseCode: 200,
+                            message: 'Retrieved Mainsite Data successfully.'
+                        }
+                        wlogger.info(info); // for information
+                        connection_ikon_cms.release();
+                        res.send(results);
+                    }
+                });
             });
         }else{
+            var error = {
+                userName: "Unknown User",
+                action : 'getMainSiteData',
+                responseCode: 500,
+                message: 'Invalid User Session'
+            }
+            wlogger.error(error); // for error
             res.redirect('/accountlogin');
         }
-    }catch(err){
+    }
+    catch (err) {
+        var error = {
+            userName: "Unknown User",
+            action : 'getMainSiteData',
+            responseCode: 500,
+            message: JSON.stringify(err.message)
+        }
+        wlogger.error(error); // for error
         res.status(500).json(err.message);
     }
 };
