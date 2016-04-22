@@ -1,0 +1,5 @@
+{"userName":"Unknown User","action":"getData","responseCode":500,"message":"Invalid User Session","level":"error","timestamp":"21-04-2016 15:30:40"}
+{"userName":"testt2617","action":"userAuthDetails","responseCode":200,"message":"User authenticated successfully.","level":"info","timestamp":"21-04-2016 15:30:46"}
+{"userName":"testt2617","action":"pages","responseCode":200,"message":"Page data retrieved successfully.","level":"info","timestamp":"21-04-2016 15:30:47"}
+{"userName":"testt2617","action":"getStoreDetails","responseCode":200,"message":"Retrieved Store Details Successfully.","level":"info","timestamp":"21-04-2016 15:30:50"}
+{"userName":"testt2617","action":"getStoreDetails","responseCode":200,"message":"Retrieved Store Details Successfully.","level":"info","timestamp":"21-04-2016 15:30:50"}

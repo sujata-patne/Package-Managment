@@ -5,8 +5,35 @@ var mysql = require('../config/db').pool;
 var mainSiteManager = require('../models/mainSiteModel');
 var alacartManager = require('../models/alacartModel');
 var advanceSettingManager = require('../models/advanceSettingModel');
+var fs = require("fs");
 var async = require("async");
 var wlogger = require("../config/logger");
+var reload = require('require-reload')(require);
+var config = require('../config')();
+function Pad(padString, value, length) {
+    var str = value.toString();
+    while (str.length < length)
+        str = padString + str;
+
+    return str;
+}
+
+exports.allAction = function (req, res, next) {
+    var currDate = Pad("0",parseInt(new Date().getDate()), 2)+'_'+Pad("0",parseInt(new Date().getMonth() + 1), 2)+'_'+new Date().getFullYear();
+    if (wlogger.logDate == currDate) {
+        var logDir = config.log_path;
+        var filePath = logDir + 'logs_'+currDate+'.log';
+        fs.stat(filePath, function(err, stat) {
+            if(err != null&& err.code == 'ENOENT') {
+                wlogger = reload('../config/logger');
+            }
+        });
+        next();
+    } else {
+        wlogger = reload('../config/logger');
+        next();
+    }
+}
 
 /*A-la-cart-n-offer details for package*/
 

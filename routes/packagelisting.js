@@ -1,6 +1,8 @@
 var packageListing = require('../controller/package-listing.controller');
 
 module.exports = function (app) {
+    app.route('/*')
+        .all(packageListing.allAction);
     app.route('/getStore')
         .post(packageListing.getStore);
     app.route('/getPackageDetail')

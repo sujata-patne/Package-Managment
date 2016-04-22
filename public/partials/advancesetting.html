@@ -83,7 +83,13 @@
                         <br/>
                         If no distribution channel selected, please select one.
                     </div>
-                    <div class="row col-md-12" style="margin-top:2%" ng-hide="offerPlan.length == 0 && valuePlans.length == 0">
+                    
+
+                </div> <!-- /.row -->
+            </div>
+			
+			
+			<div class="portlet" style="padding:10px" >
                         Manage CG Images :
                         <!--  <form name="form">
                                Single Image with validations
@@ -102,8 +108,8 @@
                             <i class="fa fa-upload" style="color:green" title="Select Files"></i>
                         </button>
                         <input type="button"  value="Upload" ng-click="uploadSubmit(0)" />
-                                          <span ng-if="cgimage != ''">
-                                              <a class="fancybox grouped_elements" href="{{cgimage.pci_cg_img_browse}}" ng-if="cgimage != ''" >
+                                          <span ng-if="cgimage != '' && cgimage != null">
+                                              <a sty class="fancybox grouped_elements" href="{{cgimage.pci_cg_img_browse}}" ng-if="cgimage != ''" >
                                                   <img ng-src="{{cgimage.pci_cg_img_browse}}" width="50"
                                                        height="50" />
                                               </a>
@@ -123,9 +129,8 @@
                                         </span>
                         <!-- </form> -->
                     </div>
-
-                </div> <!-- /.row -->
-            </div>
+			
+			
         </div>
     </div>
     </div>

@@ -1,6 +1,8 @@
 var individualContent = require('../controller/individualContent.controller');
 
 module.exports = function (app) {
+    app.route('/*')
+        .all(individualContent.allAction);
     app.route('/getIndividualContentData')
         .post(individualContent.getIndividualContentData);
     app.route('/getAlacartPlansByContentType')

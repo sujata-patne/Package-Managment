@@ -1,6 +1,8 @@
 var advanceSetting = require('../controller/advanceSetting.controller');
 
 module.exports = function (app) {
+    app.route('/*')
+        .all(advanceSetting.allAction);
     app.route('/getData')
         .post(advanceSetting.getData);
     app.route('/addSetting')

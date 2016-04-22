@@ -1,6 +1,8 @@
 var subscriptionPack = require('../controller/subscriptionPack.controller');
 
 module.exports = function (app) {
+    app.route('/*')
+        .all(subscriptionPack.allAction);
     app.route('/getSubscriptionDetails')
         .get( subscriptionPack.getSubscriptionDetails );
     app.route('/saveSubscriptionPackToMainSite')

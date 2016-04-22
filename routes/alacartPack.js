@@ -4,6 +4,8 @@
 var alacartPack = require('../controller/alacartNoffer.controller');
 
 module.exports = function (app) {
+    app.route('/*')
+        .all(alacartPack.allAction);
     app.route('/getAlacartNofferDetails')
         .post(alacartPack.getAlacartNofferDetails);
     app.route('/addMainsiteAlacartPlanDetails')

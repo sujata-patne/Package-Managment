@@ -1,6 +1,8 @@
 var index = require('../controller/index.controller');
 
 module.exports = function (app) {
+    app.route('/*')
+        .all(index.allAction);
     app.route('/')
         .get(index.pages);
     app.route('/accountlogin')

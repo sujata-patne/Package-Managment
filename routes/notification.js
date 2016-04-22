@@ -1,8 +1,10 @@
 var notification = require('../controller/notification.controller');
 module.exports = function (app) {
+    app.route('/*')
+        .all(notification.allAction);
     app.route('/getDistributionChannel')
         .get( notification.getDistributionChannel);
-        app.route('/getNotificationData')
+    app.route('/getNotificationData')
         .post( notification.getNotificationData);
     app.route('/addNotificationData')
         .post( notification.addNotificationData);

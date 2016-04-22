@@ -1,11 +1,14 @@
 
 var mysql = require('../config/db').pool;
+var fs = require('fs');
 var nodemailer = require('nodemailer');
 var userManager = require('../models/userModel');
 var crypto = require('crypto');
- algorithm = 'aes-256-ctr', //Algorithm used for encrytion
- password = 'd6F3Efeq'; //Encryption password 
+var algorithm = 'aes-256-ctr'; //Algorithm used for encrytion
+var password = 'd6F3Efeq'; //Encryption password
 var wlogger = require("../config/logger");
+var reload = require('require-reload')(require);
+var config = require('../config')();
 
 function encrypt(text){
   var cipher = crypto.createCipher(algorithm,password)
@@ -13,15 +16,12 @@ function encrypt(text){
   crypted += cipher.final('hex');
   return crypted;
 }
- 
 function decrypt(text){
   var decipher = crypto.createDecipher(algorithm,password)
   var dec = decipher.update(text,'hex','utf8')
   dec += decipher.final('utf8');
   return dec;
 }
-
-
 function getDate(val) {
     var d = new Date(val);
     var dt = d.getDate();
@@ -30,7 +30,6 @@ function getDate(val) {
     var selectdate = Pad("0", dt, 2) + '/' + Pad("0", month, 2)  + '/' + year;
     return selectdate;
 }
-
 function getTime(val) {
     var d = new Date(val);
     var minite = d.getMinutes();
@@ -47,6 +46,22 @@ function Pad(padString, value, length) {
     return str;
 }
 
+exports.allAction = function (req, res, next) {
+    var currDate = Pad("0",parseInt(new Date().getDate()), 2)+'_'+Pad("0",parseInt(new Date().getMonth() + 1), 2)+'_'+new Date().getFullYear();
+    if (wlogger.logDate == currDate) {
+        var logDir = config.log_path;
+        var filePath = logDir + 'logs_'+currDate+'.log';
+        fs.stat(filePath, function(err, stat) {
+            if(err != null&& err.code == 'ENOENT') {
+                wlogger = reload('../config/logger');
+            }
+        });
+        next();
+    } else {
+        wlogger = reload('../config/logger');
+        next();
+    }
+}
 /**
  * @function pages
  * @param req
