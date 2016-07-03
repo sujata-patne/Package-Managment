@@ -1,0 +1,4 @@
+{"userName":"Unknown User","action":"getData","responseCode":500,"message":"Invalid User Session","level":"error","timestamp":"01-06-2016 17:04:28"}
+{"userName":"ajitraut_2716480","action":"userAuthDetails","responseCode":200,"message":"User authenticated successfully.","level":"info","timestamp":"01-06-2016 17:04:37"}
+{"userName":"ajitraut_2716480","action":"pages","responseCode":200,"message":"Page data retrieved successfully.","level":"info","timestamp":"01-06-2016 17:04:37"}
+{"userName":"ajitraut_2716480","action":"getSelectedValuePacks","responseCode":200,"message":"Retrieved Value Pack Plan for PackageId undefined details successfully.","level":"info","timestamp":"01-06-2016 17:04:51"}

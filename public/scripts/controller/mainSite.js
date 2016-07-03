@@ -180,14 +180,11 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             });
     }
 
-
-
     $scope.checkState = function () {
         // alert($scope.previousState.name);
 
         if ($scope.previousState.name && !new RegExp("main-site").test($scope.previousState.name)
             && !new RegExp("packageListing").test($scope.previousState.name)) {
-            console.log(' $rootScope.previousState 1')
 
             $rootScope.distributionChannelId = undefined;
             $scope.setDistributionChannelId = 0;
@@ -204,16 +201,14 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
 
-            console.log(' $rootScope.previousState 3')
-            $rootScope.distributionChannelId = undefined;
+             $rootScope.distributionChannelId = undefined;
             $scope.setEmptyPackage();
 
         } else if ( (new RegExp("main-site").test($scope.previousState.name) || new RegExp("main-site").test($state.current.name))
             && (($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || ($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
 
-            console.log(' $rootScope.previousState 4')
-            $rootScope.PackageId = $stateParams.packageId;
+             $rootScope.PackageId = $stateParams.packageId;
             $rootScope.action = 'edit';
             
             $scope.showPackageData();
@@ -222,21 +217,18 @@ myApp.controller('mainSiteCtrl', function ( $scope, $rootScope, $state, ngProgre
         }else if ( (new RegExp("main-site").test($scope.previousState.name) || new RegExp("main-site").test($state.current.name))
             && (!($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
             || (!$rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != ''))) {
-            console.log(' $rootScope.previousState 5')
-             
+
              $scope.setEmptyPackage();
 
         }else if(($stateParams.packageId != undefined && $stateParams.packageId != '' && $stateParams.packageId != 0)
              && ($rootScope.action  !== '' && $rootScope.action !== 'edit' )){
-             console.log(' $rootScope.previousState 6')
 
              $rootScope.PackageId = $stateParams.packageId;
              $rootScope.action = 'edit';
              $scope.showPackageData();
          }else if (($rootScope.PackageId != 0 && $rootScope.PackageId != undefined && $rootScope.PackageId != '')
             && ($rootScope.action !== '' && $rootScope.action !== 'edit' )) {
-            console.log(' $rootScope.previousState 7'  )
-            $scope.setEmptyPackage();
+             $scope.setEmptyPackage();
         } /*else{
             console.log(' $rootScope.previousState 8')
 
